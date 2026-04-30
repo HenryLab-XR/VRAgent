@@ -181,6 +181,8 @@ class TraceEntry:
     state_before: Dict[str, Any] = field(default_factory=dict)
     state_after: Dict[str, Any] = field(default_factory=dict)
     events: List[str] = field(default_factory=list)
+    success: bool = False
+    duration_ms: float = 0.0
 
 
 @dataclass

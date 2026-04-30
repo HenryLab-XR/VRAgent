@@ -74,10 +74,21 @@ class PlannerAgent(BaseAgent):
         goal = input_data.get("goal", "")
         recent_trace = input_data.get("recent_trace")
         gate_hints = input_data.get("gate_hints")
+        observer_instruction = input_data.get("observer_instruction", "")
+        scene_context = input_data.get("scene_context", "")
+
+        round_directives = []
+        if goal:
+            round_directives.append(f"Exploration goal: {goal}")
+        if observer_instruction:
+            round_directives.append(f"Observer instruction: {observer_instruction}")
+        if scene_context:
+            round_directives.append(f"Shared world state:\n{scene_context}")
+        self._round_directives = "\n\n".join(round_directives)
 
         # Build structured context pack for this planning round
         self._context_pack = self.retrieval.build_planner_context(
-            goal, gobj_info,
+            self._round_directives or goal, gobj_info,
             recent_trace=recent_trace,
             gate_hints=gate_hints,
         )
@@ -87,7 +98,7 @@ class PlannerAgent(BaseAgent):
         return PlannerOutput(
             actions=actions,
             intent=f"Test plan for {gobj_info.get('gameobject_name', 'Unknown')} — {goal}",
-            expected_reward=0.0,
+            expected_reward=self._estimate_expected_reward(actions),
         ).to_dict()
 
     # ------------------------------------------------------------------
@@ -272,6 +283,9 @@ class PlannerAgent(BaseAgent):
             extra = self._format_context_pack_for_prompt(self._context_pack)
             if extra and extra != "(no context available)":
                 result += "\n\n--- Additional Context ---\n" + extra
+
+        if hasattr(self, '_round_directives') and self._round_directives:
+            result += "\n\n--- Current Round Directive ---\n" + self._round_directives
 
         return result
 
@@ -506,3 +520,18 @@ class PlannerAgent(BaseAgent):
                         merged.append(au)
 
         return merged
+
+    @staticmethod
+    def _estimate_expected_reward(actions: List[Dict]) -> float:
+        if not actions:
+            return 0.0
+        action_types = {str(action.get("type", "")) for action in actions}
+        method_count = 0
+        for action in actions:
+            for event_key in ("triggerring_events", "triggerred_events"):
+                for event_unit in action.get(event_key, []) or []:
+                    method_count += len(event_unit.get("methodCallUnits", []) or [])
+        diversity = min(1.0, len(action_types) / 4.0)
+        method_signal = min(1.0, method_count / 8.0)
+        volume_signal = min(1.0, len(actions) / 12.0)
+        return round(0.45 * diversity + 0.35 * method_signal + 0.20 * volume_signal, 3)

@@ -71,6 +71,7 @@ class ObjectScheduler:
         coverage_state: Optional[Dict[str, float]] = None,
         scheduler_bias: Optional[List[str]] = None,
         failure_counts: Optional[Dict[str, int]] = None,
+        max_revisits: int = 2,
     ) -> Optional[SchedulerDecision]:
         """Pick the next object to process.
 
@@ -92,16 +93,26 @@ class ObjectScheduler:
         -------
         SchedulerDecision or None (if nothing left or LLM fails).
         """
-        remaining = [
-            g for g in candidates
-            if g.get("gameobject_name", "") not in processed
-        ]
+        bias_names = self._normalise_bias_names(scheduler_bias or [])
+        failure_counts = failure_counts or {}
+        remaining = []
+        for candidate in candidates:
+            candidate_name = candidate.get("gameobject_name", "")
+            was_processed = candidate_name in processed
+            is_biased = self._name_matches_bias(candidate_name, bias_names)
+            failure_count = failure_counts.get(candidate_name, 0)
+            if not was_processed or (is_biased and failure_count < max_revisits):
+                remaining.append(candidate)
         if not remaining:
             return None
 
         # If LLM is unavailable or disabled, fall back to priority / linear order
         if not self._is_llm_enabled():
-            return self._fallback_select(remaining, scene_understanding)
+            return self._fallback_select(
+                remaining, scene_understanding,
+                scheduler_bias=scheduler_bias,
+                failure_counts=failure_counts,
+            )
 
         # Build prompt
         user_prompt = self._build_prompt(
@@ -128,11 +139,19 @@ class ObjectScheduler:
         )
 
         if not raw:
-            return self._fallback_select(remaining, scene_understanding)
+            return self._fallback_select(
+                remaining, scene_understanding,
+                scheduler_bias=scheduler_bias,
+                failure_counts=failure_counts,
+            )
 
         parsed = self.llm.extract_json(raw)
         if not parsed:
-            return self._fallback_select(remaining, scene_understanding)
+            return self._fallback_select(
+                remaining, scene_understanding,
+                scheduler_bias=scheduler_bias,
+                failure_counts=failure_counts,
+            )
 
         chosen_name = parsed.get("object_name", "")
         # Validate that the chosen object actually exists in remaining
@@ -142,7 +161,11 @@ class ObjectScheduler:
         )
         if obj_info is None:
             # LLM hallucinated an object name — fall back
-            return self._fallback_select(remaining, scene_understanding)
+            return self._fallback_select(
+                remaining, scene_understanding,
+                scheduler_bias=scheduler_bias,
+                failure_counts=failure_counts,
+            )
 
         decision = SchedulerDecision(
             object_name=chosen_name,
@@ -219,30 +242,49 @@ class ObjectScheduler:
     # Fallback (no LLM)
     # ------------------------------------------------------------------
 
-    @staticmethod
     def _fallback_select(
+        self,
         remaining: List[Dict],
         scene_understanding: Optional[SceneUnderstandingOutput],
+        *,
+        scheduler_bias: Optional[List[str]] = None,
+        failure_counts: Optional[Dict[str, int]] = None,
     ) -> SchedulerDecision:
-        """Deterministic fallback: use scene priority ranking or first-in-list."""
-        if scene_understanding and scene_understanding.object_priority_ranking:
-            ranking = scene_understanding.object_priority_ranking
-            name_map = {g.get("gameobject_name", ""): g for g in remaining}
-            for ranked_name in ranking:
-                if ranked_name in name_map:
-                    return SchedulerDecision(
-                        object_name=ranked_name,
-                        object_info=name_map[ranked_name],
-                        reason="priority ranking (fallback)",
-                        priority_score=0.5,
-                    )
+        """Deterministic fallback with coverage-oriented scoring."""
+        bias_names = self._normalise_bias_names(scheduler_bias or [])
+        failure_counts = failure_counts or {}
+        ranking = scene_understanding.object_priority_ranking if scene_understanding else []
+        key_objects = set(scene_understanding.key_objects if scene_understanding else [])
 
-        first = remaining[0]
+        scored: List[tuple[float, Dict]] = []
+        for index, candidate in enumerate(remaining):
+            name = candidate.get("gameobject_name", "")
+            score = 1.0 / (index + 1)
+            if self._name_matches_bias(name, bias_names):
+                score += 8.0
+            if name in key_objects:
+                score += 4.0
+            if name in ranking:
+                score += max(0.0, 12.0 - 1.0 * ranking.index(name))
+            score += 0.6 * len(candidate.get("mono_comp_relations", []) or [])
+            score += 0.15 * len(candidate.get("child_relations", []) or [])
+            if any(candidate.get(field) for field in (
+                "sorted_target_logic_info",
+                "sorted_layer_logic_info",
+                "gameobject_find_info",
+                "gameobject_instantiate_info",
+            )):
+                score += 2.5
+            score -= min(3.0, 0.8 * failure_counts.get(name, 0))
+            scored.append((score, candidate))
+
+        scored.sort(key=lambda item: item[0], reverse=True)
+        best_score, first = scored[0]
         return SchedulerDecision(
             object_name=first.get("gameobject_name", ""),
             object_info=first,
-            reason="linear order (fallback)",
-            priority_score=0.5,
+            reason="coverage-oriented fallback",
+            priority_score=round(min(1.0, max(0.0, best_score / 10.0)), 3),
         )
 
     # ------------------------------------------------------------------
@@ -253,3 +295,18 @@ class ObjectScheduler:
         if self.llm_config:
             return self.llm_config.enabled
         return self.llm is not None
+
+    @staticmethod
+    def _normalise_bias_names(raw_bias: List[str]) -> List[str]:
+        names: List[str] = []
+        for item in raw_bias:
+            text = str(item).strip()
+            if not text:
+                continue
+            names.append(text.lower())
+        return names
+
+    @staticmethod
+    def _name_matches_bias(name: str, bias_names: List[str]) -> bool:
+        lowered = name.lower()
+        return any(lowered == bias or lowered in bias or bias in lowered for bias in bias_names)

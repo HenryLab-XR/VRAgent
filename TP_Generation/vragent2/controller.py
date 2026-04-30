@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .agents.planner import PlannerAgent
@@ -206,6 +207,17 @@ class VRAgentController:
             ws.coverage_history = ws_data.get("coverage_history", [])
             ws.scheduler_bias = ws_data.get("scheduler_bias", [])
             ws.recent_failures = ws_data.get("recent_failures", [])
+            if ws_data.get("scene_understanding"):
+                ws.scene_understanding = SceneUnderstandingOutput.from_dict(ws_data["scene_understanding"])
+                self._scene_understanding = ws.scene_understanding
+            if ws_data.get("state_delta"):
+                ws.state_delta = StateDelta(**ws_data["state_delta"])
+            if ws_data.get("failure_hypotheses"):
+                ws.failure_hypotheses = [FailureHypothesis(**h) for h in ws_data["failure_hypotheses"]]
+            if ws_data.get("strategy"):
+                ws.strategy = StrategyRecommendation(**ws_data["strategy"])
+            if ws_data.get("semantic_critique"):
+                ws.semantic_critique = SemanticVerifierOutput.from_dict(ws_data["semantic_critique"])
 
         print(f"[CONTROLLER] Session resumed — {len(self._processed_objects)} objects already processed, "
               f"{len(self._all_actions)} actions cached, "
@@ -725,15 +737,19 @@ class VRAgentController:
         if any(kw in joined for kw in ("error:", "exception:", "bridge_error:", "import_error:")):
             return False
 
+        has_completed = any(
+            e.startswith(("completed:", "fallback_completed:", "direct_trigger:", "dispatched:"))
+            for e in events
+        )
+
         # Online mode: bridge reports success + action completed
         if "success" in trace_entry:
             bridge_ok = trace_entry["success"]
-            has_completed = any(e.startswith("completed:") for e in events)
             if bridge_ok and has_completed:
                 return True
 
         # Offline mode: dispatched event means the action was sent
-        if any(e.startswith("dispatched:") for e in events):
+        if has_completed:
             return True
 
         # State change — but only meaningful changes count.

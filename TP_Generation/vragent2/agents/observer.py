@@ -168,8 +168,15 @@ class ObserverAgent(BaseAgent):
             trace, bug_signals, conditions, actions,
         )
 
-        # ⑧ O3 Strategy Recommender — LLM-enhanced (combines O1/O2/O3)
-        strategy = StrategyRecommendation()
+        # ⑧ O3 Strategy Recommender — rule baseline, optionally LLM-enhanced
+        strategy = self._rule_based_strategy(
+            actions=actions,
+            trace=trace,
+            delta=delta,
+            conditions=conditions,
+            bug_signals=bug_signals,
+            failure_hypotheses=failure_hypotheses,
+        )
         llm_analysis = ""
         if self.llm and self.llm_config and self.llm_config.enabled:
             llm_result = self._llm_strategy_analysis(
@@ -207,11 +214,11 @@ class ObserverAgent(BaseAgent):
                 if "strategy" in llm_result:
                     s = llm_result["strategy"]
                     strategy = StrategyRecommendation(
-                        new_facts=s.get("new_facts", []),
-                        gates_inferred=s.get("gates_inferred", []),
-                        planner_instruction=s.get("planner_instruction", ""),
-                        scheduler_bias=s.get("scheduler_bias", []),
-                        oracle_updates=s.get("oracle_updates", []),
+                        new_facts=s.get("new_facts") or strategy.new_facts,
+                        gates_inferred=s.get("gates_inferred") or strategy.gates_inferred,
+                        planner_instruction=s.get("planner_instruction") or strategy.planner_instruction,
+                        scheduler_bias=s.get("scheduler_bias") or strategy.scheduler_bias,
+                        oracle_updates=s.get("oracle_updates") or strategy.oracle_updates,
                     )
                     # Override mode if strategy has a strong planner instruction
                     if strategy.scheduler_bias:
@@ -235,6 +242,58 @@ class ObserverAgent(BaseAgent):
             "llm_analysis": llm_analysis,
         }
         return output
+
+    # ------------------------------------------------------------------
+    # Rule-based strategy baseline
+    # ------------------------------------------------------------------
+
+    def _rule_based_strategy(
+        self,
+        *,
+        actions: List[Dict],
+        trace: List[Dict],
+        delta: float,
+        conditions,
+        bug_signals: List[str],
+        failure_hypotheses: List[FailureHypothesis],
+    ) -> StrategyRecommendation:
+        scheduler_bias = self._extract_action_object_names(actions, trace)
+        gates_inferred: List[Dict[str, str]] = []
+        new_facts: List[str] = []
+
+        for condition in conditions or []:
+            gates_inferred.append({
+                "blocked_object": scheduler_bias[0] if scheduler_bias else "",
+                "needed_condition": condition.missing_condition,
+            })
+            new_facts.append(
+                f"{condition.failure_type}: {condition.missing_condition or condition.evidence[:80]}"
+            )
+
+        for hypothesis in failure_hypotheses:
+            if hypothesis.blocked_object and hypothesis.blocked_object not in scheduler_bias:
+                scheduler_bias.append(hypothesis.blocked_object)
+
+        if conditions:
+            top = conditions[0]
+            instruction = (
+                f"Prioritize resolving {top.failure_type}: "
+                f"{top.missing_condition or top.evidence[:80]}."
+            )
+        elif bug_signals:
+            instruction = "Prioritize objects from the failed action and generate a smaller alternative interaction."
+        elif delta <= 0.001 and scheduler_bias:
+            instruction = "The last action produced no coverage gain; revisit the same object with a different interaction type or target."
+        else:
+            instruction = "Prioritize untested objects with scripts, events, or state-changing components."
+
+        return StrategyRecommendation(
+            new_facts=new_facts,
+            gates_inferred=gates_inferred,
+            planner_instruction=instruction,
+            scheduler_bias=scheduler_bias[:8],
+            oracle_updates=[],
+        )
 
     # ------------------------------------------------------------------
     # Bug detection (weak oracle)
@@ -274,7 +333,7 @@ class ObserverAgent(BaseAgent):
             if isinstance(entry, dict):
                 before = entry.get("state_before", {})
                 after = entry.get("state_after", {})
-                if before and after and before == after:
+                if before and after and before == after and not self._trace_completed(entry):
                     signals.append(
                         f"[NO_STATE_CHANGE] Action '{entry.get('action', '')}' had no effect"
                     )
@@ -471,19 +530,17 @@ class ObserverAgent(BaseAgent):
             before = entry.get("state_before", {})
             after = entry.get("state_after", {})
             events = entry.get("events", [])
+            completed = self._trace_completed(entry)
 
-            if before and after and before != after:
+            if self._meaningful_state_changed(before, after):
                 changed.append(action_name)
                 expected.append(f"{action_name} caused state change")
+            elif completed:
+                expected.append(f"{action_name} completed; no source-object state delta observed")
             elif before and after and before == after:
-                if events:
-                    semantic_failures.append(
-                        f"{action_name}: events fired but no state change"
-                    )
-                else:
-                    semantic_failures.append(
-                        f"{action_name}: no effect at all"
-                    )
+                semantic_failures.append(f"{action_name}: no effect at all")
+            elif events and not completed:
+                semantic_failures.append(f"{action_name}: events recorded but action did not complete")
 
         return StateDelta(
             changed_objects=changed,
@@ -522,7 +579,7 @@ class ObserverAgent(BaseAgent):
             if isinstance(entry, dict):
                 before = entry.get("state_before", {})
                 after = entry.get("state_after", {})
-                if before and after and before == after:
+                if before and after and before == after and not self._trace_completed(entry):
                     no_effect_count += 1
 
         if no_effect_count > 0 and no_effect_count == len(trace) and len(trace) > 1:
@@ -544,3 +601,38 @@ class ObserverAgent(BaseAgent):
 
     def reset(self) -> None:
         self._consecutive_zero_novelty = 0
+
+    @staticmethod
+    def _trace_completed(entry: Dict[str, Any]) -> bool:
+        events = entry.get("events", []) or []
+        joined = " ".join(str(event).lower() for event in events)
+        if any(token in joined for token in ("error:", "exception:", "bridge_error:", "import_error:")):
+            return False
+        if entry.get("success") is True:
+            return True
+        return any(
+            str(event).startswith(("completed:", "fallback_completed:", "direct_trigger:", "dispatched:"))
+            for event in events
+        )
+
+    @staticmethod
+    def _meaningful_state_changed(before: Dict[str, Any], after: Dict[str, Any]) -> bool:
+        if not before or not after or before == after:
+            return False
+        return any(before.get(field) != after.get(field) for field in ("position", "rotation", "active", "scale"))
+
+    @staticmethod
+    def _extract_action_object_names(actions: List[Dict], trace: List[Dict]) -> List[str]:
+        names: List[str] = []
+        for action in actions:
+            for key in ("source_object_name", "target_object_name"):
+                value = str(action.get(key, "")).strip()
+                if value and value not in names:
+                    names.append(value)
+        for entry in trace:
+            action_name = str(entry.get("action", ""))
+            if ":" in action_name:
+                object_name = action_name.split(":", 1)[1].strip()
+                if object_name and object_name not in names:
+                    names.append(object_name)
+        return names

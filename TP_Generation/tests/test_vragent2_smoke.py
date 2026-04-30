@@ -170,6 +170,28 @@ class TestObserverLLM(unittest.TestCase):
         self.assertIn("llm_analysis", result)
         self.assertEqual(result["llm_analysis"], "")
 
+    def test_completed_trigger_without_source_state_change_is_not_bug(self):
+        obs = self._make_observer(llm=None, enabled=False)
+        same_state = {"fileid": "1", "position": {"x": 0, "y": 0, "z": 0}, "active": True}
+        result = obs.run({
+            "executor_output": {
+                "trace": [{
+                    "action": "Trigger:DoorButton",
+                    "state_before": same_state,
+                    "state_after": dict(same_state),
+                    "events": ["completed:TriggerAction"],
+                    "success": True,
+                }],
+                "coverage_delta": {"LC": 0.01, "MC": 0.02, "CoIGO": 0.0},
+                "exceptions": [],
+            },
+            "console_logs": [],
+            "actions": [{"type": "Trigger", "source_object_name": "DoorButton"}],
+        })
+        self.assertEqual(result["bug_signals"], [])
+        self.assertEqual(result["state_delta"]["semantic_failures"], [])
+        self.assertTrue(result["state_delta"]["expected_changes"])
+
     def test_observer_with_mock_llm(self):
         mock_llm = MagicMock()
         fake_llm_result = {
@@ -311,6 +333,22 @@ class TestObjectScheduler(unittest.TestCase):
             self._candidates(), processed={"Knife", "Oven", "Plate"},
         )
         self.assertIsNone(result)
+
+    def test_biased_processed_object_can_be_revisited(self):
+        from vragent2.scheduling.object_scheduler import ObjectScheduler
+        from vragent2.utils.config_loader import AgentLLMConfig
+        scheduler = ObjectScheduler(
+            llm=MagicMock(),
+            llm_config=AgentLLMConfig(enabled=False),
+        )
+        decision = scheduler.select_next(
+            self._candidates(),
+            processed={"Oven"},
+            scheduler_bias=["Oven"],
+            failure_counts={"Oven": 0},
+        )
+        self.assertIsNotNone(decision)
+        self.assertEqual(decision.object_name, "Oven")
 
     def test_llm_driven_selection(self):
         from vragent2.scheduling.object_scheduler import ObjectScheduler
@@ -818,6 +856,38 @@ class TestSchedulerBlackboard(unittest.TestCase):
         prompt_text = call_args[0][0][1]["content"]  # user message
         self.assertIn("Observer priority", prompt_text)
         self.assertIn("Failure counts", prompt_text)
+
+
+# ======================================================================
+# 15. Executor runtime coverage proxy
+# ======================================================================
+
+class TestExecutorCoverageProxy(unittest.TestCase):
+
+    def test_successful_event_and_method_create_runtime_delta(self):
+        from vragent2.agents.executor import ExecutorAgent
+        from vragent2.contracts import TraceEntry
+
+        executor = ExecutorAgent()
+        executor._trace = [TraceEntry(
+            action="Trigger:DoorButton",
+            state_before={"fileid": "1", "position": {"x": 0, "y": 0, "z": 0}},
+            state_after={"fileid": "1", "position": {"x": 0, "y": 0, "z": 0}},
+            events=["completed:TriggerAction", "direct_trigger:triggerred_events[0]"],
+            success=True,
+        )]
+        actions = [{
+            "type": "Trigger",
+            "source_object_fileID": "1",
+            "condition": "press button",
+            "triggerred_events": [{
+                "methodCallUnits": [{"script_fileID": "10", "method_name": "OpenDoor"}],
+            }],
+        }]
+
+        delta = executor._compute_coverage(actions)
+        self.assertGreater(delta.LC, 0.0)
+        self.assertGreater(delta.MC, 0.0)
 
 
 if __name__ == "__main__":

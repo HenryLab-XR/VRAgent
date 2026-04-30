@@ -15,8 +15,15 @@ import re
 import time
 from typing import Any, Dict, List, Optional
 
-import httpx
-import openai
+try:
+    import httpx
+except ImportError:  # pragma: no cover - exercised in minimal test envs
+    httpx = None
+
+try:
+    import openai
+except ImportError:  # pragma: no cover - exercised in minimal test envs
+    openai = None
 
 # Regex to strip <think>...</think> blocks (some reasoning models emit these)
 _THINK_RE = re.compile(r"<\s*think\s*>.*?<\s*/\s*think\s*>", re.IGNORECASE | re.DOTALL)
@@ -45,6 +52,17 @@ class LLMClient:
 
         # Token usage accumulator: {caller: {prompt_tokens, completion_tokens, total_tokens, calls}}
         self._token_usage: Dict[str, Dict[str, int]] = {}
+
+        if openai is None:
+            raise ImportError(
+                "The 'openai' package is required to instantiate LLMClient. "
+                "Install the TP_Generation LLM dependencies before running with real LLM calls."
+            )
+        if proxy_url and httpx is None:
+            raise ImportError(
+                "The 'httpx' package is required when LLMClient proxy_url is set. "
+                "Install httpx or pass proxy_url='' to disable proxy support."
+            )
 
         http_client = httpx.Client(proxy=proxy_url) if proxy_url else None
         self._client = openai.OpenAI(

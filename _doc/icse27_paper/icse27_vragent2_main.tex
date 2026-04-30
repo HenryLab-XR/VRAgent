@@ -1,0 +1,508 @@
+\documentclass[10pt,conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\tool}{VRAgent~2.0}
+\newcommand{\lc}{LC}
+\newcommand{\mc}{MC}
+\newcommand{\coigo}{CoIGO}
+
+\begin{document}
+
+\title{Coverage-Guided Multi-Agent Exploration for Testing Unity XR Applications}
+
+\author{Anonymous Authors}
+
+\maketitle
+
+\begin{abstract}
+Extended reality (XR) applications combine spatial interaction, scene hierarchies,
+physics objects, Unity events, and runtime-generated state. These properties make
+automated test generation difficult: a syntactically valid action may target an
+unreachable object, miss a required component, invoke an unavailable method, or
+fail semantically because a hidden precondition has not been satisfied. Recent
+large language model (LLM)-based approaches can generate interaction plans from
+project context, but one-shot generation provides little opportunity to repair
+invalid plans or to adapt exploration based on runtime feedback.
+
+This paper presents \tool, a retrieval-augmented, contract-based multi-agent
+framework for closed-loop testing of Unity XR applications. \tool decomposes XR
+test generation into specialized agents: a Planner proposes action units, a
+Verifier checks structural and semantic validity, an Executor deterministically
+executes actions through an online Unity bridge, and an Observer interprets
+runtime traces, coverage signals, and failure evidence. A shared blackboard and a
+Gate Graph record discovered states, blocked interactions, inferred conditions,
+and scheduler priorities. The system uses project retrieval over Unity scenes,
+GameObject hierarchies, component metadata, and C\# scripts to construct
+targeted context for each agent. To support online decision making before final
+Unity Code Coverage reports are available, \tool also maintains a runtime
+novelty proxy based on new successful action patterns, events, method calls, and
+state-changing objects.
+
+We plan to evaluate \tool on a suite of Unity XR applications by comparing it
+against one-shot VRAgent generation, no-retrieval generation, random and greedy
+exploration, and ablated variants of the multi-agent loop. The primary metrics
+are line coverage, method coverage, coverage of interesting game objects,
+successful interaction rate, gate resolution rate, redundancy, and token/runtime
+cost. \todo{Fill in quantitative results after running the complete benchmark.}
+\end{abstract}
+
+\begin{IEEEkeywords}
+XR testing, Unity testing, large language models, multi-agent systems,
+coverage-guided testing, retrieval-augmented generation
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+XR applications are increasingly used in training, education, healthcare,
+entertainment, and industrial simulation. Many of these applications are built
+with Unity and the XR Interaction Toolkit, where behavior is distributed across
+GameObjects, Prefabs, physics components, UnityEvents, and C\# scripts. Testing
+such applications requires more than invoking UI callbacks. A test system must
+move through a 3D scene, grab objects, place them into spatial targets, trigger
+buttons and sockets, open panels, satisfy interaction preconditions, and observe
+whether scripts actually executed.
+
+Automating this process is challenging for at least three reasons. First, object
+references in Unity are brittle: scene objects, Prefab instances, and runtime
+objects require stable resolution mechanisms. Second, XR interactions are often
+gated by hidden state, such as inventory contents, door locks, active UI panels,
+or puzzle flags. Third, a technically executable action may not increase code
+coverage if it repeats an already tested interaction or targets an object with no
+meaningful behavior.
+
+Our prior VRAgent workflow addressed part of this problem by extracting Unity
+scene information and asking an LLM to generate JSON test plans that could be
+imported and executed by a Unity-side agent. However, that workflow is largely
+one-shot: a plan is generated from static context, then executed. If the plan
+contains invalid references, misses preconditions, or produces no new coverage,
+the system lacks a principled mechanism to diagnose the failure and adapt the
+next action.
+
+This paper argues that effective XR testing requires a closed-loop architecture.
+Rather than treating LLMs as one-shot plan generators, \tool treats them as
+participants in a contract-based pipeline guided by static project knowledge,
+runtime execution traces, failure hypotheses, and coverage feedback. The system
+iteratively selects objects, retrieves local context, generates action units,
+checks them, executes them in Unity, observes the outcome, and updates a shared
+world state for the next round.
+
+The paper makes the following contributions:
+
+\begin{itemize}[leftmargin=*]
+  \item We characterize common failure modes in LLM-based XR application testing,
+  including invalid object references, missing XR components, invalid method
+  calls, semantic no-effect actions, and unsatisfied interaction gates.
+  \item We present a retrieval-augmented multi-agent architecture that separates
+  planning, verification, execution, and observation through explicit schemas and
+  a shared blackboard.
+  \item We introduce a Gate Graph and failure-to-condition reasoning mechanism
+  for converting blocked XR interactions into actionable exploration goals.
+  \item We implement an online Unity execution bridge and a runtime novelty proxy
+  that provide immediate feedback for coverage-guided exploration.
+  \item We design an empirical evaluation over multiple Unity XR applications,
+  with baselines and ablations that isolate the effect of retrieval, verification,
+  observation, gate reasoning, revisiting, and coverage feedback.
+\end{itemize}
+
+\todo{After experiments, replace the final contribution with concrete numerical
+findings, e.g., percentage coverage improvement and cost overhead.}
+
+\section{Background and Motivation}
+
+\subsection{Unity XR Application Structure}
+
+Unity XR applications are organized as scenes containing GameObjects. A
+GameObject may have physics components, colliders, XR interactables, scripts,
+UnityEvents, children, tags, and layers. Behaviors are often distributed: a
+button object may invoke a method on a door controller; a key may update an
+inventory manager; a panel may only become active after a puzzle flag changes.
+
+This structure creates a mismatch between object-level testing and behavior-level
+coverage. Testing a GameObject once is insufficient if the behavior requires a
+sequence of interactions across multiple objects. Conversely, repeatedly
+interacting with an object after its methods have already been covered wastes the
+testing budget.
+
+\subsection{VRAgent 1.0}
+
+VRAgent 1.0 uses FileID-based object resolution to stabilize scene references.
+It imports a JSON test plan consisting of task units and action units. Supported
+action types include Grab, Trigger, Transform, Move, and Socket. At runtime,
+Unity-side components such as XRGrabbable, XRTriggerable, and XRTransformable are
+dynamically attached to target objects to execute actions.
+
+The limitation is that VRAgent 1.0 executes a generated plan rather than
+exploring interactively. When an action fails or produces no new behavior, the
+feedback is not used to repair the plan or choose a better next object.
+
+\subsection{Motivating Failure Example}
+
+Consider an escape-room scene with a locked door and a key inside a drawer. A
+one-shot LLM plan may attempt to trigger the door first. The action is
+structurally valid because the door object and method exist, but it has no
+semantic effect because the player has not collected the key. A useful testing
+system should infer that the door is blocked by a missing condition, prioritize
+the drawer/key objects, and revisit the door after the condition is satisfied.
+
+\todo{Replace this toy example with a real case study from one subject app.}
+
+\section{Approach}
+
+Figure~\ref{fig:overview} gives an overview of \tool. The pipeline is organized
+around a shared blackboard. Each iteration consumes the current exploration goal
+and previous observer output, selects a target object, retrieves relevant project
+context, generates a candidate plan, verifies it, executes it in Unity, observes
+the outcome, and updates the blackboard and Gate Graph.
+
+\begin{figure*}[t]
+\centering
+\fbox{\begin{minipage}{0.94\textwidth}
+\centering
+\vspace{0.8em}
+\textbf{Placeholder for Figure 1: System Overview}\par
+\vspace{0.5em}
+Unity Project Analysis $\rightarrow$ Retrieval Layer $\rightarrow$ Blackboard\\
+Scheduler $\rightarrow$ Planner $\rightarrow$ Static/Semantic Verifier
+$\rightarrow$ Executor $\rightarrow$ Unity Bridge $\rightarrow$ Unity Runtime\\
+Observer $\rightarrow$ Coverage, Failure Hypotheses, GateGraph, Scheduler Bias
+\vspace{0.8em}
+\end{minipage}}
+\caption{Overview of \tool. Replace this placeholder with an architecture diagram
+showing Python agents, retrieval, blackboard, Gate Graph, and Unity runtime.}
+\label{fig:overview}
+\end{figure*}
+
+\subsection{Project Retrieval Layer}
+
+The retrieval layer indexes Unity scene graphs, GameObject hierarchies,
+component metadata, script sources, tag/layer logic, and special APIs such as
+\texttt{GameObject.Find} and \texttt{Instantiate}. Given a target object and a
+goal, it constructs a context pack for the Planner containing object summaries,
+nearby interactables, relevant scripts, special logic, gate hints, and recent
+failures. For the Verifier, it constructs structured caches for object existence,
+component information, and method names.
+
+The key design principle is that agents should receive local, goal-relevant
+context rather than the entire project. This reduces prompt size and makes the
+evidence used by each agent explicit.
+
+\subsection{Contract-Based Agents}
+
+Each agent communicates through a schema. The Planner returns candidate action
+units and an expected reward. The Verifier returns an executable score, errors,
+and patched actions. The Executor returns traces, exceptions, and coverage
+delta. The Observer returns bug signals, state deltas, failure hypotheses, gate
+hints, and strategy recommendations.
+
+This separation gives each component a narrow responsibility. The Planner is not
+trusted to validate its own output; the Executor does not generate or repair
+actions; the Observer does not execute tests. This design supports ablation and
+debugging because each stage can be inspected independently.
+
+\subsection{Verification and Repair}
+
+The static Verifier checks structural correctness: valid FileIDs, required
+fields, component requirements, method availability, duplicate actions, and
+repeated invalid targets. If errors are found, it returns structured repair
+signals to the Planner. A semantic verifier optionally uses an LLM to critique
+whether the plan makes sense given known scene facts and gate chains.
+
+\subsection{Online Execution}
+
+The Executor communicates with Unity through a TCP bridge. Before executing an
+action, it imports the required FileIDs into Unity. Unity executes the action and
+returns a trace containing pre-state, post-state, events, exceptions, duration,
+and a success flag. This enables Python-side agents to observe behavior without
+waiting for a full batch plan to finish.
+
+\subsection{Observation and Weak Oracle}
+
+The Observer acts as a weak oracle. It detects exceptions and console errors,
+interprets state changes, distinguishes completed trigger actions from true
+no-effect failures, and infers possible missing conditions from trace and log
+patterns. For example, evidence containing terms such as ``locked'', ``key'',
+``inactive'', or ``not found'' is mapped to structured failure types such as
+\texttt{locked}, \texttt{need\_item}, \texttt{ui\_hidden}, and
+\texttt{reference\_invalid}.
+
+\subsection{Gate Graph}
+
+The Gate Graph records successful and failed transitions. A failed edge is a
+candidate gate. When the Observer infers a condition for a failed edge, the
+Scheduler and Planner can focus on satisfying that condition rather than
+continuing a linear object traversal.
+
+\begin{figure}[t]
+\centering
+\fbox{\begin{minipage}{0.44\textwidth}
+\centering
+\vspace{0.8em}
+\textbf{Placeholder for Figure 2: Gate Graph}\par
+\vspace{0.5em}
+$S_0 \xrightarrow{Trigger(Door)} blocked:locked$\\
+$S_0 \xrightarrow{Grab(Key)} S_1$\\
+$S_1 \xrightarrow{Trigger(Door)} S_2$\\
+\vspace{0.8em}
+\end{minipage}}
+\caption{Example Gate Graph for a locked-door interaction chain. Replace with a
+real graph extracted from an experiment.}
+\label{fig:ggraph}
+\end{figure}
+
+\subsection{Coverage-Guided Scheduling}
+
+The exploration controller uses a three-mode state machine: Expand, Exploit,
+and Recover. Expand searches for new objects or UI branches. Exploit focuses on
+inferred gate conditions. Recover is triggered after repeated zero-novelty
+iterations.
+
+In addition to final Unity Code Coverage reports, the Executor maintains a
+runtime novelty proxy:
+\begin{equation}
+r_t = 0.4 \Delta LC_p + 0.3 \Delta MC_p + 0.3 \Delta CoIGO_p,
+\end{equation}
+where $\Delta LC_p$ counts new successful action patterns and events,
+$\Delta MC_p$ counts new method call units, and $\Delta CoIGO_p$ counts newly
+changed interesting objects. This proxy is used for online scheduling; final
+reported results should use Unity Code Coverage measurements.
+
+\section{Implementation}
+
+\tool is implemented as a Python package and a Unity runtime package. The Python
+package contains the controller, agents, retrieval layer, scheduler, Gate Graph,
+and bridge client. The Unity package contains an online executor that receives
+commands, resolves FileIDs, dynamically attaches XR components, executes actions,
+captures object states, and drains console logs.
+
+Table~\ref{tab:modules} summarizes the implementation modules.
+
+\begin{table*}[t]
+\centering
+\caption{Main implementation modules.}
+\label{tab:modules}
+\begin{tabular}{lll}
+\toprule
+Component & Location & Responsibility \\
+\midrule
+Controller & \texttt{vragent2/controller.py} & Closed-loop orchestration \\
+Retrieval & \texttt{vragent2/retrieval/} & Scene/script/context retrieval \\
+Planner & \texttt{vragent2/agents/planner.py} & Candidate action generation \\
+Verifier & \texttt{vragent2/agents/verifier.py} & Static and semantic validation \\
+Executor & \texttt{vragent2/agents/executor.py} & Deterministic execution and traces \\
+Observer & \texttt{vragent2/agents/observer.py} & Weak oracle and strategy recommendation \\
+Scheduler & \texttt{vragent2/scheduling/object\_scheduler.py} & Target object selection \\
+Gate Graph & \texttt{vragent2/graph/gate\_graph.py} & Gate and state transition memory \\
+Unity bridge & \texttt{vragent2/bridge/unity\_bridge.py} & TCP protocol client \\
+Unity runtime & \texttt{VRAgentOnline.cs} & In-editor action execution \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\todo{Add implementation size: Python LOC, C\# LOC, number of commands, number of
+schemas, and supported action types.}
+
+\section{Evaluation Plan}
+
+\subsection{Research Questions}
+
+\begin{description}[leftmargin=*]
+  \item[RQ1] Does \tool improve code and interaction coverage compared with
+  one-shot LLM test generation and non-LLM exploration baselines?
+  \item[RQ2] Which components contribute most to effectiveness?
+  \item[RQ3] Does closed-loop observation reduce invalid, redundant, or
+  no-effect actions?
+  \item[RQ4] What is the runtime and token cost of multi-agent exploration?
+  \item[RQ5] How does \tool behave on gated interaction chains in XR scenes?
+\end{description}
+
+\subsection{Subject Applications}
+
+We will evaluate \tool on Unity XR applications spanning room-scale navigation,
+object manipulation, escape-room puzzles, and simulation tasks. Candidate
+subjects include BowlingVR, EE-Room, EscapeTheRoom, maze, Parkinson-VR,
+UnityCityView, VGuns, VR-Basics, VR-Room, vr-firefighter-simulator, and
+wheelchair-sim.
+
+\begin{table*}[t]
+\centering
+\caption{Subject applications. Fill values after running the analysis pipeline.}
+\label{tab:subjects}
+\begin{tabular}{lrrrrr}
+\toprule
+Subject & Scenes & GameObjects & MonoBehaviours & UnityEvents & LOC \\
+\midrule
+\todo{Subject A} & -- & -- & -- & -- & -- \\
+\todo{Subject B} & -- & -- & -- & -- & -- \\
+\todo{Subject C} & -- & -- & -- & -- & -- \\
+\todo{Subject D} & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Baselines}
+
+We compare against the following baselines:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{VRAgent 1.0 one-shot}: the previous one-shot plan generation
+  workflow.
+  \item \textbf{NoTODG}: generation without the target object dependency graph.
+  \item \textbf{Random}: randomly chooses objects and action patterns.
+  \item \textbf{Greedy static}: prioritizes objects by static script/component
+  features without runtime feedback.
+  \item \textbf{LLM-only online}: uses an LLM online but removes verification,
+  observer feedback, and Gate Graph memory.
+\end{itemize}
+
+\todo{Add any SOTA fuzzing/RL/game-testing baseline that can be fairly run on the
+same Unity XR subjects. If a direct baseline is unavailable, justify why and use
+closest runnable alternatives.}
+
+\subsection{Metrics}
+
+The primary metrics are line coverage (LC), method coverage (MC), and coverage
+of interesting game objects (CoIGO). Secondary metrics include action success
+rate, semantic success rate, gate solved count, duplicate action rate, invalid
+target rate, no-effect action rate, token cost, and wall-clock runtime.
+
+\subsection{Ablations}
+
+\begin{table*}[t]
+\centering
+\caption{Planned ablation variants.}
+\label{tab:ablations}
+\begin{tabular}{lcccccc}
+\toprule
+Variant & RAG & Verifier & Observer & GateGraph & Revisit & Runtime proxy \\
+\midrule
+Full \tool & yes & yes & yes & yes & yes & yes \\
+w/o RAG & no & yes & yes & yes & yes & yes \\
+w/o Verifier & yes & no & yes & yes & yes & yes \\
+w/o Observer & yes & yes & no & no & no & yes \\
+w/o GateGraph & yes & yes & yes & no & yes & yes \\
+w/o Revisit & yes & yes & yes & yes & no & yes \\
+w/o Runtime Proxy & yes & yes & yes & yes & yes & no \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Expected Result Tables}
+
+\begin{table*}[t]
+\centering
+\caption{Overall effectiveness. Replace placeholders with mean and standard
+deviation over repeated runs.}
+\label{tab:results}
+\begin{tabular}{lrrrrrr}
+\toprule
+Technique & LC & MC & CoIGO & Success & Gates & Cost \\
+\midrule
+Random & -- & -- & -- & -- & -- & -- \\
+Greedy static & -- & -- & -- & -- & -- & -- \\
+NoTODG & -- & -- & -- & -- & -- & -- \\
+VRAgent 1.0 & -- & -- & -- & -- & -- & -- \\
+\tool & -- & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{Discussion}
+
+\subsection{Why Closed-Loop Feedback Matters}
+
+One-shot LLM plans fail because they cannot observe whether an interaction was
+useful. The runtime trace gives the system evidence about which actions succeed,
+which objects change, which methods are invoked, and which conditions are
+missing. The Observer converts this evidence into planner instructions and
+scheduler bias, enabling the system to revisit important objects after new
+preconditions are inferred.
+
+\subsection{Runtime Proxy vs. Ground-Truth Coverage}
+
+The runtime novelty proxy is not a replacement for Unity Code Coverage. It is an
+online reward used to guide exploration before offline coverage reports are
+available. In the final evaluation, all coverage claims should be based on Unity
+Code Coverage summaries. The proxy should be analyzed separately as a guidance
+signal.
+
+\subsection{Limitations}
+
+\tool currently relies on static extraction quality and FileID resolution. Some
+runtime-generated objects may still be missed. The Observer uses heuristic
+failure-to-condition inference and may misclassify failures. The LLM agents can
+produce inconsistent action semantics, although the Verifier mitigates many
+structural errors. Finally, the current runtime proxy approximates coverage and
+must be validated against actual Unity coverage data.
+
+\section{Threats to Validity}
+
+\textbf{Internal validity.} Results may depend on prompt templates, LLM model
+versions, Unity version, and scene setup. We will use fixed seeds where possible,
+log all prompts and responses, and repeat runs to reduce nondeterminism.
+
+\textbf{Construct validity.} LC and MC measure code execution but may not fully
+capture XR interaction quality. We therefore include CoIGO, gate resolution, and
+semantic success metrics.
+
+\textbf{External validity.} The subject applications may not represent all XR
+genres or industrial XR systems. We mitigate this by selecting diverse projects
+with different interaction patterns.
+
+\textbf{Conclusion validity.} Statistical comparisons require repeated runs and
+appropriate tests. \todo{Add statistical method: Wilcoxon signed-rank, effect
+size, confidence intervals, or bootstrap depending on final data.}
+
+\section{Related Work}
+
+\todo{Add and cite related work in the following areas: automated GUI testing,
+game testing, Unity/VR testing, search-based testing, coverage-guided fuzzing,
+LLM-based test generation, retrieval-augmented generation for SE, and multi-agent
+LLM systems. Use real bibliographic entries before submission.}
+
+\section{Conclusion}
+
+This paper presented \tool, a closed-loop, retrieval-augmented multi-agent
+framework for testing Unity XR applications. By combining structured project
+retrieval, contract-based planning and verification, online Unity execution,
+weak-oracle observation, Gate Graph memory, and runtime coverage guidance, \tool
+addresses key limitations of one-shot LLM test generation. The planned empirical
+evaluation will quantify its impact on code coverage, interaction coverage,
+failure reduction, and exploration cost across multiple XR applications.
+
+\section*{Artifact Availability}
+
+\todo{For double-anonymous submission, provide an anonymized artifact link or a
+statement explaining artifact availability. Include setup instructions, subject
+apps, scripts, and raw logs. Remove identifying paths and names.}
+
+\section*{AI Assistance Disclosure}
+
+\todo{Before submission, add the required ACM/IEEE generative-AI disclosure in a
+way consistent with ICSE 2027 double-anonymous policy.}
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{1}
+
+\bibitem{todo-vr-testing}
+\todo{Add canonical references for VR/XR application testing.}
+
+\bibitem{todo-llm-testing}
+\todo{Add references for LLM-based software test generation.}
+
+\bibitem{todo-coverage-guided}
+\todo{Add references for coverage-guided fuzzing and search-based testing.}
+
+\bibitem{todo-gui-testing}
+\todo{Add references for GUI/mobile/game testing.}
+
+\end{thebibliography}
+
+\end{document}
