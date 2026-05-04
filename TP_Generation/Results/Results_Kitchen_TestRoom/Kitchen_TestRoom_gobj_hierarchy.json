@@ -3,7 +3,7 @@
     "gameobject_id": "1328195216",
     "gameobject_id_replace": "1328195216",
     "gameobject_type": "PrefabInstance",
-    "gameobject_name": "VRAgent2.0-PVEO",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [
       {
         "source": "1328195216",
@@ -13,44 +13,36 @@
         "edge_type": "Has_Mono_Comp",
         "mono_property": [
           {
-            "m_ObjectHideFlags": "0"
+            "mObjectHideFlags": "0"
           },
           {
-            "m_CorrespondingSourceObject": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mCorrespondingSourceObject": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabInstance": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabInstance": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabAsset": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabAsset": {
+              "fileID": "0"
+            }
           },
           {
-            "m_GameObject": [
-              {
-                "fileID": "4194219831183207930"
-              }
-            ]
+            "mGameObject": {
+              "fileID": "4194219831183207930"
+            }
           },
           {
-            "m_Enabled": "1"
+            "mEnabled": "1"
           },
           {
-            "m_EditorHideFlags": "0"
+            "mEditorHideFlags": "0"
           },
           {
-            "m_Script": [
+            "mScript": [
               {
                 "fileID": "11500000"
               },
@@ -63,10 +55,10 @@
             ]
           },
           {
-            "m_Name": ""
+            "mName": ""
           },
           {
-            "m_EditorClassIdentifier": ""
+            "mEditorClassIdentifier": ""
           },
           {
             "port": "6400"
@@ -78,7 +70,7 @@
         "valid_source_code_files": [
           {
             "script_id": "936d9149ac1e25949911d561695a271a",
-            "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\AgentBridge.cs.meta"
+            "file_path": ""
           }
         ]
       },
@@ -90,44 +82,36 @@
         "edge_type": "Has_Mono_Comp",
         "mono_property": [
           {
-            "m_ObjectHideFlags": "0"
+            "mObjectHideFlags": "0"
           },
           {
-            "m_CorrespondingSourceObject": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mCorrespondingSourceObject": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabInstance": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabInstance": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabAsset": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabAsset": {
+              "fileID": "0"
+            }
           },
           {
-            "m_GameObject": [
-              {
-                "fileID": "4194219831183207930"
-              }
-            ]
+            "mGameObject": {
+              "fileID": "4194219831183207930"
+            }
           },
           {
-            "m_Enabled": "1"
+            "mEnabled": "1"
           },
           {
-            "m_EditorHideFlags": "0"
+            "mEditorHideFlags": "0"
           },
           {
-            "m_Script": [
+            "mScript": [
               {
                 "fileID": "11500000"
               },
@@ -140,10 +124,10 @@
             ]
           },
           {
-            "m_Name": ""
+            "mName": ""
           },
           {
-            "m_EditorClassIdentifier": ""
+            "mEditorClassIdentifier": ""
           },
           {
             "reportCoverageDuration": "5"
@@ -152,11 +136,9 @@
             "exitAfterTesting": "0"
           },
           {
-            "leftHandController": [
-              {
-                "fileID": "4194219831230103897"
-              }
-            ]
+            "leftHandController": {
+              "fileID": "4194219831230103897"
+            }
           },
           {
             "moveSpeed": "6"
@@ -171,30 +153,26 @@
             "areaDiameter": "7.5"
           },
           {
-            "curTask": []
+            "curTask": "[]"
           },
           {
             "useFileID": "1"
           },
           {
-            "objA": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "objA": {
+              "fileID": "0"
+            }
           },
           {
-            "objB": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "objB": {
+              "fileID": "0"
+            }
           }
         ],
         "valid_source_code_files": [
           {
             "script_id": "b839dd7887a52e24d8bed59d18ec5987",
-            "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\VRAgentOnline.cs.meta"
+            "file_path": ""
           }
         ]
       },
@@ -206,44 +184,36 @@
         "edge_type": "Has_Mono_Comp",
         "mono_property": [
           {
-            "m_ObjectHideFlags": "0"
+            "mObjectHideFlags": "0"
           },
           {
-            "m_CorrespondingSourceObject": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mCorrespondingSourceObject": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabInstance": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabInstance": {
+              "fileID": "0"
+            }
           },
           {
-            "m_PrefabAsset": [
-              {
-                "fileID": "0"
-              }
-            ]
+            "mPrefabAsset": {
+              "fileID": "0"
+            }
           },
           {
-            "m_GameObject": [
-              {
-                "fileID": "4194219831183207930"
-              }
-            ]
+            "mGameObject": {
+              "fileID": "4194219831183207930"
+            }
           },
           {
-            "m_Enabled": "1"
+            "mEnabled": "1"
           },
           {
-            "m_EditorHideFlags": "0"
+            "mEditorHideFlags": "0"
           },
           {
-            "m_Script": [
+            "mScript": [
               {
                 "fileID": "11500000"
               },
@@ -256,16 +226,16 @@
             ]
           },
           {
-            "m_Name": ""
+            "mName": ""
           },
           {
-            "m_EditorClassIdentifier": ""
+            "mEditorClassIdentifier": ""
           }
         ],
         "valid_source_code_files": [
           {
             "script_id": "ec675469d72486646a106baa5e0e1bfd",
-            "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\StateCollector.cs.meta"
+            "file_path": ""
           }
         ]
       }
@@ -277,13 +247,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "247836572",
     "gameobject_id_replace": "247836572",
     "gameobject_type": "GameObject",
-    "gameobject_name": "_Managers",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [],
     "child_relations": [
       {
@@ -301,7 +273,7 @@
       {
         "child_id": "553705491",
         "child_id_replace": "553705491",
-        "child_name": "RecipeController_Main",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "553705491",
@@ -313,44 +285,36 @@
               "id": "553705493",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "553705491"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "553705491"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -363,10 +327,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "hasPantryKey": "0"
@@ -399,121 +363,81 @@
                   "finalDoorUnlocked": "0"
                 },
                 {
-                  "onPantryKeyPickedUp": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onPantryKeyPickedUp": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onPantryDoorUnlocked": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onPantryDoorUnlocked": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onKitchenDoorUnlocked": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onKitchenDoorUnlocked": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onPowerEnabled": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onPowerEnabled": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onIngredientWashed": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onIngredientWashed": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onIngredientCut": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onIngredientCut": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onIngredientsCombined": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onIngredientsCombined": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onDishCooked": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onDishCooked": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onDishPlated": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onDishPlated": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 },
                 {
-                  "onFinalDoorUnlocked": [
-                    {
-                      "m_PersistentCalls": [
-                        {
-                          "m_Calls": []
-                        }
-                      ]
+                  "onFinalDoorUnlocked": {
+                    "mPersistentCalls": {
+                      "mCalls": "[]"
                     }
-                  ]
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "60cacc58ceb77f0409a42bcf885e4d3c",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -521,12 +445,14 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "247836572",
-          "parent_name": "_Managers"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       }
     ],
     "parent_id": null,
@@ -535,13 +461,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "469710505",
     "gameobject_id_replace": "469710505",
     "gameobject_type": "GameObject",
-    "gameobject_name": "Room_B_Pantry",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [],
     "child_relations": [
       {
@@ -714,7 +642,7 @@
       {
         "child_id": "196765814",
         "child_id_replace": "196765814",
-        "child_name": "Cabinet_Ingredients",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "196765814",
@@ -726,44 +654,36 @@
               "id": "196765818",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "196765814"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "196765814"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -776,10 +696,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "openDistance": "0.35"
@@ -788,11 +708,9 @@
                   "animationSpeed": "5"
                 },
                 {
-                  "lockIndicatorRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "lockIndicatorRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
                   "materialLocked": [
@@ -825,7 +743,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "76584fa30dd8a484cbd474a5be0ac416",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\LockedCabinetController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -833,12 +751,14 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "469710505",
-          "parent_name": "Room_B_Pantry"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       }
     ],
     "parent_id": null,
@@ -847,13 +767,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "1034201484",
     "gameobject_id_replace": "1034201484",
     "gameobject_type": "GameObject",
-    "gameobject_name": "Room_C_Kitchen",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [],
     "child_relations": [
       {
@@ -1061,7 +983,7 @@
       {
         "child_id": "1341467250",
         "child_id_replace": "1341467250",
-        "child_name": "Door_Kitchen",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1341467250",
@@ -1073,44 +995,36 @@
               "id": "1341467255",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1341467250"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1341467250"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1123,10 +1037,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "openAngle": "90"
@@ -1142,7 +1056,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "df6ed34bdc198f845aeef08129f7eb31",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Home_TwoRooms\\DoorController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1150,17 +1064,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "58197014",
-          "parent_name": "DoorFrame_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1770515124",
         "child_id_replace": "1770515124",
-        "child_name": "Socket_KitchenBadge",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1770515124",
@@ -1172,44 +1088,36 @@
               "id": "1770515126",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1770515124"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1770515124"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1222,24 +1130,20 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "kitchenDoorController": [
-                    {
-                      "fileID": "1341467255"
-                    }
-                  ]
+                  "kitchenDoorController": {
+                    "fileID": "1341467255"
+                  }
                 },
                 {
-                  "panelRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "panelRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
                   "materialUnlocked": [
@@ -1272,7 +1176,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "e8270255d47442349a5f55f6fd69b2d0",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\KitchenBadgeUnlockReceiver.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1280,17 +1184,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "58197014",
-          "parent_name": "DoorFrame_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "2088852900",
         "child_id_replace": "2088852900",
-        "child_name": "Socket_WashSlot",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "2088852900",
@@ -1302,44 +1208,36 @@
               "id": "2088852902",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "2088852900"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "2088852900"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1352,31 +1250,25 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "waterFXRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "waterFXRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialWashing": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialWashing": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialIdle": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialIdle": {
+                    "fileID": "0"
+                  }
                 },
                 {
                   "washDuration": "1.5"
@@ -1386,7 +1278,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "1384d3dc87509de42b893913f2d8a309",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\SinkWashStation.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1394,17 +1286,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "1483904620",
-          "parent_name": "Sink_WashStation"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1235159925",
         "child_id_replace": "1235159925",
-        "child_name": "Board_Cutting",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1235159925",
@@ -1416,44 +1310,36 @@
               "id": "1235159929",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1235159925"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1235159925"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1466,45 +1352,37 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "knifeSlot": [
-                    {
-                      "fileID": "677490825"
-                    }
-                  ]
+                  "knifeSlot": {
+                    "fileID": "677490825"
+                  }
                 },
                 {
-                  "boardRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "boardRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialCut": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialCut": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialUncut": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialUncut": {
+                    "fileID": "0"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "eee8f7b5ca7e8d545b37b64b4407f513",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\CuttingBoardController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1512,17 +1390,19 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1034201484",
-          "parent_name": "Room_C_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "677490823",
         "child_id_replace": "677490823",
-        "child_name": "Socket_KnifeSlot",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "677490823",
@@ -1534,44 +1414,36 @@
               "id": "677490825",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "677490823"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "677490823"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1584,17 +1456,17 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "1a45bbe1dfaed6541baab30284d57f09",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\KnifeSlotDetector.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1602,17 +1474,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "1235159925",
-          "parent_name": "Board_Cutting"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1334793350",
         "child_id_replace": "1334793350",
-        "child_name": "Bowl_Mixing",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1334793350",
@@ -1624,44 +1498,36 @@
               "id": "1334793357",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1334793350"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1334793350"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1674,17 +1540,17 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "ebc8c9e1f2695b242b69a68739791567",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\MixingBowlController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1692,17 +1558,19 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1034201484",
-          "parent_name": "Room_C_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1200882479",
         "child_id_replace": "1200882479",
-        "child_name": "Stove_Main",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1200882479",
@@ -1714,44 +1582,36 @@
               "id": "1200882481",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1200882479"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1200882479"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1764,24 +1624,20 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "hobSocket": [
-                    {
-                      "fileID": "934798473"
-                    }
-                  ]
+                  "hobSocket": {
+                    "fileID": "934798473"
+                  }
                 },
                 {
-                  "burnerRenderer": [
-                    {
-                      "fileID": "162382998"
-                    }
-                  ]
+                  "burnerRenderer": {
+                    "fileID": "162382998"
+                  }
                 },
                 {
                   "materialCooking": [
@@ -1830,7 +1686,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "d3577b42541692847a9f6608008010b4",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\StoveController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1838,17 +1694,19 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1034201484",
-          "parent_name": "Room_C_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "934798471",
         "child_id_replace": "934798471",
-        "child_name": "Socket_HobSlot",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "934798471",
@@ -1860,44 +1718,36 @@
               "id": "934798473",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "934798471"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "934798471"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -1910,17 +1760,17 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "ab82c2aa2c1912a48b7a6b1e88257a98",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\MixingBowlSocket.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -1928,17 +1778,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "1200882479",
-          "parent_name": "Stove_Main"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "807955241",
         "child_id_replace": "807955241",
-        "child_name": "Plate_Serving",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "807955241",
@@ -1950,44 +1802,36 @@
               "id": "807955243",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "807955241"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "807955241"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2000,38 +1844,32 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "plateRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "plateRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialPlated": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialPlated": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "materialEmpty": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "materialEmpty": {
+                    "fileID": "0"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "aec06104d3eb91340b240651337c660b",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\ServingPlateSocket.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2039,12 +1877,14 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1034201484",
-          "parent_name": "Room_C_Kitchen"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       }
     ],
     "parent_id": null,
@@ -2053,13 +1893,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "1090305309",
     "gameobject_id_replace": "1090305309",
     "gameobject_type": "GameObject",
-    "gameobject_name": "Room_D_Exit",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [],
     "child_relations": [
       {
@@ -2202,7 +2044,7 @@
       {
         "child_id": "1841690631",
         "child_id_replace": "1841690631",
-        "child_name": "Door_FinalExit",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1841690631",
@@ -2214,44 +2056,36 @@
               "id": "1841690636",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1841690631"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1841690631"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2264,10 +2098,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "openAngle": "90"
@@ -2283,7 +2117,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "df6ed34bdc198f845aeef08129f7eb31",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Home_TwoRooms\\DoorController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2291,17 +2125,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "689067126",
-          "parent_name": "DoorFrame_FinalExit"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1062148655",
         "child_id_replace": "1062148655",
-        "child_name": "Socket_DeliverySlot",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1062148655",
@@ -2313,44 +2149,36 @@
               "id": "1062148657",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1062148655"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1062148655"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2363,24 +2191,20 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "finalExitDoor": [
-                    {
-                      "fileID": "1841690636"
-                    }
-                  ]
+                  "finalExitDoor": {
+                    "fileID": "1841690636"
+                  }
                 },
                 {
-                  "counterRenderer": [
-                    {
-                      "fileID": "1673849597"
-                    }
-                  ]
+                  "counterRenderer": {
+                    "fileID": "1673849597"
+                  }
                 },
                 {
                   "materialComplete": [
@@ -2413,7 +2237,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "991cddff530dc494b828bf533d5d87de",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\ServingCounterSocket.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2421,17 +2245,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "869482065",
-          "parent_name": "Counter_Serving"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1567135693",
         "child_id_replace": "1567135693",
-        "child_name": "Trigger_FinalExit",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1567135693",
@@ -2443,44 +2269,36 @@
               "id": "1567135695",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1567135693"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1567135693"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2493,24 +2311,22 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "recipeController": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "recipeController": {
+                    "fileID": "0"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "06666edcea97a8046a1b4939514d305c",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\FinalExitTrigger.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2518,12 +2334,14 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1090305309",
-          "parent_name": "Room_D_Exit"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       }
     ],
     "parent_id": null,
@@ -2532,13 +2350,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "1361896045",
     "gameobject_id_replace": "1361896045",
     "gameobject_type": "GameObject",
-    "gameobject_name": "Room_A_Lobby",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [],
     "child_relations": [
       {
@@ -2686,7 +2506,7 @@
       {
         "child_id": "915335388",
         "child_id_replace": "915335388",
-        "child_name": "Key_Pantry",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "915335388",
@@ -2698,44 +2518,36 @@
               "id": "915335393",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "915335388"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "915335388"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2748,10 +2560,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "usePhysicsOnRelease": "0"
@@ -2763,18 +2575,16 @@
                   "GrabMechanic": "0"
                 },
                 {
-                  "destination": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "destination": {
+                    "fileID": "0"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "54c3800260f6fb9468fb868d9434622f",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\GrabbableKeyController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2782,17 +2592,19 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1361896045",
-          "parent_name": "Room_A_Lobby"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "1854153234",
         "child_id_replace": "1854153234",
-        "child_name": "Switch_MainPower",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "1854153234",
@@ -2804,44 +2616,36 @@
               "id": "1854153240",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "1854153234"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "1854153234"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2854,17 +2658,15 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "switchRenderer": [
-                    {
-                      "fileID": "1854153236"
-                    }
-                  ]
+                  "switchRenderer": {
+                    "fileID": "1854153236"
+                  }
                 },
                 {
                   "materialOn": [
@@ -2893,18 +2695,16 @@
                   ]
                 },
                 {
-                  "controlledLights": [
-                    {
-                      "fileID": "2081857544"
-                    }
-                  ]
+                  "controlledLights": {
+                    "fileID": "2081857544"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "8f0cd920dda4e7949843aef0380f2bad",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PowerSwitchController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -2912,17 +2712,19 @@
         "depth": 1,
         "parent_info": {
           "parent_id": "1361896045",
-          "parent_name": "Room_A_Lobby"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "789745775",
         "child_id_replace": "789745775",
-        "child_name": "Door_Pantry",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "789745775",
@@ -2934,44 +2736,36 @@
               "id": "789745780",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "789745775"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "789745775"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -2984,10 +2778,10 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
                   "openAngle": "90"
@@ -3003,7 +2797,7 @@
             "valid_source_code_files": [
               {
                 "script_id": "df6ed34bdc198f845aeef08129f7eb31",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Home_TwoRooms\\DoorController.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -3011,17 +2805,19 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "581787307",
-          "parent_name": "DoorFrame_Pantry"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       },
       {
         "child_id": "351089451",
         "child_id_replace": "351089451",
-        "child_name": "Socket_PantryLock",
+        "child_name": "Unknown",
         "mono_comp_targets": [
           {
             "source": "351089451",
@@ -3033,44 +2829,36 @@
               "id": "351089453",
               "MonoBehaviour": [
                 {
-                  "m_ObjectHideFlags": "0"
+                  "mObjectHideFlags": "0"
                 },
                 {
-                  "m_CorrespondingSourceObject": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mCorrespondingSourceObject": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabInstance": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabInstance": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_PrefabAsset": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "mPrefabAsset": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "m_GameObject": [
-                    {
-                      "fileID": "351089451"
-                    }
-                  ]
+                  "mGameObject": {
+                    "fileID": "351089451"
+                  }
                 },
                 {
-                  "m_Enabled": "1"
+                  "mEnabled": "1"
                 },
                 {
-                  "m_EditorHideFlags": "0"
+                  "mEditorHideFlags": "0"
                 },
                 {
-                  "m_Script": [
+                  "mScript": [
                     {
                       "fileID": "11500000"
                     },
@@ -3083,38 +2871,32 @@
                   ]
                 },
                 {
-                  "m_Name": ""
+                  "mName": ""
                 },
                 {
-                  "m_EditorClassIdentifier": ""
+                  "mEditorClassIdentifier": ""
                 },
                 {
-                  "pantryDoorController": [
-                    {
-                      "fileID": "789745780"
-                    }
-                  ]
+                  "pantryDoorController": {
+                    "fileID": "789745780"
+                  }
                 },
                 {
-                  "socketIndicatorRenderer": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "socketIndicatorRenderer": {
+                    "fileID": "0"
+                  }
                 },
                 {
-                  "unlockedMaterial": [
-                    {
-                      "fileID": "0"
-                    }
-                  ]
+                  "unlockedMaterial": {
+                    "fileID": "0"
+                  }
                 }
               ]
             },
             "valid_source_code_files": [
               {
                 "script_id": "d0b9e11e66c34ea488dd065d8f20959d",
-                "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PantryKeyUnlockReceiver.cs.meta"
+                "file_path": ""
               }
             ]
           }
@@ -3122,12 +2904,14 @@
         "depth": 2,
         "parent_info": {
           "parent_id": "581787307",
-          "parent_name": "DoorFrame_Pantry"
+          "parent_name": "Unknown"
         },
         "tag_logic_info": [],
         "layer_logic_info": [],
         "gameobject_find_info": [],
-        "gameobject_instantiate_info": []
+        "gameobject_instantiate_info": [],
+        "sorted_target_logic_info": [],
+        "sorted_layer_logic_info": []
       }
     ],
     "parent_id": null,
@@ -3136,13 +2920,15 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   },
   {
     "gameobject_id": "1996025211",
     "gameobject_id_replace": "1996025211",
     "gameobject_type": "GameObject",
-    "gameobject_name": "Player_KitchenTest",
+    "gameobject_name": "Unknown",
     "mono_comp_relations": [
       {
         "source": "1996025211",
@@ -3154,44 +2940,36 @@
           "id": "1996025217",
           "MonoBehaviour": [
             {
-              "m_ObjectHideFlags": "0"
+              "mObjectHideFlags": "0"
             },
             {
-              "m_CorrespondingSourceObject": [
-                {
-                  "fileID": "0"
-                }
-              ]
+              "mCorrespondingSourceObject": {
+                "fileID": "0"
+              }
             },
             {
-              "m_PrefabInstance": [
-                {
-                  "fileID": "0"
-                }
-              ]
+              "mPrefabInstance": {
+                "fileID": "0"
+              }
             },
             {
-              "m_PrefabAsset": [
-                {
-                  "fileID": "0"
-                }
-              ]
+              "mPrefabAsset": {
+                "fileID": "0"
+              }
             },
             {
-              "m_GameObject": [
-                {
-                  "fileID": "1996025211"
-                }
-              ]
+              "mGameObject": {
+                "fileID": "1996025211"
+              }
             },
             {
-              "m_Enabled": "1"
+              "mEnabled": "1"
             },
             {
-              "m_EditorHideFlags": "0"
+              "mEditorHideFlags": "0"
             },
             {
-              "m_Script": [
+              "mScript": [
                 {
                   "fileID": "11500000"
                 },
@@ -3204,10 +2982,10 @@
               ]
             },
             {
-              "m_Name": ""
+              "mName": ""
             },
             {
-              "m_EditorClassIdentifier": ""
+              "mEditorClassIdentifier": ""
             },
             {
               "moveSpeed": "4"
@@ -3219,11 +2997,9 @@
               "gravity": "-9.81"
             },
             {
-              "cameraRig": [
-                {
-                  "fileID": "354756969"
-                }
-              ]
+              "cameraRig": {
+                "fileID": "354756969"
+              }
             },
             {
               "lookSensitivity": "2"
@@ -3242,7 +3018,7 @@
         "valid_source_code_files": [
           {
             "script_id": "c711490ec1ca04b4f999b3c1872a4087",
-            "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\EditorPlayerController.cs.meta"
+            "file_path": ""
           }
         ]
       }
@@ -3260,6 +3036,8 @@
     "tag_logic_info": [],
     "layer_logic_info": [],
     "gameobject_find_info": [],
-    "gameobject_instantiate_info": []
+    "gameobject_instantiate_info": [],
+    "sorted_target_logic_info": [],
+    "sorted_layer_logic_info": []
   }
 ]

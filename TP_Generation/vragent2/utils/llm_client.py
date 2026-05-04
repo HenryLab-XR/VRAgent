@@ -6,6 +6,10 @@ Supports:
     - Single-turn and multi-turn conversations
     - Configurable model, temperature, retries
     - Response parsing (JSON extraction, think-tag stripping)
+
+Implementation uses the ``requests`` library (stdlib-adjacent, always available)
+to call the OpenAI-compatible REST endpoint directly, avoiding the ``openai``
+and ``httpx`` packages which require Python >=3.7.1.
 """
 
 from __future__ import annotations
@@ -15,15 +19,7 @@ import re
 import time
 from typing import Any, Dict, List, Optional
 
-try:
-    import httpx
-except ImportError:  # pragma: no cover - exercised in minimal test envs
-    httpx = None
-
-try:
-    import openai
-except ImportError:  # pragma: no cover - exercised in minimal test envs
-    openai = None
+import requests
 
 # Regex to strip <think>...</think> blocks (some reasoning models emit these)
 _THINK_RE = re.compile(r"<\s*think\s*>.*?<\s*/\s*think\s*>", re.IGNORECASE | re.DOTALL)
@@ -33,7 +29,7 @@ _PROXY_URL = "http://127.0.0.1:15236"
 
 
 class LLMClient:
-    """Thin wrapper around the OpenAI chat-completions API."""
+    """Thin wrapper around the OpenAI-compatible chat-completions REST API."""
 
     def __init__(
         self,
@@ -50,26 +46,30 @@ class LLMClient:
         self.max_retries = max_retries
         self.retry_delay = retry_delay
 
+        # Normalise base_url: strip trailing slash, auto-append /v1 if bare domain
+        from urllib.parse import urlparse as _urlparse
+        _raw = (base_url or "").rstrip("/")
+        _parsed = _urlparse(_raw)
+        if _parsed.path in ("", "/"):
+            # Bare domain like https://api.vectorengine.cn — auto-add /v1
+            self._base_url = _raw + "/v1"
+            print(f"[LLM] Auto-added /v1 to base URL: {_raw} -> {self._base_url}")
+        else:
+            self._base_url = _raw
+        self._endpoint = self._base_url + "/chat/completions"
+        print(f"[LLM] Endpoint: {self._endpoint}")
+
         # Token usage accumulator: {caller: {prompt_tokens, completion_tokens, total_tokens, calls}}
         self._token_usage: Dict[str, Dict[str, int]] = {}
 
-        if openai is None:
-            raise ImportError(
-                "The 'openai' package is required to instantiate LLMClient. "
-                "Install the TP_Generation LLM dependencies before running with real LLM calls."
-            )
-        if proxy_url and httpx is None:
-            raise ImportError(
-                "The 'httpx' package is required when LLMClient proxy_url is set. "
-                "Install httpx or pass proxy_url='' to disable proxy support."
-            )
-
-        http_client = httpx.Client(proxy=proxy_url) if proxy_url else None
-        self._client = openai.OpenAI(
-            api_key=api_key,
-            base_url=base_url,
-            http_client=http_client,
-        )
+        # Build a requests.Session with optional proxy
+        self._session = requests.Session()
+        self._session.headers.update({
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        })
+        if proxy_url:
+            self._session.proxies = {"http": proxy_url, "https": proxy_url}
 
     # ------------------------------------------------------------------
     # Core API call
@@ -94,24 +94,51 @@ class LLMClient:
         temperature = temperature if temperature is not None else self.default_temperature
         retries = max_retries if max_retries is not None else self.max_retries
 
-        for attempt in range(1, retries + 1):
-            try:
-                response = self._client.chat.completions.create(
-                    model=model,
-                    messages=messages,
-                    temperature=temperature,
-                )
-                # Accumulate token usage
-                self._accumulate_usage(response, caller or model)
+        payload = {
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+        }
 
-                if response.choices:
-                    return response.choices[0].message.content
+        for attempt in range(1, retries + 1):
+            resp = None
+            try:
+                resp = self._session.post(
+                    self._endpoint,
+                    json=payload,
+                    timeout=120,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+
+                # Accumulate token usage
+                self._accumulate_usage(data, caller or model)
+
+                choices = data.get("choices") or []
+                if choices:
+                    return choices[0].get("message", {}).get("content")
                 print("[LLM] Empty response from API")
                 return None
             except Exception as exc:
-                print(f"[LLM] Attempt {attempt}/{retries} failed: {exc}")
+                # Show HTTP status + response body snippet to aid debugging
+                if resp is not None:
+                    _snippet = (resp.text or "")[:300].replace("\n", " ")
+                    print(f"[LLM] Attempt {attempt}/{retries} failed (HTTP {resp.status_code}): {exc} | body: {_snippet}")
+                    # If server returned HTML, this is a config error (wrong endpoint),
+                    # not a rate limit — no point waiting the full retry_delay
+                    content_type = resp.headers.get("Content-Type", "")
+                    is_html = "text/html" in content_type or (resp.text or "").lstrip().startswith("<!DOCTYPE")
+                    if is_html:
+                        print("[LLM] Response is HTML — likely wrong endpoint. Check API Base URL.")
+                        # Short delay only; no benefit to 30s wait
+                        wait = min(self.retry_delay, 3.0)
+                    else:
+                        wait = self.retry_delay
+                else:
+                    print(f"[LLM] Attempt {attempt}/{retries} failed: {exc}")
+                    wait = self.retry_delay
                 if attempt < retries:
-                    time.sleep(self.retry_delay)
+                    time.sleep(wait)
         print("[LLM] All retries exhausted")
         return None
 
@@ -119,17 +146,17 @@ class LLMClient:
     # Token usage tracking
     # ------------------------------------------------------------------
 
-    def _accumulate_usage(self, response: Any, caller: str) -> None:
-        """Extract token counts from the API response and accumulate."""
-        usage = getattr(response, "usage", None)
+    def _accumulate_usage(self, data: Any, caller: str) -> None:
+        """Extract token counts from the API response dict and accumulate."""
+        usage = data.get("usage") if isinstance(data, dict) else None
         if not usage:
             return
         bucket = self._token_usage.setdefault(caller, {
             "prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "calls": 0,
         })
-        bucket["prompt_tokens"] += getattr(usage, "prompt_tokens", 0) or 0
-        bucket["completion_tokens"] += getattr(usage, "completion_tokens", 0) or 0
-        bucket["total_tokens"] += getattr(usage, "total_tokens", 0) or 0
+        bucket["prompt_tokens"] += usage.get("prompt_tokens", 0) or 0
+        bucket["completion_tokens"] += usage.get("completion_tokens", 0) or 0
+        bucket["total_tokens"] += usage.get("total_tokens", 0) or 0
         bucket["calls"] += 1
 
     def get_token_usage(self) -> Dict[str, Dict[str, int]]:

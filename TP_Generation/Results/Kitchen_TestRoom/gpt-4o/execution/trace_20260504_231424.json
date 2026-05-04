@@ -1,0 +1,13 @@
+[
+  {
+    "action": "Trigger:Unknown",
+    "state_before": {},
+    "state_after": {},
+    "events": [
+      "error:Unknown error",
+      "exception:Source object not found: fileID=1328195216"
+    ],
+    "success": false,
+    "duration_ms": 0.0
+  }
+]

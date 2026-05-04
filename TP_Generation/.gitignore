@@ -1,0 +1,15 @@
+# Local UI settings — contains API key, never commit
+.ui_settings.json
+
+# Jelly server runtime files
+.jelly.pid
+.jelly.log
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+venv/

@@ -57,19 +57,47 @@ class UnityBridge:
         self._sock.connect((self.host, self.port))
         print(f"[UnityBridge] Connected to {self.host}:{self.port}")
 
+    def _close_socket(self) -> None:
+        """Close and clear the socket (used after any I/O error)."""
+        if self._sock is not None:
+            try:
+                self._sock.close()
+            except Exception:
+                pass
+            self._sock = None
+
     def close(self) -> None:
         """Gracefully disconnect."""
         if self._sock:
             try:
                 self._send_command({"type": "Shutdown", "request_id": self._rid()})
-                # Read the Pong response
                 self._recv_response()
             except Exception:
                 pass
             finally:
-                self._sock.close()
-                self._sock = None
+                self._close_socket()
         print("[UnityBridge] Disconnected")
+
+    def ensure_connected(self) -> bool:
+        """Re-connect if the socket is gone (e.g. Unity closed the idle connection).
+
+        Returns True if connected (or just reconnected successfully), False on failure.
+        """
+        if self._sock is not None:
+            return True
+        print(f"[UnityBridge] Reconnecting to {self.host}:{self.port}...")
+        try:
+            self.connect()
+            # Reset Unity scene state so it's ready for fresh actions
+            reset_resp = self.reset()
+            if reset_resp.get("success", False):
+                print("[UnityBridge] Reconnected and scene reset OK")
+            else:
+                print("[UnityBridge] Reconnected (scene reset skipped)")
+            return True
+        except Exception as exc:
+            print(f"[UnityBridge] Reconnect failed: {exc}")
+            return False
 
     @property
     def connected(self) -> bool:
@@ -181,19 +209,27 @@ class UnityBridge:
 
         body = json.dumps(command, ensure_ascii=False).encode("utf-8")
         header = struct.pack("<I", len(body))  # 4 bytes little-endian
-        self._sock.sendall(header + body)
+        try:
+            self._sock.sendall(header + body)
+        except Exception as exc:
+            self._close_socket()
+            raise ConnectionError(f"Send failed: {exc}") from exc
 
     def _recv_response(self) -> Dict[str, Any]:
         """Receive a length-prefixed JSON response."""
-        # Read 4-byte header
-        header = self._recv_exact(4)
-        length = struct.unpack("<I", header)[0]
+        try:
+            # Read 4-byte header
+            header = self._recv_exact(4)
+            length = struct.unpack("<I", header)[0]
 
-        if length <= 0 or length > 10 * 1024 * 1024:
-            raise ValueError(f"Invalid response length: {length}")
+            if length <= 0 or length > 10 * 1024 * 1024:
+                raise ValueError(f"Invalid response length: {length}")
 
-        body = self._recv_exact(length)
-        return json.loads(body.decode("utf-8"))
+            body = self._recv_exact(length)
+            return json.loads(body.decode("utf-8"))
+        except (ConnectionError, ValueError) as exc:
+            self._close_socket()  # mark as disconnected
+            raise
 
     def _recv_exact(self, n: int) -> bytes:
         """Read exactly n bytes from the socket."""

@@ -1,8 +1,8 @@
 {
   "ProjectName": "C# Project",
-  "ProjectDirectory": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets",
+  "ProjectDirectory": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets",
   "ProjectLanguage": "C#",
-  "DatasetPath": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\TP_Generation\\Results\\Results_Kitchen_TestRoom\\script_detailed_info\\mainResults\\CodeAnalysis.json",
+  "DatasetPath": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\TP_Generation\\Results\\Results_Kitchen_TestRoom\\script_detailed_info\\mainResults\\CodeAnalysis.json",
   "StructureList": [
     {
       "Name": "AllInstantiate",
@@ -14,7 +14,7 @@
       "Occurrency": 1,
       "Structure": [
         {
-          "Script": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\EditorPlayerController.cs",
+          "Script": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\EditorPlayerController.cs",
           "Name": "transform.Find",
           "Invocation": "transform.Find",
           "Line": 42,
@@ -48,7 +48,7 @@
       "Occurrency": 2,
       "Structure": [
         {
-          "Script": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\FinalExitTrigger.cs",
+          "Script": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\FinalExitTrigger.cs",
           "Name": "other.CompareTag",
           "Invocation": "other.CompareTag",
           "Line": 23,
@@ -61,7 +61,7 @@
           ]
         },
         {
-          "Script": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets\\Scripts\\Test\\ExitRoom.cs",
+          "Script": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\Scripts\\Test\\ExitRoom.cs",
           "Name": "collision.gameObject.CompareTag",
           "Invocation": "collision.gameObject.CompareTag",
           "Line": 7,

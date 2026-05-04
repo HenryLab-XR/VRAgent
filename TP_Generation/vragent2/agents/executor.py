@@ -110,7 +110,13 @@ class ExecutorAgent(BaseAgent):
         source_name = action.get("source_object_name") or str(action.get("source_object_fileID", ""))
 
         # ── Online mode: real Unity execution ────────────────────────
-        if self.bridge is not None and self.bridge.connected:
+        if self.bridge is not None:
+            # Auto-reconnect if the socket was dropped while waiting for LLM
+            if not self.bridge.connected:
+                print("[EXECUTOR] Bridge disconnected — attempting reconnect...")
+                if not self.bridge.ensure_connected():
+                    print("[EXECUTOR] Reconnect failed, falling back to offline mode")
+                    return self._execute_offline(action, action_type, source_name)
             return self._execute_via_bridge(action, action_type, source_name)
 
         # ── Offline / dry-run mode ───────────────────────────────────

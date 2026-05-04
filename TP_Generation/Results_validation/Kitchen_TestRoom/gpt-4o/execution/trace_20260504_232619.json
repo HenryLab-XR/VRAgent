@@ -1,0 +1,22 @@
+[
+  {
+    "action": "Trigger:KitchenBadgeUnlockReceiver",
+    "state_before": {},
+    "state_after": {},
+    "events": [
+      "dispatched:Trigger"
+    ],
+    "success": true,
+    "duration_ms": 0.0
+  },
+  {
+    "action": "Trigger:SinkWashStation",
+    "state_before": {},
+    "state_after": {},
+    "events": [
+      "dispatched:Trigger"
+    ],
+    "success": true,
+    "duration_ms": 0.0
+  }
+]

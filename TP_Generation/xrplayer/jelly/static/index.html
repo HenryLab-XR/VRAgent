@@ -80,10 +80,11 @@
   .modal-body{flex:1;overflow:auto;padding:14px 16px;}
   .modal-body textarea{width:100%;min-height:400px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;line-height:1.5;resize:vertical;}
   .modal-foot{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;align-items:center;}
-  .proj-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:5px;margin-bottom:6px;}
-  .proj-item .pname{font-weight:600;font-size:13px;}
-  .proj-item .ppath{color:var(--muted);font-size:11px;}
-  .proj-item .pdel{margin-left:auto;flex-shrink:0;}
+  .proj-item{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:5px;margin-bottom:6px;}
+  .proj-item .pinfo{flex:1;min-width:0;overflow:hidden;}
+  .proj-item .pname{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .proj-item .ppath{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .proj-item .pdel,.proj-item .pedit{flex-shrink:0;}
   /* ---- tooltip ---- */
   [data-tip]{position:relative;cursor:help;}
   [data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1e2736;color:#e6edf3;border:1px solid #3a4560;border-radius:7px;padding:8px 12px;font-size:12px;line-height:1.6;white-space:pre-wrap;max-width:280px;min-width:120px;box-shadow:0 6px 24px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4);opacity:0;pointer-events:none;z-index:200;transition:opacity .15s ease,transform .15s ease;transform:translateX(-50%) translateY(4px);text-align:left;}
@@ -105,6 +106,29 @@
   .fb-item.fb-selected{background:var(--panel2);outline:1px solid var(--accent2);}
   .fb-empty{padding:24px;text-align:center;color:var(--muted);font-style:italic;font-size:13px;}
   .fb-loading{padding:16px;text-align:center;color:var(--muted);font-size:12px;}
+  .fb-path-input{flex:1;background:transparent;border:none;outline:none;font-size:12px;color:var(--accent);min-width:0;font-family:"Cascadia Code",Consolas,monospace;}
+  .fb-path-input:focus{color:var(--fg);}
+  .fb-mkdir-row{display:none;align-items:center;gap:6px;padding:5px 14px;background:var(--panel2);border-bottom:1px solid var(--border);}
+  .fb-mkdir-row input{flex:1;font-size:12px;}
+  .fb-mkdir-row.open{display:flex;}
+  /* ---- workflow pipeline ---- */
+  .wf-pipeline{display:flex;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:12px 20px;margin-bottom:12px;}
+  .wf-pipe-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+  .wf-pipe-step:hover .wf-pipe-dot{border-color:var(--accent);}
+  .wf-pipe-sep{color:var(--border);font-size:20px;flex-shrink:0;padding-bottom:22px;}
+  .wf-pipe-dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:all .3s;background:var(--panel2);color:var(--muted);}
+  .wf-pipe-dot.running{color:var(--accent);border-color:var(--accent);animation:pulseDot 1.2s ease-in-out infinite;}
+  .wf-pipe-dot.done{color:var(--good);border-color:var(--good);background:rgba(63,185,80,.12);}
+  .wf-pipe-dot.error{color:var(--bad);border-color:var(--bad);}
+  .wf-pipe-label{font-size:10px;text-align:center;max-width:88px;line-height:1.35;color:var(--muted);}
+  @keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(88,166,255,.5);}50%{box-shadow:0 0 0 6px rgba(88,166,255,0);}}
+  /* ---- step collapsible ---- */
+  .wf-step-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;}
+  .wf-step-chevron{color:var(--muted);font-size:11px;transition:transform .2s;}
+  .wf-section.collapsed .wf-step-chevron{transform:rotate(-90deg);}
+  .wf-step-body{margin-top:0;}
+  .wf-section.collapsed .wf-step-body{display:none;}
+  .btn.sm{font-size:11px;padding:3px 8px;}
 </style>
 </head>
 <body>
@@ -132,86 +156,220 @@
 <main>
 
 <section id="tab-workflow" class="panel active">
-  <div class="wf-section">
-    <h2>1 &middot; Project &amp; Scene</h2>
-    <div class="row">
-      <div class="col">
-        <div class="field-row">
-          <label>Project</label>
-          <select id="wfProjectSel" style="flex:1" data-tip="选择要测试的 Unity 项目&#10;需先在项目配置中注册"></select>
-          <button class="btn ghost sm" onclick="openAddProject()" data-tip="添加或更新一个 Unity 项目配置">+ 添加</button>
-          <button class="btn ghost sm" onclick="openGlobalCfg()" data-tip="编辑全局默认配置&#10;（Python 路径、默认模型等）">&#x2699;</button>
-        </div>
-        <div id="wfProjectMeta" class="meta" style="margin-left:118px;margin-bottom:8px;"></div>
-        <div class="field-row">
-          <label>Scene</label>
-          <select id="wfSceneSel" style="flex:1" data-tip="从 Unity 项目目录中扫描到的 .unity 场景文件"></select>
-          <button class="btn ghost sm" onclick="refreshScenes()" data-tip="重新扫描项目目录中的场景文件">&#x27F3;</button>
-        </div>
-      </div>
-      <div class="col" style="max-width:320px;">
-        <h3 class="sec" style="margin-top:0">Registered Projects</h3>
-        <div id="wfProjList"></div>
-      </div>
+  <!-- Pipeline overview bar -->
+  <div class="wf-pipeline">
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec0')">
+      <div class="wf-pipe-dot" id="pd0">&#x2699;</div>
+      <div class="wf-pipe-label">项目<br>配置</div>
+    </div>
+    <div class="wf-pipe-sep">&#x2192;</div>
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec1')">
+      <div class="wf-pipe-dot" id="pd1">1</div>
+      <div class="wf-pipe-label">场景依赖<br>提取</div>
+    </div>
+    <div class="wf-pipe-sep">&#x2192;</div>
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec2')">
+      <div class="wf-pipe-dot" id="pd2">2</div>
+      <div class="wf-pipe-label">层级<br>遍历</div>
+    </div>
+    <div class="wf-pipe-sep">&#x2192;</div>
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec3')">
+      <div class="wf-pipe-dot" id="pd3">3</div>
+      <div class="wf-pipe-label">逻辑<br>预处理</div>
+    </div>
+    <div class="wf-pipe-sep">&#x2192;</div>
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec4')">
+      <div class="wf-pipe-dot" id="pd4">4</div>
+      <div class="wf-pipe-label">探索<br>运行</div>
     </div>
   </div>
 
-  <div class="wf-section">
-    <h2>2 &middot; Run Configuration</h2>
-    <div class="row">
-      <div class="col">
-        <div class="field-row"><label data-tip="使用的 LLM 模型名称&#10;例：gpt-4o / qwen3-coder">模型</label><input id="cfgModel" value="gpt-4o" placeholder="gpt-4o, qwen3-coder ..." /></div>
-        <div class="field-row"><label data-tip="OpenAI 兼容接口的 Base URL&#10;使用 OpenAI 官方时留空">API 地址</label><input id="cfgApiBase" placeholder="（可选）OpenAI 兼容接口地址" /></div>
-        <div class="field-row"><label data-tip="API 密钥，仅在本次运行中使用&#10;不会写入磁盘或项目配置">API Key</label><input id="cfgApiKey" type="password" placeholder="sk-... （不会保存）" /></div>
-        <div class="field-row">
-          <label data-tip="最大迭代轮数（探索预算）&#10;每轮对一个对象执行一组动作">预算</label>
-          <input id="cfgBudget" type="number" value="100" min="1" style="max-width:80px" />
-          <span class="meta" style="margin-left:4px">轮</span>
-          <span style="margin-left:12px" class="meta" data-tip="限制最多测试的对象数量&#10;0 = 不限制，测试场景中所有可交互对象">对象上限:</span>
-          <input id="cfgLimit" type="number" value="0" min="0" style="max-width:60px;margin-left:4px" />
-          <span class="meta" style="margin-left:4px">（0=不限）</span>
-        </div>
-        <div class="field-row"><label data-tip="结果输出目录名称&#10;相对于工作目录的路径">输出目录</label><input id="cfgOutput" value="Results" /></div>
-        <div class="field-row"><label data-tip="C# 脚本目录路径（可选）&#10;提供后将用于静态分析增强测试计划">脚本目录</label><input id="cfgScriptsDir" placeholder="（可选）C# 脚本目录路径" /></div>
-      </div>
-      <div class="col">
-        <div class="field-row" style="align-items:flex-start">
-          <label style="padding-top:4px" data-tip="通过 TCP 连接 Unity Editor&#10;需要在 Unity 中进入 Play Mode&#10;连接后可获取真实场景状态和事件反馈">Unity Bridge</label>
-          <div style="display:flex;flex-direction:column;gap:6px;flex:1">
-            <label style="width:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg);cursor:pointer">
-              <input type="checkbox" id="cfgUnity" />
-              TCP 连接 Unity &nbsp;<span class="meta">（Unity Editor 需处于 Play Mode）</span>
-            </label>
-            <div style="display:flex;gap:6px;align-items:center">
-              <span class="meta">Host:</span>
-              <input id="cfgUnityHost" value="127.0.0.1" style="width:120px" />
-              <span class="meta">Port:</span>
-              <input id="cfgUnityPort" type="number" value="6400" style="width:70px" />
-            </div>
+  <!-- Step 0: Project & Scene (collapsed by default) -->
+  <div class="wf-section collapsed" id="wfSec0">
+    <div class="wf-step-head" onclick="toggleStep('wfSec0')">
+      <h2>&#x2699; 项目 &amp; 场景</h2>
+      <span style="flex:1"></span>
+      <span class="wf-step-chevron">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="row">
+        <div class="col">
+          <div class="field-row">
+            <label>Project</label>
+            <select id="wfProjectSel" style="flex:1" data-tip="选择要测试的 Unity 项目&#10;需先在项目配置中注册"></select>
+            <button class="btn ghost sm" onclick="openAddProject()" data-tip="添加或更新一个 Unity 项目配置">+ 添加</button>
+            <button class="btn ghost sm" onclick="openGlobalCfg()" data-tip="编辑全局默认配置&#10;（Python 路径、默认模型等）">&#x2699;</button>
+          </div>
+          <div id="wfProjectMeta" class="meta" style="margin-left:118px;margin-bottom:8px;"></div>
+          <div class="field-row">
+            <label>Scene</label>
+            <select id="wfSceneSel" style="flex:1" data-tip="从 Unity 项目目录中扫描到的 .unity 场景文件"></select>
+            <button class="btn ghost sm" onclick="refreshScenes()" data-tip="重新扫描项目目录中的场景文件">&#x27F3;</button>
           </div>
         </div>
-        <div class="field-row">
-          <label></label>
-          <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer">
-            <input type="checkbox" id="cfgResume" /> 续跑上次会话
-          </label>
-          <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer;margin-left:12px" data-tip="禁止 Agent 间共享 World State&#10;用于消融实验，测试无信息共享时的覆盖效果">
-            <input type="checkbox" id="cfgNoInfoSharing" /> 禁用信息共享
-          </label>
+        <div class="col" style="max-width:320px;">
+          <h3 class="sec" style="margin-top:0">Registered Projects</h3>
+          <div id="wfProjList"></div>
         </div>
       </div>
     </div>
-    <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
-      <button class="btn primary" id="btnStart" onclick="startRun()" data-tip="启动 vragent2 多智能体探索&#10;将在后台运行 python -m vragent2">&#x25B6; 启动运行</button>
-      <button class="btn danger"  id="btnStop"  onclick="stopRun()" disabled data-tip="终止当前正在运行的探索进程">&#x25A0; 停止</button>
-      <span id="runStateLabel" class="meta"></span>
+  </div>
+
+  <!-- Step 1: ExtractSceneDependency -->
+  <div class="wf-section collapsed" id="wfSec1">
+    <div class="wf-step-head" onclick="toggleStep('wfSec1')">
+      <h2>1 &middot; 场景依赖提取 <span class="tag" id="step1Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">ExtractSceneDependency.py</span>
+      <span style="flex:1"></span>
+      <button class="btn primary sm" id="step1Btn" onclick="runStep(1);event.stopPropagation()" data-tip="提取 Unity 场景脚本依赖图（GML）&#10;生成 scene_detailed_info/ 和 script_detailed_info/">&#x25B6; 运行</button>
+      <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="field-row">
+        <label data-tip="Unity 项目根目录（含 ProjectSettings/ 的目录）&#10;通常是 Assets 路径的上一级目录&#10;选择项目后自动填充">项目根目录</label>
+        <input id="ppProjectRoot" placeholder="D:\MyProject\VRAgent" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('ppProjectRoot')" title="浏览">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="结果输出目录（相对工作目录）&#10;建议格式：Results/Results_{场景名}&#10;选择 Scene 后自动填充">结果目录</label>
+        <input id="ppResultsDir" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('ppResultsDir')" title="浏览">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="要提取的场景名称（可选）&#10;不填则提取项目中所有场景">场景名称</label>
+        <input id="ppSceneName" placeholder="Kitchen_TestRoom（选 Scene 后自动填充）" />
+      </div>
+      <div class="meta" style="margin-top:6px;margin-left:118px;line-height:2">
+        命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python ExtractSceneDependency.py -p &lt;项目根&gt; -r &lt;结果目录&gt; [-s &lt;场景名&gt;]</code>
+      </div>
     </div>
   </div>
 
+  <!-- Step 2: TraverseSceneHierarchy -->
+  <div class="wf-section collapsed" id="wfSec2">
+    <div class="wf-step-head" onclick="toggleStep('wfSec2')">
+      <h2>2 &middot; 层级遍历 <span class="tag" id="step2Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">TraverseSceneHierarchy.py</span>
+      <span style="flex:1"></span>
+      <button class="btn primary sm" id="step2Btn" onclick="runStep(2);event.stopPropagation()" data-tip="遍历场景层级，生成 {SceneName}_gobj_hierarchy.json&#10;依赖 Step 1 的输出">&#x25B6; 运行</button>
+      <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="field-row">
+        <label data-tip="Step 1 的结果目录（自动同步自 Step 1）">结果目录</label>
+        <input id="ppResultsDir2" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('ppResultsDir2')" title="浏览">&#x1F4C2;</button>
+      </div>
+      <div class="meta" style="margin-top:6px;margin-left:118px;line-height:2">
+        命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python TraverseSceneHierarchy.py -r &lt;结果目录&gt;</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: SpecialLogicPreprocessor -->
+  <div class="wf-section collapsed" id="wfSec3">
+    <div class="wf-step-head" onclick="toggleStep('wfSec3')">
+      <h2>3 &middot; 逻辑预处理 <span class="tag" id="step3Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">SpecialLogicPreprocessor.py</span>
+      <span style="flex:1"></span>
+      <button class="btn primary sm" id="step3Btn" onclick="runStep(3);event.stopPropagation()" data-tip="生成 sorted_target_logic_info&#10;提升 Planner 规划质量与稳定性">&#x25B6; 运行</button>
+      <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="field-row">
+        <label data-tip="Step 1/2 的结果目录（自动同步）">结果目录</label>
+        <input id="ppResultsDir3" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('ppResultsDir3')" title="浏览">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="应用名称（可选）&#10;用于逻辑注释，如 EscapeGameVR">应用名称</label>
+        <input id="ppAppName" placeholder="EscapeGameVR（可选）" />
+      </div>
+      <div class="meta" style="margin-top:6px;margin-left:118px;line-height:2">
+        命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python SpecialLogicPreprocessor.py -r &lt;结果目录&gt; [-a &lt;应用名&gt;]</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: vragent2 run (expanded by default) -->
+  <div class="wf-section" id="wfSec4">
+    <div class="wf-step-head" onclick="toggleStep('wfSec4')">
+      <h2>4 &middot; 探索运行 <span class="tag" id="logStateBadge" style="margin-left:6px;font-size:11px">idle</span></h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">vragent2 Multi-Agent Pipeline</span>
+      <span style="flex:1"></span>
+      <span class="wf-step-chevron">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:12px">
+      <div class="row">
+        <div class="col">
+          <div class="field-row"><label data-tip="使用的 LLM 模型名称&#10;例：gpt-4o / qwen3-coder">模型</label><input id="cfgModel" value="gpt-4o" placeholder="gpt-4o, qwen3-coder ..." /></div>
+          <div class="field-row"><label data-tip="OpenAI 兼容接口的 Base URL&#10;必须包含 /v1，例如：&#10;https://api.openai.com/v1&#10;https://api.vectorengine.cn/v1">API 地址</label><input id="cfgApiBase" placeholder="https://api.vectorengine.cn/v1" /></div>
+          <div class="field-row">
+            <label data-tip="API 密钥&#10;可保存到本地 .ui_settings.json（不推送到 git）&#10;运行时若字段为空则自动使用已保存的密钥">API Key</label>
+            <input id="cfgApiKey" type="password" placeholder="sk-... （留空则使用本地保存的密钥）" style="flex:1" />
+            <button class="btn ghost sm" id="btnSaveApiKey" onclick="saveApiKey()" style="white-space:nowrap" data-tip="将当前输入的密钥保存到本地 .ui_settings.json&#10;（文件已加入 .gitignore，不会推送到云端）">保存到本地</button>
+            <button class="btn ghost sm" id="btnClearApiKey" onclick="clearApiKey()" style="white-space:nowrap;color:var(--err)" data-tip="清除已保存的本地密钥">清除</button>
+          </div>
+          <div class="field-row">
+            <label data-tip="最大迭代轮数（探索预算）&#10;每轮对一个对象执行一组动作">预算</label>
+            <input id="cfgBudget" type="number" value="100" min="1" style="max-width:80px" />
+            <span class="meta" style="margin-left:4px">轮</span>
+            <span style="margin-left:12px" class="meta" data-tip="限制最多测试的对象数量&#10;0 = 不限制">对象上限:</span>
+            <input id="cfgLimit" type="number" value="0" min="0" style="max-width:60px;margin-left:4px" />
+            <span class="meta" style="margin-left:4px">（0=不限）</span>
+          </div>
+          <div class="field-row"><label data-tip="vragent2 输出目录（相对工作目录）">输出目录</label><input id="cfgOutput" value="Results" /></div>
+          <div class="field-row"><label data-tip="C# 脚本目录（可选）&#10;用于静态分析增强测试计划">脚本目录</label><input id="cfgScriptsDir" placeholder="（可选）C# 脚本目录路径" /></div>
+          <div class="field-row">
+            <label data-tip="gobj_hierarchy.json 路径&#10;Step 2 完成后自动填充">层级 JSON</label>
+            <input id="cfgHierarchyJson" placeholder="Step 2 完成后自动填充" style="flex:1" />
+            <button class="btn-browse" onclick="browseFile('cfgHierarchyJson')" title="浏览">&#x1F4C2;</button>
+          </div>
+          <div class="field-row">
+            <label data-tip="场景依赖图 .gml 路径&#10;Step 1 完成后自动填充">依赖图 GML</label>
+            <input id="cfgSceneGml" placeholder="Step 1 完成后自动填充" style="flex:1" />
+            <button class="btn-browse" onclick="browseFile('cfgSceneGml')" title="浏览">&#x1F4C2;</button>
+          </div>
+        </div>
+        <div class="col">
+          <div class="field-row" style="align-items:flex-start">
+            <label style="padding-top:4px" data-tip="通过 TCP 连接 Unity Editor&#10;需要在 Unity 中进入 Play Mode&#10;连接后可获取真实场景状态和事件反馈">Unity Bridge</label>
+            <div style="display:flex;flex-direction:column;gap:6px;flex:1">
+              <label style="width:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg);cursor:pointer">
+                <input type="checkbox" id="cfgUnity" />
+                TCP 连接 Unity &nbsp;<span class="meta">（Unity Editor 需处于 Play Mode）</span>
+              </label>
+              <div style="display:flex;gap:6px;align-items:center">
+                <span class="meta">Host:</span>
+                <input id="cfgUnityHost" value="127.0.0.1" style="width:120px" />
+                <span class="meta">Port:</span>
+                <input id="cfgUnityPort" type="number" value="6400" style="width:70px" />
+              </div>
+            </div>
+          </div>
+          <div class="field-row">
+            <label></label>
+            <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer">
+              <input type="checkbox" id="cfgResume" /> 续跑上次会话
+            </label>
+            <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer;margin-left:12px" data-tip="禁止 Agent 间共享 World State&#10;用于消融实验，测试无信息共享时的覆盖效果">
+              <input type="checkbox" id="cfgNoInfoSharing" /> 禁用信息共享
+            </label>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn primary" id="btnStart" onclick="startRun()" data-tip="启动 vragent2 多智能体探索&#10;将在后台运行 python -m vragent2">&#x25B6; 启动运行</button>
+        <button class="btn danger"  id="btnStop"  onclick="stopRun()" disabled data-tip="终止当前正在运行的探索进程">&#x25A0; 停止</button>
+        <span id="runStateLabel" class="meta"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Log -->
   <div class="wf-section">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <h2 style="margin:0">3 &middot; 实时日志</h2>
-      <span id="logStateBadge" class="tag">idle</span>
+      <h2 style="margin:0">&#x1F4CB; 实时日志</h2>
       <span style="flex:1"></span>
       <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;cursor:pointer" data-tip="新日志出现时自动滚动到底部">
         <input type="checkbox" id="chkAutoScroll" checked /> 自动滚动
@@ -281,7 +439,7 @@
 <!-- ===== MODALS ===== -->
 <div class="modal-overlay" id="modalAddProject">
   <div class="modal" style="max-width:520px">
-    <div class="modal-head"><h3>Add / Update Project</h3><button class="btn ghost sm" onclick="closeModal('modalAddProject')">&#x2715;</button></div>
+    <div class="modal-head"><h3 id="modalAddProjectTitle">添加项目</h3><button class="btn ghost sm" onclick="closeModal('modalAddProject')">&#x2715;</button></div>
     <div class="modal-body">
       <div class="field-row"><label data-tip="项目唯一标识名称">名称 *</label><input id="apName" placeholder="EscapeGameVR" /></div>
       <div class="field-row">
@@ -356,8 +514,15 @@
       <button class="btn ghost sm" onclick="closeModal('fileBrowserModal')">&#x2715;</button>
     </div>
     <div class="fb-bar">
-      <button class="btn ghost sm" id="fbUpBtn" onclick="fbGoUp()" title="上级目录">&#x2191; 上级</button>
-      <span class="fb-path" id="fbCurrentPath">--</span>
+      <button class="btn ghost sm" id="fbUpBtn" onclick="fbGoUp()" title="上级目录" style="flex-shrink:0">&#x2191; 上级</button>
+      <input class="fb-path-input" id="fbPathInput" type="text" spellcheck="false" title="输入路径后按 Enter 跳转" />
+      <button class="btn ghost sm" id="fbMkdirBtn" onclick="fbOpenMkdir()" title="新建文件夹" style="flex-shrink:0;display:none">&#x1F4C1;+</button>
+    </div>
+    <div class="fb-mkdir-row" id="fbMkdirRow">
+      <span style="font-size:12px;color:var(--muted);flex-shrink:0">新建：</span>
+      <input id="fbMkdirName" placeholder="文件夹名称" />
+      <button class="btn primary sm" onclick="fbConfirmMkdir()">创建</button>
+      <button class="btn ghost sm" onclick="fbCloseMkdir()">取消</button>
     </div>
     <div class="fb-list" id="fbList"><div class="fb-loading">加载中...</div></div>
     <div class="modal-foot">
@@ -376,7 +541,8 @@ let currentRun    = "";
 let logPollHandle = null;
 let logLineIdx    = 0;
 let _cfg          = {projects:[], python_exe:"", work_dir:"", default_model:"gpt-4o"};
-let _activeTab    = "workflow";
+let _activeTab        = "workflow";
+let _editingProjName  = null;  // null = new, string = editing existing project
 
 /* ---- utils ---- */
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -528,32 +694,264 @@ async function saveFileModal(){
   $("#fileModalSaveStatus").textContent=r.ok?"Saved.":"Error: "+(r.error||"unknown");
 }
 
+/* ---- workflow pipeline helpers ---- */
+function toggleStep(id){
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle("collapsed");
+}
+function scrollToStep(id){
+  const el=document.getElementById(id);
+  if(el){ el.classList.remove("collapsed"); el.scrollIntoView({behavior:"smooth",block:"start"}); }
+}
+function setStepState(n,state){
+  const dot=document.getElementById("pd"+n);
+  const badge=document.getElementById("step"+n+"Badge");
+  if(dot){
+    dot.className="wf-pipe-dot "+state;
+    dot.textContent=state==="done"?"\u2713":state==="error"?"\u2717":String(n);
+  }
+  if(badge){
+    badge.textContent=state;
+    badge.className="tag"+(state==="done"?" good":state==="error"?" bad":state==="running"?" live":"");
+  }
+  const btn=document.getElementById("step"+n+"Btn");
+  if(btn) btn.disabled=(state==="running");
+}
+
+// ---------------------------------------------------------------------------
+// API key local storage helpers
+// ---------------------------------------------------------------------------
+async function checkSavedApiKey(){
+  try{
+    const d=await apiRaw("/api/ui_settings");
+    const el=$("#cfgApiKey");
+    if(d.has_api_key){
+      if(!el.value) el.placeholder="已从本地文件加载（留空使用保存的密钥）";
+    } else {
+      el.placeholder="sk-... （留空则使用本地保存的密钥）";
+    }
+  } catch(e){}
+}
+async function saveApiKey(){
+  const key=$("#cfgApiKey").value.trim();
+  if(!key){alert("请先在 API Key 字段输入密钥");return;}
+  const r=await post("/api/ui_settings",{api_key:key});
+  if(r.ok){
+    $("#cfgApiKey").value="";
+    $("#cfgApiKey").placeholder="已从本地文件加载（留空使用保存的密钥）";
+    alert("密钥已保存到本地 .ui_settings.json");
+  } else { alert("保存失败: "+(r.error||JSON.stringify(r))); }
+}
+async function clearApiKey(){
+  if(!confirm("确定要清除本地保存的 API 密钥吗？")) return;
+  const r=await post("/api/ui_settings",{api_key:""});
+  if(r.ok){
+    $("#cfgApiKey").placeholder="sk-... （留空则使用本地保存的密钥）";
+    alert("本地密钥已清除");
+  } else { alert("清除失败: "+(r.error||JSON.stringify(r))); }
+}
+
+async function refreshPreprocessState(){
+  const results_dir1=$("#ppResultsDir").value.trim();
+  const results_dir2=$("#ppResultsDir2").value.trim()||results_dir1;
+  const results_dir3=$("#ppResultsDir3").value.trim()||results_dir2||results_dir1;
+  const scene_name=$("#ppSceneName").value.trim()||$("#wfSceneSel").value.trim();
+
+  if(!results_dir1&&!results_dir2&&!results_dir3){
+    setStepState(1,"idle");
+    setStepState(2,"idle");
+    setStepState(3,"idle");
+    return;
+  }
+
+  const d=await apiRaw("/api/preprocess/status",{results_dir1,results_dir2,results_dir3,scene_name});
+  if(d.error||d._jelly_error) return;
+
+  setStepState(1,(d.step1&&d.step1.state)||"idle");
+  setStepState(2,(d.step2&&d.step2.state)||"idle");
+  setStepState(3,(d.step3&&d.step3.state)||"idle");
+
+  if(!(($("#ppSceneName").value||"").trim())&&d.scene_name){
+    $("#ppSceneName").value=d.scene_name;
+  }
+  if(!$("#cfgSceneGml").value&&d.step1&&d.step1.graph_path){
+    $("#cfgSceneGml").value=d.step1.graph_path;
+  }
+  if(!$("#cfgHierarchyJson").value&&d.step2&&d.step2.hierarchy_path){
+    $("#cfgHierarchyJson").value=d.step2.hierarchy_path;
+  }
+}
+async function runStep(n){
+  const p=selProj();
+  // Leave python_exe/work_dir undefined if not configured — server falls back to sys.executable/results_root
+  const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
+  const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
+  const stepMap={1:"extract_scene",2:"traverse_hierarchy",3:"special_logic"};
+  const step=stepMap[n];
+  const rdirId=n===1?"ppResultsDir":n===2?"ppResultsDir2":"ppResultsDir3";
+  let results_dir=$("#"+rdirId).value.trim();
+  // Auto-correct stale results_dir that accidentally points inside the Unity Assets tree
+  if(!results_dir || /[\\/]assets[\\/]/i.test(results_dir)){
+    const sname=$("#ppSceneName").value.trim()||$("#wfSceneSel").value;
+    if(sname&&_resultsRoot){
+      const sep=_resultsRoot.includes("\\")?"\\":"/";
+      results_dir=_resultsRoot.replace(/[\\/]+$/,"")+sep+"Results"+sep+"Results_"+sname;
+      $("#"+rdirId).value=results_dir; saveRunCfg();
+      appendLog("[jelly] Auto-corrected results_dir to: "+results_dir,"warn");
+    }
+  }
+  if(!results_dir){alert("请填写结果目录");scrollToStep("wfSec"+n);return;}
+  const body={step,python_exe,work_dir,results_dir};
+  if(n===1){
+    const proot=$("#ppProjectRoot").value.trim();
+    if(!proot){alert("请填写 Unity 项目根目录");scrollToStep("wfSec1");return;}
+    body.project_path=proot;
+    const sn=$("#ppSceneName").value.trim(); if(sn) body.scene_name=sn;
+  }
+  if(n===3){ const an=$("#ppAppName").value.trim(); if(an) body.app_name=an; }
+  const r=await post("/api/preprocess/start",body);
+  if(r.error){alert("启动失败："+r.error);return;}
+  logLineIdx=0; clearLog();
+  appendLog("[jelly] Step "+n+" started -- PID "+(r.pid||"?"),"ok");
+  appendLog("[jelly] cmd: "+(r.cmd||[]).join(" "));
+  setStepState(n,"running");
+  startLogPoll(function(state){
+    if(state==="finished"){ setStepState(n,"done"); autoFillAfterStep(n); refreshPreprocessState(); }
+    else { setStepState(n,"error"); }
+  });
+}
+function autoFillAfterStep(n){
+  const scene=$("#ppSceneName").value.trim();
+  if(n===1){
+    const rdir=$("#ppResultsDir").value.trim();
+    if(rdir&&scene&&!$("#cfgSceneGml").value){
+      const sep=(rdir.includes("\\")&&!rdir.includes("/"))?"\\\\": "/";
+      $("#cfgSceneGml").value=rdir.replace(/[\\/]+$/,"")+sep+"scene_detailed_info"+sep+"mainResults"+sep+scene+".unity.json_graph.gml";
+    }
+  } else if(n===2){
+    const rdir=$("#ppResultsDir2").value.trim();
+    if(rdir&&scene&&!$("#cfgHierarchyJson").value){
+      const sep=(rdir.includes("\\")&&!rdir.includes("/"))?"\\\\": "/";
+      $("#cfgHierarchyJson").value=rdir.replace(/[\\/]+$/,"")+sep+scene+"_gobj_hierarchy.json";
+    }
+  }
+  saveRunCfg();
+}
+
+/* ---- localStorage config persistence ---- */
+let _resultsRoot=""; // set on boot from /api/health
+const _RUN_CFG_KEYS=["cfgModel","cfgApiBase","cfgBudget","cfgLimit","cfgOutput","cfgScriptsDir",
+  "cfgHierarchyJson","cfgSceneGml","cfgUnityHost","cfgUnityPort",
+  "ppProjectRoot","ppResultsDir","ppResultsDir2","ppResultsDir3","ppSceneName","ppAppName"];
+const _RUN_CFG_CHECKS=["cfgUnity","cfgResume","cfgNoInfoSharing"];
+function saveRunCfg(){
+  const data={};
+  _RUN_CFG_KEYS.forEach(k=>{const el=document.getElementById(k);if(el)data[k]=el.value;});
+  _RUN_CFG_CHECKS.forEach(k=>{const el=document.getElementById(k);if(el)data[k]=el.checked;});
+  localStorage.setItem("xrplayer_run_cfg",JSON.stringify(data));
+}
+function restoreRunCfg(){
+  try{
+    const raw=localStorage.getItem("xrplayer_run_cfg");
+    if(!raw) return;
+    const data=JSON.parse(raw);
+    _RUN_CFG_KEYS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.value=data[k];});
+    _RUN_CFG_CHECKS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.checked=!!data[k];});
+  }catch(e){}
+}
+function sanitizeSceneDerivedState(){
+  const badIds=["ppSceneName","ppResultsDir","ppResultsDir2","ppResultsDir3","cfgHierarchyJson","cfgSceneGml"];
+  const hasBad=badIds.some(id=>String($("#"+id).value||"").includes("[object Event]"));
+  if(!hasBad) return;
+
+  const selectedScene=$("#wfSceneSel").value.trim();
+  if(selectedScene){
+    onSceneChange(selectedScene);
+    return;
+  }
+
+  badIds.forEach(id=>{
+    const el=$("#"+id);
+    if(el&&String(el.value||"").includes("[object Event]")) el.value="";
+  });
+  saveRunCfg();
+}
+
 /* ---- projects ---- */
 async function loadProjects(){
   _cfg=await apiRaw("/api/projects")||_cfg;
   renderProjList(); renderProjSel();
-  const p=selProj(); if(p) fillFromProj(p);
+  const p=selProj(); if(p) await fillFromProj(p);
 }
 function selProj(){ const n=$("#wfProjectSel").value; return (_cfg.projects||[]).find(p=>p.name===n)||null; }
 
 function renderProjList(){
   const ps=_cfg.projects||[];
-  $("#wfProjList").innerHTML=ps.length===0
+  const list=$("#wfProjList");
+  list.innerHTML=ps.length===0
     ?`<div class="meta">No projects. Click "+ Add".</div>`
-    :ps.map(p=>`<div class="proj-item"><div><div class="pname">${esc(p.name)}</div><div class="ppath">${esc(p.assets_path||"")}</div></div><button class="btn ghost sm pdel" onclick="delProj('${esc(p.name)}')">&#x2715;</button></div>`).join("");
+    :ps.map(p=>`<div class="proj-item"><div class="pinfo"><div class="pname">${esc(p.name)}</div><div class="ppath">${esc(p.assets_path||"")}</div></div><button class="btn ghost sm pedit" data-pname="${esc(p.name)}" title="编辑">&#x270E;</button><button class="btn ghost sm pdel" data-pname="${esc(p.name)}" title="删除">&#x2715;</button></div>`).join("");
+  list.querySelectorAll(".pedit").forEach(btn=>btn.addEventListener("click",()=>editProj(btn.dataset.pname)));
+  list.querySelectorAll(".pdel").forEach(btn=>btn.addEventListener("click",()=>delProj(btn.dataset.pname)));
 }
 function renderProjSel(){
   const sel=$("#wfProjectSel"), prev=sel.value, ps=_cfg.projects||[];
   sel.innerHTML=ps.length===0?`<option value="">-- no projects --</option>`:ps.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join("");
   if(prev) sel.value=prev;
 }
-function fillFromProj(p){
+function fillFromProj(p){ return _fillFromProjAsync(p); }
+async function _fillFromProjAsync(p){
   $("#wfProjectMeta").textContent=p.assets_path?"Assets: "+p.assets_path:"";
   if(p.default_model) $("#cfgModel").value=p.default_model;
   if(p.results_dir)   $("#cfgOutput").value=p.results_dir;
+  // Always re-detect Unity project root from server (walk up from assets_path)
+  if(p.assets_path){
+    const d=await apiRaw("/api/find_project_root",{path:p.assets_path});
+    if(d.found){
+      $("#ppProjectRoot").value=d.project_root;
+    } else {
+      // fallback: strip last segment (e.g. Assets -> project)
+      const norm=p.assets_path.replace(/\\/g,"/");
+      $("#ppProjectRoot").value=norm.replace(/\/[^\/]*$/,"");
+    }
+  }
   refreshScenes();
 }
-$("#wfProjectSel").addEventListener("change",()=>{ const p=selProj(); if(p) fillFromProj(p); });
+$("#wfProjectSel").addEventListener("change",async ()=>{ const p=selProj(); if(p) await fillFromProj(p); });
+function onSceneChange(forcedScene){
+  const sceneValue=(typeof forcedScene==="string")
+    ? forcedScene
+    : (forcedScene&&forcedScene.target&&typeof forcedScene.target.value==="string"
+      ? forcedScene.target.value
+      : "");
+  const sname=sceneValue||$("#wfSceneSel").value; if(!sname) return;
+  const p=selProj();
+  // Use work_dir, or fall back to _resultsRoot (TP_Generation path from server)
+  const base=(p&&p.work_dir)||_cfg.work_dir||_resultsRoot;
+  const sep=(base&&base.includes("\\")?"\\":"/");
+  const rbase=base?base.replace(/[\\/]+$/,"")+sep:"";
+  const rdir=rbase+"Results"+sep+"Results_"+sname;
+  $("#ppSceneName").value=sname;
+  $("#ppResultsDir").value=rdir;
+  $("#ppResultsDir2").value=rdir;
+  $("#ppResultsDir3").value=rdir;
+  $("#cfgHierarchyJson").value=rdir+sep+sname+"_gobj_hierarchy.json";
+  $("#cfgSceneGml").value=rdir+sep+"scene_detailed_info"+sep+"mainResults"+sep+sname+".unity.json_graph.gml";
+  saveRunCfg();
+  refreshPreprocessState();
+}
+$("#wfSceneSel").addEventListener("change", onSceneChange);
+// Sync ppResultsDir to steps 2/3 on change
+$("#ppResultsDir").addEventListener("change",()=>{
+  const v=$("#ppResultsDir").value;
+  if(!$("#ppResultsDir2").value) $("#ppResultsDir2").value=v;
+  if(!$("#ppResultsDir3").value) $("#ppResultsDir3").value=v;
+  saveRunCfg();
+  refreshPreprocessState();
+});
+$("#ppResultsDir2").addEventListener("change",()=>{ saveRunCfg(); refreshPreprocessState(); });
+$("#ppResultsDir3").addEventListener("change",()=>{ saveRunCfg(); refreshPreprocessState(); });
+$("#ppSceneName").addEventListener("change",()=>{ saveRunCfg(); refreshPreprocessState(); });
 
 async function refreshScenes(){
   const p=selProj(); if(!p){return;}
@@ -565,11 +963,27 @@ async function refreshScenes(){
 }
 
 function openAddProject(){
-  $("#apName").value="";$("#apAssetsPath").value="";
+  _editingProjName=null;
+  $("#modalAddProjectTitle").textContent="添加项目";
+  $("#apName").value=""; $("#apName").disabled=false;
+  $("#apAssetsPath").value="";
   $("#apPython").value=_cfg.python_exe||"";
   $("#apWorkDir").value=_cfg.work_dir||"";
   $("#apModel").value=_cfg.default_model||"gpt-4o";
   $("#apResults").value="Results";
+  openModal("modalAddProject");
+}
+function editProj(name){
+  const p=(_cfg.projects||[]).find(x=>x.name===name);
+  if(!p) return;
+  _editingProjName=name;
+  $("#modalAddProjectTitle").textContent="编辑项目";
+  $("#apName").value=p.name||""; $("#apName").disabled=true;
+  $("#apAssetsPath").value=p.assets_path||"";
+  $("#apPython").value=p.python_exe||_cfg.python_exe||"";
+  $("#apWorkDir").value=p.work_dir||_cfg.work_dir||"";
+  $("#apModel").value=p.default_model||_cfg.default_model||"gpt-4o";
+  $("#apResults").value=p.results_dir||"Results";
   openModal("modalAddProject");
 }
 async function saveProject(){
@@ -601,9 +1015,11 @@ async function saveGlobalCfg(){
 
 /* ---- run control ---- */
 async function startRun(){
+  saveRunCfg();
   const p=selProj();
-  const python_exe=(p&&p.python_exe)||_cfg.python_exe||"python";
-  const work_dir=(p&&p.work_dir)||_cfg.work_dir||".";
+  // Leave python_exe/work_dir undefined if not configured — server uses sys.executable
+  const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
+  const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
   const scene_name=$("#wfSceneSel").value||undefined;
   const body={python_exe,work_dir,scene_name,
     model:$("#cfgModel").value.trim()||undefined,
@@ -613,6 +1029,8 @@ async function startRun(){
     budget:parseInt($("#cfgBudget").value)||100,
     limit:parseInt($("#cfgLimit").value)||0,
     scripts_dir:$("#cfgScriptsDir").value.trim()||undefined,
+    hierarchy_json:$("#cfgHierarchyJson").value.trim()||undefined,
+    scene_gml:$("#cfgSceneGml").value.trim()||undefined,
     unity:$("#cfgUnity").checked,
     unity_host:$("#cfgUnity").checked?($("#cfgUnityHost").value.trim()||undefined):undefined,
     unity_port:$("#cfgUnity").checked?(parseInt($("#cfgUnityPort").value)||6400):undefined,
@@ -646,14 +1064,19 @@ function appendLog(text,cls=""){
   if($("#chkAutoScroll").checked) box.scrollTop=box.scrollHeight;
 }
 function clearLog(){$("#logBox").innerHTML=""; logLineIdx=0;}
-function startLogPoll(){ if(logPollHandle) clearInterval(logPollHandle); logPollHandle=setInterval(pollLog,800); }
+let _pollOnDone=null;
+function startLogPoll(onDone){
+  _pollOnDone=onDone||null;
+  if(logPollHandle) clearInterval(logPollHandle);
+  logPollHandle=setInterval(pollLog,800);
+}
 async function pollLog(){
   const d=await apiRaw("/api/run/log",{from:logLineIdx});
   if(d._jelly_error) return;
   (d.lines||[]).forEach(l=>appendLog(l));
   logLineIdx=d.total||logLineIdx;
   setRunState(d.state||"idle");
-  if(d.state!=="running"){clearInterval(logPollHandle);logPollHandle=null;}
+  if(d.state!=="running"){clearInterval(logPollHandle);logPollHandle=null;if(_pollOnDone){_pollOnDone(d.state);_pollOnDone=null;}}
 }
 function setRunState(state){
   const badge=$("#logStateBadge");
@@ -670,22 +1093,53 @@ function setRunState(state){
 let _fbInputId   = "";
 let _fbMode      = "dir";
 let _fbSelected  = "";
-let _fbParent    = null;  // 服务端返回的上级路径，避免从 DOM 文本中解析路径
+let _fbParent    = null;  // 服务端返回的上级路径
+
+// 获取默认起始路径：优先当前项目work_dir，否则全局work_dir
+function _fbDefaultBase(){
+  const p=selProj();
+  return (p&&p.work_dir)||_cfg.work_dir||"";
+}
+// 解析路径：若相对路径则 base+sep+rel；若绝对路径直接用
+function _fbResolvePath(val){
+  if(!val) return _fbDefaultBase();
+  // Windows absolute: starts with drive letter or UNC; Unix: starts with /
+  if(/^[A-Za-z]:\\/.test(val)||/^\//.test(val)) return val;
+  // Relative path — join with work_dir
+  const base=_fbDefaultBase();
+  if(!base) return val;
+  const sep=(base.includes("\\")&&!base.includes("/"))?"\\":"/";
+  return base.replace(/[\\/]+$/,"")+sep+val;
+}
 
 async function browseDir(inputId){
   _fbInputId=inputId; _fbMode="dir"; _fbSelected="";
   $("#fbTitle").textContent="选择文件夹";
   $("#fbConfirmBtn").textContent="选择此文件夹";
-  const cur=$("#"+inputId).value.trim();
-  await fbNavigate(cur||"");
+  $("#fbMkdirBtn").style.display="";
+  fbCloseMkdir();
+  const raw=$("#"+inputId).value.trim();
+  await fbNavigate(_fbResolvePath(raw));
   openModal("fileBrowserModal");
 }
 async function browseFile(inputId){
   _fbInputId=inputId; _fbMode="file"; _fbSelected="";
   $("#fbTitle").textContent="选择文件";
   $("#fbConfirmBtn").textContent="选择此文件";
-  const cur=$("#"+inputId).value.trim();
-  await fbNavigate(cur||"");
+  $("#fbMkdirBtn").style.display="none";
+  fbCloseMkdir();
+  let raw=$("#"+inputId).value.trim();
+  // 若是文件路径，导航到父目录
+  const resolved=_fbResolvePath(raw);
+  // ask server whether it's a dir or parent
+  const probe=await apiRaw("/api/browse",{path:resolved,type:"file"});
+  if(probe.error){
+    // might be a file path — strip last segment and navigate to parent
+    const parent=resolved.replace(/[\\/][^\\/]*$/,"");
+    await fbNavigate(parent||_fbDefaultBase());
+  } else {
+    await fbNavigate(resolved);
+  }
   openModal("fileBrowserModal");
 }
 
@@ -694,13 +1148,15 @@ async function fbNavigate(path){
   list.innerHTML=`<div class="fb-loading">加载中...</div>`;
   _fbSelected="";
   $("#fbSelLabel").textContent="";
+  fbCloseMkdir();
 
   const d=await apiRaw("/api/browse",{path:path||"",type:_fbMode});
   if(d.error){list.innerHTML=`<div class="fb-empty">错误：${esc(d.error)}</div>`;return;}
 
   const realPath=d.path||"";
   _fbParent = d.parent!=null ? d.parent : null;
-  $("#fbCurrentPath").textContent=realPath||"(根目录)";
+  // Update editable path bar
+  $("#fbPathInput").value=realPath;
   $("#fbUpBtn").disabled=(_fbParent===null&&!realPath);
 
   if(_fbMode==="dir"){
@@ -719,7 +1175,6 @@ async function fbNavigate(path){
   dirs.forEach(entry=>{
     const p=typeof entry==="string"?entry:entry.path;
     const n=typeof entry==="string"?entry:(entry.name||entry.path);
-    // 用 data-fbpath 存储路径，不嵌入 onclick 字符串，避免反斜杠被解释为 JS 转义
     html+=`<div class="fb-item fb-dir" data-fbpath="${esc(p)}">
       <span class="fb-icon">&#x1F4C1;</span><span class="fb-name">${esc(n)}</span>
     </div>`;
@@ -735,7 +1190,6 @@ async function fbNavigate(path){
   }
   list.innerHTML=html;
 
-  // 绑定点击事件 —— 从 data-fbpath 读取路径，完全避开字符串转义问题
   list.querySelectorAll(".fb-dir").forEach(el=>{
     el.addEventListener("click",()=>fbNavigate(el.dataset.fbpath));
   });
@@ -753,9 +1207,32 @@ function fbGoUp(){
   fbNavigate(_fbParent!=null ? _fbParent : "");
 }
 
+function fbOpenMkdir(){
+  const row=$("#fbMkdirRow");
+  row.classList.add("open");
+  const inp=$("#fbMkdirName");
+  inp.value=""; inp.focus();
+}
+function fbCloseMkdir(){
+  $("#fbMkdirRow").classList.remove("open");
+  $("#fbMkdirName").value="";
+}
+async function fbConfirmMkdir(){
+  const name=$("#fbMkdirName").value.trim();
+  if(!name){alert("请输入文件夹名称");return;}
+  const cur=$("#fbPathInput").value.trim();
+  const sep=(cur.includes("\\")&&!cur.includes("/"))?"\\":"/";
+  const newPath=cur?cur.replace(/[\\/]+$/,"")+sep+name:name;
+  const r=await post("/api/mkdir",{path:newPath});
+  if(r.error){alert("创建失败："+r.error);return;}
+  fbCloseMkdir();
+  await fbNavigate(r.path||newPath);
+}
+
 function fbConfirm(){
   if(!_fbSelected){alert("请先进入目标目录，再点击确认。");return;}
   $("#"+_fbInputId).value=_fbSelected;
+  saveRunCfg();
   closeModal("fileBrowserModal");
 }
 
@@ -766,14 +1243,45 @@ $$(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o) 
 
 /* ---- boot ---- */
 (async()=>{
+  restoreRunCfg();
+  // Auto-save on any config field change/blur
+  _RUN_CFG_KEYS.forEach(k=>{
+    const el=document.getElementById(k);
+    if(el){ el.addEventListener("change",saveRunCfg); el.addEventListener("blur",saveRunCfg); }
+  });
+  _RUN_CFG_CHECKS.forEach(k=>{
+    const el=document.getElementById(k);
+    if(el) el.addEventListener("change",saveRunCfg);
+  });
+  // Path bar: press Enter to navigate
+  $("#fbPathInput").addEventListener("keydown",e=>{
+    if(e.key==="Enter"){ e.preventDefault(); fbNavigate($("#fbPathInput").value.trim()); }
+  });
+  // New folder name: press Enter to confirm
+  $("#fbMkdirName").addEventListener("keydown",e=>{
+    if(e.key==="Enter"){ e.preventDefault(); fbConfirmMkdir(); }
+    if(e.key==="Escape") fbCloseMkdir();
+  });
   await refreshRuns();
+  // Get results_root from server (needed for computing default paths)
+  const health=await apiRaw("/api/health");
+  _resultsRoot=health.results_root||"";
   await loadProjects();
+  sanitizeSceneDerivedState();
+  // If a scene name was saved in localStorage, refresh all derived paths now
+  const savedScene=$("#ppSceneName").value.trim();
+  if(savedScene) onSceneChange(savedScene);
+  await refreshPreprocessState();
+  await checkSavedApiKey();  // update API Key placeholder if key is saved locally
   const rs=await apiRaw("/api/run/status");
   if(rs.state==="running"){
     logLineIdx=0; clearLog();
     appendLog("[jelly] Run in progress -- attaching to log stream...","warn");
     startLogPoll();
     setRunState("running");
+    const stepMap={extract_scene:1,traverse_hierarchy:2,special_logic:3};
+    const activeStep=rs.params&&stepMap[rs.params.step];
+    if(activeStep) setStepState(activeStep,"running");
   } else { setRunState(rs.state||"idle"); }
   setInterval(async()=>{
     const rs2=await apiRaw("/api/run/status");

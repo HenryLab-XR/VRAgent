@@ -1,0 +1,53 @@
+{
+  "total_actions": 1,
+  "total_traces": 1,
+  "iterations": 1,
+  "explorer": {
+    "mode": "Exploit",
+    "step": 2,
+    "budget_remaining": 98,
+    "total_coverage": 0.0,
+    "gates_frontier": 1,
+    "gates_solved": 0
+  },
+  "gate_graph_nodes": 1,
+  "gate_graph_edges": 1,
+  "token_usage": {
+    "scheduler": {
+      "prompt_tokens": 234,
+      "completion_tokens": 50,
+      "total_tokens": 284,
+      "calls": 1
+    },
+    "planner": {
+      "prompt_tokens": 7860,
+      "completion_tokens": 631,
+      "total_tokens": 8491,
+      "calls": 1
+    },
+    "verifier_v1": {
+      "prompt_tokens": 434,
+      "completion_tokens": 219,
+      "total_tokens": 653,
+      "calls": 1
+    },
+    "verifier_v2": {
+      "prompt_tokens": 636,
+      "completion_tokens": 147,
+      "total_tokens": 783,
+      "calls": 1
+    },
+    "observer": {
+      "prompt_tokens": 1132,
+      "completion_tokens": 360,
+      "total_tokens": 1492,
+      "calls": 1
+    },
+    "_total": {
+      "prompt_tokens": 10296,
+      "completion_tokens": 1407,
+      "total_tokens": 11703,
+      "calls": 5
+    }
+  }
+}

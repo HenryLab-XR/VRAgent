@@ -1,0 +1,624 @@
+{
+  "processed_objects": [
+    "KitchenBadgeUnlockReceiver#1770515124"
+  ],
+  "all_actions": [
+    {
+      "type": "Trigger",
+      "source_object_name": "KitchenBadgeUnlockReceiver",
+      "triggerring_time": 0.5,
+      "source_object_fileID": 1770515124,
+      "condition": "Trigger the event to unlock PantryKeyUnlockReceiver#351089451. The MonoBehaviour component (fileID: 1770515126) is attached to the game object and has a reference to kitchenDoorController (fileID: 1341467255).",
+      "triggerring_events": [
+        {
+          "methodCallUnits": [
+            {
+              "script_fileID": 1770515126,
+              "method_name": "UnlockDoor",
+              "parameter_fileID": []
+            }
+          ]
+        }
+      ],
+      "triggerred_events": []
+    }
+  ],
+  "all_traces": [
+    {
+      "action": "Trigger:KitchenBadgeUnlockReceiver",
+      "state_before": {
+        "fileid": "1770515124",
+        "name": "Socket_KitchenBadge",
+        "active": true,
+        "position": {
+          "x": 10.3,
+          "y": 1.2,
+          "z": -6.7
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "XRSocketInteractor",
+          "KitchenBadgeUnlockReceiver",
+          "XRSimpleInteractable",
+          "XRTriggerable"
+        ]
+      },
+      "state_after": {
+        "fileid": "1770515124",
+        "name": "Socket_KitchenBadge",
+        "active": true,
+        "position": {
+          "x": 10.3,
+          "y": 1.2,
+          "z": -6.7
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "XRSocketInteractor",
+          "KitchenBadgeUnlockReceiver",
+          "XRSimpleInteractable",
+          "XRTriggerable",
+          "XRTriggerable"
+        ]
+      },
+      "events": [
+        "component_added:XRTriggerable:Socket_KitchenBadge",
+        "xrbase_initialized:Socket_KitchenBadge",
+        "execute:MoveAction",
+        "completed:MoveAction",
+        "execute:TriggerAction",
+        "completed:TriggerAction"
+      ],
+      "success": true,
+      "duration_ms": 2118.93018
+    }
+  ],
+  "iteration_logs": [
+    {
+      "iteration": 0,
+      "object": "KitchenBadgeUnlockReceiver#1770515124",
+      "goal": "Initial exploration of all interactable objects.",
+      "mode": "Expand",
+      "timestamp": "2026-05-04T23:49:09.787962",
+      "planned_actions": 1,
+      "verified_actions": 1,
+      "verifier_score": 1.0,
+      "verifier_errors": 0,
+      "semantic_verdict": "accept",
+      "semantic_risk": 0.3,
+      "coverage_delta": 0.0132,
+      "bugs": [
+        "[CONSOLE_WARN] [Warning] [HenryLab.XR] Destination (10.30, 1.20, -6.70) may not be reachable, but will try",
+        "[CONSOLE_WARN] [Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of its parents.",
+        "[CONSOLE_WARN] [Warning] [RecipeController] FAIL — tried to unlock kitchen door without power.",
+        "[CONSOLE_WARN] [Warning] [KitchenBadgeUnlockReceiver] FAIL — badge scanned but no power. Panel flashes red."
+      ],
+      "gate_hints": [
+        {
+          "failure_type": "need_state",
+          "missing_condition": "d",
+          "candidate_sources": [],
+          "confidence": 0.6,
+          "evidence": "Pattern 'complete' in Trigger:KitchenBadgeUnlockReceiver: component_added:XRTriggerable:Socket_KitchenBadge xrbase_initialized:Socket_KitchenBadge execute:MoveAction completed:MoveAction execute:TriggerAction completed:TriggerAction"
+        },
+        {
+          "failure_type": "locked",
+          "missing_condition": "kitchen",
+          "candidate_sources": [],
+          "confidence": 0.75,
+          "evidence": "Pattern 'lock ' in console_log: [Log] [HenryLab.XR]Entity'triggerable' Registered [Error] [HenryLab.XR] No parameterless method 'UnlockDoor' found on KitchenBadgeUnlockReceiver (Socket_KitchenBadge). Only methods without parameters "
+        }
+      ],
+      "failure_summary": "Inferred conditions:\n  - [need_state] d (confidence=0.60)\n  - [locked] kitchen (confidence=0.75)\nBug signals (4):\n  - [CONSOLE_WARN] [Warning] [HenryLab.XR] Destination (10.30, 1.20, -6.70) may not be reachable, but will try\n  - [CONSOLE_WARN] [Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of its parents.\n  - [CONSOLE_WARN] [Warning] [RecipeController] FAIL — tried to unlock kitchen door without power.\n  - [CONSOLE_WARN] [Warning] [KitchenBadgeUnlockReceiver] FAIL — badge scanned but no power. Panel flashes red.",
+      "observer_suggestion": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124.",
+      "state_delta": {
+        "changed_objects": [
+          "Socket_KitchenBadge"
+        ],
+        "expected_changes": [
+          "Trigger:KitchenBadgeUnlockReceiver completed; no source-object state delta observed"
+        ],
+        "unexpected_changes": [],
+        "gates_opened": [],
+        "gates_still_blocked": [
+          "Step 1: Use KitchenBadgeUnlockReceiver#1770515124 to unlock PantryKeyUnlockReceiver#351089451."
+        ],
+        "semantic_failures": [
+          "Action succeeded technically but failed due to missing power, as indicated by the panel flashing red."
+        ]
+      },
+      "strategy": {
+        "new_facts": [
+          "KitchenBadgeUnlockReceiver#1770515124 requires power to function.",
+          "Destination (10.30, 1.20, -6.70) may have navigation issues.",
+          "VRAgent2.0-PVEO is missing an XRBaseController component."
+        ],
+        "gates_inferred": [
+          {
+            "blocked_object": "KitchenBadgeUnlockReceiver#1770515124",
+            "needed_condition": "Power must be restored to the system."
+          },
+          {
+            "blocked_object": "Socket_KitchenBadge",
+            "needed_condition": "Verify navigation path to ensure accessibility."
+          },
+          {
+            "blocked_object": "VRAgent2.0-PVEO",
+            "needed_condition": "Ensure XRBaseController component is properly attached."
+          }
+        ],
+        "planner_instruction": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124.",
+        "scheduler_bias": [
+          "KitchenBadgeUnlockReceiver#1770515124",
+          "PowerSwitchController#1854153234"
+        ],
+        "oracle_updates": [
+          "KitchenBadgeUnlockReceiver#1770515124 requires power to unlock PantryKeyUnlockReceiver#351089451.",
+          "Ensure navigation paths are accessible before triggering actions."
+        ]
+      },
+      "token_usage": {
+        "scene_understanding": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0,
+          "calls": 0
+        },
+        "scheduler": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0,
+          "calls": 0
+        },
+        "planner": {
+          "prompt_tokens": 5323,
+          "completion_tokens": 538,
+          "total_tokens": 5861,
+          "calls": 1
+        },
+        "verifier_v1": {
+          "prompt_tokens": 1383,
+          "completion_tokens": 172,
+          "total_tokens": 1555,
+          "calls": 1
+        },
+        "verifier_v2": {
+          "prompt_tokens": 1829,
+          "completion_tokens": 48,
+          "total_tokens": 1877,
+          "calls": 1
+        },
+        "observer": {
+          "prompt_tokens": 2857,
+          "completion_tokens": 746,
+          "total_tokens": 3603,
+          "calls": 1
+        },
+        "_total": {
+          "prompt_tokens": 11392,
+          "completion_tokens": 1504,
+          "total_tokens": 12896,
+          "calls": 4
+        }
+      }
+    }
+  ],
+  "explorer_state": {
+    "mode": "Expand",
+    "step_count": 1,
+    "budget_remaining": 99,
+    "total_coverage": 0.0,
+    "zero_novelty_streak": 1,
+    "solved_gates": []
+  },
+  "gate_graph": {
+    "nodes": {
+      "state_1": {
+        "node_id": "state_1",
+        "label": "KitchenBadgeUnlockReceiver#1770515124",
+        "room": "KitchenBadgeUnlockReceiver#1770515124",
+        "active_ui": "",
+        "flags": {}
+      }
+    },
+    "edges": [
+      {
+        "from_state": "state_1",
+        "to_state": "blocked_Trigger:KitchenBadgeUnlockReceiver",
+        "action": "Trigger:KitchenBadgeUnlockReceiver",
+        "success": false,
+        "failure_type": "",
+        "evidence": "component_added:XRTriggerable:Socket_KitchenBadge; xrbase_initialized:Socket_KitchenBadge; execute:MoveAction; completed:MoveAction; execute:TriggerAction; completed:TriggerAction; [observer] semantic failure detected"
+      }
+    ]
+  },
+  "world_state": {
+    "facts": [
+      "KitchenBadgeUnlockReceiver#1770515124 requires power to function.",
+      "Destination (10.30, 1.20, -6.70) may have navigation issues.",
+      "VRAgent2.0-PVEO is missing an XRBaseController component."
+    ],
+    "open_gates": [],
+    "blocked_gates": [
+      "Step 1: Use KitchenBadgeUnlockReceiver#1770515124 to unlock PantryKeyUnlockReceiver#351089451.",
+      "Step 2: Use PantryKeyUnlockReceiver#351089451 to unlock MixingBowlSocket#934798471.",
+      "Step 3: Wash items at SinkWashStation#2088852900 to enable MixingBowlSocket#934798471.",
+      "Step 4: Use KnifeSlotDetector#677490823 to enable ServingPlateSocket#807955241.",
+      "Step 5: Use MixingBowlSocket#934798471 to enable ServingCounterSocket#1062148655."
+    ],
+    "tested_objects": [
+      "KitchenBadgeUnlockReceiver#1770515124"
+    ],
+    "object_risk_scores": {},
+    "object_failure_counts": {
+      "KitchenBadgeUnlockReceiver#1770515124": 1
+    },
+    "recent_failures": [
+      "KitchenBadgeUnlockReceiver#1770515124"
+    ],
+    "oracle_rules": [
+      "PantryKeyUnlockReceiver#351089451 becomes interactable after using KitchenBadgeUnlockReceiver#1770515124.",
+      "MixingBowlSocket#934798471 becomes interactable after washing items at SinkWashStation#2088852900.",
+      "ServingPlateSocket#807955241 becomes interactable after using KnifeSlotDetector#677490823.",
+      "ServingCounterSocket#1062148655 becomes interactable after completing MixingBowlSocket#934798471 and ServingPlateSocket#807955241.",
+      "KitchenBadgeUnlockReceiver#1770515124 requires power to unlock PantryKeyUnlockReceiver#351089451.",
+      "Ensure navigation paths are accessible before triggering actions."
+    ],
+    "total_coverage": 0.0132,
+    "coverage_history": [
+      0.0132
+    ],
+    "scheduler_bias": [
+      "KitchenBadgeUnlockReceiver#1770515124",
+      "PowerSwitchController#1854153234"
+    ],
+    "agent_decisions": [
+      {
+        "iteration": -1,
+        "agent": "SceneUnderstandingAgent",
+        "summary": "Scene understood (llm, heuristic): 7 key obj, 11 forbidden, 5 deps",
+        "confidence": 0.7,
+        "inputs": {
+          "scene_doc_path": "",
+          "scene_name": "Kitchen_TestRoom",
+          "hierarchy_objects": 18
+        },
+        "outputs": {
+          "key_objects": 7,
+          "forbidden": 11,
+          "ranking": 7
+        },
+        "evidence": [
+          "hierarchy:18 key=7 forbidden=11"
+        ],
+        "next_hint": "Scheduler should pull from object_priority_ranking",
+        "duration_ms": 204781.0,
+        "timestamp": "2026-05-04T23:48:33"
+      },
+      {
+        "iteration": 0,
+        "agent": "PlannerAgent",
+        "summary": "Planned 1 actions for KitchenBadgeUnlockReceiver#1770515124 (types=Trigger, reward=0.17)",
+        "confidence": 0.173,
+        "inputs": {
+          "gobj": "KitchenBadgeUnlockReceiver#1770515124",
+          "goal": "Initial exploration of all interactable objects.",
+          "observer_instruction": ""
+        },
+        "outputs": {
+          "n_actions": 1,
+          "action_types": "Trigger",
+          "expected_reward": 0.173
+        },
+        "evidence": [
+          "gate_hints=0",
+          "recent_trace=0"
+        ],
+        "next_hint": "Verifier should validate FileIDs and method signatures",
+        "duration_ms": 0.0,
+        "timestamp": "2026-05-04T23:49:53"
+      },
+      {
+        "iteration": 0,
+        "agent": "VerifierAgent",
+        "summary": "Verifier accepted 1/1 actions (score=1.00, errors=0)",
+        "confidence": 1.0,
+        "inputs": {
+          "n_actions": 1
+        },
+        "outputs": {
+          "passed": true,
+          "score": 1.0,
+          "n_errors": 0,
+          "error_types": "",
+          "n_patched": 1
+        },
+        "evidence": [
+          "{'fileID': '1770515126', 'exists': True}",
+          "{'fileID': '1770515124', 'exists': True}",
+          "{'fileID': '1770515124', 'components': {'Has_Rigidbody': False, 'Has_Collider': False, 'Has_Event_Trigger': False, 'mono"
+        ],
+        "next_hint": "Executor should run patched_actions",
+        "duration_ms": 0.0,
+        "timestamp": "2026-05-04T23:50:31"
+      },
+      {
+        "iteration": 0,
+        "agent": "ExecutorAgent",
+        "summary": "Executed 1 actions (exceptions=0, coverage_delta=0.000)",
+        "confidence": 1.0,
+        "inputs": {
+          "n_actions": 1
+        },
+        "outputs": {
+          "n_trace": 1,
+          "n_exceptions": 0,
+          "coverage_delta": 0.0
+        },
+        "evidence": [],
+        "next_hint": "Observer should analyse trace",
+        "duration_ms": 0.0,
+        "timestamp": "2026-05-04T23:50:58"
+      },
+      {
+        "iteration": 0,
+        "agent": "ObserverAgent",
+        "summary": "Observed coverage_delta=0.013, mode=Exploit, bugs=4, gate_hints=2",
+        "confidence": 0.0132,
+        "inputs": {
+          "goal": "Initial exploration of all interactable objects.",
+          "n_actions": 1
+        },
+        "outputs": {
+          "coverage_delta": 0.0132,
+          "recommended_mode": "Exploit",
+          "n_bugs": 4,
+          "n_gate_hints": 2,
+          "n_failure_hypotheses": 5
+        },
+        "evidence": [
+          "[CONSOLE_WARN] [Warning] [HenryLab.XR] Destination (10.30, 1.20, -6.70) may not be reachable, but will try",
+          "[CONSOLE_WARN] [Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of",
+          "[CONSOLE_WARN] [Warning] [RecipeController] FAIL — tried to unlock kitchen door without power.",
+          "[CONSOLE_WARN] [Warning] [KitchenBadgeUnlockReceiver] FAIL — badge scanned but no power. Panel flashes red."
+        ],
+        "next_hint": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124.",
+        "duration_ms": 0.0,
+        "timestamp": "2026-05-04T23:51:28"
+      }
+    ],
+    "scene_understanding": {
+      "scene_overview": "The scene is a kitchen-based test room where the player must interact with various objects to complete a sequence of tasks, such as unlocking, washing, and assembling items.",
+      "key_objects": [
+        "KitchenBadgeUnlockReceiver#1770515124",
+        "PantryKeyUnlockReceiver#351089451",
+        "ServingCounterSocket#1062148655",
+        "KnifeSlotDetector#677490823",
+        "MixingBowlSocket#934798471",
+        "ServingPlateSocket#807955241",
+        "SinkWashStation#2088852900"
+      ],
+      "interaction_dependencies": [
+        {
+          "source": "KitchenBadgeUnlockReceiver#1770515124",
+          "target": "PantryKeyUnlockReceiver#351089451",
+          "relation": "unlocks"
+        },
+        {
+          "source": "PantryKeyUnlockReceiver#351089451",
+          "target": "MixingBowlSocket#934798471",
+          "relation": "unlocks"
+        },
+        {
+          "source": "SinkWashStation#2088852900",
+          "target": "MixingBowlSocket#934798471",
+          "relation": "enables"
+        },
+        {
+          "source": "KnifeSlotDetector#677490823",
+          "target": "ServingPlateSocket#807955241",
+          "relation": "enables"
+        },
+        {
+          "source": "MixingBowlSocket#934798471",
+          "target": "ServingCounterSocket#1062148655",
+          "relation": "enables"
+        }
+      ],
+      "gate_chains": [
+        "Step 1: Use KitchenBadgeUnlockReceiver#1770515124 to unlock PantryKeyUnlockReceiver#351089451.",
+        "Step 2: Use PantryKeyUnlockReceiver#351089451 to unlock MixingBowlSocket#934798471.",
+        "Step 3: Wash items at SinkWashStation#2088852900 to enable MixingBowlSocket#934798471.",
+        "Step 4: Use KnifeSlotDetector#677490823 to enable ServingPlateSocket#807955241.",
+        "Step 5: Use MixingBowlSocket#934798471 to enable ServingCounterSocket#1062148655."
+      ],
+      "main_path": [
+        "Step 1: Interact with KitchenBadgeUnlockReceiver#1770515124.",
+        "Step 2: Interact with PantryKeyUnlockReceiver#351089451.",
+        "Step 3: Wash items at SinkWashStation#2088852900.",
+        "Step 4: Place items in MixingBowlSocket#934798471.",
+        "Step 5: Use KnifeSlotDetector#677490823.",
+        "Step 6: Place items in ServingPlateSocket#807955241.",
+        "Step 7: Place final items in ServingCounterSocket#1062148655."
+      ],
+      "failure_paths": [
+        "Failing to interact with KitchenBadgeUnlockReceiver#1770515124 prevents progress.",
+        "Skipping the washing step at SinkWashStation#2088852900 results in MixingBowlSocket#934798471 not being enabled.",
+        "Placing items in the wrong order in MixingBowlSocket#934798471 or ServingPlateSocket#807955241 causes errors.",
+        "Not using KnifeSlotDetector#677490823 before ServingPlateSocket#807955241 results in an incomplete sequence."
+      ],
+      "object_priority_ranking": [
+        "KitchenBadgeUnlockReceiver#1770515124",
+        "PantryKeyUnlockReceiver#351089451",
+        "SinkWashStation#2088852900",
+        "MixingBowlSocket#934798471",
+        "KnifeSlotDetector#677490823",
+        "ServingPlateSocket#807955241",
+        "ServingCounterSocket#1062148655"
+      ],
+      "object_roles": {
+        "KitchenBadgeUnlockReceiver#1770515124": "unlocker",
+        "PantryKeyUnlockReceiver#351089451": "unlocker",
+        "SinkWashStation#2088852900": "tool",
+        "KnifeSlotDetector#677490823": "tool",
+        "MixingBowlSocket#934798471": "container",
+        "ServingPlateSocket#807955241": "container",
+        "ServingCounterSocket#1062148655": "gated_target",
+        "RecipeController#553705491": "system",
+        "LockedCabinetController#196765814": "system",
+        "DoorController#1341467250": "system",
+        "CuttingBoardController#1235159925": "system",
+        "MixingBowlController#1334793350": "system",
+        "StoveController#1200882479": "system",
+        "DoorController#1841690631": "system",
+        "FinalExitTrigger#1567135693": "system",
+        "GrabbableKeyController#915335388": "system",
+        "PowerSwitchController#1854153234": "system",
+        "DoorController#789745775": "system"
+      },
+      "oracle_hints": [
+        "PantryKeyUnlockReceiver#351089451 becomes interactable after using KitchenBadgeUnlockReceiver#1770515124.",
+        "MixingBowlSocket#934798471 becomes interactable after washing items at SinkWashStation#2088852900.",
+        "ServingPlateSocket#807955241 becomes interactable after using KnifeSlotDetector#677490823.",
+        "ServingCounterSocket#1062148655 becomes interactable after completing MixingBowlSocket#934798471 and ServingPlateSocket#807955241."
+      ],
+      "completion_criteria": [
+        "All required items are placed in ServingCounterSocket#1062148655."
+      ],
+      "forbidden_test_objects": [
+        "RecipeController#553705491",
+        "LockedCabinetController#196765814",
+        "DoorController#1341467250",
+        "CuttingBoardController#1235159925",
+        "MixingBowlController#1334793350",
+        "StoveController#1200882479",
+        "DoorController#1841690631",
+        "FinalExitTrigger#1567135693",
+        "GrabbableKeyController#915335388",
+        "PowerSwitchController#1854153234",
+        "DoorController#789745775"
+      ]
+    },
+    "state_delta": {
+      "changed_objects": [
+        "Socket_KitchenBadge"
+      ],
+      "expected_changes": [
+        "Trigger:KitchenBadgeUnlockReceiver completed; no source-object state delta observed"
+      ],
+      "unexpected_changes": [],
+      "gates_opened": [],
+      "gates_still_blocked": [
+        "Step 1: Use KitchenBadgeUnlockReceiver#1770515124 to unlock PantryKeyUnlockReceiver#351089451."
+      ],
+      "semantic_failures": [
+        "Action succeeded technically but failed due to missing power, as indicated by the panel flashing red."
+      ]
+    },
+    "failure_hypotheses": [
+      {
+        "hypothesis": "[need_state] d",
+        "evidence": [
+          "Pattern 'complete' in Trigger:KitchenBadgeUnlockReceiver: component_added:XRTriggerable:Socket_KitchenBadge xrbase_initialized:Socket_KitchenBadge execute:MoveAction completed:MoveAction execute:TriggerAction completed:TriggerAction"
+        ],
+        "confidence": 0.6,
+        "blocked_object": "",
+        "needed_condition": "d"
+      },
+      {
+        "hypothesis": "[locked] kitchen",
+        "evidence": [
+          "Pattern 'lock ' in console_log: [Log] [HenryLab.XR]Entity'triggerable' Registered [Error] [HenryLab.XR] No parameterless method 'UnlockDoor' found on KitchenBadgeUnlockReceiver (Socket_KitchenBadge). Only methods without parameters "
+        ],
+        "confidence": 0.75,
+        "blocked_object": "",
+        "needed_condition": "kitchen"
+      },
+      {
+        "hypothesis": "KitchenBadgeUnlockReceiver failed due to lack of power.",
+        "evidence": [
+          "[CONSOLE_WARN] [Warning] [RecipeController] FAIL — tried to unlock kitchen door without power.",
+          "[CONSOLE_WARN] [Warning] [KitchenBadgeUnlockReceiver] FAIL — badge scanned but no power. Panel flashes red."
+        ],
+        "confidence": 0.9,
+        "blocked_object": "KitchenBadgeUnlockReceiver#1770515124",
+        "needed_condition": "Power must be restored to the system."
+      },
+      {
+        "hypothesis": "Destination may not be reachable due to navigation issues.",
+        "evidence": [
+          "[CONSOLE_WARN] [Warning] [HenryLab.XR] Destination (10.30, 1.20, -6.70) may not be reachable, but will try"
+        ],
+        "confidence": 0.6,
+        "blocked_object": "Socket_KitchenBadge",
+        "needed_condition": "Verify navigation path to ensure accessibility."
+      },
+      {
+        "hypothesis": "Missing XRBaseController component on VRAgent2.0-PVEO.",
+        "evidence": [
+          "[CONSOLE_WARN] [Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of its parents."
+        ],
+        "confidence": 0.7,
+        "blocked_object": "VRAgent2.0-PVEO",
+        "needed_condition": "Ensure XRBaseController component is properly attached."
+      }
+    ],
+    "strategy": {
+      "new_facts": [
+        "KitchenBadgeUnlockReceiver#1770515124 requires power to function.",
+        "Destination (10.30, 1.20, -6.70) may have navigation issues.",
+        "VRAgent2.0-PVEO is missing an XRBaseController component."
+      ],
+      "gates_inferred": [
+        {
+          "blocked_object": "KitchenBadgeUnlockReceiver#1770515124",
+          "needed_condition": "Power must be restored to the system."
+        },
+        {
+          "blocked_object": "Socket_KitchenBadge",
+          "needed_condition": "Verify navigation path to ensure accessibility."
+        },
+        {
+          "blocked_object": "VRAgent2.0-PVEO",
+          "needed_condition": "Ensure XRBaseController component is properly attached."
+        }
+      ],
+      "planner_instruction": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124.",
+      "scheduler_bias": [
+        "KitchenBadgeUnlockReceiver#1770515124",
+        "PowerSwitchController#1854153234"
+      ],
+      "oracle_updates": [
+        "KitchenBadgeUnlockReceiver#1770515124 requires power to unlock PantryKeyUnlockReceiver#351089451.",
+        "Ensure navigation paths are accessible before triggering actions."
+      ]
+    },
+    "semantic_critique": {
+      "semantic_risk_score": 0.3,
+      "missing_preconditions": [],
+      "suspicious_steps": [],
+      "counter_plan": [],
+      "verdict": "accept"
+    }
+  }
+}

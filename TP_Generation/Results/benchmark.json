@@ -1,0 +1,367 @@
+[
+  {
+    "scene": "Kitchen_TestRoom",
+    "model": "gpt-4o",
+    "timestamp": "2026-05-04T22:02:01.180812",
+    "run_start": "2026-05-04T21:57:55.167342",
+    "run_end": "2026-05-04T21:57:55.167342",
+    "total_actions": 0,
+    "iterations": 1,
+    "gates_solved": 0,
+    "gates_frontier": 0,
+    "budget_remaining": 98,
+    "token_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "calls": 0,
+      "per_agent": {}
+    },
+    "coverage": {
+      "generated_on": "2026/3/31 - 11:06:27",
+      "line_coverage": 41.2,
+      "method_coverage": 61.3,
+      "covered_lines": 204,
+      "coverable_lines": 494,
+      "total_lines": 1001,
+      "covered_methods": 62,
+      "total_methods": 101,
+      "classes": 15,
+      "per_class": [
+        {
+          "name": "CuttingBoardController",
+          "line_coverage": 64.0,
+          "covered_lines": 16,
+          "coverable_lines": 25,
+          "method_coverage": 80.0,
+          "covered_methods": 4,
+          "total_methods": 5
+        },
+        {
+          "name": "FinalExitTrigger",
+          "line_coverage": 26.0,
+          "covered_lines": 6,
+          "coverable_lines": 23,
+          "method_coverage": 100.0,
+          "covered_methods": 4,
+          "total_methods": 4
+        },
+        {
+          "name": "GrabbableKeyController",
+          "line_coverage": 11.1,
+          "covered_lines": 1,
+          "coverable_lines": 9,
+          "method_coverage": 33.3,
+          "covered_methods": 1,
+          "total_methods": 3
+        },
+        {
+          "name": "KitchenBadgeUnlockReceiver",
+          "line_coverage": 37.5,
+          "covered_lines": 9,
+          "coverable_lines": 24,
+          "method_coverage": 75.0,
+          "covered_methods": 3,
+          "total_methods": 4
+        },
+        {
+          "name": "KnifeSlotDetector",
+          "line_coverage": 57.8,
+          "covered_lines": 11,
+          "coverable_lines": 19,
+          "method_coverage": 71.4,
+          "covered_methods": 5,
+          "total_methods": 7
+        },
+        {
+          "name": "LockedCabinetController",
+          "line_coverage": 82.0,
+          "covered_lines": 32,
+          "coverable_lines": 39,
+          "method_coverage": 75.0,
+          "covered_methods": 6,
+          "total_methods": 8
+        },
+        {
+          "name": "MixingBowlController",
+          "line_coverage": 45.0,
+          "covered_lines": 9,
+          "coverable_lines": 20,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "MixingBowlSocket",
+          "line_coverage": 57.8,
+          "covered_lines": 11,
+          "coverable_lines": 19,
+          "method_coverage": 71.4,
+          "covered_methods": 5,
+          "total_methods": 7
+        },
+        {
+          "name": "PantryKeyUnlockReceiver",
+          "line_coverage": 50.0,
+          "covered_lines": 9,
+          "coverable_lines": 18,
+          "method_coverage": 75.0,
+          "covered_methods": 3,
+          "total_methods": 4
+        },
+        {
+          "name": "PowerSwitchController",
+          "line_coverage": 100.0,
+          "covered_lines": 20,
+          "coverable_lines": 20,
+          "method_coverage": 100.0,
+          "covered_methods": 6,
+          "total_methods": 6
+        },
+        {
+          "name": "RecipeController",
+          "line_coverage": 20.9,
+          "covered_lines": 31,
+          "coverable_lines": 148,
+          "method_coverage": 28.0,
+          "covered_methods": 7,
+          "total_methods": 25
+        },
+        {
+          "name": "ServingCounterSocket",
+          "line_coverage": 39.1,
+          "covered_lines": 9,
+          "coverable_lines": 23,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "ServingPlateSocket",
+          "line_coverage": 40.9,
+          "covered_lines": 9,
+          "coverable_lines": 22,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "SinkWashStation",
+          "line_coverage": 34.0,
+          "covered_lines": 17,
+          "coverable_lines": 50,
+          "method_coverage": 57.1,
+          "covered_methods": 4,
+          "total_methods": 7
+        },
+        {
+          "name": "StoveController",
+          "line_coverage": 40.0,
+          "covered_lines": 14,
+          "coverable_lines": 35,
+          "method_coverage": 83.3,
+          "covered_methods": 5,
+          "total_methods": 6
+        }
+      ]
+    }
+  },
+  {
+    "scene": "Kitchen_TestRoom",
+    "model": "gpt-4o",
+    "timestamp": "2026-05-04T23:14:32.814686",
+    "run_start": "2026-05-04T23:13:39.245653",
+    "run_end": "2026-05-04T23:13:39.245653",
+    "total_actions": 1,
+    "iterations": 1,
+    "gates_solved": 0,
+    "gates_frontier": 1,
+    "budget_remaining": 98,
+    "token_usage": {
+      "prompt_tokens": 10296,
+      "completion_tokens": 1407,
+      "total_tokens": 11703,
+      "calls": 5,
+      "per_agent": {
+        "scheduler": {
+          "prompt_tokens": 234,
+          "completion_tokens": 50,
+          "total_tokens": 284,
+          "calls": 1
+        },
+        "planner": {
+          "prompt_tokens": 7860,
+          "completion_tokens": 631,
+          "total_tokens": 8491,
+          "calls": 1
+        },
+        "verifier_v1": {
+          "prompt_tokens": 434,
+          "completion_tokens": 219,
+          "total_tokens": 653,
+          "calls": 1
+        },
+        "verifier_v2": {
+          "prompt_tokens": 636,
+          "completion_tokens": 147,
+          "total_tokens": 783,
+          "calls": 1
+        },
+        "observer": {
+          "prompt_tokens": 1132,
+          "completion_tokens": 360,
+          "total_tokens": 1492,
+          "calls": 1
+        }
+      }
+    },
+    "coverage": {
+      "generated_on": "2026/3/31 - 11:06:27",
+      "line_coverage": 41.2,
+      "method_coverage": 61.3,
+      "covered_lines": 204,
+      "coverable_lines": 494,
+      "total_lines": 1001,
+      "covered_methods": 62,
+      "total_methods": 101,
+      "classes": 15,
+      "per_class": [
+        {
+          "name": "CuttingBoardController",
+          "line_coverage": 64.0,
+          "covered_lines": 16,
+          "coverable_lines": 25,
+          "method_coverage": 80.0,
+          "covered_methods": 4,
+          "total_methods": 5
+        },
+        {
+          "name": "FinalExitTrigger",
+          "line_coverage": 26.0,
+          "covered_lines": 6,
+          "coverable_lines": 23,
+          "method_coverage": 100.0,
+          "covered_methods": 4,
+          "total_methods": 4
+        },
+        {
+          "name": "GrabbableKeyController",
+          "line_coverage": 11.1,
+          "covered_lines": 1,
+          "coverable_lines": 9,
+          "method_coverage": 33.3,
+          "covered_methods": 1,
+          "total_methods": 3
+        },
+        {
+          "name": "KitchenBadgeUnlockReceiver",
+          "line_coverage": 37.5,
+          "covered_lines": 9,
+          "coverable_lines": 24,
+          "method_coverage": 75.0,
+          "covered_methods": 3,
+          "total_methods": 4
+        },
+        {
+          "name": "KnifeSlotDetector",
+          "line_coverage": 57.8,
+          "covered_lines": 11,
+          "coverable_lines": 19,
+          "method_coverage": 71.4,
+          "covered_methods": 5,
+          "total_methods": 7
+        },
+        {
+          "name": "LockedCabinetController",
+          "line_coverage": 82.0,
+          "covered_lines": 32,
+          "coverable_lines": 39,
+          "method_coverage": 75.0,
+          "covered_methods": 6,
+          "total_methods": 8
+        },
+        {
+          "name": "MixingBowlController",
+          "line_coverage": 45.0,
+          "covered_lines": 9,
+          "coverable_lines": 20,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "MixingBowlSocket",
+          "line_coverage": 57.8,
+          "covered_lines": 11,
+          "coverable_lines": 19,
+          "method_coverage": 71.4,
+          "covered_methods": 5,
+          "total_methods": 7
+        },
+        {
+          "name": "PantryKeyUnlockReceiver",
+          "line_coverage": 50.0,
+          "covered_lines": 9,
+          "coverable_lines": 18,
+          "method_coverage": 75.0,
+          "covered_methods": 3,
+          "total_methods": 4
+        },
+        {
+          "name": "PowerSwitchController",
+          "line_coverage": 100.0,
+          "covered_lines": 20,
+          "coverable_lines": 20,
+          "method_coverage": 100.0,
+          "covered_methods": 6,
+          "total_methods": 6
+        },
+        {
+          "name": "RecipeController",
+          "line_coverage": 20.9,
+          "covered_lines": 31,
+          "coverable_lines": 148,
+          "method_coverage": 28.0,
+          "covered_methods": 7,
+          "total_methods": 25
+        },
+        {
+          "name": "ServingCounterSocket",
+          "line_coverage": 39.1,
+          "covered_lines": 9,
+          "coverable_lines": 23,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "ServingPlateSocket",
+          "line_coverage": 40.9,
+          "covered_lines": 9,
+          "coverable_lines": 22,
+          "method_coverage": 60.0,
+          "covered_methods": 3,
+          "total_methods": 5
+        },
+        {
+          "name": "SinkWashStation",
+          "line_coverage": 34.0,
+          "covered_lines": 17,
+          "coverable_lines": 50,
+          "method_coverage": 57.1,
+          "covered_methods": 4,
+          "total_methods": 7
+        },
+        {
+          "name": "StoveController",
+          "line_coverage": 40.0,
+          "covered_lines": 14,
+          "coverable_lines": 35,
+          "method_coverage": 83.3,
+          "covered_methods": 5,
+          "total_methods": 6
+        }
+      ]
+    }
+  }
+]

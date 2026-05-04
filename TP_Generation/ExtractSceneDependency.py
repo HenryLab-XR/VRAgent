@@ -3,10 +3,8 @@ import json
 import subprocess
 import argparse
 from networkx.algorithms.bipartite.cluster import latapy_clustering
-from openai import file_from_path
 import config
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
 def find_scene_path_by_name(project_path, scene_name):
@@ -1506,16 +1504,31 @@ def sanitize_graph_keys(G):
     First applies Unity-specific sanitization (sanitize_keys), then GML format sanitization.
     GML format requires valid identifier keys without spaces or special characters.
     """
+    def to_gml_key(key):
+        """Convert arbitrary Unity/JSON keys into NetworkX GML-safe identifiers."""
+        cleaned_key = ''.join(ch for ch in str(key) if ch.isalnum())
+        if not cleaned_key:
+            cleaned_key = 'Key'
+        if not cleaned_key[0].isalpha():
+            cleaned_key = f'K{cleaned_key}'
+        return cleaned_key
+
     def clean_dict_keys(data):
         """Recursively clean keys in nested dictionaries and lists for GML format"""
         if isinstance(data, dict):
             cleaned_data = {}
+            used_keys = set()
             for key, value in data.items():
-                # Clean the key for GML format
-                cleaned_key = key.strip().replace(' ', '_').replace('-', '_')
-                if cleaned_key and cleaned_key != '_':
-                    # Recursively clean nested values
-                    cleaned_data[cleaned_key] = clean_dict_keys(value)
+                cleaned_key = to_gml_key(key)
+                if cleaned_key in used_keys:
+                    suffix = 2
+                    deduped_key = f'{cleaned_key}{suffix}'
+                    while deduped_key in used_keys:
+                        suffix += 1
+                        deduped_key = f'{cleaned_key}{suffix}'
+                    cleaned_key = deduped_key
+                used_keys.add(cleaned_key)
+                cleaned_data[cleaned_key] = clean_dict_keys(value)
             return cleaned_data
         elif isinstance(data, list):
             # Clean each item in the list
@@ -1539,19 +1552,18 @@ def sanitize_graph_keys(G):
             # Return primitive values as-is
             return data
     
+    G.graph.clear()
+    G.graph.update(clean_dict_keys(apply_unity_sanitization(dict(G.graph))))
+
     # Clean node attributes
     for node_id, node_data in G.nodes(data=True):
-        if 'properties' in node_data:
-            # First apply Unity-specific sanitization, then GML format sanitization
-            node_data['properties'] = apply_unity_sanitization(node_data['properties'])
-            node_data['properties'] = clean_dict_keys(node_data['properties'])
+        cleaned_node_data = clean_dict_keys(apply_unity_sanitization(dict(node_data)))
+        node_data.clear()
+        node_data.update(cleaned_node_data)
     
     # Clean edge attributes
     for source, target, edge_data in G.edges(data=True):
-        # First apply Unity-specific sanitization, then GML format sanitization
-        cleaned_edge_data = apply_unity_sanitization(edge_data)
-        cleaned_edge_data = clean_dict_keys(cleaned_edge_data)
-        # Update edge data
+        cleaned_edge_data = clean_dict_keys(apply_unity_sanitization(dict(edge_data)))
         G[source][target].clear()
         G[source][target].update(cleaned_edge_data)
 

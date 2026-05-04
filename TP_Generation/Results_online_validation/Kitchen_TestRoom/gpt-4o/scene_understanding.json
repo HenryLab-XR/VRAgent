@@ -1,0 +1,105 @@
+{
+  "scene_overview": "A kitchen-themed VR test room where players interact with various objects to complete tasks involving food preparation and unlocking areas.",
+  "key_objects": [
+    "KitchenBadgeUnlockReceiver#1770515124",
+    "PantryKeyUnlockReceiver#351089451",
+    "ServingCounterSocket#1062148655",
+    "KnifeSlotDetector#677490823",
+    "MixingBowlSocket#934798471",
+    "ServingPlateSocket#807955241",
+    "SinkWashStation#2088852900"
+  ],
+  "interaction_dependencies": [
+    {
+      "source": "KitchenBadgeUnlockReceiver#1770515124",
+      "target": "PantryKeyUnlockReceiver#351089451",
+      "relation": "unlocks"
+    },
+    {
+      "source": "KnifeSlotDetector#677490823",
+      "target": "MixingBowlSocket#934798471",
+      "relation": "enables"
+    },
+    {
+      "source": "MixingBowlSocket#934798471",
+      "target": "ServingPlateSocket#807955241",
+      "relation": "requires"
+    },
+    {
+      "source": "ServingPlateSocket#807955241",
+      "target": "ServingCounterSocket#1062148655",
+      "relation": "triggers"
+    }
+  ],
+  "gate_chains": [
+    "Step 1: Use KitchenBadgeUnlockReceiver#1770515124 to unlock PantryKeyUnlockReceiver#351089451.",
+    "Step 2: Place the knife in KnifeSlotDetector#677490823 to enable MixingBowlSocket#934798471.",
+    "Step 3: Interact with MixingBowlSocket#934798471 to prepare ingredients for ServingPlateSocket#807955241.",
+    "Step 4: Place the prepared plate in ServingPlateSocket#807955241 to trigger ServingCounterSocket#1062148655."
+  ],
+  "main_path": [
+    "Step 1: Interact with KitchenBadgeUnlockReceiver#1770515124.",
+    "Step 2: Unlock PantryKeyUnlockReceiver#351089451.",
+    "Step 3: Place knife in KnifeSlotDetector#677490823.",
+    "Step 4: Use MixingBowlSocket#934798471.",
+    "Step 5: Place plate in ServingPlateSocket#807955241.",
+    "Step 6: Complete task at ServingCounterSocket#1062148655."
+  ],
+  "failure_paths": [
+    "Failing to unlock PantryKeyUnlockReceiver#351089451 due to missing KitchenBadgeUnlockReceiver#1770515124 interaction.",
+    "Not placing the knife in KnifeSlotDetector#677490823, preventing MixingBowlSocket#934798471 from being enabled.",
+    "Skipping MixingBowlSocket#934798471 interaction, leaving ServingPlateSocket#807955241 unprepared.",
+    "Incorrect placement of items in ServingPlateSocket#807955241, blocking ServingCounterSocket#1062148655."
+  ],
+  "object_priority_ranking": [
+    "KitchenBadgeUnlockReceiver#1770515124",
+    "PantryKeyUnlockReceiver#351089451",
+    "KnifeSlotDetector#677490823",
+    "MixingBowlSocket#934798471",
+    "ServingPlateSocket#807955241",
+    "ServingCounterSocket#1062148655",
+    "SinkWashStation#2088852900"
+  ],
+  "object_roles": {
+    "KitchenBadgeUnlockReceiver#1770515124": "unlocker",
+    "PantryKeyUnlockReceiver#351089451": "gated_target",
+    "ServingCounterSocket#1062148655": "gated_target",
+    "KnifeSlotDetector#677490823": "tool",
+    "MixingBowlSocket#934798471": "container",
+    "ServingPlateSocket#807955241": "container",
+    "SinkWashStation#2088852900": "optional_decoration",
+    "RecipeController#553705491": "system",
+    "LockedCabinetController#196765814": "system",
+    "DoorController#1341467250": "system",
+    "CuttingBoardController#1235159925": "system",
+    "MixingBowlController#1334793350": "system",
+    "StoveController#1200882479": "system",
+    "DoorController#1841690631": "system",
+    "FinalExitTrigger#1567135693": "system",
+    "GrabbableKeyController#915335388": "system",
+    "PowerSwitchController#1854153234": "system",
+    "DoorController#789745775": "system"
+  },
+  "oracle_hints": [
+    "PantryKeyUnlockReceiver#351089451 becomes interactable after KitchenBadgeUnlockReceiver#1770515124 is used.",
+    "MixingBowlSocket#934798471 visually changes or logs an event when KnifeSlotDetector#677490823 is activated.",
+    "ServingPlateSocket#807955241 shows a filled plate after MixingBowlSocket#934798471 interaction.",
+    "ServingCounterSocket#1062148655 triggers a success event when ServingPlateSocket#807955241 is correctly used."
+  ],
+  "completion_criteria": [
+    "Successfully interact with ServingCounterSocket#1062148655 after completing all prior steps."
+  ],
+  "forbidden_test_objects": [
+    "RecipeController#553705491",
+    "LockedCabinetController#196765814",
+    "DoorController#1341467250",
+    "CuttingBoardController#1235159925",
+    "MixingBowlController#1334793350",
+    "StoveController#1200882479",
+    "DoorController#1841690631",
+    "FinalExitTrigger#1567135693",
+    "GrabbableKeyController#915335388",
+    "PowerSwitchController#1854153234",
+    "DoorController#789745775"
+  ]
+}

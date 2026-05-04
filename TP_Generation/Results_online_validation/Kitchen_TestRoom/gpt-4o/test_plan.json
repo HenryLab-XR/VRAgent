@@ -1,0 +1,85 @@
+{
+  "taskUnits": [
+    {
+      "actionUnits": [
+        {
+          "type": "Trigger",
+          "source_object_name": "KitchenBadgeUnlockReceiver",
+          "triggerring_time": 0.5,
+          "source_object_fileID": 1770515124,
+          "condition": "Trigger the event to unlock the pantry door. The MonoBehaviour component (fileID: 1770515126) is attached to the KitchenBadgeUnlockReceiver. The script is associated with the kitchenDoorController (fileID: 1341467255).",
+          "triggerring_events": [
+            {
+              "methodCallUnits": [
+                {
+                  "script_fileID": 1770515126,
+                  "method_name": "UnlockDoor",
+                  "parameter_fileID": []
+                }
+              ]
+            }
+          ],
+          "triggerred_events": [
+            {
+              "type": "Trigger",
+              "source_object_name": "PantryKeyUnlockReceiver",
+              "triggerring_time": 0.6,
+              "source_object_fileID": 351089451,
+              "condition": "Unlock the pantry key after the KitchenBadgeUnlockReceiver interaction.",
+              "triggerring_events": [
+                {
+                  "methodCallUnits": [
+                    {
+                      "script_fileID": 351089452,
+                      "method_name": "UnlockKey",
+                      "parameter_fileID": []
+                    }
+                  ]
+                }
+              ],
+              "triggerred_events": []
+            }
+          ]
+        },
+        {
+          "type": "Trigger",
+          "source_object_name": "KitchenBadgeUnlockReceiver",
+          "triggerring_time": 1.0,
+          "source_object_fileID": 1770515124,
+          "condition": "Ensure power is restored to the system and KitchenBadgeUnlockReceiver#1770515124 is interactable.",
+          "triggerring_events": [
+            {
+              "methodCallUnits": [
+                {
+                  "script_fileID": 351089453,
+                  "method_name": "UnlockDoor",
+                  "parameter_fileID": []
+                }
+              ]
+            }
+          ],
+          "triggerred_events": []
+        },
+        {
+          "type": "Trigger",
+          "source_object_name": "PantryKeyUnlockReceiver",
+          "triggerring_time": 1.0,
+          "source_object_fileID": 351089451,
+          "condition": "Triggered after explicitly verifying that KitchenBadgeUnlockReceiver#1770515124 has successfully unlocked PantryKeyUnlockReceiver#351089451.",
+          "triggerring_events": [
+            {
+              "methodCallUnits": [
+                {
+                  "script_fileID": 351089453,
+                  "method_name": "UnlockDoor",
+                  "parameter_fileID": []
+                }
+              ]
+            }
+          ],
+          "triggerred_events": []
+        }
+      ]
+    }
+  ]
+}

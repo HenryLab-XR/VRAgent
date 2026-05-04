@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "state_1": {
+      "node_id": "state_1",
+      "label": "KitchenBadgeUnlockReceiver#1770515124",
+      "room": "KitchenBadgeUnlockReceiver#1770515124",
+      "active_ui": "",
+      "flags": {}
+    },
+    "state_2": {
+      "node_id": "state_2",
+      "label": "PantryKeyUnlockReceiver#351089451",
+      "room": "PantryKeyUnlockReceiver#351089451",
+      "active_ui": "",
+      "flags": {}
+    }
+  },
+  "edges": [
+    {
+      "from_state": "state_1",
+      "to_state": "blocked_Trigger:KitchenBadgeUnlockReceiver",
+      "action": "Trigger:KitchenBadgeUnlockReceiver",
+      "success": false,
+      "failure_type": "",
+      "evidence": "component_added:XRTriggerable:Socket_KitchenBadge; xrbase_initialized:Socket_KitchenBadge; execute:MoveAction; completed:MoveAction; execute:TriggerAction; completed:TriggerAction; [observer] semantic failure detected"
+    },
+    {
+      "from_state": "state_2",
+      "to_state": "blocked_Trigger:KitchenBadgeUnlockReceiver",
+      "action": "Trigger:KitchenBadgeUnlockReceiver",
+      "success": false,
+      "failure_type": "",
+      "evidence": "component_added:XRTriggerable:Socket_KitchenBadge; xrbase_initialized:Socket_KitchenBadge; execute:MoveAction; completed:MoveAction; execute:TriggerAction; completed:TriggerAction; [observer] semantic failure detected"
+    },
+    {
+      "from_state": "state_2",
+      "to_state": "blocked_Trigger:PantryKeyUnlockReceiver",
+      "action": "Trigger:PantryKeyUnlockReceiver",
+      "success": false,
+      "failure_type": "",
+      "evidence": "component_added:XRTriggerable:Socket_PantryLock; xrbase_initialized:Socket_PantryLock; execute:MoveAction; completed:MoveAction; execute:TriggerAction; completed:TriggerAction; [observer] semantic failure detected"
+    }
+  ]
+}

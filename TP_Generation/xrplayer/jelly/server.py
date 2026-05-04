@@ -38,6 +38,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 import time
 import threading
 import webbrowser
@@ -81,13 +82,19 @@ class _RunManager:
             self._params = params
             self._env = env
         proc_env = os.environ.copy()
+        # Force unbuffered output so log lines appear even if process exits immediately
+        proc_env["PYTHONUNBUFFERED"] = "1"
         if env:
             proc_env.update(env)
+        # On Windows, prevent subprocess from opening a console window
+        _extra: Dict[str, Any] = {}
+        if sys.platform == "win32":
+            _extra["creationflags"] = subprocess.CREATE_NO_WINDOW
         self._proc = subprocess.Popen(
             cmd, cwd=cwd,
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             text=True, bufsize=1, encoding="utf-8", errors="replace",
-            env=proc_env,
+            env=proc_env, **_extra,
         )
         t = threading.Thread(target=self._reader, daemon=True)
         t.start()
@@ -143,8 +150,37 @@ class _RunManager:
 # Project config  (results_root/projects.json)
 # ---------------------------------------------------------------------------
 
+class _UiSettingsConfig:
+    """Local-only UI settings (API key etc.) stored in .ui_settings.json.
+
+    This file is gitignored and never served to the browser as plaintext.
+    The GET route returns only ``has_api_key`` so the key never leaves the server.
+    """
+
+    def __init__(self, results_root: Path) -> None:
+        self._path = results_root / ".ui_settings.json"
+        self._lock = threading.Lock()
+
+    def load(self) -> Dict[str, Any]:
+        try:
+            return json.loads(self._path.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return {}
+        except Exception:
+            return {}
+
+    def save(self, data: Dict[str, Any]) -> None:
+        with self._lock:
+            self._path.write_text(
+                json.dumps(data, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+
+    def get_api_key(self) -> str:
+        return self.load().get("api_key", "")
+
+
 class _ProjectsConfig:
-    """Read/write the projects.json config stored next to the results."""
 
     _DEFAULT: Dict[str, Any] = {
         "projects": [],
@@ -347,6 +383,122 @@ def _list_runs(results_root: Path, max_depth: int = 3) -> List[Dict[str, Any]]:
     return runs
 
 
+def _normalize_preprocess_dir(path_value: str) -> Optional[Path]:
+    if not path_value:
+        return None
+    try:
+        return Path(path_value).resolve()
+    except OSError:
+        return None
+
+
+def _infer_scene_name_from_dir(results_dir: Optional[Path]) -> str:
+    if results_dir is None or not results_dir.is_dir():
+        return ""
+
+    scene_meta_dir = results_dir / "scene_detailed_info" / "mainResults"
+    if scene_meta_dir.is_dir():
+        suffixes = (
+            ".unity.json_graph.gml",
+            ".unity.json_database.json",
+            ".unity.json",
+        )
+        for suffix in suffixes:
+            for path in sorted(scene_meta_dir.glob(f"*{suffix}")):
+                return path.name[: -len(suffix)]
+
+    hierarchy_suffix = "_gobj_hierarchy.json"
+    for path in sorted(results_dir.glob(f"*{hierarchy_suffix}")):
+        return path.name[: -len(hierarchy_suffix)]
+
+    return ""
+
+
+def _contains_sorted_logic_markers(data: Any) -> bool:
+    stack: List[Any] = [data]
+    while stack:
+        current = stack.pop()
+        if isinstance(current, dict):
+            if "sorted_target_logic_info" in current or "sorted_layer_logic_info" in current:
+                return True
+            for value in current.values():
+                if isinstance(value, (dict, list)):
+                    stack.append(value)
+        elif isinstance(current, list):
+            for value in current:
+                if isinstance(value, (dict, list)):
+                    stack.append(value)
+    return False
+
+
+def _build_preprocess_status(results_dir1: Optional[Path], results_dir2: Optional[Path],
+                             results_dir3: Optional[Path], scene_name: str) -> Dict[str, Any]:
+    scene_name = (scene_name or "").strip()
+    if not scene_name:
+        for candidate_dir in (results_dir1, results_dir2, results_dir3):
+            scene_name = _infer_scene_name_from_dir(candidate_dir)
+            if scene_name:
+                break
+
+    step1_dir = results_dir1 or results_dir2 or results_dir3
+    step2_dir = results_dir2 or results_dir1 or results_dir3
+    step3_dir = results_dir3 or results_dir2 or results_dir1
+
+    graph_path = None
+    database_path = None
+    scene_json_path = None
+    if step1_dir is not None and scene_name:
+        scene_meta_dir = step1_dir / "scene_detailed_info" / "mainResults"
+        graph_path = scene_meta_dir / f"{scene_name}.unity.json_graph.gml"
+        database_path = scene_meta_dir / f"{scene_name}.unity.json_database.json"
+        scene_json_path = scene_meta_dir / f"{scene_name}.unity.json"
+
+    hierarchy_path2 = (step2_dir / f"{scene_name}_gobj_hierarchy.json") if step2_dir is not None and scene_name else None
+    hierarchy_path3 = (step3_dir / f"{scene_name}_gobj_hierarchy.json") if step3_dir is not None and scene_name else None
+
+    step1_done = any(path is not None and path.is_file() for path in (graph_path, database_path, scene_json_path))
+    step2_done = hierarchy_path2 is not None and hierarchy_path2.is_file()
+
+    step3_done = False
+    step3_error = ""
+    if hierarchy_path3 is not None and hierarchy_path3.is_file():
+        data = _read_json(hierarchy_path3)
+        if isinstance(data, dict) and data.get("_jelly_error"):
+            step3_error = data["_jelly_error"]
+        elif data is not None:
+            step3_done = _contains_sorted_logic_markers(data)
+
+    if step2_done or step3_done:
+        step1_done = True
+    if step3_done:
+        step2_done = True
+
+    return {
+        "scene_name": scene_name,
+        "step1": {
+            "state": "done" if step1_done else "idle",
+            "results_dir": str(step1_dir) if step1_dir is not None else "",
+            "exists": bool(step1_dir and step1_dir.is_dir()),
+            "graph_path": str(graph_path) if graph_path is not None and graph_path.is_file() else "",
+            "database_path": str(database_path) if database_path is not None and database_path.is_file() else "",
+            "scene_json_path": str(scene_json_path) if scene_json_path is not None and scene_json_path.is_file() else "",
+        },
+        "step2": {
+            "state": "done" if step2_done else "idle",
+            "results_dir": str(step2_dir) if step2_dir is not None else "",
+            "exists": bool(step2_dir and step2_dir.is_dir()),
+            "hierarchy_path": str(hierarchy_path2) if hierarchy_path2 is not None and hierarchy_path2.is_file() else "",
+        },
+        "step3": {
+            "state": "done" if step3_done else "idle",
+            "results_dir": str(step3_dir) if step3_dir is not None else "",
+            "exists": bool(step3_dir and step3_dir.is_dir()),
+            "hierarchy_path": str(hierarchy_path3) if hierarchy_path3 is not None and hierarchy_path3.is_file() else "",
+            "error": step3_error,
+        },
+    }
+
+
 # ---------------------------------------------------------------------------
 # HTTP handler
 # ---------------------------------------------------------------------------
@@ -470,6 +622,12 @@ class _JellyHandler(BaseHTTPRequestHandler):
             self._send_json(self.server.projects_config.load())  # type: ignore[attr-defined]
             return
 
+        if path == "/api/ui_settings":
+            # Never return the key itself — only indicate whether one is saved
+            key = self.server.ui_settings.get_api_key()  # type: ignore[attr-defined]
+            self._send_json({"has_api_key": bool(key)})
+            return
+
         if path == "/api/scenes":
             project_path = (qs.get("project_path") or [None])[0]
             if not project_path:
@@ -495,6 +653,20 @@ class _JellyHandler(BaseHTTPRequestHandler):
             })
             return
 
+        if path == "/api/preprocess/status":
+            shared_dir = (qs.get("results_dir") or [""])[0].strip()
+            dir1 = (qs.get("results_dir1") or [shared_dir])[0].strip()
+            dir2 = (qs.get("results_dir2") or [shared_dir or dir1])[0].strip()
+            dir3 = (qs.get("results_dir3") or [shared_dir or dir2 or dir1])[0].strip()
+            scene_name = (qs.get("scene_name") or [""])[0].strip()
+            self._send_json(_build_preprocess_status(
+                _normalize_preprocess_dir(dir1),
+                _normalize_preprocess_dir(dir2),
+                _normalize_preprocess_dir(dir3),
+                scene_name,
+            ))
+            return
+
         if path == "/api/file":
             rel = (qs.get("path") or [None])[0]
             if not rel:
@@ -510,6 +682,24 @@ class _JellyHandler(BaseHTTPRequestHandler):
         if path == "/api/result_files":
             files = _list_result_files(self._root, run_dir)
             self._send_json({"files": files})
+            return
+
+        # ── Find Unity project root (walk up from any path inside project) ──
+        if path == "/api/find_project_root":
+            search_path = (qs.get("path") or [""])[0].strip()
+            if not search_path:
+                self._send_json({"found": False, "project_root": ""})
+                return
+            p = Path(search_path).resolve()
+            for _ in range(12):
+                if (p / "Assets").is_dir() and (p / "ProjectSettings").is_dir():
+                    self._send_json({"found": True, "project_root": str(p)})
+                    return
+                parent = p.parent
+                if parent == p:
+                    break
+                p = parent
+            self._send_json({"found": False, "project_root": ""})
             return
 
         if path == "/api/browse":
@@ -616,8 +806,8 @@ class _JellyHandler(BaseHTTPRequestHandler):
         # ── Start a vragent2 run ───────────────────────────────────────────
         if path == "/api/run/start":
             cfg = self.server.projects_config.load()  # type: ignore[attr-defined]
-            python_exe = body.get("python_exe") or cfg.get("python_exe") or "python"
-            work_dir   = body.get("work_dir")   or cfg.get("work_dir")   or "."
+            python_exe = body.get("python_exe") or cfg.get("python_exe") or sys.executable
+            work_dir   = body.get("work_dir")   or cfg.get("work_dir")   or str(self.server.results_root)  # type: ignore[attr-defined]
 
             # Build CLI args
             cmd = [python_exe, "-m", "vragent2"]
@@ -656,8 +846,15 @@ class _JellyHandler(BaseHTTPRequestHandler):
 
             env: Optional[Dict[str, str]] = None
             api_key = body.get("api_key", "").strip()
+            # Fallback: use key saved in .ui_settings.json when field is empty
+            if not api_key:
+                api_key = self.server.ui_settings.get_api_key()  # type: ignore[attr-defined]
             if api_key:
                 env = {"OPENAI_API_KEY": api_key}
+            else:
+                # No key anywhere — fail fast with a clear message before even launching
+                self._send_json({"error": "No API key. Enter it in the API Key field or click '保存到本地' to save it locally first."}, status=HTTPStatus.BAD_REQUEST)
+                return
 
             params = {k: v for k, v in body.items() if k not in ("api_key",)}
             try:
@@ -671,6 +868,82 @@ class _JellyHandler(BaseHTTPRequestHandler):
         if path == "/api/run/stop":
             self.server.run_manager.stop()  # type: ignore[attr-defined]
             self._send_json({"ok": True})
+            return
+
+        # ── Save / clear local UI settings (API key etc.) ──────────────────
+        if path == "/api/ui_settings":
+            ui = self.server.ui_settings  # type: ignore[attr-defined]
+            settings = ui.load()
+            new_key = body.get("api_key", "").strip()
+            if new_key:
+                settings["api_key"] = new_key
+            elif "api_key" in body:
+                # Explicit empty string means clear the saved key
+                settings.pop("api_key", None)
+            ui.save(settings)
+            self._send_json({"ok": True, "has_api_key": bool(settings.get("api_key"))})
+            return
+        if path == "/api/mkdir":
+            dir_path = body.get("path", "").strip()
+            if not dir_path:
+                self._send_json({"error": "path is required"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            # Security: reject any path traversal attempt
+            try:
+                target = Path(dir_path).resolve()
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
+                return
+            try:
+                target.mkdir(parents=True, exist_ok=True)
+                self._send_json({"ok": True, "path": str(target)})
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+
+        # ── Start a preprocessing step ─────────────────────────────────────
+        if path == "/api/preprocess/start":
+            cfg = self.server.projects_config.load()  # type: ignore[attr-defined]
+            python_exe = body.get("python_exe") or cfg.get("python_exe") or sys.executable
+            # Preprocessing scripts always run from the TP_Generation directory (results_root)
+            preprocess_cwd = str(self.server.results_root)  # type: ignore[attr-defined]
+            work_dir = preprocess_cwd  # alias for clarity
+            step        = body.get("step", "").strip()
+            results_dir = body.get("results_dir", "").strip()
+            if step == "extract_scene":
+                project_path = body.get("project_path", "").strip()
+                if not project_path:
+                    self._send_json({"error": "project_path required"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                if not results_dir:
+                    self._send_json({"error": "results_dir required"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                cmd = [python_exe, "ExtractSceneDependency.py", "-p", project_path, "-r", results_dir]
+                scene_name = body.get("scene_name", "").strip()
+                if scene_name:
+                    cmd += ["-s", scene_name]
+            elif step == "traverse_hierarchy":
+                if not results_dir:
+                    self._send_json({"error": "results_dir required"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                cmd = [python_exe, "TraverseSceneHierarchy.py", "-r", results_dir]
+            elif step == "special_logic":
+                if not results_dir:
+                    self._send_json({"error": "results_dir required"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                cmd = [python_exe, "SpecialLogicPreprocessor.py", "-r", results_dir]
+                app_name = body.get("app_name", "").strip()
+                if app_name:
+                    cmd += ["-a", app_name]
+            else:
+                self._send_json({"error": f"unknown step: {step!r}"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            params = {k: v for k, v in body.items()}
+            try:
+                self.server.run_manager.start(cmd, preprocess_cwd, params, None)  # type: ignore[attr-defined]
+                self._send_json({"ok": True, "cmd": cmd, "pid": self.server.run_manager._proc.pid})  # type: ignore[attr-defined]
+            except ValueError as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.CONFLICT)
             return
 
         # ── File write (Results/ only, .json/.md/.txt) ────────────────────
@@ -729,6 +1002,7 @@ def serve(*, host: str, port: int, results_dir: str,
     server.results_root = root          # type: ignore[attr-defined]
     server.run_manager = _RunManager()  # type: ignore[attr-defined]
     server.projects_config = _ProjectsConfig(root)  # type: ignore[attr-defined]
+    server.ui_settings = _UiSettingsConfig(root)    # type: ignore[attr-defined]
 
     url = f"http://{host}:{port}/"
     print(f"[jelly] serving XRPlayer dashboard on {url}")

@@ -1,0 +1,140 @@
+[
+  {
+    "action": "Trigger:KitchenBadgeUnlockReceiver",
+    "state_before": {
+      "fileid": "1770515124",
+      "name": "Socket_KitchenBadge",
+      "active": true,
+      "position": {
+        "x": 10.3,
+        "y": 1.2,
+        "z": -6.7
+      },
+      "rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "components": [
+        "Transform",
+        "XRSocketInteractor",
+        "KitchenBadgeUnlockReceiver",
+        "XRSimpleInteractable",
+        "XRTriggerable",
+        "XRTriggerable"
+      ]
+    },
+    "state_after": {
+      "fileid": "1770515124",
+      "name": "Socket_KitchenBadge",
+      "active": true,
+      "position": {
+        "x": 10.3,
+        "y": 1.2,
+        "z": -6.7
+      },
+      "rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "components": [
+        "Transform",
+        "XRSocketInteractor",
+        "KitchenBadgeUnlockReceiver",
+        "XRSimpleInteractable",
+        "XRTriggerable",
+        "XRTriggerable",
+        "XRTriggerable"
+      ]
+    },
+    "events": [
+      "component_added:XRTriggerable:Socket_KitchenBadge",
+      "xrbase_initialized:Socket_KitchenBadge",
+      "execute:MoveAction",
+      "completed:MoveAction",
+      "execute:TriggerAction",
+      "completed:TriggerAction"
+    ],
+    "success": true,
+    "duration_ms": 1039.002
+  },
+  {
+    "action": "Trigger:PantryKeyUnlockReceiver",
+    "state_before": {
+      "fileid": "351089451",
+      "name": "Socket_PantryLock",
+      "active": true,
+      "position": {
+        "x": 4.2,
+        "y": 1.1,
+        "z": -0.6
+      },
+      "rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "components": [
+        "Transform",
+        "XRSocketInteractor",
+        "PantryKeyUnlockReceiver",
+        "XRSimpleInteractable",
+        "XRTriggerable"
+      ]
+    },
+    "state_after": {
+      "fileid": "351089451",
+      "name": "Socket_PantryLock",
+      "active": true,
+      "position": {
+        "x": 4.2,
+        "y": 1.1,
+        "z": -0.6
+      },
+      "rotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "components": [
+        "Transform",
+        "XRSocketInteractor",
+        "PantryKeyUnlockReceiver",
+        "XRSimpleInteractable",
+        "XRTriggerable",
+        "XRTriggerable"
+      ]
+    },
+    "events": [
+      "component_added:XRTriggerable:Socket_PantryLock",
+      "xrbase_initialized:Socket_PantryLock",
+      "execute:MoveAction",
+      "completed:MoveAction",
+      "execute:TriggerAction",
+      "completed:TriggerAction"
+    ],
+    "success": true,
+    "duration_ms": 3009.39819
+  }
+]

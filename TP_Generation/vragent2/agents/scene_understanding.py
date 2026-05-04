@@ -151,9 +151,10 @@ class SceneUnderstandingAgent(BaseAgent):
         if doc_text:
             evidence.append(f"docs:{len(doc_text)}chars")
 
-        # ── 3. LLM pass (if enabled and we have docs to read) ────────
+        # ── 3. LLM pass (docs preferred, but hierarchy-only scenes should
+        #        still get an LLM scene summary) ───────────────────────
         llm_output: Optional[SceneUnderstandingOutput] = None
-        if doc_text and self.llm is not None and self.llm_enabled:
+        if self.llm is not None and self.llm_enabled and (doc_text or heuristic):
             llm_output = self._call_llm(doc_text, extra_ctx, heuristic)
 
         # ── 4. Merge LLM + heuristic ─────────────────────────────────
@@ -203,15 +204,14 @@ class SceneUnderstandingAgent(BaseAgent):
         extra_ctx: str,
         heuristic: Optional[SceneUnderstandingOutput],
     ) -> Optional[SceneUnderstandingOutput]:
-        user_prompt = f"## Scene Documentation\n\n{doc_text}"
-        if heuristic and heuristic.key_objects:
-            # Ground the LLM in the *actual* Unity scene contents.
-            top = ", ".join(heuristic.key_objects[:30])
-            user_prompt += (
-                "\n\n## Unity Scene Hierarchy (heuristic candidates)\n\n"
-                f"Likely interactable: {top}\n"
-                f"Likely system/forbidden: {', '.join(heuristic.forbidden_test_objects[:20])}"
-            )
+        if doc_text:
+            user_prompt = f"## Scene Documentation\n\n{doc_text}"
+        else:
+            user_prompt = "## Scene Hierarchy Summary\n\nNo markdown scene document was provided. Infer the scene from the extracted Unity hierarchy and candidate objects below."
+
+        if heuristic:
+            user_prompt += "\n\n## Unity Scene Hierarchy (heuristic candidates)\n\n"
+            user_prompt += heuristic.to_prompt_text()
         if extra_ctx:
             user_prompt += f"\n\n## Additional Context\n\n{extra_ctx}"
 
@@ -348,11 +348,11 @@ class SceneUnderstandingAgent(BaseAgent):
 
         overview = (
             f"Heuristic scene snapshot for '{scene_name}': "
-            f"{len(gobj_list)} root GameObjects, "
+            f"{len(gobj_list)} candidate GameObjects, "
             f"{len(ranking)} likely interactable, "
             f"{len(forbidden)} system/forbidden."
         ) if scene_name else (
-            f"Heuristic scene snapshot: {len(gobj_list)} root GameObjects, "
+            f"Heuristic scene snapshot: {len(gobj_list)} candidate GameObjects, "
             f"{len(ranking)} likely interactable."
         )
 
@@ -368,7 +368,7 @@ class SceneUnderstandingAgent(BaseAgent):
     def _object_name(entry: Dict[str, Any]) -> str:
         for key in ("gameobject_name", "name", "object_name"):
             v = entry.get(key)
-            if isinstance(v, str) and v.strip():
+            if isinstance(v, str) and v.strip() and v.strip().lower() != "unknown":
                 return v.strip()
         return ""
 

@@ -1,0 +1,138 @@
+[
+  {
+    "iteration": -1,
+    "agent": "SceneUnderstandingAgent",
+    "summary": "Scene understood (llm, heuristic): 7 key obj, 11 forbidden, 5 deps",
+    "confidence": 0.7,
+    "inputs": {
+      "scene_doc_path": "",
+      "scene_name": "Kitchen_TestRoom",
+      "hierarchy_objects": 18
+    },
+    "outputs": {
+      "key_objects": 7,
+      "forbidden": 11,
+      "ranking": 7
+    },
+    "evidence": [
+      "hierarchy:18 key=7 forbidden=11"
+    ],
+    "next_hint": "Scheduler should pull from object_priority_ranking",
+    "duration_ms": 204781.0,
+    "timestamp": "2026-05-04T23:48:33"
+  },
+  {
+    "iteration": 0,
+    "agent": "PlannerAgent",
+    "summary": "Planned 1 actions for KitchenBadgeUnlockReceiver#1770515124 (types=Trigger, reward=0.17)",
+    "confidence": 0.173,
+    "inputs": {
+      "gobj": "KitchenBadgeUnlockReceiver#1770515124",
+      "goal": "Initial exploration of all interactable objects.",
+      "observer_instruction": ""
+    },
+    "outputs": {
+      "n_actions": 1,
+      "action_types": "Trigger",
+      "expected_reward": 0.173
+    },
+    "evidence": [
+      "gate_hints=0",
+      "recent_trace=0"
+    ],
+    "next_hint": "Verifier should validate FileIDs and method signatures",
+    "duration_ms": 0.0,
+    "timestamp": "2026-05-04T23:49:53"
+  },
+  {
+    "iteration": 0,
+    "agent": "VerifierAgent",
+    "summary": "Verifier accepted 1/1 actions (score=1.00, errors=0)",
+    "confidence": 1.0,
+    "inputs": {
+      "n_actions": 1
+    },
+    "outputs": {
+      "passed": true,
+      "score": 1.0,
+      "n_errors": 0,
+      "error_types": "",
+      "n_patched": 1
+    },
+    "evidence": [
+      "{'fileID': '1770515126', 'exists': True}",
+      "{'fileID': '1770515124', 'exists': True}",
+      "{'fileID': '1770515124', 'components': {'Has_Rigidbody': False, 'Has_Collider': False, 'Has_Event_Trigger': False, 'mono"
+    ],
+    "next_hint": "Executor should run patched_actions",
+    "duration_ms": 0.0,
+    "timestamp": "2026-05-04T23:50:31"
+  },
+  {
+    "iteration": 0,
+    "agent": "ExecutorAgent",
+    "summary": "Executed 1 actions (exceptions=0, coverage_delta=0.000)",
+    "confidence": 1.0,
+    "inputs": {
+      "n_actions": 1
+    },
+    "outputs": {
+      "n_trace": 1,
+      "n_exceptions": 0,
+      "coverage_delta": 0.0
+    },
+    "evidence": [],
+    "next_hint": "Observer should analyse trace",
+    "duration_ms": 0.0,
+    "timestamp": "2026-05-04T23:50:58"
+  },
+  {
+    "iteration": 0,
+    "agent": "ObserverAgent",
+    "summary": "Observed coverage_delta=0.013, mode=Exploit, bugs=4, gate_hints=2",
+    "confidence": 0.0132,
+    "inputs": {
+      "goal": "Initial exploration of all interactable objects.",
+      "n_actions": 1
+    },
+    "outputs": {
+      "coverage_delta": 0.0132,
+      "recommended_mode": "Exploit",
+      "n_bugs": 4,
+      "n_gate_hints": 2,
+      "n_failure_hypotheses": 5
+    },
+    "evidence": [
+      "[CONSOLE_WARN] [Warning] [HenryLab.XR] Destination (10.30, 1.20, -6.70) may not be reachable, but will try",
+      "[CONSOLE_WARN] [Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of",
+      "[CONSOLE_WARN] [Warning] [RecipeController] FAIL — tried to unlock kitchen door without power.",
+      "[CONSOLE_WARN] [Warning] [KitchenBadgeUnlockReceiver] FAIL — badge scanned but no power. Panel flashes red."
+    ],
+    "next_hint": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124.",
+    "duration_ms": 0.0,
+    "timestamp": "2026-05-04T23:51:28"
+  },
+  {
+    "iteration": 1,
+    "agent": "PlannerAgent",
+    "summary": "Planned 7 actions for PantryKeyUnlockReceiver#351089451 (types=Trigger, reward=0.54)",
+    "confidence": 0.535,
+    "inputs": {
+      "gobj": "PantryKeyUnlockReceiver#351089451",
+      "goal": "Resolve gate conditions: Trigger:KitchenBadgeUnlockReceiver",
+      "observer_instruction": "Restore power to the system before attempting to interact with KitchenBadgeUnlockReceiver#1770515124."
+    },
+    "outputs": {
+      "n_actions": 7,
+      "action_types": "Trigger",
+      "expected_reward": 0.535
+    },
+    "evidence": [
+      "gate_hints=2",
+      "recent_trace=1"
+    ],
+    "next_hint": "Verifier should validate FileIDs and method signatures",
+    "duration_ms": 0.0,
+    "timestamp": "2026-05-04T23:52:06"
+  }
+]

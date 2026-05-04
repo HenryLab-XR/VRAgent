@@ -23,6 +23,232 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import Any, Dict, List, Set, Tuple
+
+
+def _clean_object_name(value: Any) -> str:
+    text = str(value or "").strip()
+    if not text or text.lower() == "unknown":
+        return ""
+    return text
+
+
+def _extract_script_names(mono_targets: List[Dict[str, Any]], retrieval) -> List[str]:
+    names: List[str] = []
+
+    def add_name(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text:
+            return
+        if text.endswith(".cs"):
+            text = Path(text).stem
+        if not any(ch.isalpha() for ch in text):
+            return
+        if text not in names:
+            names.append(text)
+
+    for info in mono_targets:
+        for source_file in info.get("valid_source_code_files", []) or []:
+            file_path = str(source_file.get("file_path", "")).strip()
+            if file_path:
+                add_name(Path(file_path).stem)
+
+        mono_id = str(info.get("target", "") or "")
+        if retrieval is None or not mono_id:
+            continue
+        try:
+            graph = retrieval.scene.graph
+            for _, script_node_id, _ in retrieval.scene.get_source_code_edges(mono_id):
+                if graph is None or script_node_id not in graph.nodes:
+                    continue
+                node = graph.nodes[script_node_id]
+                props = node.get("properties", {}) if isinstance(node, dict) else {}
+                add_name(props.get("name") or props.get("m_Name") or node.get("label"))
+        except Exception:
+            continue
+
+    return names
+
+
+def _extract_component_tokens(mono_targets: List[Dict[str, Any]], retrieval) -> List[str]:
+    tokens: List[str] = []
+
+    def add_token(value: Any) -> None:
+        text = str(value or "").strip()
+        if not text:
+            return
+        if text.endswith(".cs"):
+            text = Path(text).stem
+        if not any(ch.isalpha() for ch in text):
+            return
+        if text not in tokens:
+            tokens.append(text)
+
+    def walk(value: Any) -> None:
+        if isinstance(value, dict):
+            for key, sub_value in value.items():
+                add_token(key)
+                walk(sub_value)
+        elif isinstance(value, list):
+            for item in value:
+                walk(item)
+        elif isinstance(value, str):
+            add_token(value)
+
+    for info in mono_targets:
+        for source_file in info.get("valid_source_code_files", []) or []:
+            file_path = str(source_file.get("file_path", "")).strip()
+            if file_path:
+                add_token(Path(file_path).stem)
+        walk(info.get("mono_property", {}))
+
+    for script_name in _extract_script_names(mono_targets, retrieval):
+        add_token(script_name)
+
+    return tokens
+
+
+def _resolve_candidate_name(
+    raw_name: Any,
+    object_id: str,
+    mono_targets: List[Dict[str, Any]],
+    retrieval,
+    *,
+    parent_name: str = "",
+) -> str:
+    direct = _clean_object_name(raw_name)
+    if direct:
+        return f"{direct}#{object_id}" if object_id else direct
+
+    graph_name = ""
+    if retrieval is not None:
+        try:
+            graph_name = _clean_object_name(retrieval.get_object_name(str(object_id)) or "")
+        except Exception:
+            graph_name = ""
+    if graph_name:
+        return f"{graph_name}#{object_id}" if object_id else graph_name
+
+    script_names = _extract_script_names(mono_targets, retrieval)
+    script_hint = script_names[0] if script_names else ""
+
+    parent_hint = _clean_object_name(parent_name)
+    if script_hint and parent_hint:
+        base = f"{script_hint}@{parent_hint}"
+        return f"{base}#{object_id}" if object_id else base
+    if script_hint:
+        return f"{script_hint}#{object_id}" if object_id else script_hint
+    if parent_hint:
+        return f"{parent_hint}#{object_id}"
+    return f"Object#{object_id}"
+
+
+def _has_special_logic(info: Dict[str, Any]) -> bool:
+    for key in (
+        "sorted_target_logic_info",
+        "sorted_layer_logic_info",
+        "tag_logic_info",
+        "layer_logic_info",
+        "gameobject_find_info",
+        "gameobject_instantiate_info",
+    ):
+        value = info.get(key)
+        if value:
+            return True
+    return False
+
+
+def _normalize_candidate(root_or_child: Dict[str, Any], retrieval) -> Dict[str, Any]:
+    is_child = "child_id" in root_or_child or "mono_comp_targets" in root_or_child
+    mono_targets = root_or_child.get("mono_comp_targets" if is_child else "mono_comp_relations", []) or []
+    object_id = str(root_or_child.get("child_id" if is_child else "gameobject_id", "") or "")
+    object_id_replace = str(
+        root_or_child.get("child_id_replace" if is_child else "gameobject_id_replace", object_id) or object_id
+    )
+    parent_info = root_or_child.get("parent_info", {}) if is_child else {}
+    parent_name = parent_info.get("parent_name", "") if isinstance(parent_info, dict) else ""
+    raw_name = root_or_child.get("child_name" if is_child else "gameobject_name", "")
+    name = _resolve_candidate_name(raw_name, object_id, mono_targets, retrieval, parent_name=parent_name)
+    script_names = _extract_script_names(mono_targets, retrieval)
+    components = _extract_component_tokens(mono_targets, retrieval)
+
+    candidate: Dict[str, Any] = {
+        "gameobject_id": object_id,
+        "gameobject_id_replace": object_id_replace,
+        "gameobject_type": root_or_child.get("gameobject_type", "GameObject"),
+        "gameobject_name": name,
+        "mono_comp_relations": mono_targets,
+        "child_relations": root_or_child.get("child_relations", []) if not is_child else [],
+        "child_mono_comp_info": root_or_child.get("child_mono_comp_info", []) if not is_child else [],
+        "depth": root_or_child.get("depth", 1 if is_child else 0),
+        "components": components,
+        "scripts": script_names,
+        "children": root_or_child.get("child_relations", []) if not is_child else [],
+        "candidate_origin": "child" if is_child else "root",
+        "candidate_key": object_id_replace or object_id or name,
+        "raw_gameobject_name": str(raw_name or ""),
+    }
+    if is_child and isinstance(parent_info, dict):
+        candidate["parent_info"] = parent_info
+
+    for key in (
+        "sorted_target_logic_info",
+        "sorted_layer_logic_info",
+        "tag_logic_info",
+        "layer_logic_info",
+        "gameobject_find_info",
+        "gameobject_instantiate_info",
+    ):
+        candidate[key] = root_or_child.get(key, [])
+
+    return candidate
+
+
+def _should_skip_candidate(candidate: Dict[str, Any], skip_tokens: Tuple[str, ...]) -> bool:
+    name_blob = str(candidate.get("gameobject_name", "")).lower()
+    component_blob = " ".join((candidate.get("components", []) or []) + (candidate.get("scripts", []) or [])).lower()
+    if any(token in name_blob or token in component_blob for token in skip_tokens):
+        return True
+    if not candidate.get("mono_comp_relations") and not _has_special_logic(candidate):
+        return True
+    return False
+
+
+def _build_candidate_objects(raw_gobj_list: List[Dict[str, Any]], retrieval) -> List[Dict[str, Any]]:
+    default_skip_tokens: Tuple[str, ...] = (
+        "vragent",
+        "fileidmanager",
+        "agentbridge",
+        "agentonline",
+        "editorplayercontroller",
+        "playercontroller",
+        "lefthandcontroller",
+        "righthandcontroller",
+        "eventsystem",
+        "xr interaction manager",
+        "xr origin",
+        "main camera",
+    )
+    candidates: List[Dict[str, Any]] = []
+    seen: Set[str] = set()
+
+    for root in raw_gobj_list:
+        root_has_body = bool(root.get("mono_comp_relations")) or _has_special_logic(root)
+        if root_has_body:
+            candidate = _normalize_candidate(root, retrieval)
+            key = str(candidate.get("candidate_key", ""))
+            if key and key not in seen and not _should_skip_candidate(candidate, default_skip_tokens):
+                seen.add(key)
+                candidates.append(candidate)
+
+        for child in root.get("child_mono_comp_info", []) or []:
+            candidate = _normalize_candidate(child, retrieval)
+            key = str(candidate.get("candidate_key", ""))
+            if key and key not in seen and not _should_skip_candidate(candidate, default_skip_tokens):
+                seen.add(key)
+                candidates.append(candidate)
+
+    return candidates
 
 
 def parse_args() -> argparse.Namespace:
@@ -260,15 +486,22 @@ def main() -> None:
         )
 
     # ── LLM Client ────────────────────────────────────────────────────
-    api_key = args.api_key or os.environ.get("OPENAI_API_KEY", "")
-    api_base = args.api_base or os.environ.get("OPENAI_API_BASE", "")
-    if not api_key:
-        # Attempt to load from legacy config
+    api_key = args.api_key or os.environ.get("OPENAI_API_KEY", "") or config.OPENAI_API_KEY or config.OPENAI_API_KEY_1
+    api_base = (
+        args.api_base
+        or os.environ.get("OPENAI_API_BASE", "")
+        or os.environ.get("OPENAI_BASE_URL", "")
+        or config.base_url
+    )
+    if not api_key or not api_base:
+        # Attempt to load missing values from the legacy config module.
         try:
             import importlib
             legacy = importlib.import_module("config")
-            api_key = getattr(legacy, "OPENAI_API_KEY", "") or getattr(legacy, "API_KEY", "")
-            api_base = api_base or getattr(legacy, "basicUrl_gpt35", "") or getattr(legacy, "BASE_URL", "")
+            if not api_key:
+                api_key = getattr(legacy, "OPENAI_API_KEY", "") or getattr(legacy, "API_KEY", "")
+            if not api_base:
+                api_base = getattr(legacy, "basicUrl_gpt35", "") or getattr(legacy, "BASE_URL", "")
         except ImportError:
             pass
 
@@ -276,7 +509,11 @@ def main() -> None:
         print("[ERROR] No API key. Set --api_key or OPENAI_API_KEY env var.")
         sys.exit(1)
 
-    llm = LLMClient(api_key=api_key, base_url=api_base or None)
+    if not api_base:
+        print("[ERROR] No API base URL. Set --api_base, OPENAI_API_BASE, or OPENAI_BASE_URL.")
+        sys.exit(1)
+
+    llm = LLMClient(api_key=api_key, base_url=api_base)
 
     # ── Retrieval Layer ───────────────────────────────────────────────
     hierarchy_data = load_json(args.hierarchy_json)
@@ -291,41 +528,26 @@ def main() -> None:
         scene_name=args.scene_name,
     )
 
-    # ── Build object list ─────────────────────────────────────────────
-    gobj_list: list = []
+    # ── Build candidate object list ───────────────────────────────────
+    raw_gobj_list: list = []
     if isinstance(hierarchy_data, list):
-        gobj_list = hierarchy_data
+        raw_gobj_list = hierarchy_data
     elif isinstance(hierarchy_data, dict):
         # Could be {id: info, ...} or {gobj_list: [...]}
         if "gobj_list" in hierarchy_data:
-            gobj_list = hierarchy_data["gobj_list"]
+            raw_gobj_list = hierarchy_data["gobj_list"]
         else:
-            gobj_list = list(hierarchy_data.values())
+            raw_gobj_list = list(hierarchy_data.values())
 
-    # Filter out infra/system objects that are not meaningful interaction targets
-    default_skip_tokens = (
-        "vragent",
-        "fileidmanager",
-        "agentbridge",
-        "eventsystem",
-        "xr interaction manager",
-        "xr origin",
-        "main camera",
-    )
-    filtered_list = []
-    for obj in gobj_list:
-        obj_name = str(obj.get("gameobject_name", "")).strip()
-        low = obj_name.lower()
-        if any(token in low for token in default_skip_tokens):
-            continue
-        filtered_list.append(obj)
-    if filtered_list:
-        gobj_list = filtered_list
+    gobj_list = _build_candidate_objects(raw_gobj_list, retrieval)
+    if not gobj_list:
+        gobj_list = raw_gobj_list
 
     if args.limit > 0:
         gobj_list = gobj_list[:args.limit]
 
     print(f"[MAIN] Scene: {args.scene_name}")
+    print(f"[MAIN] Roots: {len(raw_gobj_list)}")
     print(f"[MAIN] Objects: {len(gobj_list)}")
     print(f"[MAIN] Budget: {args.budget}")
     print(f"[MAIN] Model: {args.model}")

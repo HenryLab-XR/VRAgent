@@ -10,6 +10,7 @@ Special Logic Preprocessor - 预处理tag_logic_info和layer_logic_info并生成
 5. 使用TAG_LOGIC_CHILD_REQUEST_TEMPLATE模板向LLM提供tag和layer相关的prompt信息
 """
 
+import sys
 import json
 import os
 import argparse
@@ -18,6 +19,12 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Set
 import requests
 import networkx as nx
+
+# Ensure stdout/stderr can handle Unicode (emoji) even on Windows GBK consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from config import (
     TAG_LOGIC_CHILD_REQUEST_TEMPLATE,
     TAG_LOGIC_REQUEST_TEMPLATE,
