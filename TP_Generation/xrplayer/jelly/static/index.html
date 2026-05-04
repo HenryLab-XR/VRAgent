@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>XRPlayer Dashboard</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2330;--border:#2a313c;--fg:#e6edf3;--muted:#8b949e;--accent:#79c0ff;--accent2:#58a6ff;--good:#3fb950;--warn:#d29922;--bad:#f85149;--purple:#bc8cff;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);height:100vh;display:flex;flex-direction:column;}
+  header{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--panel);flex-shrink:0;}
+  header h1{font-size:17px;font-weight:700;white-space:nowrap;}
+  header .pulse{width:9px;height:9px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+  header .pulse.live{background:var(--good);box-shadow:0 0 7px var(--good);}
+  header select{background:var(--bg);color:var(--fg);border:1px solid var(--border);padding:3px 8px;border-radius:4px;font-size:12px;max-width:280px;}
+  nav{display:flex;gap:2px;padding:6px 16px;background:var(--panel);border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;}
+  nav button{background:transparent;color:var(--muted);border:none;padding:7px 13px;cursor:pointer;border-radius:4px;font-size:13px;white-space:nowrap;}
+  nav button:hover{color:var(--fg);}
+  nav button.active{background:var(--bg);color:var(--accent);font-weight:600;}
+  main{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+  .panel{display:none;flex:1;overflow:auto;padding:16px 20px;}
+  .panel.active{display:block;}
+  .grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:11px 13px;}
+  .card h3{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:5px;}
+  .card .v{font-size:21px;font-weight:700;}
+  .card .v.sm{font-size:13px;word-break:break-all;}
+  table{width:100%;border-collapse:collapse;font-size:12px;}
+  th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  th{color:var(--muted);font-size:10px;text-transform:uppercase;font-weight:600;}
+  td.agent{font-weight:700;color:var(--accent);white-space:nowrap;}
+  td.iter{color:var(--muted);width:36px;}
+  pre{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:10px;overflow:auto;font-size:12px;line-height:1.5;}
+  .bar{display:inline-block;width:54px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;vertical-align:middle;}
+  .bar>span{display:block;height:100%;background:var(--accent);}
+  .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;background:var(--border);color:var(--fg);}
+  .tag.good{background:var(--good);color:#000;}
+  .tag.warn{background:var(--warn);color:#000;}
+  .tag.bad{background:var(--bad);}
+  .tag.purple{background:var(--purple);color:#000;}
+  .meta{color:var(--muted);font-size:11px;}
+  .empty{color:var(--muted);padding:24px;text-align:center;font-style:italic;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;}
+  .col{flex:1;min-width:280px;}
+  ul.list{padding-left:16px;margin:4px 0;}
+  ul.list li{margin:2px 0;font-size:13px;}
+  h2.sec{font-size:14px;font-weight:600;margin:14px 0 8px;}
+  h3.sec{font-size:12px;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.05em;}
+  .wf-section{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:12px;}
+  .wf-section h2{font-size:14px;font-weight:600;margin-bottom:10px;}
+  .field-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+  .field-row label{font-size:12px;color:var(--muted);width:110px;flex-shrink:0;}
+  .field-row input,.field-row select{background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:5px 8px;font-size:12px;flex:1;min-width:0;font-family:inherit;}
+  .field-row input[type=checkbox]{width:auto;flex:none;}
+  .field-row input:focus,.field-row select:focus{outline:none;border-color:var(--accent2);}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:5px;border:none;cursor:pointer;font-size:12px;font-weight:600;transition:opacity .15s;}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn.primary{background:var(--accent2);color:#000;}
+  .btn.primary:hover:not(:disabled){opacity:.85;}
+  .btn.danger{background:var(--bad);color:#fff;}
+  .btn.danger:hover:not(:disabled){opacity:.85;}
+  .btn.ghost{background:var(--panel2);color:var(--fg);border:1px solid var(--border);}
+  .btn.ghost:hover:not(:disabled){border-color:var(--accent);}
+  .btn.sm{padding:3px 9px;font-size:11px;}
+  #logBox{background:#0a0a0f;border:1px solid var(--border);border-radius:4px;height:320px;overflow-y:auto;padding:10px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:11.5px;line-height:1.55;color:#c9d1d9;}
+  #logBox .err{color:var(--bad);}
+  #logBox .warn{color:var(--warn);}
+  #logBox .ok{color:var(--good);}
+  .file-list{list-style:none;padding:0;}
+  .file-list li{display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid var(--border);font-size:12px;}
+  .file-list li:hover{background:var(--panel2);}
+  .file-fn{flex:1;cursor:pointer;color:var(--accent);text-decoration:none;}
+  .file-fn:hover{text-decoration:underline;}
+  .file-sz{color:var(--muted);font-size:11px;white-space:nowrap;}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:8px;width:min(860px,95vw);max-height:90vh;display:flex;flex-direction:column;}
+  .modal-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .modal-head h3{flex:1;font-size:14px;font-weight:600;}
+  .modal-body{flex:1;overflow:auto;padding:14px 16px;}
+  .modal-body textarea{width:100%;min-height:400px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;line-height:1.5;resize:vertical;}
+  .modal-foot{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;align-items:center;}
+  .proj-item{display:flex;align-items:flex-start;gap:8px;padding:7px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:5px;margin-bottom:6px;}
+  .proj-item .pname{font-weight:600;font-size:13px;}
+  .proj-item .ppath{color:var(--muted);font-size:11px;}
+  .proj-item .pdel{margin-left:auto;flex-shrink:0;}
+  /* ---- tooltip ---- */
+  [data-tip]{position:relative;cursor:help;}
+  [data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1e2736;color:#e6edf3;border:1px solid #3a4560;border-radius:7px;padding:8px 12px;font-size:12px;line-height:1.6;white-space:pre-wrap;max-width:280px;min-width:120px;box-shadow:0 6px 24px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4);opacity:0;pointer-events:none;z-index:200;transition:opacity .15s ease,transform .15s ease;transform:translateX(-50%) translateY(4px);text-align:left;}
+  [data-tip]:hover::after{opacity:1;transform:translateX(-50%) translateY(0);}
+  [data-tip].tip-right::after{left:0;transform:none;}
+  [data-tip].tip-right:hover::after{transform:translateY(0);}
+  .btn-browse{display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:14px;line-height:1;transition:color .15s,border-color .15s;flex-shrink:0;}
+  .btn-browse:hover{color:var(--accent);border-color:var(--accent);}
+  /* ---- file browser ---- */
+  #fileBrowserModal .modal{max-width:620px;}
+  .fb-bar{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--border);}
+  .fb-bar .fb-path{flex:1;font-size:12px;color:var(--accent);word-break:break-all;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .fb-list{min-height:280px;max-height:380px;overflow-y:auto;padding:6px 0;}
+  .fb-item{display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:13px;user-select:none;}
+  .fb-item:hover{background:var(--panel2);}
+  .fb-item .fb-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+  .fb-item.fb-dir .fb-name{color:var(--accent);}
+  .fb-item.fb-file .fb-name{color:var(--fg);}
+  .fb-item.fb-selected{background:var(--panel2);outline:1px solid var(--accent2);}
+  .fb-empty{padding:24px;text-align:center;color:var(--muted);font-style:italic;font-size:13px;}
+  .fb-loading{padding:16px;text-align:center;color:var(--muted);font-size:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#x1F916; XRPlayer</h1>
+  <span style="flex:1"></span>
+  <span class="meta" style="white-space:nowrap" data-tip="切换历史运行记录&#10;选择后其他标签页将展示对应结果" class="tip-right">历史记录:</span>
+  <select id="runSelect" title="Select a past results directory"></select>
+  <span class="pulse" id="pulse"></span>
+  <span class="meta" id="lastTick">--</span>
+</header>
+
+<nav>
+  <button data-tab="workflow" class="active">&#x26A1; Workflow</button>
+  <button data-tab="overview">Overview</button>
+  <button data-tab="scene">Scene</button>
+  <button data-tab="agents">Agents</button>
+  <button data-tab="coverage">Coverage</button>
+  <button data-tab="gate">Gate Graph</button>
+  <button data-tab="iterations">Iterations</button>
+  <button data-tab="files">Files</button>
+</nav>
+
+<main>
+
+<section id="tab-workflow" class="panel active">
+  <div class="wf-section">
+    <h2>1 &middot; Project &amp; Scene</h2>
+    <div class="row">
+      <div class="col">
+        <div class="field-row">
+          <label>Project</label>
+          <select id="wfProjectSel" style="flex:1" data-tip="选择要测试的 Unity 项目&#10;需先在项目配置中注册"></select>
+          <button class="btn ghost sm" onclick="openAddProject()" data-tip="添加或更新一个 Unity 项目配置">+ 添加</button>
+          <button class="btn ghost sm" onclick="openGlobalCfg()" data-tip="编辑全局默认配置&#10;（Python 路径、默认模型等）">&#x2699;</button>
+        </div>
+        <div id="wfProjectMeta" class="meta" style="margin-left:118px;margin-bottom:8px;"></div>
+        <div class="field-row">
+          <label>Scene</label>
+          <select id="wfSceneSel" style="flex:1" data-tip="从 Unity 项目目录中扫描到的 .unity 场景文件"></select>
+          <button class="btn ghost sm" onclick="refreshScenes()" data-tip="重新扫描项目目录中的场景文件">&#x27F3;</button>
+        </div>
+      </div>
+      <div class="col" style="max-width:320px;">
+        <h3 class="sec" style="margin-top:0">Registered Projects</h3>
+        <div id="wfProjList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-section">
+    <h2>2 &middot; Run Configuration</h2>
+    <div class="row">
+      <div class="col">
+        <div class="field-row"><label data-tip="使用的 LLM 模型名称&#10;例：gpt-4o / qwen3-coder">模型</label><input id="cfgModel" value="gpt-4o" placeholder="gpt-4o, qwen3-coder ..." /></div>
+        <div class="field-row"><label data-tip="OpenAI 兼容接口的 Base URL&#10;使用 OpenAI 官方时留空">API 地址</label><input id="cfgApiBase" placeholder="（可选）OpenAI 兼容接口地址" /></div>
+        <div class="field-row"><label data-tip="API 密钥，仅在本次运行中使用&#10;不会写入磁盘或项目配置">API Key</label><input id="cfgApiKey" type="password" placeholder="sk-... （不会保存）" /></div>
+        <div class="field-row">
+          <label data-tip="最大迭代轮数（探索预算）&#10;每轮对一个对象执行一组动作">预算</label>
+          <input id="cfgBudget" type="number" value="100" min="1" style="max-width:80px" />
+          <span class="meta" style="margin-left:4px">轮</span>
+          <span style="margin-left:12px" class="meta" data-tip="限制最多测试的对象数量&#10;0 = 不限制，测试场景中所有可交互对象">对象上限:</span>
+          <input id="cfgLimit" type="number" value="0" min="0" style="max-width:60px;margin-left:4px" />
+          <span class="meta" style="margin-left:4px">（0=不限）</span>
+        </div>
+        <div class="field-row"><label data-tip="结果输出目录名称&#10;相对于工作目录的路径">输出目录</label><input id="cfgOutput" value="Results" /></div>
+        <div class="field-row"><label data-tip="C# 脚本目录路径（可选）&#10;提供后将用于静态分析增强测试计划">脚本目录</label><input id="cfgScriptsDir" placeholder="（可选）C# 脚本目录路径" /></div>
+      </div>
+      <div class="col">
+        <div class="field-row" style="align-items:flex-start">
+          <label style="padding-top:4px" data-tip="通过 TCP 连接 Unity Editor&#10;需要在 Unity 中进入 Play Mode&#10;连接后可获取真实场景状态和事件反馈">Unity Bridge</label>
+          <div style="display:flex;flex-direction:column;gap:6px;flex:1">
+            <label style="width:auto;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--fg);cursor:pointer">
+              <input type="checkbox" id="cfgUnity" />
+              TCP 连接 Unity &nbsp;<span class="meta">（Unity Editor 需处于 Play Mode）</span>
+            </label>
+            <div style="display:flex;gap:6px;align-items:center">
+              <span class="meta">Host:</span>
+              <input id="cfgUnityHost" value="127.0.0.1" style="width:120px" />
+              <span class="meta">Port:</span>
+              <input id="cfgUnityPort" type="number" value="6400" style="width:70px" />
+            </div>
+          </div>
+        </div>
+        <div class="field-row">
+          <label></label>
+          <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer">
+            <input type="checkbox" id="cfgResume" /> 续跑上次会话
+          </label>
+          <label style="width:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--fg);cursor:pointer;margin-left:12px" data-tip="禁止 Agent 间共享 World State&#10;用于消融实验，测试无信息共享时的覆盖效果">
+            <input type="checkbox" id="cfgNoInfoSharing" /> 禁用信息共享
+          </label>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn primary" id="btnStart" onclick="startRun()" data-tip="启动 vragent2 多智能体探索&#10;将在后台运行 python -m vragent2">&#x25B6; 启动运行</button>
+      <button class="btn danger"  id="btnStop"  onclick="stopRun()" disabled data-tip="终止当前正在运行的探索进程">&#x25A0; 停止</button>
+      <span id="runStateLabel" class="meta"></span>
+    </div>
+  </div>
+
+  <div class="wf-section">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <h2 style="margin:0">3 &middot; 实时日志</h2>
+      <span id="logStateBadge" class="tag">idle</span>
+      <span style="flex:1"></span>
+      <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px;cursor:pointer" data-tip="新日志出现时自动滚动到底部">
+        <input type="checkbox" id="chkAutoScroll" checked /> 自动滚动
+      </label>
+      <button class="btn ghost sm" onclick="clearLog()" data-tip="清空日志显示区域">清空</button>
+    </div>
+    <div id="logBox"></div>
+  </div>
+</section>
+
+<section id="tab-overview" class="panel">
+  <div class="grid" id="overviewGrid"></div>
+  <div style="margin-top:14px">
+    <h3 class="sec">Recent agent decisions</h3>
+    <div id="overviewDecisions"></div>
+  </div>
+</section>
+
+<section id="tab-scene" class="panel">
+  <div class="row">
+    <div class="col">
+      <h3 class="sec">Scene overview</h3>
+      <pre id="sceneOverview" class="empty">loading...</pre>
+      <h3 class="sec">Key objects</h3>
+      <ul class="list" id="sceneKey"></ul>
+      <h3 class="sec">Forbidden / system objects</h3>
+      <ul class="list" id="sceneForbidden"></ul>
+    </div>
+    <div class="col">
+      <h3 class="sec">Object roles (heuristic)</h3>
+      <pre id="sceneRoles" class="empty">loading...</pre>
+    </div>
+  </div>
+</section>
+
+<section id="tab-agents" class="panel">
+  <div id="agentsTableWrap"></div>
+</section>
+
+<section id="tab-coverage" class="panel">
+  <pre id="coverageJson" class="empty">loading...</pre>
+</section>
+
+<section id="tab-gate" class="panel">
+  <div class="row">
+    <div class="col"><h3 class="sec">Nodes</h3><pre id="gateNodes" class="empty">loading...</pre></div>
+    <div class="col"><h3 class="sec">Edges</h3><pre id="gateEdges" class="empty">loading...</pre></div>
+  </div>
+</section>
+
+<section id="tab-iterations" class="panel">
+  <div id="iterTableWrap"></div>
+</section>
+
+<section id="tab-files" class="panel">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <h2 class="sec" style="margin:0">Result Files</h2>
+    <span class="meta">Click a file to view / edit (JSON, MD, TXT only)</span>
+    <span style="flex:1"></span>
+    <button class="btn ghost sm" onclick="refreshFiles()">&#x27F3; Refresh</button>
+  </div>
+  <ul class="file-list" id="fileList"></ul>
+</section>
+
+</main>
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modalAddProject">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><h3>Add / Update Project</h3><button class="btn ghost sm" onclick="closeModal('modalAddProject')">&#x2715;</button></div>
+    <div class="modal-body">
+      <div class="field-row"><label data-tip="项目唯一标识名称">名称 *</label><input id="apName" placeholder="EscapeGameVR" /></div>
+      <div class="field-row">
+        <label data-tip="Unity 项目 Assets 目录的绝对路径&#10;用于扫描 .unity 场景文件">Assets 路径</label>
+        <input id="apAssetsPath" placeholder="D:\MyUnityProject\Assets" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('apAssetsPath')" title="浏览本地文件夹">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="用于运行 vragent2 的 Python 可执行文件路径">Python 路径</label>
+        <input id="apPython" placeholder="E:\--SoftWare\python.exe" style="flex:1" />
+        <button class="btn-browse" onclick="browseFile('apPython')" title="浏览文件">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="vragent2 的工作目录&#10;通常为 TP_Generation 文件夹">工作目录</label>
+        <input id="apWorkDir" placeholder="D:\...\TP_Generation" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('apWorkDir')" title="浏览本地文件夹">&#x1F4C2;</button>
+      </div>
+      <div class="field-row"><label data-tip="该项目默认使用的 LLM 模型">默认模型</label><input id="apModel" placeholder="gpt-4o" /></div>
+      <div class="field-row"><label data-tip="结果输出目录名（相对工作目录）">结果目录</label><input id="apResults" placeholder="Results" /></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('modalAddProject')">Cancel</button>
+      <button class="btn primary" onclick="saveProject()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalGlobalCfg">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3>Global Defaults</h3><button class="btn ghost sm" onclick="closeModal('modalGlobalCfg')">&#x2715;</button></div>
+    <div class="modal-body">
+      <div class="field-row">
+        <label data-tip="全局默认 Python 路径&#10;未配置项目级路径时使用">Python 路径</label>
+        <input id="gcPython" style="flex:1" />
+        <button class="btn-browse" onclick="browseFile('gcPython')" title="浏览文件">&#x1F4C2;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="全局默认工作目录">工作目录</label>
+        <input id="gcWorkDir" style="flex:1" />
+        <button class="btn-browse" onclick="browseDir('gcWorkDir')" title="浏览本地文件夹">&#x1F4C2;</button>
+      </div>
+      <div class="field-row"><label data-tip="全局默认 LLM 模型名称">默认模型</label><input id="gcModel" /></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal('modalGlobalCfg')">Cancel</button>
+      <button class="btn primary" onclick="saveGlobalCfg()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalFile">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="fileModalTitle">File</h3>
+      <span class="meta" id="fileModalPath" style="margin-right:auto;font-size:11px;"></span>
+      <button class="btn ghost sm" onclick="closeModal('modalFile')">&#x2715;</button>
+    </div>
+    <div class="modal-body"><textarea id="fileModalContent" spellcheck="false"></textarea></div>
+    <div class="modal-foot">
+      <span class="meta" id="fileModalSaveStatus" style="margin-right:auto"></span>
+      <button class="btn ghost" onclick="closeModal('modalFile')">Close</button>
+      <button class="btn primary" id="fileModalSaveBtn" onclick="saveFileModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FILE BROWSER MODAL (highest z-index, always on top) ===== -->
+<div class="modal-overlay" id="fileBrowserModal" style="z-index:300">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head">
+      <h3 id="fbTitle">选择文件夹</h3>
+      <button class="btn ghost sm" onclick="closeModal('fileBrowserModal')">&#x2715;</button>
+    </div>
+    <div class="fb-bar">
+      <button class="btn ghost sm" id="fbUpBtn" onclick="fbGoUp()" title="上级目录">&#x2191; 上级</button>
+      <span class="fb-path" id="fbCurrentPath">--</span>
+    </div>
+    <div class="fb-list" id="fbList"><div class="fb-loading">加载中...</div></div>
+    <div class="modal-foot">
+      <span class="meta" id="fbSelLabel" style="margin-right:auto;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <button class="btn ghost" onclick="closeModal('fileBrowserModal')">取消</button>
+      <button class="btn primary" id="fbConfirmBtn" onclick="fbConfirm()">选择此路径</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+let currentRun    = "";
+let logPollHandle = null;
+let logLineIdx    = 0;
+let _cfg          = {projects:[], python_exe:"", work_dir:"", default_model:"gpt-4o"};
+let _activeTab    = "workflow";
+
+/* ---- utils ---- */
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function api(path, params={}){
+  const qs = new URLSearchParams(params);
+  if(currentRun && currentRun!==".") qs.set("run", currentRun);
+  try{ return await (await fetch(path+(qs.toString()?"?"+qs:""),{cache:"no-store"})).json(); }
+  catch(e){ return {_jelly_error:String(e)}; }
+}
+async function apiRaw(path, params={}){
+  const qs = new URLSearchParams(params);
+  try{ return await (await fetch(path+(qs.toString()?"?"+qs:""),{cache:"no-store"})).json(); }
+  catch(e){ return {_jelly_error:String(e)}; }
+}
+async function post(path, body={}){
+  try{
+    return await (await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();
+  }catch(e){ return {error:String(e)}; }
+}
+
+function bar(v){const p=Math.round(Math.max(0,Math.min(1,v))*100);return `<span class="bar"><span style="width:${p}%"></span></span>`;}
+function tag(t,c=""){return `<span class="tag ${c}">${esc(t)}</span>`;}
+function fmtBytes(n){if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(1)+" MB";}
+
+/* ---- tabs ---- */
+function setTab(name){
+  _activeTab=name;
+  $$("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  $$(".panel").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
+  if(name==="overview")    refreshOverview();
+  if(name==="scene")       refreshScene();
+  if(name==="agents")      refreshAgents();
+  if(name==="coverage")    refreshCoverage();
+  if(name==="gate")        refreshGate();
+  if(name==="iterations")  refreshIterations();
+  if(name==="files")       refreshFiles();
+}
+$$("nav button").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+
+/* ---- run selector ---- */
+async function refreshRuns(){
+  const data = await apiRaw("/api/runs");
+  const sel=$("#runSelect"), prev=sel.value;
+  sel.innerHTML="";
+  const runs=data.runs||[];
+  if(!runs.length){ sel.innerHTML=`<option value=".">(results root)</option>`; }
+  else runs.forEach(r=>{
+    const o=document.createElement("option");
+    o.value=r.run_dir; o.textContent=r.run_dir+(r.has_status?"  \u25CF":""); sel.appendChild(o);
+  });
+  if(prev) sel.value=prev;
+  currentRun=sel.value;
+}
+$("#runSelect").addEventListener("change",()=>{ currentRun=$("#runSelect").value; refreshActiveTab(); });
+function refreshActiveTab(){
+  const map={overview:refreshOverview,scene:refreshScene,agents:refreshAgents,
+             coverage:refreshCoverage,gate:refreshGate,iterations:refreshIterations,files:refreshFiles};
+  if(map[_activeTab]) map[_activeTab]();
+}
+
+/* ---- overview ---- */
+function card(title,val,sub){return `<div class="card"><h3>${title}</h3><div class="v ${String(val).length>12?"sm":""}">${val}</div>${sub?`<div class="meta" style="margin-top:3px">${sub}</div>`:""}</div>`;}
+
+async function refreshOverview(){
+  const [st,cov,tr]=await Promise.all([api("/api/status"),api("/api/coverage"),api("/api/agent_trace",{limit:10})]);
+  const cards=[
+    card("Scene",st.scene_name||"--"),card("Iteration",st.iteration??0),
+    card("Actions",st.actions_total??0),card("Tested",( st.tested_objects||[]).length),
+    card("Mode",st.explorer_mode||"--"),card("Budget left",st.budget_remaining??"--"),
+    card("Cov proxy",(st.total_coverage_proxy??0).toFixed(3),bar(st.total_coverage_proxy??0)),
+    card("Unity",st.unity_bridge_connected?tag("connected","good"):tag("offline")),
+    card("Status",st.finished?tag("finished"):tag("running","good")),
+  ];
+  $("#overviewGrid").innerHTML=cards.join("");
+  const tail=(tr.tail||[]).slice().reverse();
+  $("#overviewDecisions").innerHTML=tail.length?renderDT(tail):`<div class="empty">No decisions yet.</div>`;
+  $("#pulse").classList.toggle("live",!st.finished);
+  $("#lastTick").textContent=new Date().toLocaleTimeString();
+}
+
+function renderDT(rows){
+  return `<table><thead><tr><th>iter</th><th>agent</th><th>decision</th><th>conf</th><th>next hint</th></tr></thead><tbody>`+
+    rows.map(d=>`<tr><td class="iter">${d.iteration??""}</td><td class="agent">${esc(d.agent||"?")}</td><td>${esc(d.summary||"")}</td><td>${bar(d.confidence??0)} ${(d.confidence??0).toFixed(2)}</td><td class="meta">${d.next_hint?esc(d.next_hint):""}</td></tr>`).join("")+
+    `</tbody></table>`;
+}
+
+/* ---- scene ---- */
+async function refreshScene(){
+  const d=await api("/api/scene_understanding");
+  $("#sceneOverview").textContent=d.scene_overview||"(empty)";
+  $("#sceneKey").innerHTML=(d.key_objects||d.object_priority_ranking||[]).slice(0,60).map(o=>`<li>${esc(o)}</li>`).join("")||"<li class='meta'>none</li>";
+  $("#sceneForbidden").innerHTML=(d.forbidden_test_objects||[]).slice(0,60).map(o=>`<li>${esc(o)}</li>`).join("")||"<li class='meta'>none</li>";
+  $("#sceneRoles").textContent=JSON.stringify(d.object_roles||{},null,2);
+}
+
+/* ---- agents ---- */
+async function refreshAgents(){
+  const tr=await api("/api/agent_trace",{limit:200});
+  const rows=(tr.tail||[]).slice().reverse();
+  $("#agentsTableWrap").innerHTML=rows.length
+    ?`<div class="meta" style="margin-bottom:6px">${tr.count} total, showing ${rows.length}</div>`+renderDT(rows)
+    :`<div class="empty">No decisions recorded.</div>`;
+}
+
+/* ---- coverage ---- */
+async function refreshCoverage(){ const d=await api("/api/coverage"); $("#coverageJson").textContent=JSON.stringify(d,null,2); }
+
+/* ---- gate ---- */
+async function refreshGate(){ const d=await api("/api/gate_graph"); $("#gateNodes").textContent=JSON.stringify(d.nodes||[],null,2); $("#gateEdges").textContent=JSON.stringify(d.edges||[],null,2); }
+
+/* ---- iterations ---- */
+async function refreshIterations(){
+  const d=await api("/api/iterations",{limit:200});
+  const rows=(d.tail||[]).slice().reverse();
+  if(!rows.length){$("#iterTableWrap").innerHTML=`<div class="empty">No iterations yet.</div>`;return;}
+  $("#iterTableWrap").innerHTML=`<table><thead><tr><th>#</th><th>object</th><th>actions</th><th>passed</th><th>cov delta</th><th>mode</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td class="iter">${r.iteration??""}</td><td>${esc(r.gobj_name||r.object||"")}</td><td>${r.actions_count??r.n_actions??""}</td><td>${r.verifier_passed!=null?(r.verifier_passed?tag("pass","good"):tag("fail","bad")):""}</td><td>${(r.coverage_delta??0).toFixed(3)}</td><td>${r.explorer_mode?tag(r.explorer_mode):""}</td></tr>`).join("")+
+    `</tbody></table>`;
+}
+
+/* ---- files tab ---- */
+async function refreshFiles(){
+  const d=await api("/api/result_files");
+  const files=d.files||[];
+  if(!files.length){$("#fileList").innerHTML=`<div class="empty">No files in selected run.</div>`;return;}
+  $("#fileList").innerHTML=files.map(f=>`<li>
+    <span class="file-fn" onclick="openFile('${esc(f.path)}','${esc(f.name)}')">${esc(f.name)}</span>
+    <span class="file-sz">${fmtBytes(f.size)}</span>
+    <button class="btn ghost sm" onclick="openFile('${esc(f.path)}','${esc(f.name)}')">Open</button>
+  </li>`).join("");
+}
+
+async function openFile(path, name){
+  const d=await apiRaw("/api/file",{path});
+  if(d.error||d._jelly_error){alert("Error: "+(d.error||d._jelly_error));return;}
+  $("#fileModalTitle").textContent=name;
+  $("#fileModalPath").textContent=path;
+  $("#fileModalContent").value=d.content||"";
+  $("#fileModalSaveStatus").textContent="";
+  const editable=path.endsWith(".json")||path.endsWith(".md")||path.endsWith(".txt");
+  $("#fileModalSaveBtn").disabled=!editable;
+  openModal("modalFile");
+}
+
+async function saveFileModal(){
+  const path=$("#fileModalPath").textContent, content=$("#fileModalContent").value;
+  const r=await post("/api/file",{path,content});
+  $("#fileModalSaveStatus").textContent=r.ok?"Saved.":"Error: "+(r.error||"unknown");
+}
+
+/* ---- projects ---- */
+async function loadProjects(){
+  _cfg=await apiRaw("/api/projects")||_cfg;
+  renderProjList(); renderProjSel();
+  const p=selProj(); if(p) fillFromProj(p);
+}
+function selProj(){ const n=$("#wfProjectSel").value; return (_cfg.projects||[]).find(p=>p.name===n)||null; }
+
+function renderProjList(){
+  const ps=_cfg.projects||[];
+  $("#wfProjList").innerHTML=ps.length===0
+    ?`<div class="meta">No projects. Click "+ Add".</div>`
+    :ps.map(p=>`<div class="proj-item"><div><div class="pname">${esc(p.name)}</div><div class="ppath">${esc(p.assets_path||"")}</div></div><button class="btn ghost sm pdel" onclick="delProj('${esc(p.name)}')">&#x2715;</button></div>`).join("");
+}
+function renderProjSel(){
+  const sel=$("#wfProjectSel"), prev=sel.value, ps=_cfg.projects||[];
+  sel.innerHTML=ps.length===0?`<option value="">-- no projects --</option>`:ps.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join("");
+  if(prev) sel.value=prev;
+}
+function fillFromProj(p){
+  $("#wfProjectMeta").textContent=p.assets_path?"Assets: "+p.assets_path:"";
+  if(p.default_model) $("#cfgModel").value=p.default_model;
+  if(p.results_dir)   $("#cfgOutput").value=p.results_dir;
+  refreshScenes();
+}
+$("#wfProjectSel").addEventListener("change",()=>{ const p=selProj(); if(p) fillFromProj(p); });
+
+async function refreshScenes(){
+  const p=selProj(); if(!p){return;}
+  const base=p.assets_path||""; if(!base){alert("Set Assets path in project config.");return;}
+  const d=await apiRaw("/api/scenes",{project_path:base});
+  const sc=d.scenes||[];
+  const sel=$("#wfSceneSel");
+  sel.innerHTML=sc.length===0?`<option value="">-- no .unity files --</option>`:sc.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("");
+}
+
+function openAddProject(){
+  $("#apName").value="";$("#apAssetsPath").value="";
+  $("#apPython").value=_cfg.python_exe||"";
+  $("#apWorkDir").value=_cfg.work_dir||"";
+  $("#apModel").value=_cfg.default_model||"gpt-4o";
+  $("#apResults").value="Results";
+  openModal("modalAddProject");
+}
+async function saveProject(){
+  const proj={name:$("#apName").value.trim(),assets_path:$("#apAssetsPath").value.trim(),
+    python_exe:$("#apPython").value.trim(),work_dir:$("#apWorkDir").value.trim(),
+    default_model:$("#apModel").value.trim(),results_dir:$("#apResults").value.trim()};
+  if(!proj.name){alert("Name required.");return;}
+  const r=await post("/api/projects",{action:"add",project:proj});
+  if(r.ok){_cfg=r.config;renderProjList();renderProjSel();closeModal("modalAddProject");}
+  else alert("Error: "+(r.error||JSON.stringify(r)));
+}
+async function delProj(name){
+  if(!confirm("Remove project '"+name+"'?")) return;
+  const r=await post("/api/projects",{action:"remove",name});
+  if(r.ok){_cfg=r.config;renderProjList();renderProjSel();}
+  else alert("Error: "+(r.error||JSON.stringify(r)));
+}
+function openGlobalCfg(){
+  $("#gcPython").value=_cfg.python_exe||"";
+  $("#gcWorkDir").value=_cfg.work_dir||"";
+  $("#gcModel").value=_cfg.default_model||"gpt-4o";
+  openModal("modalGlobalCfg");
+}
+async function saveGlobalCfg(){
+  const r=await post("/api/projects",{action:"global",python_exe:$("#gcPython").value.trim(),work_dir:$("#gcWorkDir").value.trim(),default_model:$("#gcModel").value.trim()});
+  if(r.ok){_cfg=r.config;closeModal("modalGlobalCfg");}
+  else alert("Error: "+(r.error||JSON.stringify(r)));
+}
+
+/* ---- run control ---- */
+async function startRun(){
+  const p=selProj();
+  const python_exe=(p&&p.python_exe)||_cfg.python_exe||"python";
+  const work_dir=(p&&p.work_dir)||_cfg.work_dir||".";
+  const scene_name=$("#wfSceneSel").value||undefined;
+  const body={python_exe,work_dir,scene_name,
+    model:$("#cfgModel").value.trim()||undefined,
+    api_base:$("#cfgApiBase").value.trim()||undefined,
+    api_key:$("#cfgApiKey").value.trim()||undefined,
+    output:$("#cfgOutput").value.trim()||"Results",
+    budget:parseInt($("#cfgBudget").value)||100,
+    limit:parseInt($("#cfgLimit").value)||0,
+    scripts_dir:$("#cfgScriptsDir").value.trim()||undefined,
+    unity:$("#cfgUnity").checked,
+    unity_host:$("#cfgUnity").checked?($("#cfgUnityHost").value.trim()||undefined):undefined,
+    unity_port:$("#cfgUnity").checked?(parseInt($("#cfgUnityPort").value)||6400):undefined,
+    resume:$("#cfgResume").checked,
+    no_info_sharing:$("#cfgNoInfoSharing").checked,
+  };
+  const r=await post("/api/run/start",body);
+  if(r.error){alert("Failed to start: "+r.error);return;}
+  logLineIdx=0; clearLog();
+  appendLog(`[jelly] Run started -- PID ${r.pid||"?"}`,"ok");
+  appendLog(`[jelly] cmd: ${(r.cmd||[]).join(" ")}`);
+  startLogPoll();
+  setRunState("running");
+}
+async function stopRun(){
+  const r=await post("/api/run/stop");
+  appendLog("[jelly] Stop requested."+(r.ok?"":" ("+JSON.stringify(r)+")"),"warn");
+}
+
+/* ---- live log ---- */
+function appendLog(text,cls=""){
+  const box=$("#logBox"), div=document.createElement("div");
+  if(cls){div.className=cls;}
+  else{
+    const lt=text.toLowerCase();
+    if(lt.includes("error")||lt.includes("exception")||lt.includes("traceback")) div.className="err";
+    else if(lt.includes("warn")) div.className="warn";
+    else if(lt.includes("[ok]")||lt.includes("success")) div.className="ok";
+  }
+  div.textContent=text; box.appendChild(div);
+  if($("#chkAutoScroll").checked) box.scrollTop=box.scrollHeight;
+}
+function clearLog(){$("#logBox").innerHTML=""; logLineIdx=0;}
+function startLogPoll(){ if(logPollHandle) clearInterval(logPollHandle); logPollHandle=setInterval(pollLog,800); }
+async function pollLog(){
+  const d=await apiRaw("/api/run/log",{from:logLineIdx});
+  if(d._jelly_error) return;
+  (d.lines||[]).forEach(l=>appendLog(l));
+  logLineIdx=d.total||logLineIdx;
+  setRunState(d.state||"idle");
+  if(d.state!=="running"){clearInterval(logPollHandle);logPollHandle=null;}
+}
+function setRunState(state){
+  const badge=$("#logStateBadge");
+  badge.textContent=state; badge.className="tag";
+  if(state==="running") badge.classList.add("good");
+  else if(state==="error") badge.classList.add("bad");
+  else if(state==="finished") badge.classList.add("purple");
+  $("#btnStart").disabled=(state==="running");
+  $("#btnStop").disabled=(state!=="running");
+  $("#runStateLabel").textContent=state==="running"?"Running...":state==="finished"?"Completed.":state==="error"?"Exited with error.":"";
+}
+
+/* ---- server-side file browser ---- */
+let _fbInputId   = "";
+let _fbMode      = "dir";
+let _fbSelected  = "";
+let _fbParent    = null;  // 服务端返回的上级路径，避免从 DOM 文本中解析路径
+
+async function browseDir(inputId){
+  _fbInputId=inputId; _fbMode="dir"; _fbSelected="";
+  $("#fbTitle").textContent="选择文件夹";
+  $("#fbConfirmBtn").textContent="选择此文件夹";
+  const cur=$("#"+inputId).value.trim();
+  await fbNavigate(cur||"");
+  openModal("fileBrowserModal");
+}
+async function browseFile(inputId){
+  _fbInputId=inputId; _fbMode="file"; _fbSelected="";
+  $("#fbTitle").textContent="选择文件";
+  $("#fbConfirmBtn").textContent="选择此文件";
+  const cur=$("#"+inputId).value.trim();
+  await fbNavigate(cur||"");
+  openModal("fileBrowserModal");
+}
+
+async function fbNavigate(path){
+  const list=$("#fbList");
+  list.innerHTML=`<div class="fb-loading">加载中...</div>`;
+  _fbSelected="";
+  $("#fbSelLabel").textContent="";
+
+  const d=await apiRaw("/api/browse",{path:path||"",type:_fbMode});
+  if(d.error){list.innerHTML=`<div class="fb-empty">错误：${esc(d.error)}</div>`;return;}
+
+  const realPath=d.path||"";
+  _fbParent = d.parent!=null ? d.parent : null;
+  $("#fbCurrentPath").textContent=realPath||"(根目录)";
+  $("#fbUpBtn").disabled=(_fbParent===null&&!realPath);
+
+  if(_fbMode==="dir"){
+    _fbSelected=realPath;
+    $("#fbSelLabel").textContent=realPath?"已选："+realPath:"（进入目标目录后点确认）";
+  }
+
+  const dirs=d.dirs||[];
+  const files=d.files||[];
+
+  if(!dirs.length&&!files.length){
+    list.innerHTML=`<div class="fb-empty">此文件夹为空</div>`;return;
+  }
+
+  let html="";
+  dirs.forEach(entry=>{
+    const p=typeof entry==="string"?entry:entry.path;
+    const n=typeof entry==="string"?entry:(entry.name||entry.path);
+    // 用 data-fbpath 存储路径，不嵌入 onclick 字符串，避免反斜杠被解释为 JS 转义
+    html+=`<div class="fb-item fb-dir" data-fbpath="${esc(p)}">
+      <span class="fb-icon">&#x1F4C1;</span><span class="fb-name">${esc(n)}</span>
+    </div>`;
+  });
+  if(_fbMode==="file"){
+    files.forEach(entry=>{
+      const p=typeof entry==="string"?entry:entry.path;
+      const n=typeof entry==="string"?entry:(entry.name||entry.path);
+      html+=`<div class="fb-item fb-file" data-fbpath="${esc(p)}">
+        <span class="fb-icon">&#x1F4C4;</span><span class="fb-name">${esc(n)}</span>
+      </div>`;
+    });
+  }
+  list.innerHTML=html;
+
+  // 绑定点击事件 —— 从 data-fbpath 读取路径，完全避开字符串转义问题
+  list.querySelectorAll(".fb-dir").forEach(el=>{
+    el.addEventListener("click",()=>fbNavigate(el.dataset.fbpath));
+  });
+  list.querySelectorAll(".fb-file").forEach(el=>{
+    el.addEventListener("click",()=>{
+      list.querySelectorAll(".fb-selected").forEach(x=>x.classList.remove("fb-selected"));
+      el.classList.add("fb-selected");
+      _fbSelected=el.dataset.fbpath;
+      $("#fbSelLabel").textContent="已选："+_fbSelected;
+    });
+  });
+}
+
+function fbGoUp(){
+  fbNavigate(_fbParent!=null ? _fbParent : "");
+}
+
+function fbConfirm(){
+  if(!_fbSelected){alert("请先进入目标目录，再点击确认。");return;}
+  $("#"+_fbInputId).value=_fbSelected;
+  closeModal("fileBrowserModal");
+}
+
+/* ---- modals ---- */
+function openModal(id){$("#"+id).classList.add("open");}
+function closeModal(id){$("#"+id).classList.remove("open");}
+$$(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o) o.classList.remove("open");}));
+
+/* ---- boot ---- */
+(async()=>{
+  await refreshRuns();
+  await loadProjects();
+  const rs=await apiRaw("/api/run/status");
+  if(rs.state==="running"){
+    logLineIdx=0; clearLog();
+    appendLog("[jelly] Run in progress -- attaching to log stream...","warn");
+    startLogPoll();
+    setRunState("running");
+  } else { setRunState(rs.state||"idle"); }
+  setInterval(async()=>{
+    const rs2=await apiRaw("/api/run/status");
+    setRunState(rs2.state||"idle");
+    if(_activeTab==="overview") refreshOverview();
+    else{ const st=await api("/api/status"); $("#pulse").classList.toggle("live",!st.finished); $("#lastTick").textContent=new Date().toLocaleTimeString(); }
+  }, 5000);
+  setInterval(refreshRuns,30000);
+})();
+</script>
+</body>
+</html>

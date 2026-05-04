@@ -81,6 +81,23 @@ class ExecutorAgent(BaseAgent):
         if self.output_dir:
             self._save_trace()
 
+        cov = output.coverage_delta if isinstance(output.coverage_delta, (int, float)) else 0.0
+        self.record_decision(
+            summary=(
+                f"Executed {len(self._trace)} actions "
+                f"(exceptions={len(self._exceptions)}, coverage_delta={cov:.3f})"
+            ),
+            confidence=1.0 if not self._exceptions else 0.5,
+            inputs={"n_actions": len(actions)},
+            outputs={
+                "n_trace": len(self._trace),
+                "n_exceptions": len(self._exceptions),
+                "coverage_delta": float(cov) if isinstance(cov, (int, float)) else 0.0,
+            },
+            evidence=[str(e)[:120] for e in self._exceptions[:5]],
+            next_hint="Observer should analyse trace",
+        )
+
         return output.to_dict()
 
     # ------------------------------------------------------------------

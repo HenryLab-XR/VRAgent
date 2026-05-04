@@ -95,10 +95,36 @@ class PlannerAgent(BaseAgent):
 
         conversation, actions = self.generate_test_plan(gobj_info, scene_name)
 
+        expected_reward = self._estimate_expected_reward(actions)
+        gobj_name = gobj_info.get("gameobject_name", "Unknown")
+        action_types = sorted({a.get("type", "?") for a in actions})
+        self.record_decision(
+            summary=(
+                f"Planned {len(actions)} actions for {gobj_name} "
+                f"(types={','.join(action_types) or '-'}, reward={expected_reward:.2f})"
+            ),
+            confidence=min(1.0, expected_reward),
+            inputs={
+                "gobj": gobj_name,
+                "goal": goal,
+                "observer_instruction": observer_instruction,
+            },
+            outputs={
+                "n_actions": len(actions),
+                "action_types": ",".join(action_types),
+                "expected_reward": expected_reward,
+            },
+            evidence=[
+                f"gate_hints={len(gate_hints) if gate_hints else 0}",
+                f"recent_trace={len(recent_trace) if recent_trace else 0}",
+            ],
+            next_hint="Verifier should validate FileIDs and method signatures",
+        )
+
         return PlannerOutput(
             actions=actions,
             intent=f"Test plan for {gobj_info.get('gameobject_name', 'Unknown')} — {goal}",
-            expected_reward=self._estimate_expected_reward(actions),
+            expected_reward=expected_reward,
         ).to_dict()
 
     # ------------------------------------------------------------------

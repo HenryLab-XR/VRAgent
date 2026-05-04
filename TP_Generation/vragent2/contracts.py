@@ -367,6 +367,43 @@ class SchedulerDecision:
 
 
 # ---------------------------------------------------------------------------
+# Agent decision record (XRPlayer / Jelly trace)
+# ---------------------------------------------------------------------------
+
+@dataclass
+class AgentDecision:
+    """Compact decision record emitted by every agent on each ``run()``.
+
+    Used by Jelly UI and ``agent_trace.json`` to surface *what* each agent did
+    in a given iteration without leaking the full LLM prompts/responses.
+
+    Fields are intentionally small — this is a *summary*, not a transcript.
+    """
+    iteration: int = -1                       # controller iteration index
+    agent: str = ""                           # e.g. "PlannerAgent"
+    summary: str = ""                         # one-line human-readable summary
+    confidence: float = 0.0                   # 0..1
+    inputs: Dict[str, Any] = field(default_factory=dict)   # compact input digest
+    outputs: Dict[str, Any] = field(default_factory=dict)  # compact output digest
+    evidence: List[str] = field(default_factory=list)
+    next_hint: str = ""                       # what should happen next
+    duration_ms: float = 0.0
+    timestamp: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @staticmethod
+    def from_dict(d: Dict[str, Any]) -> "AgentDecision":
+        return AgentDecision(**{
+            k: d[k] for k in (
+                "iteration", "agent", "summary", "confidence", "inputs",
+                "outputs", "evidence", "next_hint", "duration_ms", "timestamp",
+            ) if k in d
+        })
+
+
+# ---------------------------------------------------------------------------
 # Semantic Verifier output (V2 — LLM critic)
 # ---------------------------------------------------------------------------
 
@@ -490,6 +527,11 @@ class SharedWorldState:
     # ── Scheduler bias (written by Observer O3) ──────────────────────
     scheduler_bias: List[str] = field(default_factory=list)
 
+    # ── Agent collaboration trace (XRPlayer / Jelly) ─────────────────
+    # Bounded list of ``AgentDecision`` dicts (most-recent-last).
+    # Controller appends to this every time an agent finishes ``run()``.
+    agent_decisions: List[Dict[str, Any]] = field(default_factory=list)
+
     # -----------------------------------------------------------------
     # Helpers
     # -----------------------------------------------------------------
@@ -507,6 +549,7 @@ class SharedWorldState:
         d["total_coverage"] = self.total_coverage
         d["coverage_history"] = self.coverage_history
         d["scheduler_bias"] = self.scheduler_bias
+        d["agent_decisions"] = self.agent_decisions[-100:]  # bounded
         if self.scene_understanding:
             d["scene_understanding"] = self.scene_understanding.to_dict()
         if self.state_delta:

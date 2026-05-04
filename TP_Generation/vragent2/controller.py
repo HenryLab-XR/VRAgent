@@ -153,6 +153,87 @@ class VRAgentController:
         save_json(path, session)
         print(f"[CONTROLLER] Session saved ({len(self._processed_objects)} objects processed)")
 
+    # ------------------------------------------------------------------
+    # XRPlayer / Jelly support helpers
+    # ------------------------------------------------------------------
+
+    def _drain_agent_decisions(self, agent: Any) -> None:
+        """Move any ``AgentDecision`` records the agent emitted during its
+        last ``run()`` into the shared blackboard, then re-persist a small
+        rolling artefact so Jelly can poll for live updates without us
+        waiting for the full session save.
+        """
+        drain = getattr(agent, "drain_decisions", None)
+        if not callable(drain):
+            return
+        decisions = drain()
+        if not decisions:
+            return
+        for d in decisions:
+            self.world_state.agent_decisions.append(d.to_dict())
+        # Bound the list so long runs don't explode memory / disk.
+        if len(self.world_state.agent_decisions) > 500:
+            self.world_state.agent_decisions = self.world_state.agent_decisions[-500:]
+        # Best-effort live dump for Jelly polling.
+        try:
+            ensure_dir(self.output_dir)
+            save_json(
+                os.path.join(self.output_dir, "agent_decisions.json"),
+                list(self.world_state.agent_decisions),
+            )
+        except Exception:
+            pass
+
+    def _build_jelly_status(
+        self,
+        summary: Optional[Dict[str, Any]] = None,
+        *,
+        finished: bool = False,
+    ) -> Dict[str, Any]:
+        """Compact status object consumed by the Jelly UI.
+
+        The Jelly server polls ``jelly_status.json`` every few seconds and
+        renders this dict in the dashboard.
+        """
+        ws = self.world_state
+        status: Dict[str, Any] = {
+            "scene_name": self.scene_name,
+            "output_dir": str(self.output_dir),
+            "finished": finished,
+            "iteration": len(self._iteration_logs),
+            "actions_total": len(self._all_actions),
+            "traces_total": len(self._all_traces),
+            "tested_objects": list(ws.tested_objects),
+            "scheduler_bias": list(ws.scheduler_bias),
+            "open_gates": list(ws.open_gates),
+            "blocked_gates": list(ws.blocked_gates),
+            "total_coverage_proxy": float(ws.total_coverage),
+            "coverage_history": list(ws.coverage_history)[-50:],
+            "agent_decisions_tail": list(ws.agent_decisions)[-30:],
+            "explorer_mode": (
+                self.explorer.state.mode.value
+                if hasattr(self.explorer.state, "mode") else ""
+            ),
+            "budget_remaining": getattr(self.explorer.state, "budget_remaining", 0),
+            "unity_bridge_connected": bool(
+                self.unity_bridge is not None
+                and getattr(self.unity_bridge, "connected", False)
+            ),
+        }
+        if summary is not None:
+            status["summary"] = summary
+        return status
+
+    def _write_jelly_status(self) -> None:
+        try:
+            ensure_dir(self.output_dir)
+            save_json(
+                os.path.join(self.output_dir, "jelly_status.json"),
+                self._build_jelly_status(),
+            )
+        except Exception:
+            pass
+
     def load_session(self) -> bool:
         """Load previous session state if available. Returns True if loaded."""
         path = os.path.join(self.output_dir, "session_state.json")
@@ -245,7 +326,9 @@ class VRAgentController:
         print(f"[CONTROLLER] Starting VRAgent 2.0 — {len(gobj_list)} objects, scene={self.scene_name}")
 
         # ── Phase 0: Scene Understanding ─────────────────────────────
-        self._run_scene_understanding()
+        # Pass the actual Unity hierarchy so SceneUnderstandingAgent can
+        # ground its output in real components, not only .md docs.
+        self._run_scene_understanding(gobj_list=gobj_list)
 
         # Initial goal: Expand (explore everything)
         observer_output: Dict[str, Any] = {
@@ -306,6 +389,8 @@ class VRAgentController:
             # Mark object as processed and save session incrementally
             self._processed_objects.add(gobj_name)
             self.save_session()
+            # Refresh Jelly status pulse so the UI updates between iterations.
+            self._write_jelly_status()
 
             iteration += 1
 
@@ -316,18 +401,26 @@ class VRAgentController:
     # Scene Understanding Phase
     # ------------------------------------------------------------------
 
-    def _run_scene_understanding(self) -> None:
-        """Run SceneUnderstandingAgent if a scene doc path is configured.
+    def _run_scene_understanding(self, gobj_list: Optional[List[Dict[str, Any]]] = None) -> None:
+        """Run SceneUnderstandingAgent (XRPlayer-strengthened).
 
-        Writes results to the blackboard (SharedWorldState).
+        Now passes both ``scene_doc_path`` *and* the live Unity hierarchy
+        (``gobj_list``) so the agent can fall back to a heuristic understanding
+        when no docs are available.
         """
         doc_path = self.config.scene_doc_path
-        if not doc_path:
-            print("[CONTROLLER] No scene_doc_path configured — skipping scene understanding")
+        if not doc_path and not gobj_list:
+            print("[CONTROLLER] No scene_doc_path and no gobj_list — skipping scene understanding")
             return
 
         print("[CONTROLLER] → SceneUnderstandingAgent")
-        raw = self.scene_agent.run({"scene_doc_path": doc_path})
+        self.scene_agent.set_iteration(-1)  # phase 0 marker
+        raw = self.scene_agent.run({
+            "scene_doc_path": doc_path,
+            "gobj_list": gobj_list or [],
+            "scene_name": self.scene_name,
+        })
+        self._drain_agent_decisions(self.scene_agent)
         self._scene_understanding = SceneUnderstandingOutput.from_dict(raw)
 
         # ── Write to blackboard ──────────────────────────────────────
@@ -437,6 +530,11 @@ class VRAgentController:
 
         # ── 1. Plan ──────────────────────────────────────────────────
         print("[CONTROLLER] → Planner")
+        for _agent in (self.planner, self.verifier, self.semantic_verifier,
+                       self.executor, self.observer):
+            _setter = getattr(_agent, "set_iteration", None)
+            if callable(_setter):
+                _setter(iteration)
         planner_input: Dict[str, Any] = {
             "gobj_info": gobj_info,
             "scene_name": self.scene_name,
@@ -452,6 +550,7 @@ class VRAgentController:
             planner_input["observer_instruction"] = self.world_state.strategy.planner_instruction
 
         planner_output = self.planner.run(planner_input)
+        self._drain_agent_decisions(self.planner)
         actions = planner_output.get("actions", [])
         log_entry["planned_actions"] = len(actions)
         print(f"[CONTROLLER]   Planner proposed {len(actions)} actions")
@@ -469,6 +568,7 @@ class VRAgentController:
                 "actions": actions,
                 "shared_context": shared_ctx,
             })
+            self._drain_agent_decisions(self.verifier)
             errors = verifier_output.get("errors", [])
             passed = verifier_output.get("passed", verifier_output.get("pass", False))
             score = verifier_output.get("executable_score", 0.0)
@@ -498,6 +598,7 @@ class VRAgentController:
             "planner_intent": planner_output.get("intent", ""),
             "recent_failures": self.world_state.recent_failures[-10:],
         })
+        self._drain_agent_decisions(self.semantic_verifier)
         sv = SemanticVerifierOutput.from_dict(sv_output)
         self.world_state.semantic_critique = sv
         print(f"[CONTROLLER]   V2 verdict={sv.verdict}, risk={sv.semantic_risk_score:.2f}, "
@@ -532,6 +633,7 @@ class VRAgentController:
         # ── 3. Execute ───────────────────────────────────────────────
         print("[CONTROLLER] → Executor")
         executor_output = self.executor.run({"actions": actions})
+        self._drain_agent_decisions(self.executor)
         trace = executor_output.get("trace", [])
         exceptions = executor_output.get("exceptions", [])
         print(f"[CONTROLLER]   Executed {len(trace)} actions, {len(exceptions)} exceptions")
@@ -550,6 +652,7 @@ class VRAgentController:
             "actions": actions,
             "world_state": self.world_state.to_prompt_summary(),
         })
+        self._drain_agent_decisions(self.observer)
         delta = observer_output.get("coverage_delta", 0.0)
         bugs = observer_output.get("bug_signals", [])
         gate_hints_out = observer_output.get("gate_hints", [])
@@ -791,6 +894,18 @@ class VRAgentController:
         save_json(os.path.join(self.output_dir, "iteration_logs.json"), self._iteration_logs)
         save_json(os.path.join(self.output_dir, "summary.json"), summary)
         self.gate_graph.save(os.path.join(self.output_dir, "gate_graph.json"))
+
+        # ── XRPlayer / Jelly artefacts ───────────────────────────────
+        # agent_decisions.json — the full collaboration trace consumed by Jelly UI.
+        save_json(
+            os.path.join(self.output_dir, "agent_decisions.json"),
+            list(self.world_state.agent_decisions),
+        )
+        # jelly_status.json — small machine-readable status pulse.
+        save_json(
+            os.path.join(self.output_dir, "jelly_status.json"),
+            self._build_jelly_status(summary, finished=True),
+        )
 
         # Save test plan in VRAgent-compatible format
         test_plan = self._build_test_plan()

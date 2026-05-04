@@ -1,0 +1,766 @@
+"""Jelly stdlib HTTP server.
+
+Implementation notes
+--------------------
+* Only Python standard library — no FastAPI / Flask / Tornado.
+* Multi-threaded so the polling dashboard never blocks a slow read.
+* Endpoints return small JSON payloads; heavy artefacts live on disk.
+* POST endpoints allow workflow control (project management, run start/stop,
+  file editing) in addition to the original read-only GET endpoints.
+
+Read-only GET endpoints
+~~~~~~~~~~~~~~~~~~~~~~~
+* ``GET /``                          → dashboard HTML
+* ``GET /api/health``                → ``{"ok": true}``
+* ``GET /api/runs``                  → list available run dirs
+* ``GET /api/status``                → ``jelly_status.json``
+* ``GET /api/scene_understanding``   → scene understanding output
+* ``GET /api/agent_trace``           → ``agent_decisions.json`` tail
+* ``GET /api/coverage``              → ``summary.json``
+* ``GET /api/gate_graph``            → ``gate_graph.json``
+* ``GET /api/iterations``            → ``iteration_logs.json`` tail
+* ``GET /api/test_plan``             → ``test_plan.json``
+
+Workflow control endpoints
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+* ``GET  /api/projects``             → project list config
+* ``POST /api/projects``             → add / remove / global-config
+* ``GET  /api/scenes``               → discover .unity files in a project
+* ``GET  /api/run/status``           → subprocess state + log line count
+* ``GET  /api/run/log``              → rolling log slice (polling)
+* ``POST /api/run/start``            → launch ``python -m vragent2``
+* ``POST /api/run/stop``             → terminate running process
+* ``GET  /api/file``                 → read a file under results_root
+* ``POST /api/file``                 → write a file under results_root (.json/.md/.txt)
+"""
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+import time
+import threading
+import webbrowser
+from collections import deque
+from http import HTTPStatus
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+from socketserver import ThreadingMixIn
+from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import parse_qs, urlsplit
+
+
+# ---------------------------------------------------------------------------
+# Process manager (run vragent2 as subprocess)
+# ---------------------------------------------------------------------------
+
+class _RunManager:
+    """Manage a single vragent2 subprocess with a rolling log buffer."""
+
+    MAX_LINES = 5000
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._proc: Optional[subprocess.Popen] = None
+        self._log: deque = deque(maxlen=self.MAX_LINES)
+        self._state = "idle"   # idle | running | finished | error
+        self._start_time = 0.0
+        self._returncode: Optional[int] = None
+        self._params: Dict[str, Any] = {}
+        self._env: Optional[Dict[str, str]] = None
+
+    def start(self, cmd: List[str], cwd: str, params: Dict[str, Any],
+              env: Optional[Dict[str, str]] = None) -> None:
+        with self._lock:
+            if self._state == "running":
+                raise ValueError("A run is already in progress. Stop it first.")
+            self._log.clear()
+            self._state = "running"
+            self._start_time = time.time()
+            self._returncode = None
+            self._params = params
+            self._env = env
+        proc_env = os.environ.copy()
+        if env:
+            proc_env.update(env)
+        self._proc = subprocess.Popen(
+            cmd, cwd=cwd,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, bufsize=1, encoding="utf-8", errors="replace",
+            env=proc_env,
+        )
+        t = threading.Thread(target=self._reader, daemon=True)
+        t.start()
+
+    def _reader(self) -> None:
+        try:
+            assert self._proc is not None
+            for raw in self._proc.stdout:  # type: ignore[union-attr]
+                line = raw.rstrip("\n")
+                with self._lock:
+                    self._log.append(line)
+        except Exception as exc:
+            with self._lock:
+                self._log.append(f"[jelly] reader error: {exc}")
+        finally:
+            rc = self._proc.wait() if self._proc else -1
+            with self._lock:
+                self._state = "finished" if rc == 0 else "error"
+                self._returncode = rc
+                self._log.append(f"[jelly] process exited with code {rc}")
+
+    def stop(self) -> None:
+        if self._proc and self._proc.poll() is None:
+            try:
+                self._proc.terminate()
+            except Exception:
+                pass
+
+    def get_status(self) -> Dict[str, Any]:
+        with self._lock:
+            elapsed = round(time.time() - self._start_time, 1) if self._state == "running" else None
+            return {
+                "state": self._state,
+                "pid": self._proc.pid if self._proc else None,
+                "lines": len(self._log),
+                "start_time": self._start_time,
+                "elapsed_s": elapsed,
+                "returncode": self._returncode,
+                "params": self._params,
+            }
+
+    def get_log_slice(self, from_idx: int) -> List[str]:
+        with self._lock:
+            lines = list(self._log)
+        return lines[max(0, from_idx):]
+
+    def total_lines(self) -> int:
+        with self._lock:
+            return len(self._log)
+
+
+# ---------------------------------------------------------------------------
+# Project config  (results_root/projects.json)
+# ---------------------------------------------------------------------------
+
+class _ProjectsConfig:
+    """Read/write the projects.json config stored next to the results."""
+
+    _DEFAULT: Dict[str, Any] = {
+        "projects": [],
+        "python_exe": "",
+        "work_dir": "",
+        "default_model": "gpt-4o",
+    }
+
+    def __init__(self, results_root: Path) -> None:
+        self._path = results_root / "projects.json"
+        self._lock = threading.Lock()
+
+    def load(self) -> Dict[str, Any]:
+        try:
+            data = json.loads(self._path.read_text(encoding="utf-8"))
+            # Merge with defaults so new keys are always present
+            merged = dict(self._DEFAULT)
+            merged.update(data)
+            return merged
+        except FileNotFoundError:
+            return dict(self._DEFAULT)
+        except (OSError, json.JSONDecodeError) as exc:
+            return {**self._DEFAULT, "_error": str(exc)}
+
+    def save(self, data: Dict[str, Any]) -> None:
+        with self._lock:
+            self._path.write_text(
+                json.dumps(data, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+
+
+# ---------------------------------------------------------------------------
+# Workflow helpers
+# ---------------------------------------------------------------------------
+
+def _find_scenes(project_path: str, max_results: int = 200) -> List[Dict[str, Any]]:
+    """Discover .unity scene files inside a Unity project directory."""
+    base = Path(project_path)
+    if not base.is_dir():
+        return []
+    scenes: List[Dict[str, Any]] = []
+    try:
+        for p in base.rglob("*.unity"):
+            try:
+                rel = str(p.relative_to(base)).replace("\\", "/")
+                scenes.append({"name": p.stem, "path": rel, "full_path": str(p)})
+            except ValueError:
+                pass
+            if len(scenes) >= max_results:
+                break
+    except Exception:
+        pass
+    return sorted(scenes, key=lambda s: s["name"].lower())
+
+
+def _read_file_safe(results_root: Path, rel: str) -> Optional[Dict[str, Any]]:
+    """Read a file inside results_root. Returns None on path-escape or not-found."""
+    try:
+        p = (results_root / rel).resolve()
+        rr = results_root.resolve()
+        if not str(p).startswith(str(rr)):
+            return None
+        if not p.is_file():
+            return None
+        content = p.read_text(encoding="utf-8", errors="replace")
+        return {"path": rel, "content": content, "size": p.stat().st_size}
+    except Exception:
+        return None
+
+
+def _write_file_safe(results_root: Path, rel: str, content: str) -> Optional[str]:
+    """Write a file inside results_root. Returns error string or None on success."""
+    try:
+        p = (results_root / rel).resolve()
+        rr = results_root.resolve()
+        if not str(p).startswith(str(rr)):
+            return "path escape not allowed"
+        if p.suffix.lower() not in (".json", ".md", ".txt"):
+            return "only .json / .md / .txt files can be edited via Jelly"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(content, encoding="utf-8")
+        return None
+    except Exception as exc:
+        return str(exc)
+
+
+def _list_result_files(results_root: Path, run_dir: Optional[str]) -> List[Dict[str, Any]]:
+    """List editable/viewable artefact files for a given run."""
+    if run_dir:
+        safe = Path(run_dir.replace("\\", "/"))
+        if any(p in ("..", "") for p in safe.parts):
+            base = results_root
+        else:
+            base = results_root / safe
+    else:
+        base = results_root
+    if not base.is_dir():
+        return []
+    files = []
+    for ext in ("*.json", "*.md", "*.txt"):
+        for p in base.glob(ext):
+            rel = str(p.relative_to(results_root)).replace("\\", "/")
+            files.append({
+                "name": p.name,
+                "path": rel,
+                "size": p.stat().st_size,
+                "mtime": p.stat().st_mtime,
+            })
+    files.sort(key=lambda f: f["name"])
+    return files
+
+
+# ---------------------------------------------------------------------------
+# Static assets
+# ---------------------------------------------------------------------------
+_STATIC_DIR = Path(__file__).resolve().parent / "static"
+
+
+def _read_static(name: str) -> Optional[bytes]:
+    p = _STATIC_DIR / name
+    if not p.is_file():
+        return None
+    try:
+        return p.read_bytes()
+    except OSError:
+        return None
+
+
+# ---------------------------------------------------------------------------
+# Artefact loading helpers (read-only, defensive)
+# ---------------------------------------------------------------------------
+
+_ARTEFACT_NAMES = {
+    "status":              "jelly_status.json",
+    "scene":               "scene_understanding.json",
+    "decisions":           "agent_decisions.json",
+    "summary":             "summary.json",
+    "gate_graph":          "gate_graph.json",
+    "iterations":          "iteration_logs.json",
+    "test_plan":           "test_plan.json",
+    "all_actions":         "all_actions.json",
+}
+
+
+def _read_json(path: Path) -> Optional[Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return None
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"_jelly_error": f"failed to read {path.name}: {exc}"}
+
+
+def _resolve_artefact(results_root: Path, run_dir: Optional[str], key: str) -> Path:
+    """Resolve <results_root>[/<run_dir>]/<file>.
+
+    ``run_dir`` may be a relative path like ``Home/qwen3-coder-30b-a3b-instruct``
+    so the same Jelly server can browse multiple scenes.  When omitted, the
+    artefact is read directly from ``results_root``.
+    """
+    name = _ARTEFACT_NAMES[key]
+    if run_dir:
+        # Disallow path escape.
+        safe = Path(run_dir.replace("\\", "/"))
+        if any(p in ("..", "") for p in safe.parts):
+            return results_root / name
+        return results_root / safe / name
+    return results_root / name
+
+
+def _list_runs(results_root: Path, max_depth: int = 3) -> List[Dict[str, Any]]:
+    """Discover sub-directories that look like XRPlayer run outputs."""
+    runs: List[Dict[str, Any]] = []
+    if not results_root.is_dir():
+        return runs
+
+    seen: set = set()
+    for marker_name in ("jelly_status.json", "summary.json", "agent_decisions.json"):
+        for marker in results_root.rglob(marker_name):
+            try:
+                rel = marker.parent.relative_to(results_root)
+            except ValueError:
+                continue
+            if len(rel.parts) > max_depth:
+                continue
+            key = str(rel).replace("\\", "/")
+            if key in seen:
+                continue
+            seen.add(key)
+            runs.append({
+                "run_dir": key or ".",
+                "scene": rel.parts[0] if rel.parts else "",
+                "model": rel.parts[1] if len(rel.parts) > 1 else "",
+                "has_status": (marker.parent / "jelly_status.json").is_file(),
+                "has_decisions": (marker.parent / "agent_decisions.json").is_file(),
+                "mtime": marker.stat().st_mtime,
+            })
+    runs.sort(key=lambda r: r["mtime"], reverse=True)
+    return runs
+
+
+# ---------------------------------------------------------------------------
+# HTTP handler
+# ---------------------------------------------------------------------------
+
+class _JellyHandler(BaseHTTPRequestHandler):
+    server_version = "JellyXRPlayer/0.1"
+
+    # The HTTPServer subclass below stamps ``results_root`` onto the server
+    # instance; we read it via ``self.server`` here.
+    @property
+    def _root(self) -> Path:
+        return self.server.results_root  # type: ignore[attr-defined]
+
+    # ------------------------------------------------------------------
+    # Plumbing
+    # ------------------------------------------------------------------
+    def log_message(self, fmt: str, *args: Any) -> None:  # noqa: A003
+        # Quieter than the default per-request stderr spam.
+        if "/api/health" in (args[0] if args else ""):
+            return
+        print("[jelly] " + (fmt % args))
+
+    def _send_json(self, payload: Any, status: int = HTTPStatus.OK) -> None:
+        body = json.dumps(payload, ensure_ascii=False, default=str).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _send_bytes(self, body: bytes, content_type: str,
+                    status: int = HTTPStatus.OK) -> None:
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _not_found(self, msg: str = "not found") -> None:
+        self._send_json({"error": msg}, status=HTTPStatus.NOT_FOUND)
+
+    # ------------------------------------------------------------------
+    # Routing
+    # ------------------------------------------------------------------
+    def do_GET(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler API)
+        url = urlsplit(self.path)
+        path = url.path
+        qs = parse_qs(url.query)
+        run_dir = (qs.get("run") or [None])[0]
+        limit = _safe_int((qs.get("limit") or ["100"])[0], default=100, lo=1, hi=2000)
+
+        if path in ("/", "/index.html"):
+            html = _read_static("index.html")
+            if html is None:
+                self._send_bytes(_FALLBACK_HTML.encode("utf-8"), "text/html; charset=utf-8")
+            else:
+                self._send_bytes(html, "text/html; charset=utf-8")
+            return
+
+        if path == "/api/health":
+            self._send_json({"ok": True, "results_root": str(self._root)})
+            return
+
+        if path == "/api/runs":
+            self._send_json({"results_root": str(self._root),
+                              "runs": _list_runs(self._root)})
+            return
+
+        if path == "/api/status":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "status"))
+            if data is None:
+                self._send_json({"finished": False, "iteration": 0,
+                                  "_jelly_note": "no jelly_status.json yet"})
+                return
+            self._send_json(data)
+            return
+
+        if path == "/api/scene_understanding":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "scene"))
+            self._send_json(data if data is not None else {})
+            return
+
+        if path == "/api/agent_trace":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "decisions"))
+            if isinstance(data, list):
+                tail = data[-limit:]
+                self._send_json({"count": len(data), "tail": tail})
+            else:
+                self._send_json({"count": 0, "tail": []})
+            return
+
+        if path == "/api/coverage":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "summary"))
+            self._send_json(data if data is not None else {})
+            return
+
+        if path == "/api/gate_graph":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "gate_graph"))
+            self._send_json(data if data is not None else {"nodes": [], "edges": []})
+            return
+
+        if path == "/api/iterations":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "iterations"))
+            if isinstance(data, list):
+                self._send_json({"count": len(data), "tail": data[-limit:]})
+            else:
+                self._send_json({"count": 0, "tail": []})
+            return
+
+        if path == "/api/test_plan":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "test_plan"))
+            self._send_json(data if data is not None else {})
+            return
+
+        # ── Workflow control (read-only side) ──────────────────────────────
+
+        if path == "/api/projects":
+            self._send_json(self.server.projects_config.load())  # type: ignore[attr-defined]
+            return
+
+        if path == "/api/scenes":
+            project_path = (qs.get("project_path") or [None])[0]
+            if not project_path:
+                self._send_json({"error": "missing project_path"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            self._send_json({"scenes": _find_scenes(project_path)})
+            return
+
+        if path == "/api/run/status":
+            self._send_json(self.server.run_manager.get_status())  # type: ignore[attr-defined]
+            return
+
+        if path == "/api/run/log":
+            from_idx = _safe_int((qs.get("from") or ["0"])[0], default=0, lo=0, hi=999_999)
+            rm = self.server.run_manager  # type: ignore[attr-defined]
+            lines = rm.get_log_slice(from_idx)
+            status = rm.get_status()
+            self._send_json({
+                "lines": lines,
+                "from": from_idx,
+                "total": rm.total_lines(),
+                "state": status["state"],
+            })
+            return
+
+        if path == "/api/file":
+            rel = (qs.get("path") or [None])[0]
+            if not rel:
+                self._not_found("missing path parameter")
+                return
+            result = _read_file_safe(self._root, rel)
+            if result is None:
+                self._not_found("file not found or path outside results root")
+                return
+            self._send_json(result)
+            return
+
+        if path == "/api/result_files":
+            files = _list_result_files(self._root, run_dir)
+            self._send_json({"files": files})
+            return
+
+        if path == "/api/browse":
+            browse_path = (qs.get("path") or [""])[0].strip()
+            browse_type = (qs.get("type") or ["dir"])[0]  # "dir" | "file"
+            # Default to drives on Windows, root on Unix
+            if not browse_path:
+                import os as _os
+                if _os.name == "nt":
+                    import string as _string
+                    drives = [d + ":\\" for d in _string.ascii_uppercase
+                              if _os.path.exists(d + ":\\")]
+                    self._send_json({"path": "", "parent": None, "dirs": drives, "files": []})
+                else:
+                    browse_path = "/"
+            if browse_path:
+                try:
+                    bp = Path(browse_path)
+                    if not bp.exists() or not bp.is_dir():
+                        self._send_json({"error": "path not found"}, status=HTTPStatus.BAD_REQUEST)
+                        return
+                    dirs, files_list = [], []
+                    for child in sorted(bp.iterdir(), key=lambda p: (p.is_file(), p.name.lower())):
+                        try:
+                            if child.is_dir():
+                                dirs.append({"name": child.name, "path": str(child)})
+                            elif browse_type == "file" and child.is_file():
+                                files_list.append({"name": child.name, "path": str(child)})
+                        except PermissionError:
+                            pass
+                    parent = str(bp.parent) if bp.parent != bp else None
+                    self._send_json({"path": str(bp), "parent": parent,
+                                     "dirs": dirs, "files": files_list})
+                except Exception as exc:
+                    self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+
+        # Static assets (anything else under /static/)
+        if path.startswith("/static/"):
+            asset = path[len("/static/"):]
+            # Disallow path escape.
+            if ".." in asset or asset.startswith("/"):
+                self._not_found("invalid asset path")
+                return
+            blob = _read_static(asset)
+            if blob is None:
+                self._not_found(f"asset not found: {asset}")
+                return
+            ctype = _guess_ctype(asset)
+            self._send_bytes(blob, ctype)
+            return
+
+        self._not_found(f"no route for {path}")
+
+    # ------------------------------------------------------------------
+    # Workflow control: POST endpoints
+    # ------------------------------------------------------------------
+
+    def do_OPTIONS(self) -> None:  # noqa: N802
+        self.send_response(HTTPStatus.NO_CONTENT)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+
+    def do_POST(self) -> None:  # noqa: N802
+        url = urlsplit(self.path)
+        path = url.path
+        length = int(self.headers.get("Content-Length", "0") or "0")
+        raw = self.rfile.read(length) if length > 0 else b""
+        try:
+            body: Dict[str, Any] = json.loads(raw) if raw.strip() else {}
+        except json.JSONDecodeError:
+            self._send_json({"error": "invalid JSON body"}, status=HTTPStatus.BAD_REQUEST)
+            return
+
+        # ── Project config management ──────────────────────────────────────
+        if path == "/api/projects":
+            cfg = self.server.projects_config  # type: ignore[attr-defined]
+            c = cfg.load()
+            action = body.get("action", "add")
+            if action == "add":
+                project = body.get("project", {})
+                name = project.get("name", "").strip()
+                if not name:
+                    self._send_json({"error": "project.name is required"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                c["projects"] = [p for p in c.get("projects", []) if p.get("name") != name]
+                c["projects"].append(project)
+            elif action == "remove":
+                name = body.get("name", "")
+                c["projects"] = [p for p in c.get("projects", []) if p.get("name") != name]
+            elif action == "global":
+                for k in ("python_exe", "work_dir", "default_model"):
+                    if k in body:
+                        c[k] = body[k]
+            else:
+                self._send_json({"error": f"unknown action: {action}"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            cfg.save(c)
+            self._send_json({"ok": True, "config": c})
+            return
+
+        # ── Start a vragent2 run ───────────────────────────────────────────
+        if path == "/api/run/start":
+            cfg = self.server.projects_config.load()  # type: ignore[attr-defined]
+            python_exe = body.get("python_exe") or cfg.get("python_exe") or "python"
+            work_dir   = body.get("work_dir")   or cfg.get("work_dir")   or "."
+
+            # Build CLI args
+            cmd = [python_exe, "-m", "vragent2"]
+            str_flags = [
+                ("scene_name",      "--scene_name"),
+                ("hierarchy_json",  "--hierarchy_json"),
+                ("scene_gml",       "--scene_gml"),
+                ("output",          "--output"),
+                ("app_name",        "--app_name"),
+                ("model",           "--model"),
+                ("api_base",        "--api_base"),
+                ("scripts_dir",     "--scripts_dir"),
+                ("unity_host",      "--unity_host"),
+                ("scene_doc",       "--scene_doc"),
+            ]
+            int_flags = [
+                ("budget",          "--budget"),
+                ("max_repair",      "--max_repair"),
+                ("limit",           "--limit"),
+                ("unity_port",      "--unity_port"),
+            ]
+            for key, flag in str_flags:
+                val = body.get(key)
+                if val:
+                    cmd += [flag, str(val)]
+            for key, flag in int_flags:
+                val = body.get(key)
+                if val is not None and str(val).strip():
+                    cmd += [flag, str(val)]
+            if body.get("unity"):
+                cmd.append("--unity")
+            if body.get("resume"):
+                cmd.append("--resume")
+            if body.get("no_info_sharing"):
+                cmd.append("--no_info_sharing")
+
+            env: Optional[Dict[str, str]] = None
+            api_key = body.get("api_key", "").strip()
+            if api_key:
+                env = {"OPENAI_API_KEY": api_key}
+
+            params = {k: v for k, v in body.items() if k not in ("api_key",)}
+            try:
+                self.server.run_manager.start(cmd, work_dir, params, env)  # type: ignore[attr-defined]
+                self._send_json({"ok": True, "cmd": cmd, "pid": self.server.run_manager._proc.pid})  # type: ignore[attr-defined]
+            except ValueError as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.CONFLICT)
+            return
+
+        # ── Stop the running process ───────────────────────────────────────
+        if path == "/api/run/stop":
+            self.server.run_manager.stop()  # type: ignore[attr-defined]
+            self._send_json({"ok": True})
+            return
+
+        # ── File write (Results/ only, .json/.md/.txt) ────────────────────
+        if path == "/api/file":
+            rel     = body.get("path", "")
+            content = body.get("content", "")
+            err = _write_file_safe(self._root, rel, content)
+            if err:
+                self._send_json({"error": err}, status=HTTPStatus.BAD_REQUEST)
+            else:
+                self._send_json({"ok": True})
+            return
+
+        self._not_found(f"no POST route for {path}")
+
+
+def _safe_int(s: str, *, default: int, lo: int, hi: int) -> int:
+    try:
+        v = int(s)
+    except (TypeError, ValueError):
+        return default
+    return max(lo, min(hi, v))
+
+
+def _guess_ctype(name: str) -> str:
+    n = name.lower()
+    if n.endswith(".html"):
+        return "text/html; charset=utf-8"
+    if n.endswith(".css"):
+        return "text/css; charset=utf-8"
+    if n.endswith(".js"):
+        return "application/javascript; charset=utf-8"
+    if n.endswith(".json"):
+        return "application/json; charset=utf-8"
+    if n.endswith(".svg"):
+        return "image/svg+xml"
+    if n.endswith(".png"):
+        return "image/png"
+    return "application/octet-stream"
+
+
+# ---------------------------------------------------------------------------
+# Server
+# ---------------------------------------------------------------------------
+
+class _ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
+    daemon_threads = True
+    allow_reuse_address = True
+
+
+def serve(*, host: str, port: int, results_dir: str,
+          auto_open: bool = False) -> None:
+    """Run the Jelly server until interrupted."""
+    root = Path(results_dir).expanduser().resolve()
+    server = _ThreadingHTTPServer((host, port), _JellyHandler)
+    server.results_root = root          # type: ignore[attr-defined]
+    server.run_manager = _RunManager()  # type: ignore[attr-defined]
+    server.projects_config = _ProjectsConfig(root)  # type: ignore[attr-defined]
+
+    url = f"http://{host}:{port}/"
+    print(f"[jelly] serving XRPlayer dashboard on {url}")
+    print(f"[jelly] watching results dir: {root}")
+
+    if auto_open:
+        threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+
+    try:
+        server.serve_forever(poll_interval=0.5)
+    finally:
+        server.server_close()
+
+
+# ---------------------------------------------------------------------------
+# Fallback HTML (used only if static/index.html is missing)
+# ---------------------------------------------------------------------------
+
+_FALLBACK_HTML = """<!doctype html>
+<html><head><meta charset='utf-8'><title>Jelly</title></head>
+<body style='font-family:sans-serif'>
+<h1>Jelly is running.</h1>
+<p>The bundled dashboard (<code>static/index.html</code>) was not found.
+Use the JSON endpoints directly:</p>
+<ul>
+  <li><a href='/api/health'>/api/health</a></li>
+  <li><a href='/api/runs'>/api/runs</a></li>
+  <li><a href='/api/status'>/api/status</a></li>
+  <li><a href='/api/agent_trace?limit=50'>/api/agent_trace</a></li>
+  <li><a href='/api/coverage'>/api/coverage</a></li>
+  <li><a href='/api/gate_graph'>/api/gate_graph</a></li>
+  <li><a href='/api/scene_understanding'>/api/scene_understanding</a></li>
+</ul>
+</body></html>
+"""

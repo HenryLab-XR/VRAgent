@@ -241,6 +241,27 @@ class ObserverAgent(BaseAgent):
             "strategy": strategy.to_dict(),
             "llm_analysis": llm_analysis,
         }
+
+        self.record_decision(
+            summary=(
+                f"Observed coverage_delta={delta:.3f}, mode={mode.value}, "
+                f"bugs={len(bug_signals)}, gate_hints={len(gate_hints)}"
+            ),
+            confidence=min(1.0, max(0.0, float(delta))),
+            inputs={
+                "goal": str(input_data.get("goal", ""))[:80],
+                "n_actions": len(input_data.get("actions", [])),
+            },
+            outputs={
+                "coverage_delta": float(delta),
+                "recommended_mode": mode.value,
+                "n_bugs": len(bug_signals),
+                "n_gate_hints": len(gate_hints),
+                "n_failure_hypotheses": len(failure_hypotheses),
+            },
+            evidence=[str(b)[:120] for b in bug_signals[:5]],
+            next_hint=suggestion[:120] if suggestion else "",
+        )
         return output
 
     # ------------------------------------------------------------------

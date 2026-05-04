@@ -890,5 +890,174 @@ class TestExecutorCoverageProxy(unittest.TestCase):
         self.assertGreater(delta.MC, 0.0)
 
 
+# ======================================================================
+# XRPlayer additions: AgentDecision, BaseAgent, SceneUnderstanding heuristic
+# ======================================================================
+
+class TestAgentDecision(unittest.TestCase):
+    """The new AgentDecision dataclass must roundtrip through dict form."""
+
+    def test_to_from_dict_roundtrip(self):
+        from vragent2.contracts import AgentDecision
+
+        orig = AgentDecision(
+            iteration=3,
+            agent="Planner",
+            summary="Planned 5 actions",
+            confidence=0.8,
+            inputs={"goal": "explore"},
+            outputs={"n_actions": 5},
+            evidence=["e1", "e2"],
+            next_hint="verify",
+            duration_ms=12.5,
+        )
+        d = orig.to_dict()
+        self.assertEqual(d["agent"], "Planner")
+        self.assertEqual(d["confidence"], 0.8)
+
+        restored = AgentDecision.from_dict(d)
+        self.assertEqual(restored.summary, orig.summary)
+        self.assertEqual(restored.outputs, orig.outputs)
+        self.assertEqual(restored.iteration, orig.iteration)
+
+    def test_from_dict_filters_unknown_keys(self):
+        from vragent2.contracts import AgentDecision
+
+        d = AgentDecision.from_dict({
+            "agent": "X", "summary": "s", "bogus_key": 123,
+        })
+        self.assertEqual(d.agent, "X")
+        self.assertFalse(hasattr(d, "bogus_key"))
+
+    def test_shared_world_state_serialises_decisions(self):
+        from vragent2.contracts import SharedWorldState
+
+        ws = SharedWorldState()
+        ws.agent_decisions.append({"agent": "Planner", "summary": "ok"})
+        d = ws.to_dict()
+        self.assertIn("agent_decisions", d)
+        self.assertEqual(d["agent_decisions"][0]["agent"], "Planner")
+
+
+class TestBaseAgentRecording(unittest.TestCase):
+    """BaseAgent.record_decision / drain_decisions / set_iteration must
+    work even on subclasses that don't call super().__init__()."""
+
+    def _make_agent(self):
+        from vragent2.agents.base_agent import BaseAgent
+
+        class _DummyAgent(BaseAgent):
+            # Note: deliberately does NOT call super().__init__()
+            def __init__(self):
+                pass
+
+            def run(self, input_data):
+                return {}
+
+        return _DummyAgent()
+
+    def test_record_and_drain(self):
+        agent = self._make_agent()
+        agent.set_iteration(7)
+        d = agent.record_decision(
+            summary="did something",
+            confidence=0.9,
+            outputs={"n": 1},
+        )
+        self.assertEqual(d.agent, "_DummyAgent")
+        self.assertEqual(d.iteration, 7)
+        self.assertEqual(d.confidence, 0.9)
+
+        drained = agent.drain_decisions()
+        self.assertEqual(len(drained), 1)
+        self.assertEqual(agent.drain_decisions(), [])
+
+    def test_record_truncates_long_strings(self):
+        agent = self._make_agent()
+        long_s = "x" * 5000
+        d = agent.record_decision(summary=long_s)
+        self.assertLess(len(d.summary), len(long_s))
+
+
+class TestSceneUnderstandingHeuristic(unittest.TestCase):
+    """SceneUnderstandingAgent must produce a useful baseline from raw
+    Unity hierarchy data even when no LLM and no .md docs are available."""
+
+    def test_classifies_interactable_system_decoration(self):
+        from vragent2.agents.scene_understanding import SceneUnderstandingAgent
+
+        agent = SceneUnderstandingAgent(llm=None)
+        gobj_list = [
+            {"gameobject_name": "DoorPantry",
+             "components": ["XRGrabInteractable", "Rigidbody"]},
+            {"gameobject_name": "RedKey",
+             "components": ["XRGrabInteractable"]},
+            {"gameobject_name": "GameManager",
+             "components": ["GameManager"]},
+            {"gameobject_name": "FloorTile_01",
+             "components": ["MeshRenderer"]},
+            {"gameobject_name": "AgentBridge",
+             "components": ["AgentBridge"]},
+        ]
+
+        out = agent._heuristic_understanding(gobj_list, "TestScene")
+        self.assertIn("DoorPantry", out.key_objects)
+        self.assertIn("RedKey", out.key_objects)
+        self.assertIn("GameManager", out.forbidden_test_objects)
+        # Floor / AgentBridge must NOT appear in the test priority list.
+        self.assertNotIn("FloorTile_01", out.key_objects)
+        self.assertNotIn("AgentBridge", out.key_objects)
+        self.assertEqual(out.object_roles.get("DoorPantry"), "interactable")
+        self.assertEqual(out.object_roles.get("GameManager"), "system")
+
+    def test_run_without_llm_emits_decision(self):
+        from vragent2.agents.scene_understanding import SceneUnderstandingAgent
+
+        agent = SceneUnderstandingAgent(llm=None)  # no LLM
+        gobj_list = [
+            {"gameobject_name": "Lever_A",
+             "components": ["XRGrabInteractable"]},
+            {"gameobject_name": "Wall", "components": ["MeshRenderer"]},
+        ]
+        out = agent.run({"gobj_list": gobj_list, "scene_name": "Smoke"})
+        self.assertIn("key_objects", out)
+        self.assertIn("Lever_A", out["key_objects"])
+
+        decisions = agent.drain_decisions()
+        self.assertEqual(len(decisions), 1)
+        self.assertEqual(decisions[0].agent, "SceneUnderstandingAgent")
+
+
+# ======================================================================
+# XRPlayer Jelly server (smoke only — no network bind)
+# ======================================================================
+
+class TestJellyArtefactResolution(unittest.TestCase):
+    """The Jelly server's read-only path resolution must be safe and correct."""
+
+    def test_resolve_artefact_with_run_dir(self):
+        from xrplayer.jelly.server import _resolve_artefact
+
+        root = Path("/tmp/xrplayer_root")
+        p = _resolve_artefact(root, "Home/qwen3", "status")
+        self.assertEqual(p.name, "jelly_status.json")
+        self.assertTrue(str(p).endswith(os.path.join("Home", "qwen3", "jelly_status.json")))
+
+    def test_resolve_artefact_blocks_path_escape(self):
+        from xrplayer.jelly.server import _resolve_artefact
+
+        root = Path("/tmp/xrplayer_root")
+        p = _resolve_artefact(root, "../../etc", "status")
+        # Path-escape attempts are silently downgraded to the root.
+        self.assertEqual(p, root / "jelly_status.json")
+
+    def test_xrplayer_re_exports(self):
+        import xrplayer
+
+        self.assertTrue(hasattr(xrplayer, "VRAgentController"))
+        self.assertTrue(hasattr(xrplayer, "AgentDecision"))
+        self.assertTrue(xrplayer.__version__.startswith("0.1"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

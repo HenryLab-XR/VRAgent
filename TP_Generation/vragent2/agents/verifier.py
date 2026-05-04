@@ -139,6 +139,26 @@ class VerifierAgent(BaseAgent):
         result = output.to_dict()
         result["evidence"] = evidence
         result["llm_review"] = llm_review
+
+        err_types = sorted({e.get("type", "?") for e in errors}) if errors else []
+        self.record_decision(
+            summary=(
+                f"Verifier {'accepted' if passed else 'rejected'} "
+                f"{len(patched)}/{len(input_data.get('actions', []))} actions "
+                f"(score={score:.2f}, errors={len(errors)})"
+            ),
+            confidence=float(score),
+            inputs={"n_actions": len(input_data.get("actions", []))},
+            outputs={
+                "passed": passed,
+                "score": float(score),
+                "n_errors": len(errors),
+                "error_types": ",".join(err_types),
+                "n_patched": len(patched),
+            },
+            evidence=[str(e)[:120] for e in evidence[:5]],
+            next_hint="Executor should run patched_actions" if passed else "Planner should fix errors",
+        )
         return result
 
     # ------------------------------------------------------------------
