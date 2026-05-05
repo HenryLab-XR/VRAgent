@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -324,6 +325,7 @@ _ARTEFACT_NAMES = {
     "test_plan":           "test_plan.json",
     "all_actions":         "all_actions.json",
     "oracle_bugs":         "oracle_bugs.json",
+    "coverage_snapshot":   "coverage_snapshot.json",
 }
 
 
@@ -471,6 +473,85 @@ def _parse_unity_coverage_xml(xml_path: Path) -> Dict[str, Any]:
         return result
     except Exception as exc:
         return {"error": str(exc), "found": False}
+
+
+def _parse_coverage_report_dir(report_dir: Path) -> Dict[str, Any]:
+    """Parse Unity CodeCoverage report directory.
+
+    Tries ``Summary.json`` first (ReportGenerator JSON output).  Falls back to
+    parsing ``Summary.xml`` (legacy OpenCover format) via
+    ``_parse_unity_coverage_xml``.
+    """
+    if not report_dir.is_dir():
+        return {"found": False, "error": f"Report directory not found: {report_dir}"}
+
+    result: Dict[str, Any] = {"found": True, "report_dir": str(report_dir)}
+
+    # Provide path to interactive HTML report if it exists
+    for htm_name in ("index.htm", "index.html"):
+        htm_p = report_dir / htm_name
+        if htm_p.exists():
+            result["index_htm_path"] = str(htm_p)
+            break
+
+    # ── Try Summary.json first (richest data, no XML needed) ────────────
+    summary_json_p = report_dir / "Summary.json"
+    if summary_json_p.exists():
+        try:
+            raw = json.loads(summary_json_p.read_text(encoding="utf-8"))
+            s = raw.get("summary", {})
+            result["generated_on"]    = s.get("generatedon", "")
+            result["line_coverage"]   = float(s.get("linecoverage", 0) or 0)
+            result["method_coverage"] = float(s.get("methodcoverage", 0) or 0)
+            result["covered_lines"]   = int(s.get("coveredlines", 0) or 0)
+            result["coverable_lines"] = int(s.get("coverablelines", 0) or 0)
+            result["total_lines"]     = int(s.get("totallines", 0) or 0)
+            result["uncovered_lines"] = int(s.get("uncoveredlines", 0) or 0)
+            result["covered_methods"] = int(s.get("coveredmethods", 0) or 0)
+            result["total_methods"]   = int(s.get("totalmethods", 0) or 0)
+            result["covered_branches"]= int(s.get("coveredbranches", 0) or 0)
+            result["total_branches"]  = int(s.get("totalbranches", 0) or 0)
+            result["num_classes"]     = int(s.get("classes", 0) or 0)
+            classes: List[Dict[str, Any]] = []
+            for asm in raw.get("coverage", {}).get("assemblies", []):
+                for cls in asm.get("classesinassembly", []):
+                    classes.append({
+                        "name":            cls.get("name", ""),
+                        "coverage":        float(cls.get("coverage", 0) or 0),
+                        "covered_lines":   int(cls.get("coveredlines", 0) or 0),
+                        "coverable_lines": int(cls.get("coverablelines", 0) or 0),
+                        "total_lines":     int(cls.get("totallines", 0) or 0),
+                        "method_coverage": float(cls.get("methodcoverage", 0) or 0),
+                        "covered_methods": int(cls.get("coveredmethods", 0) or 0),
+                        "total_methods":   int(cls.get("totalmethods", 0) or 0),
+                    })
+            result["classes"] = classes
+            return result
+        except Exception:
+            pass  # fall through to XML
+
+    # ── Fallback: parse Summary.xml (OpenCover attribute format) ────────
+    xml_p2 = report_dir / "Summary.xml"
+    if xml_p2.exists():
+        xml_data = _parse_unity_coverage_xml(xml_p2)
+        if xml_data.get("found"):
+            result["generated_on"]    = ""
+            result["line_coverage"]   = xml_data.get("sequence_coverage", 0.0)
+            result["method_coverage"] = 0.0
+            result["covered_lines"]   = xml_data.get("visited_sequence_points", 0)
+            result["coverable_lines"] = xml_data.get("num_sequence_points", 0)
+            result["total_lines"]     = xml_data.get("num_sequence_points", 0)
+            result["uncovered_lines"] = xml_data.get("num_sequence_points", 0) - xml_data.get("visited_sequence_points", 0)
+            result["covered_methods"] = xml_data.get("visited_methods", 0)
+            result["total_methods"]   = xml_data.get("num_methods", 0)
+            result["covered_branches"]= xml_data.get("visited_branch_points", 0)
+            result["total_branches"]  = xml_data.get("num_branch_points", 0)
+            result["num_classes"]     = xml_data.get("visited_classes", 0)
+            result["classes"]         = []
+        return result
+
+    return {"found": False, "error": "No Summary.json or Summary.xml in report dir",
+            "report_dir": str(report_dir)}
 
 
 def _scan_benchmark_data(root: Path) -> List[Dict[str, Any]]:
@@ -681,8 +762,98 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 self._send_bytes(html, "text/html; charset=utf-8")
             return
 
+        # ── Serve Unity CodeCoverage HTML report files ─────────────────────
+        if path.startswith("/coverage_report/"):
+            sub = path[len("/coverage_report/"):]
+            if not sub or sub == "/":
+                sub = "index.htm"
+            pp_cr = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+            report_dir_cr: Optional[Path] = None
+            if pp_cr:
+                p_cr = Path(pp_cr).resolve()
+                for _ in range(12):
+                    if (p_cr / "Assets").is_dir() and (p_cr / "ProjectSettings").is_dir():
+                        for _cov_sub in ("CodeCoverage/Report", "Coverage/Report", "CodeCoverage"):
+                            _rd_cand = p_cr
+                            for _seg in _cov_sub.split("/"):
+                                _rd_cand = _rd_cand / _seg
+                            if _rd_cand.is_dir() and (any(_rd_cand.glob("index.htm*"))):
+                                report_dir_cr = _rd_cand
+                                self.server.coverage_report_dir = _rd_cand
+                                break
+                        break
+                    _nxt_cr = p_cr.parent
+                    if _nxt_cr == p_cr:
+                        break
+                    p_cr = _nxt_cr
+            if report_dir_cr is None:
+                report_dir_cr = getattr(self.server, "coverage_report_dir", None)
+            if report_dir_cr is None:
+                _heur = self._root.parent / "VRAgent" / "CodeCoverage" / "Report"
+                if _heur.is_dir():
+                    report_dir_cr = _heur
+            if report_dir_cr is None:
+                self._send_json({"error": "Coverage report dir not found. Provide ?project_path= param."}, status=HTTPStatus.NOT_FOUND)
+                return
+            try:
+                _target_cr = (report_dir_cr / sub).resolve()
+                _resolved_rd = report_dir_cr.resolve()
+                if not str(_target_cr).startswith(str(_resolved_rd)):
+                    self._send_json({"error": "Access denied"}, status=HTTPStatus.FORBIDDEN)
+                    return
+            except Exception:
+                self._send_json({"error": "Invalid path"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            if not _target_cr.is_file():
+                self._send_json({"error": f"File not found: {sub}"}, status=HTTPStatus.NOT_FOUND)
+                return
+            _MIME_CR = {
+                ".htm": "text/html; charset=utf-8", ".html": "text/html; charset=utf-8",
+                ".css": "text/css; charset=utf-8", ".js": "application/javascript; charset=utf-8",
+                ".svg": "image/svg+xml", ".png": "image/png", ".gif": "image/gif",
+                ".json": "application/json; charset=utf-8", ".xml": "application/xml; charset=utf-8",
+                ".woff": "font/woff", ".woff2": "font/woff2",
+            }
+            self._send_bytes(_target_cr.read_bytes(), _MIME_CR.get(_target_cr.suffix.lower(), "application/octet-stream"))
+            return
+
         if path == "/api/health":
             self._send_json({"ok": True, "results_root": str(self._root)})
+            return
+
+        # ── Serve archived snapshot HTML report files ─────────────────────────
+        if path.startswith("/coverage_archive_report/"):
+            sub_sar = path[len("/coverage_archive_report/"):] or "index.htm"
+            _run_sar = (qs.get("run") or [None])[0]
+            _ts_sar  = (qs.get("ts")  or [None])[0]
+            if _run_sar and _ts_sar:
+                _snap_sar = self._root / _run_sar.replace("\\", "/") / "coverage_snapshots" / _ts_sar
+                if _snap_sar.is_dir():
+                    self.server.active_snap_dir = _snap_sar  # type: ignore[attr-defined]
+            _active_sar: Optional[Path] = getattr(self.server, "active_snap_dir", None)
+            if _active_sar is None or not _active_sar.is_dir():
+                self._send_json({"error": "Snapshot dir not found. Provide ?run= and ?ts= params."},
+                                status=HTTPStatus.NOT_FOUND)
+                return
+            try:
+                _tgt_sar = (_active_sar / sub_sar).resolve()
+                if not str(_tgt_sar).startswith(str(_active_sar.resolve())):
+                    self._send_json({"error": "Access denied"}, status=HTTPStatus.FORBIDDEN)
+                    return
+            except Exception:
+                self._send_json({"error": "Invalid path"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            if not _tgt_sar.is_file():
+                self._send_json({"error": f"File not found: {sub_sar}"}, status=HTTPStatus.NOT_FOUND)
+                return
+            _MIME_SAR = {
+                ".htm": "text/html; charset=utf-8", ".html": "text/html; charset=utf-8",
+                ".css": "text/css; charset=utf-8",  ".js": "application/javascript; charset=utf-8",
+                ".svg": "image/svg+xml", ".png": "image/png", ".gif": "image/gif",
+                ".json": "application/json; charset=utf-8", ".xml": "application/xml; charset=utf-8",
+                ".woff": "font/woff", ".woff2": "font/woff2",
+            }
+            self._send_bytes(_tgt_sar.read_bytes(), _MIME_SAR.get(_tgt_sar.suffix.lower(), "application/octet-stream"))
             return
 
         if path == "/api/runs":
@@ -914,12 +1085,8 @@ class _JellyHandler(BaseHTTPRequestHandler):
 
         # ── Smart coverage: walk up from project assets_path to find Unity root ─
         if path == "/api/smart_coverage":
-            # Accept either assets_path (will walk up to find Unity root) or direct unity_root
             assets_path = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
             unity_root_param = (qs.get("unity_root") or [""])[0].strip()
-            xml_path2: Optional[Path] = None
-            tried: List[str] = []
-            # Determine Unity project root
             unity_root: Optional[Path] = None
             if unity_root_param:
                 pr = Path(unity_root_param)
@@ -935,26 +1102,80 @@ class _JellyHandler(BaseHTTPRequestHandler):
                     if nxt == p:
                         break
                     p = nxt
-            if unity_root is not None:
-                # Unity CodeCoverage folder is directly under project root
-                for sub in (
-                    unity_root / "CodeCoverage" / "Report" / "Summary.xml",
-                    unity_root / "CodeCoverage" / "Summary.xml",
-                    unity_root / "Coverage" / "Report" / "Summary.xml",
-                ):
-                    tried.append(str(sub))
-                    if sub.exists():
-                        xml_path2 = sub
-                        break
-            if xml_path2 is None:
+            if unity_root is None:
                 self._send_json({"found": False,
-                                 "error": "Coverage Summary.xml not found. Run Window > Analysis > Code Coverage in Unity Editor first.",
-                                 "tried": tried[:6],
-                                 "unity_root": str(unity_root) if unity_root else ""})
+                                 "error": "Cannot find Unity project root. Provide project_path.",
+                                 "unity_root": ""})
                 return
-            data = _parse_unity_coverage_xml(xml_path2)
-            data["xml_path"] = str(xml_path2)
-            self._send_json(data)
+            report_dir_sc = unity_root / "CodeCoverage" / "Report"
+            data_sc = _parse_coverage_report_dir(report_dir_sc)
+            if not data_sc.get("found"):
+                # Try fallback paths
+                for sub_sc in (unity_root / "CodeCoverage", unity_root / "Coverage" / "Report"):
+                    if sub_sc.is_dir():
+                        data_sc = _parse_coverage_report_dir(sub_sc)
+                        if data_sc.get("found"):
+                            break
+            if not data_sc.get("found"):
+                data_sc["unity_root"] = str(unity_root)
+            self._send_json(data_sc)
+            return
+
+        # ── Run coverage: check snapshot first, fall back to live report ────
+        if path == "/api/run_coverage":
+            # 1. Check saved snapshot in run dir
+            if run_dir:
+                snap_p = _resolve_artefact(self._root, run_dir, "coverage_snapshot")
+                snap_d = _read_json(snap_p)
+                if isinstance(snap_d, dict) and snap_d.get("found") and not snap_d.get("_jelly_error"):
+                    snap_d["is_snapshot"] = True
+                    # Re-attach index_htm_path from live install if reachable
+                    assets_path_rc = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+                    if assets_path_rc:
+                        p_rc = Path(assets_path_rc).resolve()
+                        for _ in range(12):
+                            if (p_rc / "Assets").is_dir() and (p_rc / "ProjectSettings").is_dir():
+                                idx_rc = p_rc / "CodeCoverage" / "Report" / "index.htm"
+                                if idx_rc.exists():
+                                    snap_d["index_htm_path"] = str(idx_rc)
+                                    self.server.coverage_report_dir = idx_rc.parent
+                                break
+                            nxt_rc = p_rc.parent
+                            if nxt_rc == p_rc:
+                                break
+                            p_rc = nxt_rc
+                    self._send_json(snap_d)
+                    return
+            # 2. Fall back to live coverage report
+            assets_path_rc2 = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+            unity_root_rc: Optional[Path] = None
+            if assets_path_rc2:
+                p2 = Path(assets_path_rc2).resolve()
+                for _ in range(12):
+                    if (p2 / "Assets").is_dir() and (p2 / "ProjectSettings").is_dir():
+                        unity_root_rc = p2
+                        break
+                    nxt2 = p2.parent
+                    if nxt2 == p2:
+                        break
+                    p2 = nxt2
+            if unity_root_rc is None:
+                self._send_json({"found": False, "error": "Cannot find Unity project root. Provide project_path."})
+                return
+            data_rc = _parse_coverage_report_dir(unity_root_rc / "CodeCoverage" / "Report")
+            if not data_rc.get("found"):
+                for sub_rc2 in (unity_root_rc / "CodeCoverage", unity_root_rc / "Coverage" / "Report"):
+                    if sub_rc2.is_dir():
+                        data_rc = _parse_coverage_report_dir(sub_rc2)
+                        if data_rc.get("found"):
+                            break
+            # Cache coverage report dir for /coverage_report/ serving
+            if data_rc.get("found") and data_rc.get("report_dir"):
+                try:
+                    self.server.coverage_report_dir = Path(data_rc["report_dir"])
+                except Exception:
+                    pass
+            self._send_json(data_rc)
             return
 
         if path == "/api/oracle":
@@ -995,6 +1216,75 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 oracle_def["found"] = True
                 oracle_def["_eval_error"] = str(exc)
                 self._send_json(oracle_def)
+            return
+
+        # ── Coverage history: list all saved snapshots ──────────────────────
+        if path == "/api/coverage_history":
+            _run_prefix = (qs.get("run_prefix") or [""])[0].strip().replace("\\", "/").strip("/")
+            _hist: List[Dict[str, Any]] = []
+            try:
+                for _snap_p in self._root.rglob("coverage_snapshot.json"):
+                    _snap_d = _read_json(_snap_p)
+                    if not (_snap_d and isinstance(_snap_d, dict) and _snap_d.get("found")):
+                        continue
+                    try:
+                        _rel = _snap_p.parent.relative_to(self._root)
+                    except ValueError:
+                        continue
+                    _rk = str(_rel).replace("\\", "/")
+                    if _run_prefix and not _rk.startswith(_run_prefix):
+                        continue
+                    _parts = _rk.split("/")
+                    _hist.append({
+                        "run_dir":         _rk,
+                        "scene":           _parts[0] if _parts else "",
+                        "model":           _parts[-1] if len(_parts) > 1 else _parts[0] if _parts else "",
+                        "snapshot_time":   _snap_d.get("snapshot_time", ""),
+                        "snapshot_model":  _snap_d.get("snapshot_model", ""),
+                        "line_coverage":   _snap_d.get("line_coverage", 0),
+                        "method_coverage": _snap_d.get("method_coverage", 0),
+                        "covered_lines":   _snap_d.get("covered_lines", 0),
+                        "coverable_lines": _snap_d.get("coverable_lines", 0),
+                        "covered_methods": _snap_d.get("covered_methods", 0),
+                        "total_methods":   _snap_d.get("total_methods", 0),
+                    })
+            except Exception as _exc:
+                self._send_json({"history": [], "error": str(_exc)})
+                return
+            _hist.sort(key=lambda r: r.get("snapshot_time", ""), reverse=True)
+            self._send_json({"history": _hist, "run_prefix": _run_prefix})
+            return
+
+        # ── Coverage snapshots list: all timestamped archives for a run ───────────
+        if path == "/api/coverage_snapshots_list":
+            if not run_dir:
+                self._send_json({"snapshots": [], "run_dir": ""})
+                return
+            _snaps_base = self._root / run_dir.replace("\\", "/") / "coverage_snapshots"
+            if not _snaps_base.is_dir():
+                self._send_json({"snapshots": [], "run_dir": run_dir})
+                return
+            _snaps_out: List[Dict[str, Any]] = []
+            for _ts_dir in sorted(_snaps_base.iterdir(), reverse=True):
+                if not _ts_dir.is_dir():
+                    continue
+                _meta = _read_json(_ts_dir / "meta.json")
+                if _meta is None:
+                    continue
+                _snaps_out.append({
+                    "ts":              _ts_dir.name,
+                    "snapshot_time":   _meta.get("snapshot_time", ""),
+                    "snapshot_model":  _meta.get("snapshot_model", ""),
+                    "line_coverage":   _meta.get("line_coverage", 0),
+                    "method_coverage": _meta.get("method_coverage", 0),
+                    "covered_lines":   _meta.get("covered_lines", 0),
+                    "coverable_lines": _meta.get("coverable_lines", 0),
+                    "covered_methods": _meta.get("covered_methods", 0),
+                    "total_methods":   _meta.get("total_methods", 0),
+                    "classes":         _meta.get("classes", []),
+                    "has_html":        (_ts_dir / "index.htm").is_file() or (_ts_dir / "index.html").is_file(),
+                })
+            self._send_json({"snapshots": _snaps_out, "run_dir": run_dir})
             return
 
         # ── Smart oracle: locate scene file under project, look for oracle*.json next to it ─
@@ -1240,6 +1530,93 @@ class _JellyHandler(BaseHTTPRequestHandler):
             self._send_json({"ok": True, "has_api_key": bool(settings.get("api_key"))})
             return
 
+        # ── Save coverage snapshot from current Unity report to run dir ──────
+        if path == "/api/coverage_snapshot":
+            assets_path_cs = body.get("assets_path") or body.get("project_path", "")
+            snap_run_dir   = (body.get("run_dir") or "").strip()
+            model_label    = body.get("model") or (snap_run_dir.replace("\\", "/").split("/")[-1] if snap_run_dir else "")
+            unity_root_param_cs = body.get("unity_root", "")
+
+            # Resolve Unity project root
+            unity_root_cs: Optional[Path] = None
+            if unity_root_param_cs:
+                pr_cs = Path(unity_root_param_cs)
+                if (pr_cs / "Assets").is_dir() and (pr_cs / "ProjectSettings").is_dir():
+                    unity_root_cs = pr_cs
+            if unity_root_cs is None and assets_path_cs:
+                p_cs = Path(assets_path_cs).resolve()
+                for _ in range(12):
+                    if (p_cs / "Assets").is_dir() and (p_cs / "ProjectSettings").is_dir():
+                        unity_root_cs = p_cs
+                        break
+                    nxt_cs = p_cs.parent
+                    if nxt_cs == p_cs:
+                        break
+                    p_cs = nxt_cs
+            if unity_root_cs is None:
+                self._send_json({"error": "Cannot find Unity project root. Provide assets_path."},
+                                status=HTTPStatus.BAD_REQUEST)
+                return
+
+            # Parse the live coverage report
+            cov_cs = _parse_coverage_report_dir(unity_root_cs / "CodeCoverage" / "Report")
+            if not cov_cs.get("found"):
+                self._send_json({"error": "No coverage report found. Run Window > Analysis > Code Coverage in Unity Editor first."},
+                                status=HTTPStatus.NOT_FOUND)
+                return
+
+            # Strip local filesystem paths before saving, add snapshot metadata
+            from datetime import datetime as _dt
+            snap_ts_str = _dt.utcnow().strftime("%Y%m%dT%H%M%SZ")
+            cov_cs.pop("index_htm_path", None)
+            cov_cs.pop("report_dir", None)
+            cov_cs["snapshot_model"] = model_label
+            cov_cs["snapshot_time"]  = _dt.utcnow().isoformat() + "Z"
+            cov_cs["snapshot_ts"]    = snap_ts_str
+
+            # Save to run dir (run-binding quick snapshot)
+            save_base = self._root / snap_run_dir.replace("\\", "/") if snap_run_dir else self._root
+            save_path_cs = save_base / "coverage_snapshot.json"
+            try:
+                save_path_cs.parent.mkdir(parents=True, exist_ok=True)
+                save_path_cs.write_text(json.dumps(cov_cs, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+                return
+
+            # Copy full report directory to timestamped archive
+            report_dir_src = unity_root_cs / "CodeCoverage" / "Report"
+            # fallback search for report dir if default path not found
+            if not report_dir_src.is_dir():
+                for _cand_rd in (unity_root_cs / "CodeCoverage", unity_root_cs / "Coverage" / "Report"):
+                    if _cand_rd.is_dir() and any(_cand_rd.glob("Summary.json")):
+                        report_dir_src = _cand_rd
+                        break
+            snap_archive_dir = save_base / "coverage_snapshots" / snap_ts_str
+            archive_ok = False
+            archive_err = ""
+            if report_dir_src.is_dir():
+                try:
+                    snap_archive_dir.mkdir(parents=True, exist_ok=True)
+                    for _item in report_dir_src.iterdir():
+                        if _item.is_file():
+                            shutil.copy2(str(_item), str(snap_archive_dir / _item.name))
+                        elif _item.is_dir():
+                            shutil.copytree(str(_item), str(snap_archive_dir / _item.name))
+                    # Save meta.json alongside
+                    (snap_archive_dir / "meta.json").write_text(
+                        json.dumps(cov_cs, ensure_ascii=False, indent=2), encoding="utf-8")
+                    archive_ok = True
+                except Exception as _exc_ar:
+                    archive_err = str(_exc_ar)
+            self._send_json({"ok": True, "saved_to": str(save_path_cs),
+                             "model": model_label,
+                             "line_coverage": cov_cs.get("line_coverage", 0),
+                             "archive_ok": archive_ok,
+                             "archive_dir": str(snap_archive_dir) if archive_ok else "",
+                             "archive_error": archive_err})
+            return
+
         # ── Load a local JSON file by absolute path ────────────────────────
         if path == "/api/load_local_json":
             file_path = body.get("file_path", "").strip()
@@ -1382,6 +1759,8 @@ def serve(*, host: str, port: int, results_dir: str,
     server.run_manager = _RunManager()  # type: ignore[attr-defined]
     server.projects_config = _ProjectsConfig(root)  # type: ignore[attr-defined]
     server.ui_settings = _UiSettingsConfig(root)    # type: ignore[attr-defined]
+    server.coverage_report_dir = None   # type: ignore[attr-defined]  # cached from last successful coverage parse
+    server.active_snap_dir = None       # type: ignore[attr-defined]  # cached from last snapshot HTML request
 
     url = f"http://{host}:{port}/"
     print(f"[jelly] serving XRPlayer dashboard on {url}")

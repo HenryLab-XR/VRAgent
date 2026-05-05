@@ -62,7 +62,7 @@
   .btn.ghost{background:var(--panel2);color:var(--fg);border:1px solid var(--border);}
   .btn.ghost:hover:not(:disabled){border-color:var(--accent);}
   .btn.sm{padding:3px 9px;font-size:11px;}
-  #logBox{background:#0a0a0f;border:1px solid var(--border);border-radius:4px;height:320px;overflow-y:auto;padding:10px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:11.5px;line-height:1.55;color:#c9d1d9;}
+  #logBox{background:#0a0a0f;border:1px solid var(--border);border-radius:4px;height:320px;overflow-y:auto;padding:10px;font-family:"Cascadia Code","Fira Code",Consolas,"Microsoft YaHei Mono","Sarasa Mono SC",monospace;font-size:11.5px;line-height:1.55;color:#c9d1d9;}
   #logBox .err{color:var(--bad);}
   #logBox .warn{color:var(--warn);}
   #logBox .ok{color:var(--good);}
@@ -78,7 +78,7 @@
   .modal-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
   .modal-head h3{flex:1;font-size:14px;font-weight:600;}
   .modal-body{flex:1;overflow:auto;padding:14px 16px;}
-  .modal-body textarea{width:100%;min-height:400px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;line-height:1.5;resize:vertical;}
+  .modal-body textarea{width:100%;min-height:400px;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:12px;font-family:"Cascadia Code","Fira Code",Consolas,"Microsoft YaHei Mono","Sarasa Mono SC",monospace;line-height:1.5;resize:vertical;}
   .modal-foot{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;align-items:center;}
   .proj-item{display:flex;align-items:center;gap:6px;padding:7px 10px;background:var(--panel2);border:1px solid var(--border);border-radius:5px;margin-bottom:6px;}
   .proj-item .pinfo{flex:1;min-width:0;overflow:hidden;}
@@ -105,7 +105,7 @@
   .fb-item.fb-selected{background:var(--panel2);outline:1px solid var(--accent2);}
   .fb-empty{padding:24px;text-align:center;color:var(--muted);font-style:italic;font-size:13px;}
   .fb-loading{padding:16px;text-align:center;color:var(--muted);font-size:12px;}
-  .fb-path-input{flex:1;background:transparent;border:none;outline:none;font-size:12px;color:var(--accent);min-width:0;font-family:"Cascadia Code",Consolas,monospace;}
+  .fb-path-input{flex:1;background:transparent;border:none;outline:none;font-size:12px;color:var(--accent);min-width:0;font-family:"Cascadia Code",Consolas,"Microsoft YaHei Mono","Sarasa Mono SC",monospace;}
   .fb-path-input:focus{color:var(--fg);}
   .fb-mkdir-row{display:none;align-items:center;gap:6px;padding:5px 14px;background:var(--panel2);border-bottom:1px solid var(--border);}
   .fb-mkdir-row input{flex:1;font-size:12px;}
@@ -356,7 +356,7 @@
         <div class="col">
           <div class="field-row" style="align-items:center">
             <label data-tip="API / Model / Key 等全局设置&#10;在 Settings 中编辑">API 配置</label>
-            <span id="appSettingsDisplay" class="meta" style="flex:1;font-family:monospace;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis">&mdash;</span>
+            <span id="appSettingsDisplay" class="meta" style="flex:1;font-family:Consolas,Menlo,Monaco,'Courier New','Microsoft YaHei Mono','Sarasa Mono SC',monospace;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis">&mdash;</span>
             <button class="btn ghost sm" onclick="openAppSettings()" data-tip="打开 Settings 面板修改模型 / API 地址 / API Key">&#x2699; Settings</button>
           </div>
           <div class="field-row">
@@ -535,6 +535,8 @@
         <button class="btn ghost sm" style="margin-left:auto" onclick="refreshUnityCoverage()">&#x27F3;</button>
       </h3>
       <div id="covUnityWrap"><div class="empty">loading Unity coverage...</div></div>
+      <div id="covSnapshotsWrap" style="margin-top:12px"></div>
+      <div id="covHistoryWrap" style="margin-top:12px"></div>
     </div>
   </div>
 </section>
@@ -688,8 +690,8 @@
       </div>
       <div style="border-top:1px solid var(--border);margin:10px 0;padding-top:8px">
         <div class="meta" style="font-size:11px;margin-bottom:4px">当前 Workflow 绑定（只读，可在 Workflow 选择切换）</div>
-        <div class="field-row"><label>项目</label><span id="appSettingsProj" class="meta" style="flex:1;font-family:monospace">&mdash;</span></div>
-        <div class="field-row"><label>场景</label><span id="appSettingsScene" class="meta" style="flex:1;font-family:monospace">&mdash;</span></div>
+        <div class="field-row"><label>项目</label><span id="appSettingsProj" class="meta" style="flex:1;font-family:Consolas,Menlo,Monaco,'Courier New','Microsoft YaHei Mono','Sarasa Mono SC',monospace">&mdash;</span></div>
+        <div class="field-row"><label>场景</label><span id="appSettingsScene" class="meta" style="flex:1;font-family:Consolas,Menlo,Monaco,'Courier New','Microsoft YaHei Mono','Sarasa Mono SC',monospace">&mdash;</span></div>
       </div>
     </div>
     <div class="modal-foot">
@@ -987,41 +989,200 @@ function _renderCoverageData(d){
   refreshUnityCoverage();
 }
 async function refreshUnityCoverage(){
-  // Prefer smart lookup using selected project's assets_path; fall back to legacy walk-up
   const p=selProj();
-  let d;
-  if(p && p.assets_path){
-    d=await apiRaw("/api/smart_coverage",{project_path:p.assets_path});
-    // Fallback if smart endpoint is not yet available (old server)
-    if(d._jelly_error){
-      d=await apiRaw("/api/unity_coverage");
-    }
-  } else {
-    d=await apiRaw("/api/unity_coverage");
-  }
-  if(!d.found){
-    const msg=d.error||"Summary.xml not found";
-    const tried=Array.isArray(d.tried)&&d.tried.length?`<br><span class="meta" style="font-size:10px">tried:<br>${d.tried.map(esc).join("<br>")}</span>`:"";
-    const uroot=d.unity_root?`<br><span class="meta" style="font-size:10px">unity root: ${esc(d.unity_root)}</span>`:"";
-    $("#covUnityWrap").innerHTML=`<div class="empty" style="font-size:11px">${esc(msg)}<br><span class="meta">在 Unity Editor 中 Window &gt; Analysis &gt; Code Coverage 运行 Play Mode 后生成</span>${uroot}${tried}</div>`;
+  const params={};
+  if(p && p.assets_path) params.project_path=p.assets_path;
+  if(currentRun && currentRun!==".") params.run=currentRun;
+  // Use run_coverage: checks snapshot first, falls back to live Unity report
+  const d=await apiRaw("/api/run_coverage",params);
+  _renderUnityCovData(d);
+  _refreshCoverageSnapshots();
+  _refreshCoverageHistory();
+}
+function _renderUnityCovData(d){
+  const wrap=$("#covUnityWrap");
+  if(!d||!d.found){
+    const msg=(d&&d.error)||"Coverage report not found";
+    wrap.innerHTML=`<div class="empty" style="font-size:11px">${esc(msg)}<br>
+      <span class="meta">在 Unity Editor 中 Window &gt; Analysis &gt; Code Coverage 运行 Play Mode 后生成报告，然后点击 📸 保存快照。</span></div>`;
     return;
   }
-  const seqPct=d.sequence_coverage||0, brnPct=d.branch_coverage||0;
-  let html=`<div class="cov-grid">
-    <div class="cov-card"><h4 data-tip="代码行/语句覆盖率">行覆盖率</h4><div class="cv">${seqPct.toFixed(1)}%</div>${covBar(seqPct)}</div>
-    <div class="cov-card"><h4 data-tip="分支覆盖率">分支覆盖率</h4><div class="cv">${brnPct.toFixed(1)}%</div>${covBar(brnPct)}</div>
-    <div class="cov-card"><h4>已覆盖类</h4><div class="cv">${d.visited_classes}/${d.num_classes}</div></div>
-    <div class="cov-card"><h4>已覆盖方法</h4><div class="cv">${d.visited_methods}/${d.num_methods}</div></div>
-    <div class="cov-card"><h4>序列点</h4><div class="cv" style="font-size:13px">${d.visited_sequence_points}/${d.num_sequence_points}</div></div>
-    <div class="cov-card"><h4>分支点</h4><div class="cv" style="font-size:13px">${d.visited_branch_points}/${d.num_branch_points}</div></div>
-  </div>`;
-  if(d.modules&&d.modules.length){
-    html+=`<table style="margin-top:8px"><thead><tr><th>模块</th><th>行覆盖率</th><th>分支覆盖率</th></tr></thead><tbody>`+
-      d.modules.map(m=>`<tr><td>${esc(m.name||"(unknown)")}</td><td>${(m.sequence_coverage||0).toFixed(1)}%</td><td>${(m.branch_coverage||0).toFixed(1)}%</td></tr>`).join("")+
-      `</tbody></table>`;
+  // Header: snapshot badge / live badge + timestamp + HTML report button
+  const isSnap=!!d.is_snapshot;
+  const snapLabel=isSnap
+    ?`<span class="tag good" style="font-size:10px">📸 快照${d.snapshot_model?" · "+esc(d.snapshot_model):""}</span>`
+    :`<span class="tag" style="font-size:10px;background:var(--accent2)">📡 实时</span>`;
+  const tsLabel=d.generated_on?`<span class="meta" style="font-size:11px">生成: ${esc(d.generated_on)}</span>`:"";
+  const snapTimeLabel=(isSnap&&d.snapshot_time)?`<span class="meta" style="font-size:10px">快照时间: ${esc(d.snapshot_time.replace("T"," ").replace("Z",""))}</span>`:"";
+  const _pp=encodeURIComponent((selProj()||{}).assets_path||'');
+  const htmlBtn=d.index_htm_path
+    ?`<button class="btn ghost sm" onclick="window.open('/coverage_report/index.htm?project_path=${_pp}')" data-tip="在浏览器中打开完整 HTML 覆盖率报告&#10;（通过本地服务器代理，无 file:// 限制）">🔗 HTML 报告</button>`:"";
+  const snapBtn=`<button class="btn ghost sm" onclick="saveCoverageSnapshot()" data-tip="将当前 Unity 覆盖率报告快照保存到当前 Run 目录&#10;Replay 完成后也会自动保存">📸 保存快照</button>`;
+
+  // Summary cards
+  const lp=d.line_coverage||0, mp=d.method_coverage||0;
+  const cardsHtml=`
+    <div class="cov-card"><h4 data-tip="行覆盖率 (Line Coverage)&#10;已覆盖代码行 / 可覆盖代码行">行覆盖率</h4><div class="cv">${lp.toFixed(1)}%</div>${covBar(lp)}</div>
+    <div class="cov-card"><h4 data-tip="方法覆盖率 (Method Coverage)&#10;已覆盖方法数 / 总方法数">方法覆盖率</h4><div class="cv">${mp.toFixed(1)}%</div>${covBar(mp)}</div>
+    <div class="cov-card"><h4>覆盖行</h4><div class="cv" style="font-size:13px">${d.covered_lines||0}<span class="meta">/${d.coverable_lines||0}</span></div></div>
+    <div class="cov-card"><h4>覆盖方法</h4><div class="cv" style="font-size:13px">${d.covered_methods||0}<span class="meta">/${d.total_methods||0}</span></div></div>
+    <div class="cov-card"><h4>未覆盖行</h4><div class="cv" style="font-size:13px;color:var(--bad)">${d.uncovered_lines||0}</div></div>
+    <div class="cov-card"><h4>类数</h4><div class="cv">${(d.classes||[]).length||d.num_classes||0}</div></div>`;
+
+  // Per-class table (sorted by line coverage desc)
+  const classes=(d.classes||[]).slice().sort((a,b)=>(b.coverage||0)-(a.coverage||0));
+  let classTable="";
+  if(classes.length){
+    classTable=`<div style="overflow-x:auto;margin-top:10px">
+      <table style="font-size:11px;min-width:500px">
+        <thead><tr>
+          <th style="text-align:left">类名</th>
+          <th data-tip="行覆盖率">行覆盖率</th>
+          <th data-tip="已覆盖/可覆盖行">行</th>
+          <th data-tip="方法覆盖率">方法覆盖率</th>
+          <th data-tip="已覆盖/总方法">方法</th>
+        </tr></thead>
+        <tbody>`+
+      classes.map(cls=>{
+        const clp=cls.coverage||0, cmp=cls.method_coverage||0;
+        const lc=clp>66?"var(--good)":clp>33?"var(--warn)":"var(--bad)";
+        const mc=cmp>66?"var(--good)":cmp>33?"var(--warn)":"var(--bad)";
+        return `<tr>
+          <td style="color:var(--fg)">${esc(cls.name)}</td>
+          <td><span style="color:${lc};font-weight:600">${clp.toFixed(1)}%</span>&nbsp;${covBar(clp)}</td>
+          <td class="meta">${cls.covered_lines||0}/${cls.coverable_lines||0}</td>
+          <td><span style="color:${mc};font-weight:600">${cmp.toFixed(1)}%</span></td>
+          <td class="meta">${cls.covered_methods||0}/${cls.total_methods||0}</td>
+        </tr>`;
+      }).join("")+
+      `</tbody></table></div>`;
   }
-  html+=`<div class="meta" style="margin-top:8px">来源：${esc(d.xml_path||"")}</div>`;
-  $("#covUnityWrap").innerHTML=html;
+
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      ${snapLabel} ${tsLabel} ${snapTimeLabel}
+      <span style="flex:1"></span>
+      ${htmlBtn} ${snapBtn}
+    </div>
+    <div class="cov-grid">${cardsHtml}</div>
+    ${classTable}`;
+}
+async function saveCoverageSnapshot(){
+  const p=selProj();
+  if(!p||!p.assets_path){alert("请先选择一个配置了 Assets 路径的项目");return;}
+  const runDir=currentRun&&currentRun!=="."?currentRun:"";
+  const model=runDir.replace(/\\/g,"/").split("/").pop()||"";
+  const r=await apiPostRaw("/api/coverage_snapshot",{assets_path:p.assets_path,run_dir:runDir,model});
+  if(r.ok){
+    const archiveInfo=r.archive_ok
+      ?` | 存档: ${(r.archive_dir||"").split(/[\\/]/).slice(-3).join("/")}`
+      :(r.archive_error?` | ⚠️ 存档失败: ${r.archive_error}`:"");
+    appendLog(`[jelly] Coverage snapshot saved → ${r.saved_to} (行覆盖率: ${(r.line_coverage||0).toFixed(1)}%${archiveInfo})`,"ok");
+    refreshUnityCoverage();
+  }else{
+    alert("保存快照失败: "+(r.error||"unknown error"));
+  }
+}
+async function _refreshCoverageSnapshots(){
+  const wrap=$("#covSnapshotsWrap");
+  if(!wrap) return;
+  if(!currentRun||currentRun==="."){wrap.innerHTML="";return;}
+  const d=await api("/api/coverage_snapshots_list");
+  const snaps=(d&&d.snapshots)||[];
+  if(!snaps.length){
+    wrap.innerHTML=`<div class="empty" style="font-size:11px;padding:4px 0">暂无存档快照。点击 📸 保存快照 将当前 Unity 覆盖报告存档。</div>`;
+    return;
+  }
+  const run=currentRun;
+  const rowsHtml=snaps.map((s,i)=>{
+    const lp=(s.line_coverage||0).toFixed(1);
+    const mp=(s.method_coverage||0).toFixed(1);
+    const lc=s.line_coverage>66?'var(--good)':s.line_coverage>33?'var(--warn)':'var(--bad)';
+    const mc=s.method_coverage>66?'var(--good)':s.method_coverage>33?'var(--warn)':'var(--bad)';
+    const ts=s.snapshot_time?s.snapshot_time.replace('T',' ').replace('Z','').slice(0,19):s.ts;
+    const htmlUrl=s.has_html?`/coverage_archive_report/index.htm?run=${encodeURIComponent(run)}&ts=${encodeURIComponent(s.ts)}`:'';
+    const htmlBtn=htmlUrl?`<button class="btn ghost sm" style="font-size:10px" onclick="window.open('${htmlUrl}')" data-tip="打开此快照的完整 HTML 覆盖率报告">🔗 报告</button>`:'';
+    const detId=`csnap-${i}`;
+    const classes=(s.classes||[]).slice().sort((a,b)=>(b.coverage||0)-(a.coverage||0));
+    const hasClasses=classes.length>0;
+    const expandBtn=hasClasses?`<button class="btn ghost sm" style="font-size:10px" onclick="const d=document.getElementById('${detId}');d.style.display=d.style.display==='none'?'':'none'">展开</button>`:''
+    let classRows='';
+    if(hasClasses){
+      classRows=classes.map(cls=>{
+        const clp=cls.coverage||0,cmp=cls.method_coverage||0;
+        const lcl=clp>66?'var(--good)':clp>33?'var(--warn)':'var(--bad)';
+        const mcl=cmp>66?'var(--good)':cmp>33?'var(--warn)':'var(--bad)';
+        return `<tr><td style="color:var(--fg)">${esc(cls.name)}</td>`+
+          `<td><span style="color:${lcl}">${clp.toFixed(1)}%</span>&nbsp;${covBar(clp)}</td>`+
+          `<td class="meta">${cls.covered_lines||0}/${cls.coverable_lines||0}</td>`+
+          `<td><span style="color:${mcl}">${cmp.toFixed(1)}%</span></td>`+
+          `<td class="meta">${cls.covered_methods||0}/${cls.total_methods||0}</td></tr>`;
+      }).join('');
+    }
+    return `<div style="border:1px solid var(--border);border-radius:4px;padding:6px 8px;margin-bottom:4px">`+
+      `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">`+
+        `<span class="meta" style="font-size:10px">${esc(ts)}</span>`+
+        `<span style="color:${lc};font-size:11px;font-weight:600">${lp}%</span><span class="meta" style="font-size:10px">行</span>`+
+        `<span style="color:${mc};font-size:11px;font-weight:600">${mp}%</span><span class="meta" style="font-size:10px">方法</span>`+
+        `<span class="meta" style="font-size:10px">${s.covered_lines||0}/${s.coverable_lines||0}</span>`+
+        `<span style="flex:1"></span>${expandBtn} ${htmlBtn}`+
+      `</div>`+
+      (hasClasses?`<div id="${detId}" style="display:none;overflow-x:auto;margin-top:4px">`+
+        `<table style="font-size:10px;min-width:420px"><thead><tr>`+
+        `<th style="text-align:left">类名</th><th>行覆盖率</th><th>行</th><th>方法覆盖率</th><th>方法</th>`+
+        `</tr></thead><tbody>${classRows}</tbody></table></div>`:'')+
+      `</div>`;
+  }).join('');
+  wrap.innerHTML=`<details open>`+
+    `<summary style="font-size:11px;font-weight:600;color:var(--fg);cursor:pointer;padding:4px 0;user-select:none">`+
+    `📦 本 Run 存档快照 (${snaps.length} 条)</summary>`+
+    `<div style="margin-top:6px">${rowsHtml}</div></details>`;
+}
+async function _refreshCoverageHistory(){
+  const wrap=$("#covHistoryWrap");
+  if(!wrap) return;
+  const scene=(currentRun||"").replace(/\\/g,"/").split("/")[0]||"";
+  const params={};
+  if(scene) params.run_prefix=scene;
+  const d=await apiRaw("/api/coverage_history",params);
+  const history=(d&&d.history)||[];
+  if(!history.length){ wrap.innerHTML=""; return; }
+  const curRun=(currentRun||"").replace(/\\/g,"/");
+  const rows=history.map(h=>{
+    const lp=(h.line_coverage||0).toFixed(1);
+    const mp=(h.method_coverage||0).toFixed(1);
+    const lc=h.line_coverage>66?"var(--good)":h.line_coverage>33?"var(--warn)":"var(--bad)";
+    const mc=h.method_coverage>66?"var(--good)":h.method_coverage>33?"var(--warn)":"var(--bad)";
+    const ts=h.snapshot_time?h.snapshot_time.replace("T"," ").replace("Z","").slice(0,16):"-";
+    const isCur=h.run_dir===curRun;
+    const rs=isCur?"background:rgba(100,180,255,0.10);font-weight:600":"";
+    return `<tr style="${rs}">
+      <td style="color:var(--fg)">${esc(h.scene||"-")}</td>
+      <td>${esc(h.snapshot_model||h.model||"-")}</td>
+      <td class="meta" style="font-size:10px">${esc(ts)}</td>
+      <td><span style="color:${lc};font-weight:600">${lp}%</span></td>
+      <td><span style="color:${mc};font-weight:600">${mp}%</span></td>
+      <td class="meta">${h.covered_lines||0}/${h.coverable_lines||0}</td>
+    </tr>`;
+  }).join("");
+  wrap.innerHTML=`<details open>
+    <summary style="font-size:11px;font-weight:600;color:var(--fg);cursor:pointer;padding:4px 0;user-select:none">
+      📋 历史快照 (${history.length} 条)
+    </summary>
+    <div style="overflow-x:auto;margin-top:6px">
+      <table style="font-size:11px;min-width:420px;width:100%">
+        <thead><tr>
+          <th style="text-align:left">场景</th>
+          <th style="text-align:left">模型</th>
+          <th>快照时间</th>
+          <th>行覆盖率</th>
+          <th>方法覆盖率</th>
+          <th>覆盖行</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </details>`;
 }
 
 /* ---- gate graph (SVG) ---- */
@@ -1065,7 +1226,7 @@ function buildGateSVG(nodesRaw,edges){
   blocked.forEach((n,i)=>{n._x=W-PADX;n._y=posY(blocked,i);});
   // Helper: truncate label
   const shorten=s=>{const base=(s||"").split("#")[0].replace(/blocked_/,"");return base.length>18?base.slice(0,16)+"\u2026":base;};
-  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:${H}px;font-family:system-ui,sans-serif;">`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:${H}px;font-family:'Segoe UI','Microsoft YaHei','PingFang SC','Hiragino Sans GB',system-ui,sans-serif;">`;
   // Column labels
   if(real.length)svg+=`<text x="${PADX}" y="22" fill="var(--accent2)" font-size="10" text-anchor="middle" font-weight="600">State Nodes</text>`;
   if(blocked.length)svg+=`<text x="${W-PADX}" y="22" fill="var(--bad)" font-size="10" text-anchor="middle" font-weight="600">Blocked Targets</text>`;
@@ -1995,7 +2156,22 @@ async function startReplay(){
   appendLog(`[jelly] Replay started -- PID ${r.pid||"?"}`,"ok");
   appendLog(`[jelly] cmd: ${(r.cmd||[]).join(" ")}`);
   setStepState(5,"running");
-  startLogPoll(state=>{setStepState(5,state==="finished"?"done":"error");});
+  startLogPoll(state=>{
+    setStepState(5,state==="finished"?"done":"error");
+    // Auto-save coverage snapshot when replay finishes successfully
+    if(state==="finished"){
+      const p2=selProj();
+      if(p2&&p2.assets_path){
+        const runDir2=currentRun&&currentRun!=="."?currentRun:"";
+        const mdl2=runDir2.replace(/\\/g,"/").split("/").pop()||"";
+        apiPostRaw("/api/coverage_snapshot",{assets_path:p2.assets_path,run_dir:runDir2,model:mdl2})
+          .then(r=>{
+            if(r.ok) appendLog(`[jelly] Coverage snapshot saved (行覆盖率: ${(r.line_coverage||0).toFixed(1)}%)`,"ok");
+            else appendLog(`[jelly] Coverage snapshot: ${r.error||"未找到覆盖率报告（需先在 Unity 开启 Code Coverage）"}`,"warn");
+          });
+      }
+    }
+  });
   setRunState("running");
 }
 async function startClean(){

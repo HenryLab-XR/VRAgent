@@ -11,6 +11,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+# VRAgent sub-project CodeCoverage output (can be very large)
+VRAgent/CodeCoverage/
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
