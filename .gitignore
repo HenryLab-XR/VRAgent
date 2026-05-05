@@ -101,7 +101,21 @@ Thumbs.db
 
 # TP generation outputs
 TP_Generation/Results_VRAgent2.0/
-/VRAgent/CodeCoverage
-/VRAgent/CodeCoverage
-/VRAgent/CodeCoverage
-/VRAgent/_Experiment
+TP_Generation/Results/
+TP_Generation/Results_*/
+TP_Generation/.jelly.pid
+TP_Generation/.jelly.log
+TP_Generation/.jelly.log.err
+TP_Generation/.ui_settings.json
+TP_Generation/.projects.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# Unity project subdirectory
+/VRAgent/CodeCoverage/
+/VRAgent/_Experiment/

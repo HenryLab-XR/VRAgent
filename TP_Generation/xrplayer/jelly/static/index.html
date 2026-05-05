@@ -7,7 +7,7 @@
 <style>
   :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2330;--border:#2a313c;--fg:#e6edf3;--muted:#8b949e;--accent:#79c0ff;--accent2:#58a6ff;--good:#3fb950;--warn:#d29922;--bad:#f85149;--purple:#bc8cff;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--fg);height:100vh;display:flex;flex-direction:column;}
+  body{font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",ui-sans-serif,system-ui,Roboto,sans-serif;background:var(--bg);color:var(--fg);height:100vh;display:flex;flex-direction:column;}
   header{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--panel);flex-shrink:0;}
   header h1{font-size:17px;font-weight:700;white-space:nowrap;}
   header .pulse{width:9px;height:9px;border-radius:50%;background:var(--muted);flex-shrink:0;}
@@ -85,12 +85,11 @@
   .proj-item .pname{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .proj-item .ppath{color:var(--muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .proj-item .pdel,.proj-item .pedit{flex-shrink:0;}
-  /* ---- tooltip ---- */
-  [data-tip]{position:relative;cursor:help;}
-  [data-tip]::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1e2736;color:#e6edf3;border:1px solid #3a4560;border-radius:7px;padding:8px 12px;font-size:12px;line-height:1.6;white-space:pre-wrap;max-width:280px;min-width:120px;box-shadow:0 6px 24px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4);opacity:0;pointer-events:none;z-index:200;transition:opacity .15s ease,transform .15s ease;transform:translateX(-50%) translateY(4px);text-align:left;}
-  [data-tip]:hover::after{opacity:1;transform:translateX(-50%) translateY(0);}
-  [data-tip].tip-right::after{left:0;transform:none;}
-  [data-tip].tip-right:hover::after{transform:translateY(0);}
+  /* ---- tooltip (JS-positioned floating tip; immune to overflow:hidden ancestors) ---- */
+  [data-tip]{cursor:help;}
+  nav [data-tip]{cursor:pointer;}
+  #__tip{position:fixed;pointer-events:none;background:#1e2736;color:#e6edf3;border:1px solid #3a4560;border-radius:7px;padding:8px 12px;font-size:12px;line-height:1.6;white-space:pre-wrap;max-width:320px;min-width:120px;box-shadow:0 6px 24px rgba(0,0,0,.55),0 1px 4px rgba(0,0,0,.4);z-index:99999;opacity:0;transition:opacity .12s ease;text-align:left;}
+  #__tip.show{opacity:1;}
   .btn-browse{display:inline-flex;align-items:center;justify-content:center;padding:4px 8px;background:var(--panel2);color:var(--muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:14px;line-height:1;transition:color .15s,border-color .15s;flex-shrink:0;}
   .btn-browse:hover{color:var(--accent);border-color:var(--accent);}
   /* ---- file browser ---- */
@@ -129,6 +128,49 @@
   .wf-step-body{margin-top:0;}
   .wf-section.collapsed .wf-step-body{display:none;}
   .btn.sm{font-size:11px;padding:3px 8px;}
+  /* ---- tag.live ---- */
+  .tag.live{background:var(--accent);color:#000;animation:pulseDot 1.2s infinite;}
+  /* ---- Gate Graph SVG ---- */
+  .gate-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+  .gate-legend{display:flex;gap:14px;align-items:center;font-size:11px;flex-wrap:wrap;}
+  .gate-legend-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
+  #gateCanvas{background:var(--bg);border:1px solid var(--border);border-radius:6px;width:100%;overflow:auto;}
+  #gateCanvas svg{display:block;}
+  /* ---- Coverage enhanced ---- */
+  .cov-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:14px;}
+  .cov-card{background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:10px 12px;}
+  .cov-card h4{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+  .cov-card .cv{font-size:20px;font-weight:700;}
+  .cov-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:5px;}
+  .cov-bar>span{display:block;height:100%;border-radius:3px;background:var(--accent);}
+  .cov-bar>span.warn{background:var(--warn);}
+  .cov-bar>span.bad{background:var(--bad);}
+  .cov-bar>span.good{background:var(--good);}
+  /* ---- Timeline ---- */
+  .tl-wrap{display:flex;flex-direction:column;max-width:900px;}
+  .tl-item{display:flex;gap:0;position:relative;margin-bottom:4px;}
+  .tl-line{width:28px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
+  .tl-dot{width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);flex-shrink:0;margin-top:10px;}
+  .tl-dot.expand{border-color:var(--good);}
+  .tl-dot.exploit{border-color:var(--warn);}
+  .tl-dot.recover{border-color:var(--bad);}
+  .tl-vline{flex:1;width:2px;background:var(--border);margin-top:2px;}
+  .tl-content{flex:1;padding:7px 12px;background:var(--panel);border:1px solid var(--border);border-radius:5px;margin-left:6px;font-size:12px;}
+  .tl-head{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .tl-body{color:var(--muted);font-size:11px;margin-top:4px;line-height:1.6;}
+  /* ---- Oracle ---- */
+  .oracle-stat-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:14px;}
+  .oracle-bug{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+  .oracle-bug.triggered{background:rgba(63,185,80,.07);}
+  .oracle-bug.pending{background:rgba(248,81,73,.04);}
+  .oracle-status{width:80px;flex-shrink:0;}
+  .oracle-desc{flex:1;}
+  /* ---- Benchmark ---- */
+  .bench-row td{vertical-align:middle;}
+  .bench-bar-wrap{display:inline-block;background:var(--border);border-radius:2px;height:10px;width:80px;vertical-align:middle;}
+  .bench-bar-fill{display:block;height:10px;border-radius:2px;background:var(--accent2);}
+  /* ---- nav tooltips ---- */
+  nav button[data-tip]{cursor:pointer;}
 </style>
 </head>
 <body>
@@ -143,14 +185,19 @@
 </header>
 
 <nav>
-  <button data-tab="workflow" class="active">&#x26A1; Workflow</button>
-  <button data-tab="overview">Overview</button>
-  <button data-tab="scene">Scene</button>
-  <button data-tab="agents">Agents</button>
-  <button data-tab="coverage">Coverage</button>
-  <button data-tab="gate">Gate Graph</button>
-  <button data-tab="iterations">Iterations</button>
-  <button data-tab="files">Files</button>
+  <button data-tab="workflow" class="active" data-tip="Pipeline 工作流&#10;配置项目、运行预处理、启动探索">&#x26A1; Workflow</button>
+  <button data-tab="overview" data-tip="实时总览：场景名、迭代数&#10;覆盖率代理、模式和预算">Overview</button>
+  <button data-tab="scene" data-tip="场景理解结果&#10;关键对象、禁止对象、角色分类">Scene</button>
+  <button data-tab="agents" data-tip="Agent 决策历史&#10;Planner/Verifier/Observer 的每轮输出">Agents</button>
+  <button data-tab="coverage" data-tip="覆盖率指标&#10;代理覆盖 + Unity Code Coverage XML">Coverage</button>
+  <button data-tab="gate" data-tip="门控图可视化&#10;状态节点 + 成功/失败交互边">Gate Graph</button>
+  <button data-tab="iterations" data-tip="迭代日志&#10;每轮测试对象、动作数、覆盖增量">Iterations</button>
+  <button data-tab="timeline" data-tip="时间线视图&#10;按迭代顺序展示模式切换与覆盖变化">Timeline</button>
+  <button data-tab="oracle" data-tip="Oracle Benchmark&#10;预定义 Bug 触发情况（需要 oracle_bugs.json）">Oracle</button>
+  <button data-tab="benchmark" data-tip="多模型横向对比&#10;扫描所有 &lt;scene&gt;/&lt;model&gt; 结果目录">Benchmark</button>
+  <button data-tab="files" data-tip="结果文件浏览&#10;可查看和编辑 JSON/MD/TXT 文件">Files</button>
+  <span style="flex:1"></span>
+  <button onclick="openAppSettings()" class="nav-settings" data-tip="全局设置：模型 / API 地址 / API Key">&#x2699; Settings</button>
 </nav>
 
 <main>
@@ -181,6 +228,11 @@
     <div class="wf-pipe-step" onclick="scrollToStep('wfSec4')">
       <div class="wf-pipe-dot" id="pd4">4</div>
       <div class="wf-pipe-label">探索<br>运行</div>
+    </div>
+    <div class="wf-pipe-sep">&#x2192;</div>
+    <div class="wf-pipe-step" onclick="scrollToStep('wfSec5')">
+      <div class="wf-pipe-dot" id="pd5">&#x25B6;</div>
+      <div class="wf-pipe-label">重放<br>/ 清理</div>
     </div>
   </div>
 
@@ -302,13 +354,10 @@
     <div class="wf-step-body" style="margin-top:12px">
       <div class="row">
         <div class="col">
-          <div class="field-row"><label data-tip="使用的 LLM 模型名称&#10;例：gpt-4o / qwen3-coder">模型</label><input id="cfgModel" value="gpt-4o" placeholder="gpt-4o, qwen3-coder ..." /></div>
-          <div class="field-row"><label data-tip="OpenAI 兼容接口的 Base URL&#10;必须包含 /v1，例如：&#10;https://api.openai.com/v1&#10;https://api.vectorengine.cn/v1">API 地址</label><input id="cfgApiBase" placeholder="https://api.vectorengine.cn/v1" /></div>
-          <div class="field-row">
-            <label data-tip="API 密钥&#10;可保存到本地 .ui_settings.json（不推送到 git）&#10;运行时若字段为空则自动使用已保存的密钥">API Key</label>
-            <input id="cfgApiKey" type="password" placeholder="sk-... （留空则使用本地保存的密钥）" style="flex:1" />
-            <button class="btn ghost sm" id="btnSaveApiKey" onclick="saveApiKey()" style="white-space:nowrap" data-tip="将当前输入的密钥保存到本地 .ui_settings.json&#10;（文件已加入 .gitignore，不会推送到云端）">保存到本地</button>
-            <button class="btn ghost sm" id="btnClearApiKey" onclick="clearApiKey()" style="white-space:nowrap;color:var(--err)" data-tip="清除已保存的本地密钥">清除</button>
+          <div class="field-row" style="align-items:center">
+            <label data-tip="API / Model / Key 等全局设置&#10;在 Settings 中编辑">API 配置</label>
+            <span id="appSettingsDisplay" class="meta" style="flex:1;font-family:monospace;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis">&mdash;</span>
+            <button class="btn ghost sm" onclick="openAppSettings()" data-tip="打开 Settings 面板修改模型 / API 地址 / API Key">&#x2699; Settings</button>
           </div>
           <div class="field-row">
             <label data-tip="最大迭代轮数（探索预算）&#10;每轮对一个对象执行一组动作">预算</label>
@@ -366,6 +415,61 @@
     </div>
   </div>
 
+  <!-- Step 5: Replay -->
+  <div class="wf-section collapsed" id="wfSec5">
+    <div class="wf-step-head" onclick="toggleStep('wfSec5')">
+      <h2>5 &middot; 重放测试计划 <span class="tag" id="step5Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">--replay</span>
+      <span style="flex:1"></span>
+      <span class="wf-step-chevron">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="field-row">
+        <label data-tip="要重放的模型结果目录&#10;自动扫描 Results/ 下所有 &lt;scene&gt;/&lt;model&gt;/test_plan.json">模型结果</label>
+        <select id="replayModelSel" style="flex:1"><option value="auto">-- auto（使用最近运行）--</option></select>
+        <button class="btn ghost sm" onclick="refreshReplayOptions()" data-tip="重新扫描 Results/ 目录">&#x27F3;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="使用 Unity Bridge 连接 Unity Editor&#10;Replay 通常需要开启">Unity Bridge</label>
+        <label style="width:auto;display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer">
+          <input type="checkbox" id="replayUnity" checked /> 连接 Unity
+        </label>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+        <button class="btn primary" onclick="startReplay()" data-tip="启动 Replay 模式&#10;python -m vragent2 --replay &lt;path&gt;">&#x25B6; 重放</button>
+      </div>
+      <div class="meta" style="margin-top:8px;margin-left:118px">
+        命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python -m vragent2 --replay &lt;test_plan.json&gt; [--unity]</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clean Cache -->
+  <div class="wf-section collapsed" id="wfSecClean">
+    <div class="wf-step-head" onclick="toggleStep('wfSecClean')">
+      <h2>&#x1F5D1; 清除缓存</h2>
+      <span class="meta" style="margin-left:8px;font-size:11px">--clean</span>
+      <span style="flex:1"></span>
+      <span class="wf-step-chevron">&#x25B2;</span>
+    </div>
+    <div class="wf-step-body" style="margin-top:10px">
+      <div class="field-row">
+        <label data-tip="清除范围&#10;llm: 仅清除 LLM 缓存&#10;analysis: 仅清除分析缓存&#10;all: 清除所有缓存">清除范围</label>
+        <select id="cleanMode" style="max-width:180px">
+          <option value="llm">llm — 清除 LLM 缓存</option>
+          <option value="analysis">analysis — 清除分析缓存</option>
+          <option value="all">all — 清除所有缓存</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+        <button class="btn danger" onclick="startClean()" data-tip="清除缓存（无需 API Key）&#10;不会删除结果文件">&#x1F5D1; 执行清除</button>
+      </div>
+      <div class="meta" style="margin-top:8px;margin-left:118px">
+        命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python -m vragent2 --clean &lt;llm|analysis|all&gt;</code>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Log -->
   <div class="wf-section">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
@@ -410,18 +514,55 @@
 </section>
 
 <section id="tab-coverage" class="panel">
-  <pre id="coverageJson" class="empty">loading...</pre>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+    <h2 class="sec" data-tip="代理覆盖率（Proxy Coverage）是真实代码覆盖率的近似估算&#10;通过统计已测试对象数、组件类型、动作类型占总体的比例得出&#10;&#10;与 Unity Code Coverage 的区别：&#10;&#10;· 代理覆盖率：无需 Unity Play Mode，实时可用&#10;· Unity Code Coverage：需安装 Code Coverage 包并进入 Play Mode&#10;  能精确统计行覆盖率/分支覆盖率&#10;&#10;代理覆盖率 = 0 表示尚未开始探索&#10;代理覆盖率 = 1.0 表示所有已知对象均已被测试" class="tip-below" style="margin:0">代理覆盖率 (Proxy)</h2>
+    <span style="flex:1"></span>
+    <span class="meta" style="font-size:11px" id="covLocalLabel"></span>
+    <input id="covLocalPathInput" type="text" placeholder="本地 summary.json 路径" style="width:300px;font-size:11px;padding:3px 6px;background:var(--panel2);border:1px solid var(--border);color:var(--fg);border-radius:4px" />
+    <button class="btn ghost sm" onclick="browseFile('covLocalPathInput')" data-tip="浏览选择本地 summary.json 文件">&#x1F4C2;</button>
+    <button class="btn ghost sm" onclick="loadLocalCoverage()" data-tip="从指定路径加载覆盖率文件">加载</button>
+  </div>
+  <div class="cov-grid" id="covProxyGrid"><div class="empty">loading...</div></div>
+  <div class="row">
+    <div class="col">
+      <h3 class="sec">Token 用量</h3>
+      <div id="covTokenWrap"></div>
+    </div>
+    <div class="col">
+      <h3 class="sec" style="display:flex;align-items:center;gap:8px">
+        Unity Code Coverage
+        <span class="meta" style="font-size:10px;font-weight:400" data-tip="需在 Unity Editor 开启 Code Coverage&#10;并运行一次 Play Mode 后生成 Summary.xml&#10;路径：VRAgent/CodeCoverage/Report/Summary.xml">(?)</span>
+        <button class="btn ghost sm" style="margin-left:auto" onclick="refreshUnityCoverage()">&#x27F3;</button>
+      </h3>
+      <div id="covUnityWrap"><div class="empty">loading Unity coverage...</div></div>
+    </div>
+  </div>
 </section>
 
 <section id="tab-gate" class="panel">
-  <div class="row">
-    <div class="col"><h3 class="sec">Nodes</h3><pre id="gateNodes" class="empty">loading...</pre></div>
-    <div class="col"><h3 class="sec">Edges</h3><pre id="gateEdges" class="empty">loading...</pre></div>
+  <div class="gate-toolbar">
+    <div class="gate-legend">
+      <span class="gate-legend-dot" style="background:var(--accent2)"></span><span>状态节点</span>
+      <span class="gate-legend-dot" style="background:var(--bad);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></span><span>阻塞目标</span>
+      <span style="width:20px;height:2px;background:var(--good);display:inline-block;vertical-align:middle"></span><span>成功边（直线=转移，虚弧=自环）</span>
+      <span style="width:20px;height:2px;background:var(--bad);display:inline-block;vertical-align:middle"></span><span>失败/阻塞边</span>
+    </div>
+    <span style="flex:1"></span>
+    <button class="btn ghost sm" onclick="refreshGate()" data-tip="重新加载门控图数据">&#x27F3; 刷新</button>
+    <button class="btn ghost sm" id="gateToggleBtn" onclick="toggleGateView()" data-tip="切换图形/表格视图">切换视图</button>
+  </div>
+  <div id="gateCanvas"></div>
+  <div id="gateTableView" style="display:none;margin-top:10px">
+    <div class="row">
+      <div class="col"><h3 class="sec">Nodes</h3><pre id="gateNodes" class="empty">loading...</pre></div>
+      <div class="col"><h3 class="sec">Edges</h3><pre id="gateEdges" class="empty">loading...</pre></div>
+    </div>
   </div>
 </section>
 
 <section id="tab-iterations" class="panel">
   <div id="iterTableWrap"></div>
+  <div class="meta" style="margin-top:8px;font-size:11px" data-tip="覆盖率增量（Cov Delta）含义：&#10;&#10;· 表示本轮迭代相较上一轮带来的代理覆盖率新增量&#10;· 值越大说明本轮发现了更多新的可测试路径&#10;· 连续多轮为 0 可能触发 Recover 模式&#10;· 计算方式：当前迭代覆盖代理 − 上一迭代覆盖代理&#10;&#10;探索模式说明：&#10;· Expand：发现新房间/新 UI 分支&#10;· Exploit：集中解决某个 Gate 的阻塞条件&#10;· Recover：连续低增益时回退重检索" class="tip-below">? 悬停列标题可查看详细说明</div>
 </section>
 
 <section id="tab-files" class="panel">
@@ -432,6 +573,45 @@
     <button class="btn ghost sm" onclick="refreshFiles()">&#x27F3; Refresh</button>
   </div>
   <ul class="file-list" id="fileList"></ul>
+</section>
+
+<section id="tab-timeline" class="panel">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <h2 class="sec" style="margin:0">时间线</h2>
+    <span class="meta">按迭代顺序展示模式切换与覆盖变化</span>
+    <span style="flex:1"></span>
+    <button class="btn ghost sm" onclick="refreshTimeline()">&#x27F3; 刷新</button>
+  </div>
+  <div id="timelineWrap" class="tl-wrap"><div class="empty">loading...</div></div>
+</section>
+
+<section id="tab-oracle" class="panel">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <h2 class="sec" style="margin:0">Oracle Benchmark</h2>
+    <span class="meta" data-tip="需要 oracle_bugs.json 文件&#10;通常由 Unity 场景 benchmark 目录提供">预定义 Bug 触发情况</span>
+    <span style="flex:1"></span>
+    <span class="meta" style="font-size:11px" id="oracleLocalLabel"></span>
+    <input id="oracleLocalPathInput" type="text" placeholder="本地 oracle_bugs.json 路径" style="width:300px;font-size:11px;padding:3px 6px;background:var(--panel2);border:1px solid var(--border);color:var(--fg);border-radius:4px" />
+    <button class="btn ghost sm" onclick="browseFile('oracleLocalPathInput')" data-tip="浏览选择本地 oracle_bugs.json 文件">&#x1F4C2;</button>
+    <button class="btn ghost sm" onclick="loadLocalOracle()" data-tip="从指定路径加载 Oracle 文件">加载</button>
+    <button class="btn ghost sm" onclick="refreshOracle()">&#x27F3; 刷新</button>
+  </div>
+  <div class="oracle-stat-grid" id="oracleStatGrid"></div>
+  <div id="oracleBugList"></div>
+</section>
+
+<section id="tab-benchmark" class="panel">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <h2 class="sec" style="margin:0">多模型对比</h2>
+    <span class="meta">扫描 Results/&lt;scene&gt;/&lt;model&gt; 目录</span>
+    <span style="flex:1"></span>
+    <span class="meta" style="font-size:11px" id="benchLocalLabel"></span>
+    <input id="benchLocalPathInput" type="text" placeholder="本地 benchmark.json 路径" style="width:300px;font-size:11px;padding:3px 6px;background:var(--panel2);border:1px solid var(--border);color:var(--fg);border-radius:4px" />
+    <button class="btn ghost sm" onclick="browseFile('benchLocalPathInput')" data-tip="浏览选择本地 benchmark.json 文件">&#x1F4C2;</button>
+    <button class="btn ghost sm" onclick="loadLocalBenchmark()" data-tip="从指定路径加载 benchmark 文件">加载</button>
+    <button class="btn ghost sm" onclick="refreshBenchmark()">&#x27F3; 刷新</button>
+  </div>
+  <div id="benchmarkWrap"><div class="empty">loading...</div></div>
 </section>
 
 </main>
@@ -486,6 +666,35 @@
     <div class="modal-foot">
       <button class="btn ghost" onclick="closeModal('modalGlobalCfg')">Cancel</button>
       <button class="btn primary" onclick="saveGlobalCfg()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP SETTINGS MODAL (model / API base / API key) ===== -->
+<div class="modal-overlay" id="modalAppSettings">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-head"><h3>&#x2699; Settings</h3><button class="btn ghost sm" onclick="closeAppSettings()">&#x2715;</button></div>
+    <div class="modal-body">
+      <div class="meta" style="margin-bottom:8px;font-size:11px">这些设置会自动保存到浏览器 localStorage，并在所有 Workflow 运行中使用。</div>
+      <div class="field-row"><label data-tip="使用的 LLM 模型名称&#10;例：gpt-4o / qwen3-coder">模型</label><input id="cfgModel" value="gpt-4o" placeholder="gpt-4o, qwen3-coder ..." style="flex:1" /></div>
+      <div class="field-row"><label data-tip="OpenAI 兼容接口的 Base URL&#10;必须包含 /v1，例如：&#10;https://api.openai.com/v1&#10;https://api.vectorengine.cn/v1">API 地址</label><input id="cfgApiBase" placeholder="https://api.vectorengine.cn/v1" style="flex:1" /></div>
+      <div class="field-row">
+        <label data-tip="API 密钥&#10;可保存到本地 .ui_settings.json（不推送到 git）&#10;运行时若字段为空则自动使用已保存的密钥">API Key</label>
+        <input id="cfgApiKey" type="password" placeholder="sk-... （留空则使用本地保存的密钥）" style="flex:1" />
+      </div>
+      <div class="field-row" style="justify-content:flex-end;gap:6px">
+        <button class="btn ghost sm" id="btnSaveApiKey" onclick="saveApiKey()" data-tip="将当前输入的密钥保存到本地 .ui_settings.json&#10;（文件已加入 .gitignore，不会推送到云端）">保存 Key 到本地</button>
+        <button class="btn ghost sm" id="btnClearApiKey" onclick="clearApiKey()" style="color:var(--err)" data-tip="清除已保存的本地密钥">清除已保存 Key</button>
+      </div>
+      <div style="border-top:1px solid var(--border);margin:10px 0;padding-top:8px">
+        <div class="meta" style="font-size:11px;margin-bottom:4px">当前 Workflow 绑定（只读，可在 Workflow 选择切换）</div>
+        <div class="field-row"><label>项目</label><span id="appSettingsProj" class="meta" style="flex:1;font-family:monospace">&mdash;</span></div>
+        <div class="field-row"><label>场景</label><span id="appSettingsScene" class="meta" style="flex:1;font-family:monospace">&mdash;</span></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeAppSettings()">Close</button>
+      <button class="btn primary" onclick="saveAppSettings()">Save &amp; Close</button>
     </div>
   </div>
 </div>
@@ -558,6 +767,11 @@ async function apiRaw(path, params={}){
   try{ return await (await fetch(path+(qs.toString()?"?"+qs:""),{cache:"no-store"})).json(); }
   catch(e){ return {_jelly_error:String(e)}; }
 }
+async function apiPostRaw(path, body={}){
+  try{
+    return await (await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();
+  }catch(e){ return {error:String(e)}; }
+}
 async function post(path, body={}){
   try{
     return await (await fetch(path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})).json();
@@ -568,10 +782,53 @@ function bar(v){const p=Math.round(Math.max(0,Math.min(1,v))*100);return `<span 
 function tag(t,c=""){return `<span class="tag ${c}">${esc(t)}</span>`;}
 function fmtBytes(n){if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(1)+" MB";}
 
+/* ---- floating tooltip (immune to overflow:hidden ancestors) ---- */
+(function initFloatingTip(){
+  let tipEl=null;
+  function ensureTip(){
+    if(!tipEl){
+      tipEl=document.createElement("div");
+      tipEl.id="__tip";
+      document.body.appendChild(tipEl);
+    }
+    return tipEl;
+  }
+  function show(target){
+    const txt=target.getAttribute("data-tip");
+    if(!txt) return;
+    const el=ensureTip();
+    el.textContent=txt;
+    // Position: prefer above; flip below if not enough room; clamp horizontally.
+    const r=target.getBoundingClientRect();
+    el.classList.add("show");
+    const tw=el.offsetWidth, th=el.offsetHeight;
+    const margin=8;
+    let top=r.top-th-margin;
+    if(top<6) top=r.bottom+margin; // flip below
+    let left=r.left+(r.width-tw)/2;
+    if(left<6) left=6;
+    if(left+tw>window.innerWidth-6) left=window.innerWidth-tw-6;
+    el.style.top=top+"px";
+    el.style.left=left+"px";
+  }
+  function hide(){ if(tipEl) tipEl.classList.remove("show"); }
+  document.addEventListener("mouseover",e=>{
+    const t=e.target.closest("[data-tip]");
+    if(t) show(t);
+  });
+  document.addEventListener("mouseout",e=>{
+    const t=e.target.closest("[data-tip]");
+    if(t) hide();
+  });
+  document.addEventListener("focusin",e=>{ const t=e.target.closest("[data-tip]"); if(t) show(t); });
+  document.addEventListener("focusout",hide);
+  document.addEventListener("scroll",hide,true);
+})();
+
 /* ---- tabs ---- */
 function setTab(name){
   _activeTab=name;
-  $$("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
+  $$("nav button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
   $$(".panel").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
   if(name==="overview")    refreshOverview();
   if(name==="scene")       refreshScene();
@@ -579,9 +836,12 @@ function setTab(name){
   if(name==="coverage")    refreshCoverage();
   if(name==="gate")        refreshGate();
   if(name==="iterations")  refreshIterations();
+  if(name==="timeline")    refreshTimeline();
+  if(name==="oracle")      refreshOracle();
+  if(name==="benchmark")   refreshBenchmark();
   if(name==="files")       refreshFiles();
 }
-$$("nav button").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+$$("nav button[data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
 
 /* ---- run selector ---- */
 async function refreshRuns(){
@@ -600,22 +860,27 @@ async function refreshRuns(){
 $("#runSelect").addEventListener("change",()=>{ currentRun=$("#runSelect").value; refreshActiveTab(); });
 function refreshActiveTab(){
   const map={overview:refreshOverview,scene:refreshScene,agents:refreshAgents,
-             coverage:refreshCoverage,gate:refreshGate,iterations:refreshIterations,files:refreshFiles};
+             coverage:refreshCoverage,gate:refreshGate,iterations:refreshIterations,
+             timeline:refreshTimeline,oracle:refreshOracle,benchmark:refreshBenchmark,
+             files:refreshFiles};
   if(map[_activeTab]) map[_activeTab]();
 }
 
 /* ---- overview ---- */
-function card(title,val,sub){return `<div class="card"><h3>${title}</h3><div class="v ${String(val).length>12?"sm":""}">${val}</div>${sub?`<div class="meta" style="margin-top:3px">${sub}</div>`:""}</div>`;}
+function card(title,val,sub,tip){return `<div class="card"${tip?` data-tip="${esc(tip)}"`:``}><h3>${title}</h3><div class="v ${String(val).length>12?"sm":""}">${val}</div>${sub?`<div class="meta" style="margin-top:3px">${sub}</div>`:""}</div>`;}
 
 async function refreshOverview(){
   const [st,cov,tr]=await Promise.all([api("/api/status"),api("/api/coverage"),api("/api/agent_trace",{limit:10})]);
   const cards=[
-    card("Scene",st.scene_name||"--"),card("Iteration",st.iteration??0),
-    card("Actions",st.actions_total??0),card("Tested",( st.tested_objects||[]).length),
-    card("Mode",st.explorer_mode||"--"),card("Budget left",st.budget_remaining??"--"),
-    card("Cov proxy",(st.total_coverage_proxy??0).toFixed(3),bar(st.total_coverage_proxy??0)),
-    card("Unity",st.unity_bridge_connected?tag("connected","good"):tag("offline")),
-    card("Status",st.finished?tag("finished"):tag("running","good")),
+    card("Scene",st.scene_name||"--","","当前测试的 Unity 场景名称"),
+    card("Iteration",st.iteration??0,"","已完成的探索迭代轮数"),
+    card("Actions",st.actions_total??0,"","已执行的总动作数"),
+    card("Tested",(st.tested_objects||[]).length,"","已测试的对象数量"),
+    card("Mode",st.explorer_mode||"--","","当前探索模式：Expand/Exploit/Recover"),
+    card("Budget left",st.budget_remaining??"--","","剩余探索预算（迭代轮数）"),
+    card("Cov proxy",(st.total_coverage_proxy??0).toFixed(3),bar(st.total_coverage_proxy??0),"覆盖率代理值（0-1）&#10;基于已测试对象/组件/动作比例估算"),
+    card("Unity",st.unity_bridge_connected?tag("connected","good"):tag("offline"),"","Unity TCP Bridge 连接状态"),
+    card("Status",st.finished?tag("finished"):tag("running","good"),"","当前运行状态"),
   ];
   $("#overviewGrid").innerHTML=cards.join("");
   const tail=(tr.tail||[]).slice().reverse();
@@ -649,18 +914,241 @@ async function refreshAgents(){
 }
 
 /* ---- coverage ---- */
-async function refreshCoverage(){ const d=await api("/api/coverage"); $("#coverageJson").textContent=JSON.stringify(d,null,2); }
+function covBar(v,cls=""){const p=Math.max(0,Math.min(100,Math.round(v)));const c=p>66?"good":p>33?"warn":"bad";return `<div class="cov-bar"><span class="${cls||c}" style="width:${p}%"></span></div>`;}
 
-/* ---- gate ---- */
-async function refreshGate(){ const d=await api("/api/gate_graph"); $("#gateNodes").textContent=JSON.stringify(d.nodes||[],null,2); $("#gateEdges").textContent=JSON.stringify(d.edges||[],null,2); }
+// ── Local file loaders ──────────────────────────────────────────────────
+async function _postLoadLocalJson(path){
+  const r=await apiPostRaw("/api/load_local_json",{file_path:path});
+  if(r.error){alert("加载失败: "+r.error);return null;}
+  return r.data;
+}
+async function loadLocalCoverage(){
+  const path=$("#covLocalPathInput").value.trim();
+  if(!path){alert("请先输入或浏览选择 summary.json 路径");return;}
+  const data=await _postLoadLocalJson(path);
+  if(!data)return;
+  $("#covLocalLabel").textContent="📂 "+path.split(/[\\/]/).pop();
+  _renderCoverageData(data);
+}
+async function loadLocalOracle(){
+  const path=$("#oracleLocalPathInput").value.trim();
+  if(!path){alert("请先输入或浏览选择 oracle_bugs.json 路径");return;}
+  const data=await _postLoadLocalJson(path);
+  if(!data)return;
+  $("#oracleLocalLabel").textContent="📂 "+path.split(/[\\/]/).pop();
+  _renderOracleData(data);
+}
+async function loadLocalBenchmark(){
+  const path=$("#benchLocalPathInput").value.trim();
+  if(!path){alert("请先输入或浏览选择 benchmark.json 路径");return;}
+  const data=await _postLoadLocalJson(path);
+  if(!data)return;
+  $("#benchLocalLabel").textContent="📂 "+path.split(/[\\/]/).pop();
+  _renderBenchmarkData(Array.isArray(data)?data:(data.entries||[]));
+}
+
+async function refreshCoverage(){
+  const d=await api("/api/coverage");
+  _renderCoverageData(d);
+}
+function _renderCoverageData(d){
+  const ex=d.explorer||{};
+  const metrics=[
+    {k:"总覆盖代理",v:(d.total_actions??d.total_traces??ex.total_coverage??0),fmt:"num"},
+    {k:"覆盖代理",v:ex.total_coverage??0,fmt:"pct"},
+    {k:"迭代数",v:d.iterations??0,fmt:"num"},
+    {k:"动作总数",v:d.total_actions??0,fmt:"num"},
+    {k:"Gate 总数",v:d.gate_graph_edges??0,fmt:"num"},
+    {k:"已解 Gate",v:ex.gates_solved??0,fmt:"num"},
+    {k:"剩余预算",v:ex.budget_remaining??"--",fmt:"raw"},
+    {k:"探索模式",v:ex.mode||"--",fmt:"raw"},
+  ];
+  const cardsHtml=metrics.map(m=>{
+    let disp="--";
+    if(m.fmt==="pct"){const pv=typeof m.v==="number"?m.v:0;disp=`<div class="cv">${(pv*100).toFixed(1)}%</div>${covBar(pv*100)}`;}
+    else if(m.fmt==="num"){disp=`<div class="cv">${m.v}</div>`;}
+    else{disp=`<div class="cv" style="font-size:14px">${esc(String(m.v))}</div>`;}
+    return `<div class="cov-card"><h4>${m.k}</h4>${disp}</div>`;
+  }).join("");
+  $("#covProxyGrid").innerHTML=cardsHtml||`<div class="empty">No coverage data yet.</div>`;
+  // Token usage table
+  const tok=d.token_usage||{};
+  const tokTotal=tok._total||{};
+  const agents=Object.entries(tok).filter(([k])=>k!=="total"&&k!=="total_tokens"&&k!=="calls"&&k!=="_total");
+  if(agents.length){
+    let th=`<table><thead><tr><th>Agent</th><th data-tip="模型输入 token">输入</th><th data-tip="模型输出 token">输出</th><th>总计</th><th>调用次数</th></tr></thead><tbody>`;
+    let rows=agents.map(([k,v])=>{const vv=v||{};return `<tr><td>${esc(k)}</td><td>${(vv.prompt_tokens||0).toLocaleString()}</td><td>${(vv.completion_tokens||0).toLocaleString()}</td><td style="color:var(--accent)">${(vv.total_tokens||0).toLocaleString()}</td><td>${vv.calls||0}</td></tr>`;}).join("");
+    const tot=tokTotal;
+    rows+=`<tr style="font-weight:700;border-top:2px solid var(--border)"><td>合计</td><td>${(tot.prompt_tokens||0).toLocaleString()}</td><td>${(tot.completion_tokens||0).toLocaleString()}</td><td style="color:var(--accent)">${(tot.total_tokens||0).toLocaleString()}</td><td>${tot.calls||0}</td></tr>`;
+    $("#covTokenWrap").innerHTML=th+rows+`</tbody></table>`;
+  } else {
+    $("#covTokenWrap").innerHTML=`<div class="empty">No token data.</div>`;
+  }
+  refreshUnityCoverage();
+}
+async function refreshUnityCoverage(){
+  // Prefer smart lookup using selected project's assets_path; fall back to legacy walk-up
+  const p=selProj();
+  let d;
+  if(p && p.assets_path){
+    d=await apiRaw("/api/smart_coverage",{project_path:p.assets_path});
+    // Fallback if smart endpoint is not yet available (old server)
+    if(d._jelly_error){
+      d=await apiRaw("/api/unity_coverage");
+    }
+  } else {
+    d=await apiRaw("/api/unity_coverage");
+  }
+  if(!d.found){
+    const msg=d.error||"Summary.xml not found";
+    const tried=Array.isArray(d.tried)&&d.tried.length?`<br><span class="meta" style="font-size:10px">tried:<br>${d.tried.map(esc).join("<br>")}</span>`:"";
+    const uroot=d.unity_root?`<br><span class="meta" style="font-size:10px">unity root: ${esc(d.unity_root)}</span>`:"";
+    $("#covUnityWrap").innerHTML=`<div class="empty" style="font-size:11px">${esc(msg)}<br><span class="meta">在 Unity Editor 中 Window &gt; Analysis &gt; Code Coverage 运行 Play Mode 后生成</span>${uroot}${tried}</div>`;
+    return;
+  }
+  const seqPct=d.sequence_coverage||0, brnPct=d.branch_coverage||0;
+  let html=`<div class="cov-grid">
+    <div class="cov-card"><h4 data-tip="代码行/语句覆盖率">行覆盖率</h4><div class="cv">${seqPct.toFixed(1)}%</div>${covBar(seqPct)}</div>
+    <div class="cov-card"><h4 data-tip="分支覆盖率">分支覆盖率</h4><div class="cv">${brnPct.toFixed(1)}%</div>${covBar(brnPct)}</div>
+    <div class="cov-card"><h4>已覆盖类</h4><div class="cv">${d.visited_classes}/${d.num_classes}</div></div>
+    <div class="cov-card"><h4>已覆盖方法</h4><div class="cv">${d.visited_methods}/${d.num_methods}</div></div>
+    <div class="cov-card"><h4>序列点</h4><div class="cv" style="font-size:13px">${d.visited_sequence_points}/${d.num_sequence_points}</div></div>
+    <div class="cov-card"><h4>分支点</h4><div class="cv" style="font-size:13px">${d.visited_branch_points}/${d.num_branch_points}</div></div>
+  </div>`;
+  if(d.modules&&d.modules.length){
+    html+=`<table style="margin-top:8px"><thead><tr><th>模块</th><th>行覆盖率</th><th>分支覆盖率</th></tr></thead><tbody>`+
+      d.modules.map(m=>`<tr><td>${esc(m.name||"(unknown)")}</td><td>${(m.sequence_coverage||0).toFixed(1)}%</td><td>${(m.branch_coverage||0).toFixed(1)}%</td></tr>`).join("")+
+      `</tbody></table>`;
+  }
+  html+=`<div class="meta" style="margin-top:8px">来源：${esc(d.xml_path||"")}</div>`;
+  $("#covUnityWrap").innerHTML=html;
+}
+
+/* ---- gate graph (SVG) ---- */
+let _gateGraphView="graph"; // "graph" | "table"
+function toggleGateView(){
+  _gateGraphView=(_gateGraphView==="graph")?"table":"graph";
+  $("#gateCanvas").style.display=_gateGraphView==="graph"?"":"none";
+  $("#gateTableView").style.display=_gateGraphView==="table"?"":"none";
+  $("#gateToggleBtn").textContent=_gateGraphView==="graph"?"切换表格":"切换图形";
+}
+async function refreshGate(){
+  const d=await api("/api/gate_graph");
+  const nodesRaw=d.nodes||{};
+  const edges=d.edges||[];
+  // Render table view (fallback)
+  $("#gateNodes").textContent=JSON.stringify(nodesRaw,null,2);
+  $("#gateEdges").textContent=JSON.stringify(edges,null,2);
+  // Render SVG graph
+  const svg=buildGateSVG(nodesRaw,edges);
+  $("#gateCanvas").innerHTML=svg;
+}
+function buildGateSVG(nodesRaw,edges){
+  // Collect nodes from dict or array
+  const nodeMap={};
+  if(Array.isArray(nodesRaw)){nodesRaw.forEach(n=>{const id=n.node_id||n.id||String(Math.random());nodeMap[id]={...n,node_id:id};});}
+  else{Object.entries(nodesRaw).forEach(([k,v])=>nodeMap[k]={...v,node_id:k});}
+  // Add nodes that appear only in edges
+  edges.forEach(e=>{
+    if(!nodeMap[e.from_state])nodeMap[e.from_state]={node_id:e.from_state,label:e.from_state};
+    if(!nodeMap[e.to_state])nodeMap[e.to_state]={node_id:e.to_state,label:e.to_state};
+  });
+  const allIds=Object.keys(nodeMap);
+  if(!allIds.length)return`<div class="empty">No gate graph data for this run.</div>`;
+  // Classify nodes
+  const real=allIds.filter(id=>!id.startsWith("blocked_")).map(id=>nodeMap[id]);
+  const blocked=allIds.filter(id=>id.startsWith("blocked_")).map(id=>nodeMap[id]);
+  // Layout
+  const W=800,H=Math.max(260,Math.max(real.length,blocked.length)*80+80),R=22,PADX=120;
+  const posY=(arr,i)=>arr.length<=1?H/2:60+i*(H-120)/Math.max(arr.length-1,1);
+  real.forEach((n,i)=>{n._x=PADX;n._y=posY(real,i);});
+  blocked.forEach((n,i)=>{n._x=W-PADX;n._y=posY(blocked,i);});
+  // Helper: truncate label
+  const shorten=s=>{const base=(s||"").split("#")[0].replace(/blocked_/,"");return base.length>18?base.slice(0,16)+"\u2026":base;};
+  let svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:${H}px;font-family:system-ui,sans-serif;">`;
+  // Column labels
+  if(real.length)svg+=`<text x="${PADX}" y="22" fill="var(--accent2)" font-size="10" text-anchor="middle" font-weight="600">State Nodes</text>`;
+  if(blocked.length)svg+=`<text x="${W-PADX}" y="22" fill="var(--bad)" font-size="10" text-anchor="middle" font-weight="600">Blocked Targets</text>`;
+  // Stats
+  const succEdges=edges.filter(e=>e.success).length, failEdges=edges.filter(e=>!e.success).length;
+  svg+=`<text x="${W/2}" y="16" fill="var(--muted)" font-size="9" text-anchor="middle">${succEdges} \u6210\u529f\u8fb9 (✓)  |  ${failEdges} \u963b\u585e\u8fb9 (✗)</text>`;
+  // Arrowhead markers (defined first so they're available)
+  svg+=`<defs>
+    <marker id="ah_ok" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="var(--good)"/></marker>
+    <marker id="ah_fail" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="var(--bad)"/></marker>
+  </defs>`;
+  // Edges
+  let selfLoopIdx={};
+  edges.forEach(e=>{
+    const f=nodeMap[e.from_state],t=nodeMap[e.to_state];
+    if(!f||!t)return;
+    const color=e.success?"var(--good)":"var(--bad)";
+    const label=shorten(e.action||"");
+    const isSelfLoop=(e.from_state===e.to_state);
+    if(isSelfLoop){
+      // Draw a small arc above the node to indicate a successful self-loop
+      const idx=selfLoopIdx[e.from_state]||0;
+      selfLoopIdx[e.from_state]=idx+1;
+      const cx=f._x,cy=f._y,arcR=R+10+idx*14;
+      const ax=cx-arcR,bx=cx+arcR,ay=cy;
+      svg+=`<path d="M${ax},${ay} A${arcR},${arcR} 0 1,1 ${bx},${ay}" fill="none" stroke="${color}" stroke-width="1.4" opacity="0.85" stroke-dasharray="4 2" marker-end="url(#ah_ok)">
+        <title>✓ ${esc(e.action||"")}</title></path>`;
+      // Label above arc
+      const lx=cx,ly=cy-arcR-4;
+      svg+=`<rect x="${lx-label.length*2.5-2}" y="${ly-9}" width="${label.length*5+4}" height="11" rx="2" fill="var(--panel)" opacity="0.9"/>`;
+      svg+=`<text x="${lx}" y="${ly}" fill="${color}" font-size="8" text-anchor="middle">${esc(label)}</text>`;
+    } else {
+      const x1=f._x,y1=f._y,x2=t._x,y2=t._y;
+      const mx=(x1+x2)/2;
+      svg+=`<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" fill="none" stroke="${color}" stroke-width="1.6" opacity="0.75" marker-end="url(#ah_${e.success?'ok':'fail'})">
+        <title>${esc(e.action||"")}${e.evidence?"\n\n"+esc(e.evidence):""}</title></path>`;
+      // Edge label at midpoint
+      const lx=mx,ly=(y1+y2)/2-6;
+      svg+=`<rect x="${lx-label.length*2.8-2}" y="${ly-9}" width="${label.length*5.6+4}" height="13" rx="2" fill="var(--panel2)" opacity="0.85"/>`;
+      svg+=`<text x="${lx}" y="${ly}" fill="${color}" font-size="9" text-anchor="middle">${esc(label)}</text>`;
+    }
+  });
+  // Nodes
+  [...real,...blocked].forEach(n=>{
+    const isB=n.node_id.startsWith("blocked_");
+    const cx=n._x,cy=n._y;
+    const label=shorten(n.label||n.node_id);
+    if(isB){
+      // Diamond
+      const d2=R+4;
+      svg+=`<polygon points="${cx},${cy-d2} ${cx+d2},${cy} ${cx},${cy+d2} ${cx-d2},${cy}" fill="var(--panel2)" stroke="var(--bad)" stroke-width="1.6">
+        <title>${esc(n.label||n.node_id)}</title></polygon>`;
+    } else {
+      svg+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--panel2)" stroke="var(--accent2)" stroke-width="1.6">
+        <title>${esc(n.label||n.node_id)}</title></circle>`;
+    }
+    // Text
+    svg+=`<text x="${cx}" y="${cy+3}" fill="var(--fg)" font-size="9" text-anchor="middle" font-weight="600" pointer-events="none">${esc(label)}</text>`;
+    // Mode/flags badge
+    const flags=n.flags||{};
+    const flagStr=Object.entries(flags).filter(([,v])=>v).map(([k])=>k).join(",");
+    if(flagStr)svg+=`<text x="${cx}" y="${cy+15}" fill="var(--muted)" font-size="8" text-anchor="middle">${esc(flagStr.slice(0,16))}</text>`;
+  });
+  svg+="</svg>";
+  return svg;
+}
 
 /* ---- iterations ---- */
 async function refreshIterations(){
   const d=await api("/api/iterations",{limit:200});
   const rows=(d.tail||[]).slice().reverse();
   if(!rows.length){$("#iterTableWrap").innerHTML=`<div class="empty">No iterations yet.</div>`;return;}
-  $("#iterTableWrap").innerHTML=`<table><thead><tr><th>#</th><th>object</th><th>actions</th><th>passed</th><th>cov delta</th><th>mode</th></tr></thead><tbody>`+
-    rows.map(r=>`<tr><td class="iter">${r.iteration??""}</td><td>${esc(r.gobj_name||r.object||"")}</td><td>${r.actions_count??r.n_actions??""}</td><td>${r.verifier_passed!=null?(r.verifier_passed?tag("pass","good"):tag("fail","bad")):""}</td><td>${(r.coverage_delta??0).toFixed(3)}</td><td>${r.explorer_mode?tag(r.explorer_mode):""}</td></tr>`).join("")+
+  $("#iterTableWrap").innerHTML=`<table><thead><tr>
+    <th data-tip="迭代编号">#</th>
+    <th data-tip="本轮测试的对象名称">object</th>
+    <th data-tip="本轮对象执行的动作数量&#10;包含 Grab/Trigger/Transform 等所有动作类型">actions</th>
+    <th data-tip="Verifier Agent 验证是否通过&#10;pass = 动作可执行且完成&#10;fail = 动作包含错误或被拒绝执行">passed</th>
+    <th data-tip="覆盖率增量（Coverage Delta）&#10;本轮迭代带来的代理覆盖率新增量&#10;&#10;· 正值 = 发现新覆盖路径&#10;· 等于 0 = 重复探索已知区域&#10;· 连续 0 可能触发 Recover 模式切换&#10;&#10;计算：当前迭代覆盖 - 上一迭代覆盖">cov delta</th>
+    <th data-tip="探索模式&#10;· Expand: 发现新环境/UI 分支&#10;· Exploit: 集中解决某 gate 阻塞条件&#10;· Recover: 连续低增益时回退重检索">mode</th>
+  </tr></thead><tbody>`+
+    rows.map(r=>`<tr><td class="iter">${r.iteration??""}</td><td>${esc(r.gobj_name||r.object||"")}</td><td>${r.actions_count??r.n_actions??""}</td><td>${r.verifier_passed!=null?(r.verifier_passed?tag("pass","good"):tag("fail","bad")):""}</td><td title="本轮返回的代理覆盖率增量">${(r.coverage_delta??0).toFixed(4)}</td><td>${r.explorer_mode?tag(r.explorer_mode):""}</td></tr>`).join("")+
     `</tbody></table>`;
 }
 
@@ -739,6 +1227,7 @@ async function saveApiKey(){
   if(r.ok){
     $("#cfgApiKey").value="";
     $("#cfgApiKey").placeholder="已从本地文件加载（留空使用保存的密钥）";
+    if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay();
     alert("密钥已保存到本地 .ui_settings.json");
   } else { alert("保存失败: "+(r.error||JSON.stringify(r))); }
 }
@@ -858,6 +1347,7 @@ function restoreRunCfg(){
     _RUN_CFG_KEYS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.value=data[k];});
     _RUN_CFG_CHECKS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.checked=!!data[k];});
   }catch(e){}
+  if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay();
 }
 function sanitizeSceneDerivedState(){
   const badIds=["ppSceneName","ppResultsDir","ppResultsDir2","ppResultsDir3","cfgHierarchyJson","cfgSceneGml"];
@@ -902,8 +1392,9 @@ function renderProjSel(){
 function fillFromProj(p){ return _fillFromProjAsync(p); }
 async function _fillFromProjAsync(p){
   $("#wfProjectMeta").textContent=p.assets_path?"Assets: "+p.assets_path:"";
-  if(p.default_model) $("#cfgModel").value=p.default_model;
-  if(p.results_dir)   $("#cfgOutput").value=p.results_dir;
+  // Only fill model/output if user hasn't set them yet (preserve user overrides + localStorage restore)
+  if(p.default_model && !$("#cfgModel").value.trim()) $("#cfgModel").value=p.default_model;
+  if(p.results_dir   && !$("#cfgOutput").value.trim()) $("#cfgOutput").value=p.results_dir;
   // Always re-detect Unity project root from server (walk up from assets_path)
   if(p.assets_path){
     const d=await apiRaw("/api/find_project_root",{path:p.assets_path});
@@ -917,7 +1408,7 @@ async function _fillFromProjAsync(p){
   }
   refreshScenes();
 }
-$("#wfProjectSel").addEventListener("change",async ()=>{ const p=selProj(); if(p) await fillFromProj(p); });
+$("#wfProjectSel").addEventListener("change",async ()=>{ const p=selProj(); if(p) await fillFromProj(p); if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay(); });
 function onSceneChange(forcedScene){
   const sceneValue=(typeof forcedScene==="string")
     ? forcedScene
@@ -940,7 +1431,7 @@ function onSceneChange(forcedScene){
   saveRunCfg();
   refreshPreprocessState();
 }
-$("#wfSceneSel").addEventListener("change", onSceneChange);
+$("#wfSceneSel").addEventListener("change", ()=>{ onSceneChange(); if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay(); });
 // Sync ppResultsDir to steps 2/3 on change
 $("#ppResultsDir").addEventListener("change",()=>{
   const v=$("#ppResultsDir").value;
@@ -1239,7 +1730,291 @@ function fbConfirm(){
 /* ---- modals ---- */
 function openModal(id){$("#"+id).classList.add("open");}
 function closeModal(id){$("#"+id).classList.remove("open");}
+
+/* ---- App Settings (model / API base / API key) ---- */
+function _maskKey(){
+  // Returns a short status hint (server tells us if a key is saved on disk).
+  // The actual key value is never returned by /api/ui_settings.
+  return $("#cfgApiKey").placeholder.indexOf("已从本地")>=0 ? "(local)" : "(empty)";
+}
+function _updateAppSettingsDisplay(){
+  const m=$("#cfgModel").value.trim()||"--";
+  const b=$("#cfgApiBase").value.trim()||"--";
+  const k=_maskKey();
+  const el=$("#appSettingsDisplay");
+  if(el) el.innerHTML=`<b>${esc(m)}</b> @ ${esc(b)} <span style="color:var(--muted)">key:${k}</span>`;
+  const pj=$("#wfProjectSel"); if(pj) $("#appSettingsProj").textContent=pj.value||"未选择";
+  const sc=$("#wfSceneSel"); if(sc) $("#appSettingsScene").textContent=sc.value||"未选择";
+}
+function openAppSettings(){
+  _updateAppSettingsDisplay();
+  openModal("modalAppSettings");
+}
+function closeAppSettings(){ closeModal("modalAppSettings"); }
+function saveAppSettings(){
+  saveRunCfg();
+  _updateAppSettingsDisplay();
+  closeAppSettings();
+}
 $$(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o) o.classList.remove("open");}));
+
+/* ---- timeline ---- */
+async function refreshTimeline(){
+  const [iters, decisions] = await Promise.all([
+    api("/api/iterations",{limit:500}),
+    api("/api/agent_trace",{limit:500}),
+  ]);
+  const rows=(iters.tail||[]).slice().reverse();
+  const wrap=$("#timelineWrap");
+  if(!rows.length){wrap.innerHTML=`<div class="empty">No iteration data yet.</div>`;return;}
+  const decMap={};
+  (decisions.tail||[]).forEach(d=>{if(d.iteration!=null)decMap[d.iteration]=d;});
+  let html="";
+  rows.forEach((r,idx)=>{
+    const mode=(r.explorer_mode||"").toLowerCase();
+    const dotCls=mode==="exploit"?"exploit":mode==="expand"?"expand":mode==="recover"?"recover":"";
+    const dec=decMap[r.iteration];
+    const covDelta=(r.coverage_delta||0).toFixed(4);
+    const passed=r.verifier_passed;
+    const showConnector=idx<rows.length-1;
+    html+=`<div class="tl-item">
+      <div class="tl-line">
+        <div class="tl-dot ${dotCls}" title="${esc(mode)}"></div>
+        ${showConnector?`<div class="tl-vline"></div>`:""}
+      </div>
+      <div class="tl-content">
+        <div class="tl-head">
+          <span class="tag" style="font-size:10px">#${r.iteration??idx}</span>
+          ${r.explorer_mode?`<span class="tag ${dotCls==="expand"?"good":dotCls==="exploit"?"warn":"bad"}" style="font-size:9px">${esc(r.explorer_mode)}</span>`:""}
+          <strong style="font-size:12px">${esc(r.gobj_name||r.object||"(unknown)")}</strong>
+          ${passed!=null?(passed?`<span class="tag good" style="font-size:9px">pass</span>`:`<span class="tag bad" style="font-size:9px">fail</span>`):""}
+          <span class="meta" style="margin-left:auto">&#x394; cov: <b>${covDelta}</b></span>
+          <span class="meta">${r.actions_count??r.n_actions??""} actions</span>
+        </div>
+        ${dec?`<div class="tl-body">${esc(dec.summary||"")}${dec.next_hint?`<br><span style="color:var(--accent)">&#x21AA; ${esc(dec.next_hint)}</span>`:""}</div>`:""}
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML=html;
+}
+
+/* ---- oracle ---- */
+async function refreshOracle(){
+  // Smart-load: try Unity-side oracle file first (next to .unity scene), fall back to results dir
+  const p=selProj();
+  const sceneName=$("#wfSceneSel").value||"";
+  if(p && p.assets_path){
+    const sd=await apiRaw("/api/smart_oracle",{project_path:p.assets_path, scene_name:sceneName});
+    if(sd && sd.found){
+      // Got oracle definition; now try to evaluate against run logs
+      const ev=await apiRaw("/api/oracle_evaluate");
+      if(ev && ev.found && ev.oracles){
+        // Merge triggered status back — use evaluated result but keep smart oracle path label
+        _renderOracleData(ev);
+        const note=document.getElementById("oracleLocalLabel");
+        if(note) note.textContent="读自 Unity侧: "+(sd.path||"")+" (已评估)";
+      } else {
+        _renderOracleData(sd.data||{oracles:[]});
+        const note=document.getElementById("oracleLocalLabel");
+        if(note) note.textContent="读自 Unity侧: "+(sd.path||"");
+      }
+      return;
+    }
+  }
+  // Try evaluated oracle first (has triggered status computed from iteration_logs)
+  const ev=await apiRaw("/api/oracle_evaluate");
+  if(ev && ev.found && !ev._jelly_error){
+    _renderOracleData(ev);
+    return;
+  }
+  const d=await api("/api/oracle");
+  _renderOracleData(d);
+}
+function _renderOracleData(d){
+  const statGrid=$("#oracleStatGrid");
+  const bugList=$("#oracleBugList");
+  if(!d||d.found===false||d._jelly_error){
+    statGrid.innerHTML="";
+    bugList.innerHTML=`<div class="empty">${esc((d&&d.error)||"oracle_bugs.json not found for this run.")}<br><span class="meta">需要将 oracle_bugs.json 放置在运行结果目录中。</span></div>`;
+    return;
+  }
+  // Support both {oracles:[...]} format (oracle_bugs.json) and {bugs:[...]} format
+  const bugs=Array.isArray(d)?d:(d.oracles||d.bugs||[]);
+  const triggered=bugs.filter(b=>b.triggered||b.status==="triggered").length;
+  const total=bugs.length;
+  statGrid.innerHTML=`
+    <div class="cov-card"><h4>已触发</h4><div class="cv" style="color:var(--good)">${triggered}</div></div>
+    <div class="cov-card"><h4>未触发</h4><div class="cv" style="color:var(--bad)">${total-triggered}</div></div>
+    <div class="cov-card"><h4>总 Bug 数</h4><div class="cv">${total}</div></div>
+    <div class="cov-card"><h4>触发率</h4><div class="cv">${total?((triggered/total)*100).toFixed(0)+"%":"--"}</div>${total?covBar((triggered/total)*100):""}</div>
+  `;
+  if(!bugs.length){bugList.innerHTML=`<div class="empty">Bug 列表为空。</div>`;return;}
+  bugList.innerHTML=bugs.map(b=>{
+    const isTriggered=b.triggered||b.status==="triggered";
+    // Support both oracle_bugs.json fields and runtime summary fields
+    const desc=b.description||b.title||""; 
+    const trigCond=b.trigger_condition||"";
+    const severity=b.severity?`<span class="tag" style="background:${b.severity==="high"?"var(--bad)":b.severity==="medium"?"var(--warn)":"var(--border)"}">${esc(b.severity)}</span>`:"";
+    return `<div class="oracle-bug ${isTriggered?"triggered":"pending"}">
+      <div class="oracle-status">${isTriggered?`<span class="tag good">&#x2713; 触发</span>`:`<span class="tag bad">&#x2717; 未触发</span>`}${severity}</div>
+      <div class="oracle-desc">
+        <strong>${esc(b.id||"")}</strong> <span class="meta" style="margin-left:4px">${esc(b.category||"")}</span>
+        ${desc?`<span class="meta" style="margin-left:6px">${esc(desc)}</span>`:""}
+        ${trigCond?`<br><span class="meta" style="color:var(--accent2)">触发条件: ${esc(trigCond)}</span>`:""}
+        ${b.trigger_object?`<br><span class="meta">对象: ${esc(b.trigger_object)}</span>`:""}
+        ${b.trigger_action?`<span class="meta"> | 动作: ${esc(b.trigger_action)}</span>`:""}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ---- benchmark ---- */
+async function refreshBenchmark(){
+  const wrap=$("#benchmarkWrap");
+  wrap.innerHTML=`<div class="empty">loading...</div>`;
+  // Aggregate across results_dir(s) declared by all projects + current results root
+  const dirsSet=new Set();
+  (_cfg.projects||[]).forEach(pj=>{
+    const wd=pj.work_dir||_cfg.work_dir||""; const rd=pj.results_dir||"";
+    if(rd){ const full=_resolveDir(rd,wd); if(full) dirsSet.add(full); }
+  });
+  let d;
+  if(dirsSet.size){
+    const wd=_cfg.work_dir||"";
+    d=await apiRaw("/api/smart_benchmark",{results_dirs:[...dirsSet].join(","),work_dir:wd});
+  } else {
+    d=await apiRaw("/api/benchmark");
+  }
+  _renderBenchmarkData(d.entries||[]);
+}
+function _renderBenchmarkData(entries){
+  const wrap=$("#benchmarkWrap");
+  if(!entries.length){wrap.innerHTML=`<div class="empty">Results/ 目录下暂无模型结果。<br><span class="meta">运行至少一次 vragent2 后此处将显示对比表格。</span></div>`;return;}
+  // Group by scene
+  const scenes={};
+  entries.forEach(e=>{if(!scenes[e.scene])scenes[e.scene]=[];scenes[e.scene].push(e);});
+  let html="";
+  Object.entries(scenes).forEach(([scene,models])=>{
+    html+=`<h3 class="sec" style="margin-top:14px">${esc(scene)}</h3>`;
+    html+=`<table><thead><tr>
+      <th>模型</th>
+      <th data-tip="覆盖率代理值">覆盖代理</th>
+      <th data-tip="探索迭代轮数">迭代数</th>
+      <th data-tip="总动作数">动作数</th>
+      <th data-tip="已解 Gate 数">Gate 解决</th>
+      <th data-tip="LLM token 总消耗">Token 消耗</th>
+      <th data-tip="Oracle Benchmark Bug 触发率">Oracle 触发率</th>
+    </tr></thead><tbody>`;
+    // Find max coverage for bar scaling
+    const maxCov=Math.max(...models.map(e=>(e.summary?.explorer?.total_coverage||0)),0.001);
+    models.forEach(e=>{
+      const ex=e.summary?.explorer||{};
+      const cov=ex.total_coverage||0;
+      const barW=Math.round((cov/Math.max(maxCov,0.001))*80);
+      const tok=e.summary?.token_usage?._total?.total_tokens||0;
+      const oracle=e.oracle;
+      let oracleTxt="--";
+      if(Array.isArray(oracle)&&oracle.length){
+        const tr=oracle.filter(b=>b.triggered||b.status==="triggered").length;
+        oracleTxt=`${tr}/${oracle.length} (${Math.round(tr/oracle.length*100)}%)`;
+      }
+      html+=`<tr class="bench-row">
+        <td><strong>${esc(e.model)}</strong></td>
+        <td><div style="display:flex;align-items:center;gap:6px">
+          <div class="bench-bar-wrap"><span class="bench-bar-fill" style="width:${barW}px"></span></div>
+          <span>${cov.toFixed(4)}</span>
+        </div></td>
+        <td>${e.summary?.iterations??0}</td>
+        <td>${e.summary?.total_actions??0}</td>
+        <td>${ex.gates_solved??0}</td>
+        <td>${tok.toLocaleString()}</td>
+        <td>${oracleTxt}</td>
+      </tr>`;
+    });
+    html+=`</tbody></table>`;
+  });
+  wrap.innerHTML=html;
+}
+
+/* ---- replay & clean ---- */
+async function refreshReplayOptions(){
+  // Collect all result dirs from configured projects + current cfgOutput
+  const p=selProj();
+  const wkDir=(p&&p.work_dir)||_cfg.work_dir||"";
+  const dirsSet=new Set();
+  // Current output field
+  const outVal=($("#cfgOutput")||{}).value||""; if(outVal) dirsSet.add(_resolveDir(outVal,wkDir));
+  // All projects' results_dir
+  (_cfg.projects||[]).forEach(pj=>{
+    const wd=pj.work_dir||_cfg.work_dir||""; const rd=pj.results_dir||"";
+    if(rd) dirsSet.add(_resolveDir(rd,wd));
+  });
+  const dirs=[...dirsSet].filter(Boolean);
+  const params={};
+  if(dirs.length) params.dirs=dirs.join(",");
+  if(wkDir) params.work_dir=wkDir;
+  const d=await apiRaw("/api/replay_options",params);
+  const sel=$("#replayModelSel");
+  sel.innerHTML=`<option value="auto">-- auto（使用最近运行）--</option>`;
+  (d.options||[]).forEach(o=>{
+    const opt=document.createElement("option");
+    opt.value=o.path; opt.textContent=o.label; sel.appendChild(opt);
+  });
+}
+// Helper: if path is relative, join with workDir; otherwise return as-is
+function _resolveDir(dir,workDir){
+  if(!dir) return "";
+  // detect Windows absolute or Unix absolute
+  if(/^[A-Za-z]:[\\\/]/.test(dir)||dir.startsWith("/")) return dir;
+  return workDir ? workDir.replace(/[\\\/]+$/,"")+"/"+dir : dir;
+}
+async function startReplay(){
+  saveRunCfg();
+  const p=selProj();
+  const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
+  const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
+  const replayPath=$("#replayModelSel").value||"auto";
+  const body={
+    python_exe,work_dir,
+    replay:replayPath,
+    unity:$("#replayUnity").checked,
+    scene_name:$("#wfSceneSel").value||undefined,
+    output:$("#cfgOutput").value.trim()||"Results",
+    api_key:$("#cfgApiKey").value.trim()||undefined,
+    model:$("#cfgModel").value.trim()||undefined,
+    api_base:$("#cfgApiBase").value.trim()||undefined,
+    // Replay still needs preprocessing artefacts to resolve FileIDs / scene context
+    hierarchy_json:$("#cfgHierarchyJson").value.trim()||undefined,
+    scene_gml:$("#cfgSceneGml").value.trim()||undefined,
+    scripts_dir:$("#cfgScriptsDir").value.trim()||undefined,
+    app_name:$("#ppAppName").value.trim()||undefined,
+  };
+  const r=await post("/api/run/start",body);
+  if(r.error){alert("Replay 启动失败："+r.error);return;}
+  logLineIdx=0;clearLog();
+  appendLog(`[jelly] Replay started -- PID ${r.pid||"?"}`,"ok");
+  appendLog(`[jelly] cmd: ${(r.cmd||[]).join(" ")}`);
+  setStepState(5,"running");
+  startLogPoll(state=>{setStepState(5,state==="finished"?"done":"error");});
+  setRunState("running");
+}
+async function startClean(){
+  const p=selProj();
+  const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
+  const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
+  const cleanMode=$("#cleanMode").value;
+  if(!confirm(`确定要清除 "${cleanMode}" 缓存吗？此操作不可撤销。`))return;
+  const body={python_exe,work_dir,clean:cleanMode,
+    scene_name:$("#wfSceneSel").value||undefined,
+    output:$("#cfgOutput").value.trim()||"Results",
+  };
+  const r=await post("/api/run/start",body);
+  if(r.error){alert("Clean 启动失败："+r.error);return;}
+  logLineIdx=0;clearLog();
+  appendLog(`[jelly] Clean (${cleanMode}) started -- PID ${r.pid||"?"}`,"ok");
+  startLogPoll();
+  setRunState("running");
+}
 
 /* ---- boot ---- */
 (async()=>{
@@ -1273,6 +2048,7 @@ $$(".modal-overlay").forEach(o=>o.addEventListener("click",e=>{if(e.target===o) 
   if(savedScene) onSceneChange(savedScene);
   await refreshPreprocessState();
   await checkSavedApiKey();  // update API Key placeholder if key is saved locally
+  await refreshReplayOptions(); // populate replay model dropdown
   const rs=await apiRaw("/api/run/status");
   if(rs.state==="running"){
     logLineIdx=0; clearLog();

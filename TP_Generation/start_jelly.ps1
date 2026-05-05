@@ -8,13 +8,43 @@
 #>
 param(
     [int]$Port    = 2000,
-    [string]$Python = "E:\--SoftWare\python.exe"
+    [string]$Python = ""
 )
 
 $ScriptDir = $PSScriptRoot
 $PidFile   = Join-Path $ScriptDir ".jelly.pid"
 $LogFile   = Join-Path $ScriptDir ".jelly.log"
 # Server is a package; must be launched with -m, not directly as a script
+
+function Resolve-JellyPython {
+    param(
+        [string]$Requested,
+        [string]$TpGenerationDir
+    )
+
+    $workspaceRoot = Split-Path -Parent $TpGenerationDir
+    $candidates = @(
+        $Requested,
+        $env:XRPLAYER_JELLY_PYTHON,
+        "E:\--SoftWare\python.exe",
+        (Join-Path $workspaceRoot ".venv\Scripts\python.exe")
+    )
+
+    foreach ($candidate in $candidates) {
+        if ($candidate -and (Test-Path $candidate)) {
+            return (Resolve-Path $candidate).Path
+        }
+    }
+
+    $pythonCmd = Get-Command python.exe -ErrorAction SilentlyContinue
+    if ($pythonCmd) {
+        return $pythonCmd.Source
+    }
+
+    throw "[jelly] No usable Python interpreter found. Set -Python or XRPLAYER_JELLY_PYTHON."
+}
+
+$Python = Resolve-JellyPython -Requested $Python -TpGenerationDir $ScriptDir
 
 # Check if already running
 if (Test-Path $PidFile) {
@@ -38,7 +68,7 @@ if ($inUse) {
 # Start-Process creates a truly independent (detached) process that
 # survives after the parent PowerShell terminal is closed.
 $proc = Start-Process -FilePath $Python `
-    -ArgumentList "-m xrplayer.jelly --results-dir `"$ScriptDir`" --port $Port" `
+    -ArgumentList "-u -m xrplayer.jelly --results-dir `"$ScriptDir`" --port $Port" `
     -WorkingDirectory $ScriptDir `
     -WindowStyle Hidden `
     -RedirectStandardOutput $LogFile `

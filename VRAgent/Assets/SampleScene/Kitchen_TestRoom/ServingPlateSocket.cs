@@ -28,11 +28,16 @@ public class ServingPlateSocket : MonoBehaviour
     {
         if (_hasPlated) return;
 
-        if (RecipeController.Instance == null || !RecipeController.Instance.DishCooked)
-        {
-            Debug.LogWarning("[ServingPlateSocket] FAIL — dish is not cooked yet. Cook on Stove_Main first.");
-            return;
-        }
+        // BUG-006: DishCooked validation removed — allows plating uncooked dish
+        // Fix: uncomment the guard below
+        // if (RecipeController.Instance == null || !RecipeController.Instance.DishCooked)
+        // {
+        //     Debug.LogWarning("[ServingPlateSocket] FAIL — dish is not cooked yet.");
+        //     return;
+        // }
+
+        if (RecipeController.Instance != null && !RecipeController.Instance.DishCooked)
+            OracleRegistry.Trigger("BUG-006", "Dish plated without cooking");
 
         _hasPlated = true;
         RecipeController.Instance.SetDishPlated();

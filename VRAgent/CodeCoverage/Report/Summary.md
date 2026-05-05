@@ -1,37 +1,38 @@
 ﻿# Summary
 |||
 |:---|:---|
-| Generated on: | 2026/3/31 - 11:06:27 |
-| Parser: | MultiReportParser (2x OpenCoverParser) |
+| Generated on: | 2026/5/5 - 16:21:31 |
+| Parser: | MultiReportParser (3x OpenCoverParser) |
 | Assemblies: | 1 |
-| Classes: | 15 |
-| Files: | 15 |
-| Covered lines: | 204 |
-| Uncovered lines: | 290 |
-| Coverable lines: | 494 |
-| Total lines: | 1001 |
-| Line coverage: | 41.2% (204 of 494) |
+| Classes: | 16 |
+| Files: | 16 |
+| Covered lines: | 324 |
+| Uncovered lines: | 218 |
+| Coverable lines: | 542 |
+| Total lines: | 1214 |
+| Line coverage: | 59.7% (324 of 542) |
 | Covered branches: | 0 |
 | Total branches: | 0 |
-| Covered methods: | 62 |
-| Total methods: | 101 |
-| Method coverage: | 61.3% (62 of 101) |
+| Covered methods: | 79 |
+| Total methods: | 111 |
+| Method coverage: | 71.1% (79 of 111) |
 
 |**Name**|**Covered**|**Uncovered**|**Coverable**|**Total**|**Line coverage**|**Covered**|**Total**|**Branch coverage**|**Covered**|**Total**|**Method coverage**|
 |:---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-|**Assembly-CSharp**|**204**|**290**|**494**|**1001**|**41.2%**|**0**|**0**|****|**62**|**101**|**61.3%**|
-|CuttingBoardController|16|9|25|59|64%|0|0||4|5|80%|
+|**Assembly-CSharp**|**324**|**218**|**542**|**1214**|**59.7%**|**0**|**0**|****|**79**|**111**|**71.1%**|
+|CuttingBoardController|18|9|27|65|66.6%|0|0||4|5|80%|
 |FinalExitTrigger|6|17|23|48|26%|0|0||4|4|100%|
 |GrabbableKeyController|1|8|9|24|11.1%|0|0||1|3|33.3%|
-|KitchenBadgeUnlockReceiver|9|15|24|54|37.5%|0|0||3|4|75%|
-|KnifeSlotDetector|11|8|19|41|57.8%|0|0||5|7|71.4%|
-|LockedCabinetController|32|7|39|77|82%|0|0||6|8|75%|
-|MixingBowlController|9|11|20|43|45%|0|0||3|5|60%|
+|KitchenBadgeUnlockReceiver|22|2|24|60|91.6%|0|0||4|4|100%|
+|KnifeSlotDetector|19|0|19|41|100%|0|0||7|7|100%|
+|LockedCabinetController|40|6|46|87|86.9%|0|0||6|8|75%|
+|MixingBowlController|16|4|20|43|80%|0|0||4|5|80%|
 |MixingBowlSocket|11|8|19|41|57.8%|0|0||5|7|71.4%|
-|PantryKeyUnlockReceiver|9|9|18|45|50%|0|0||3|4|75%|
-|PowerSwitchController|20|0|20|47|100%|0|0||6|6|100%|
-|RecipeController|31|117|148|243|20.9%|0|0||7|25|28%|
-|ServingCounterSocket|9|14|23|54|39.1%|0|0||3|5|60%|
-|ServingPlateSocket|9|13|22|51|40.9%|0|0||3|5|60%|
-|SinkWashStation|17|33|50|88|34%|0|0||4|7|57.1%|
-|StoveController|14|21|35|86|40%|0|0||5|6|83.3%|
+|OracleRegistry|12|21|33|159|36.3%|0|0||2|10|20%|
+|PantryKeyUnlockReceiver|17|1|18|45|94.4%|0|0||4|4|100%|
+|PowerSwitchController|22|0|22|52|100%|0|0||6|6|100%|
+|RecipeController|83|68|151|253|54.9%|0|0||16|25|64%|
+|ServingCounterSocket|16|7|23|54|69.5%|0|0||4|5|80%|
+|ServingPlateSocket|18|2|20|56|90%|0|0||4|5|80%|
+|SinkWashStation|17|34|51|92|33.3%|0|0||4|7|57.1%|
+|StoveController|6|31|37|94|16.2%|0|0||4|6|66.6%|

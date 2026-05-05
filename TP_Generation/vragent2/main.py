@@ -505,15 +505,19 @@ def main() -> None:
         except ImportError:
             pass
 
-    if not api_key:
-        print("[ERROR] No API key. Set --api_key or OPENAI_API_KEY env var.")
-        sys.exit(1)
+    # Replay mode doesn't need LLM — skip API key validation
+    if args.replay:
+        llm = None
+    else:
+        if not api_key:
+            print("[ERROR] No API key. Set --api_key or OPENAI_API_KEY env var.")
+            sys.exit(1)
 
-    if not api_base:
-        print("[ERROR] No API base URL. Set --api_base, OPENAI_API_BASE, or OPENAI_BASE_URL.")
-        sys.exit(1)
+        if not api_base:
+            print("[ERROR] No API base URL. Set --api_base, OPENAI_API_BASE, or OPENAI_BASE_URL.")
+            sys.exit(1)
 
-    llm = LLMClient(api_key=api_key, base_url=api_base)
+        llm = LLMClient(api_key=api_key, base_url=api_base)
 
     # ── Retrieval Layer ───────────────────────────────────────────────
     hierarchy_data = load_json(args.hierarchy_json)

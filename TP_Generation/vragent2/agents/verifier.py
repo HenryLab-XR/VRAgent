@@ -140,7 +140,10 @@ class VerifierAgent(BaseAgent):
         result["evidence"] = evidence
         result["llm_review"] = llm_review
 
-        err_types = sorted({e.get("type", "?") for e in errors}) if errors else []
+        err_types = sorted({
+            (e.get("type", "?") if isinstance(e, dict) else getattr(e, "type", "?"))
+            for e in errors
+        }) if errors else []
         self.record_decision(
             summary=(
                 f"Verifier {'accepted' if passed else 'rejected'} "
@@ -244,8 +247,10 @@ class VerifierAgent(BaseAgent):
         # ⑤ Method existence check (Trigger / methodCallUnits)
         if ctx:
             for event_key in ("triggerring_events", "triggerred_events"):
-                for ei, event in enumerate(au.get(event_key, [])):
-                    for mi, mc in enumerate(event.get("methodCallUnits", [])):
+                for ei, event in enumerate(au.get(event_key, []) or []):
+                    if not isinstance(event, dict):
+                        continue  # malformed element caught by _check_trigger
+                    for mi, mc in enumerate(event.get("methodCallUnits", []) or []):
                         sfid = str(mc.get("script_fileID", ""))
                         method = mc.get("method_name", "")
                         known_methods = ctx.method_index.get(sfid, [])
@@ -306,11 +311,27 @@ class VerifierAgent(BaseAgent):
                 fix_suggestion="Trigger action must specify a condition description.",
             ))
 
+        # ── Detect malformed event units (strings instead of dicts) ──
+        for event_key in ("triggerring_events", "triggerred_events"):
+            for ei, event in enumerate(au.get(event_key, []) or []):
+                if not isinstance(event, dict):
+                    errors.append(VerifierError(
+                        type=VerifierErrorType.SCHEMA_ERROR.value,
+                        location=f"{loc}.{event_key}[{ei}]",
+                        fix_suggestion=(
+                            f"Each element of '{event_key}' must be an object "
+                            f'{{\"methodCallUnits\": [...]}}, not a string/primitive. '
+                            f"Got: {repr(event)!s:.80}. "
+                            "Replace with a proper eventUnit dict or remove it."
+                        ),
+                    ))
+
         # Trigger should contain at least one method call unit.
         event_count = 0
         for event_key in ("triggerring_events", "triggerred_events"):
-            for event in au.get(event_key, []):
-                event_count += len(event.get("methodCallUnits", []))
+            for event in au.get(event_key, []) or []:
+                if isinstance(event, dict):
+                    event_count += len(event.get("methodCallUnits", []) or [])
         if event_count == 0:
             errors.append(VerifierError(
                 type=VerifierErrorType.SCHEMA_ERROR.value,
@@ -320,8 +341,10 @@ class VerifierAgent(BaseAgent):
 
         # Validate method calls in events (script_fileID existence)
         for event_key in ("triggerring_events", "triggerred_events"):
-            for ei, event in enumerate(au.get(event_key, [])):
-                for mi, mc in enumerate(event.get("methodCallUnits", [])):
+            for ei, event in enumerate(au.get(event_key, []) or []):
+                if not isinstance(event, dict):
+                    continue  # already reported above
+                for mi, mc in enumerate(event.get("methodCallUnits", []) or []):
                     script_fid = mc.get("script_fileID")
                     if script_fid and self._is_valid_fileid(script_fid):
                         fid_str = str(script_fid)

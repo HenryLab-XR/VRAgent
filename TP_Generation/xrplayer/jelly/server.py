@@ -323,6 +323,7 @@ _ARTEFACT_NAMES = {
     "iterations":          "iteration_logs.json",
     "test_plan":           "test_plan.json",
     "all_actions":         "all_actions.json",
+    "oracle_bugs":         "oracle_bugs.json",
 }
 
 
@@ -381,6 +382,125 @@ def _list_runs(results_root: Path, max_depth: int = 3) -> List[Dict[str, Any]]:
             })
     runs.sort(key=lambda r: r["mtime"], reverse=True)
     return runs
+
+
+# ---------------------------------------------------------------------------
+# New helpers: replay options, Unity coverage XML, benchmark aggregation
+# ---------------------------------------------------------------------------
+
+def _scan_results_for_models(root: Path) -> List[Dict[str, Any]]:
+    """Scan results root for <scene>/<model>/test_plan.json patterns."""
+    options: List[Dict[str, Any]] = []
+    if not root.is_dir():
+        return options
+    try:
+        for scene_dir in sorted(root.iterdir()):
+            if not scene_dir.is_dir():
+                continue
+            for model_dir in sorted(scene_dir.iterdir()):
+                if not model_dir.is_dir():
+                    continue
+                test_plan = model_dir / "test_plan.json"
+                if test_plan.exists():
+                    options.append({
+                        "scene": scene_dir.name,
+                        "model": model_dir.name,
+                        "path": str(test_plan),
+                        "label": f"{scene_dir.name}/{model_dir.name}",
+                    })
+    except Exception:
+        pass
+    return options
+
+
+def _parse_unity_coverage_xml(xml_path: Path) -> Dict[str, Any]:
+    """Parse a Unity/OpenCover Summary.xml and return structured coverage data."""
+    import xml.etree.ElementTree as ET  # stdlib
+    if not xml_path.exists():
+        return {"error": f"Summary.xml not found: {xml_path}", "found": False}
+    try:
+        tree = ET.parse(str(xml_path))
+        root_el = tree.getroot()
+        summary = root_el.find("Summary")
+        if summary is None:
+            return {"error": "No Summary element in XML", "found": False}
+
+        def _f(k: str) -> float:
+            try:
+                return float(summary.get(k, 0) or 0)  # type: ignore[arg-type]
+            except (TypeError, ValueError):
+                return 0.0
+
+        def _i(k: str) -> int:
+            try:
+                return int(summary.get(k, 0) or 0)  # type: ignore[arg-type]
+            except (TypeError, ValueError):
+                return 0
+
+        result: Dict[str, Any] = {
+            "found": True,
+            "xml_path": str(xml_path),
+            "sequence_coverage": _f("sequenceCoverage"),
+            "branch_coverage": _f("branchCoverage"),
+            "visited_sequence_points": _i("visitedSequencePoints"),
+            "num_sequence_points": _i("numSequencePoints"),
+            "visited_branch_points": _i("visitedBranchPoints"),
+            "num_branch_points": _i("numBranchPoints"),
+            "visited_classes": _i("visitedClasses"),
+            "num_classes": _i("numClasses"),
+            "visited_methods": _i("visitedMethods"),
+            "num_methods": _i("numMethods"),
+        }
+        modules: List[Dict[str, Any]] = []
+        mods_el = root_el.find("Modules")
+        if mods_el is not None:
+            for mod in mods_el:
+                ms = mod.find("Summary")
+                if ms is None:
+                    continue
+                mod_name = mod.get("moduleName") or mod.get("ModuleName") or ""
+                try:
+                    seq = float(ms.get("sequenceCoverage", 0) or 0)
+                    brn = float(ms.get("branchCoverage", 0) or 0)
+                except (TypeError, ValueError):
+                    seq, brn = 0.0, 0.0
+                modules.append({"name": mod_name, "sequence_coverage": seq, "branch_coverage": brn})
+                if len(modules) >= 20:
+                    break
+        result["modules"] = modules
+        return result
+    except Exception as exc:
+        return {"error": str(exc), "found": False}
+
+
+def _scan_benchmark_data(root: Path) -> List[Dict[str, Any]]:
+    """Scan results root for all <scene>/<model>/summary.json entries."""
+    entries: List[Dict[str, Any]] = []
+    if not root.is_dir():
+        return entries
+    try:
+        for scene_dir in sorted(root.iterdir()):
+            if not scene_dir.is_dir():
+                continue
+            for model_dir in sorted(scene_dir.iterdir()):
+                if not model_dir.is_dir():
+                    continue
+                summary = _read_json(model_dir / "summary.json")
+                if summary is None:
+                    continue
+                oracle = _read_json(model_dir / "oracle_bugs.json")
+                status = _read_json(model_dir / "jelly_status.json")
+                entries.append({
+                    "scene": scene_dir.name,
+                    "model": model_dir.name,
+                    "run_dir": f"{scene_dir.name}/{model_dir.name}",
+                    "summary": summary,
+                    "oracle": oracle,
+                    "status": status,
+                })
+    except Exception:
+        pass
+    return entries
 
 
 def _normalize_preprocess_dir(path_value: str) -> Optional[Path]:
@@ -737,6 +857,232 @@ class _JellyHandler(BaseHTTPRequestHandler):
                     self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             return
 
+        if path == "/api/replay_options":
+            dirs_param = (qs.get("dirs") or [""])[0].strip()
+            work_dir_param = (qs.get("work_dir") or [""])[0].strip()
+            roots: List[Path] = []
+            if dirs_param:
+                for raw in dirs_param.split(","):
+                    raw = raw.strip()
+                    if not raw:
+                        continue
+                    p_dir = Path(raw)
+                    if not p_dir.is_absolute() and work_dir_param:
+                        p_dir = Path(work_dir_param) / raw
+                    elif not p_dir.is_absolute():
+                        p_dir = self._root / raw
+                    try:
+                        p_dir = p_dir.resolve()
+                    except Exception:
+                        pass
+                    if p_dir.is_dir() and p_dir not in roots:
+                        roots.append(p_dir)
+            # Always include server root
+            if self._root not in roots:
+                roots.append(self._root)
+            all_options: List[Dict[str, Any]] = []
+            seen_paths: set = set()
+            for r in roots:
+                for o in _scan_results_for_models(r):
+                    if o["path"] not in seen_paths:
+                        seen_paths.add(o["path"])
+                        all_options.append(o)
+            all_options.sort(key=lambda x: x["label"].lower())
+            self._send_json({"options": all_options})
+            return
+
+        if path == "/api/unity_coverage":
+            xml_param = (qs.get("xml_path") or [None])[0]
+            if xml_param:
+                xml_path = Path(xml_param)
+            else:
+                # Walk up from results_root to find a Unity project root
+                candidate = self._root.parent
+                xml_path = None
+                for _ in range(8):
+                    if (candidate / "Assets").is_dir() and (candidate / "ProjectSettings").is_dir():
+                        xml_path = candidate / "CodeCoverage" / "Report" / "Summary.xml"
+                        break
+                    parent = candidate.parent
+                    if parent == candidate:
+                        break
+                    candidate = parent
+                if xml_path is None:
+                    xml_path = self._root.parent / "VRAgent" / "CodeCoverage" / "Report" / "Summary.xml"
+            self._send_json(_parse_unity_coverage_xml(xml_path))  # type: ignore[arg-type]
+            return
+
+        # ── Smart coverage: walk up from project assets_path to find Unity root ─
+        if path == "/api/smart_coverage":
+            # Accept either assets_path (will walk up to find Unity root) or direct unity_root
+            assets_path = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+            unity_root_param = (qs.get("unity_root") or [""])[0].strip()
+            xml_path2: Optional[Path] = None
+            tried: List[str] = []
+            # Determine Unity project root
+            unity_root: Optional[Path] = None
+            if unity_root_param:
+                pr = Path(unity_root_param)
+                if (pr / "Assets").is_dir() and (pr / "ProjectSettings").is_dir():
+                    unity_root = pr
+            if unity_root is None and assets_path:
+                p = Path(assets_path).resolve()
+                for _ in range(12):
+                    if (p / "Assets").is_dir() and (p / "ProjectSettings").is_dir():
+                        unity_root = p
+                        break
+                    nxt = p.parent
+                    if nxt == p:
+                        break
+                    p = nxt
+            if unity_root is not None:
+                # Unity CodeCoverage folder is directly under project root
+                for sub in (
+                    unity_root / "CodeCoverage" / "Report" / "Summary.xml",
+                    unity_root / "CodeCoverage" / "Summary.xml",
+                    unity_root / "Coverage" / "Report" / "Summary.xml",
+                ):
+                    tried.append(str(sub))
+                    if sub.exists():
+                        xml_path2 = sub
+                        break
+            if xml_path2 is None:
+                self._send_json({"found": False,
+                                 "error": "Coverage Summary.xml not found. Run Window > Analysis > Code Coverage in Unity Editor first.",
+                                 "tried": tried[:6],
+                                 "unity_root": str(unity_root) if unity_root else ""})
+                return
+            data = _parse_unity_coverage_xml(xml_path2)
+            data["xml_path"] = str(xml_path2)
+            self._send_json(data)
+            return
+
+        if path == "/api/oracle":
+            data = _read_json(_resolve_artefact(self._root, run_dir, "oracle_bugs"))
+            self._send_json(data if data is not None else {"found": False, "bugs": []})
+            return
+
+        # ── Oracle evaluate: load oracle_bugs.json + iteration_logs.json, compute triggered ──
+        if path == "/api/oracle_evaluate":
+            oracle_path = _resolve_artefact(self._root, run_dir, "oracle_bugs")
+            oracle_def = _read_json(oracle_path) if oracle_path else None
+            if oracle_def is None:
+                self._send_json({"found": False, "error": "oracle_bugs.json not found for this run."})
+                return
+            # Collect console logs from iteration_logs.json
+            iter_log_path = _resolve_artefact(self._root, run_dir, "iterations")
+            console_logs: list = []
+            if iter_log_path:
+                iter_data = _read_json(iter_log_path)
+                if isinstance(iter_data, list):
+                    for entry in iter_data:
+                        if not isinstance(entry, dict):
+                            continue
+                        for field in ("bugs", "console_logs"):
+                            val = entry.get(field)
+                            if isinstance(val, list):
+                                console_logs.extend(str(s) for s in val)
+                            elif isinstance(val, str) and val:
+                                console_logs.append(val)
+            try:
+                import sys as _sys, importlib as _il
+                _ora = _il.import_module("vragent2.utils.oracle")
+                result = _ora.evaluate_oracle_coverage(console_logs, oracle_def)
+                result["found"] = True
+                self._send_json(result)
+            except Exception as exc:
+                # Fallback: just return raw oracle_def without evaluation
+                oracle_def["found"] = True
+                oracle_def["_eval_error"] = str(exc)
+                self._send_json(oracle_def)
+            return
+
+        # ── Smart oracle: locate scene file under project, look for oracle*.json next to it ─
+        if path == "/api/smart_oracle":
+            assets_path = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+            scene_name = (qs.get("scene_name") or [""])[0].strip()
+            if not assets_path:
+                self._send_json({"found": False, "error": "missing project_path"})
+                return
+            base = Path(assets_path)
+            if not base.is_dir():
+                self._send_json({"found": False, "error": f"project_path not a directory: {assets_path}"})
+                return
+            tried: List[str] = []
+            found_path: Optional[Path] = None
+            try:
+                # Find scene file(s) and check sibling oracle*.json
+                scene_files = []
+                if scene_name:
+                    scene_files = [p for p in base.rglob(f"{scene_name}.unity")]
+                if not scene_files:
+                    scene_files = list(base.rglob("*.unity"))
+                for scene_file in scene_files[:50]:
+                    sib_dir = scene_file.parent
+                    for pattern in ("oracle_bugs.json", "oracle*.json", "*oracle*.json"):
+                        for cand in sib_dir.glob(pattern):
+                            tried.append(str(cand))
+                            if cand.is_file():
+                                found_path = cand
+                                break
+                        if found_path:
+                            break
+                    if found_path:
+                        break
+            except Exception as exc:
+                self._send_json({"found": False, "error": str(exc)})
+                return
+            if found_path is None:
+                self._send_json({"found": False,
+                                 "error": "No oracle*.json next to any .unity scene file",
+                                 "tried": tried[:10]})
+                return
+            data = _read_json(found_path)
+            self._send_json({"found": True, "path": str(found_path), "data": data})
+            return
+
+        if path == "/api/benchmark":
+            entries = _scan_benchmark_data(self._root)
+            self._send_json({"entries": entries})
+            return
+
+        # ── Smart benchmark: scan one or more results dirs (comma-separated) ─
+        if path == "/api/smart_benchmark":
+            dirs_param = (qs.get("results_dirs") or [""])[0].strip()
+            work_dir_bm = (qs.get("work_dir") or [""])[0].strip()
+            bm_roots: List[Path] = []
+            if dirs_param:
+                for raw in dirs_param.split(","):
+                    raw = raw.strip()
+                    if not raw:
+                        continue
+                    p_bm = Path(raw)
+                    if not p_bm.is_absolute():
+                        if work_dir_bm:
+                            p_bm = Path(work_dir_bm) / raw
+                        else:
+                            p_bm = self._root / raw
+                    try:
+                        p_bm = p_bm.resolve()
+                    except Exception:
+                        pass
+                    if p_bm.is_dir() and p_bm not in bm_roots:
+                        bm_roots.append(p_bm)
+            if not bm_roots:
+                bm_roots = [self._root]
+            bm_entries: List[Dict[str, Any]] = []
+            bm_seen: set = set()
+            for r in bm_roots:
+                for e in _scan_benchmark_data(r):
+                    key = (str(r), e.get("scene", ""), e.get("model", ""))
+                    if key in bm_seen:
+                        continue
+                    bm_seen.add(key)
+                    e["_source_root"] = str(r)
+                    bm_entries.append(e)
+            self._send_json({"entries": bm_entries, "roots": [str(r) for r in bm_roots]})
+            return
+
         # Static assets (anything else under /static/)
         if path.startswith("/static/"):
             asset = path[len("/static/"):]
@@ -843,18 +1189,28 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 cmd.append("--resume")
             if body.get("no_info_sharing"):
                 cmd.append("--no_info_sharing")
+            replay_val = body.get("replay", "").strip() if isinstance(body.get("replay"), str) else ""
+            if replay_val:
+                cmd += ["--replay", replay_val]
+            clean_val = body.get("clean", "").strip() if isinstance(body.get("clean"), str) else ""
+            if clean_val:
+                cmd += ["--clean", clean_val]
+
+            # --clean and --replay both skip LLM calls — no API key needed
+            is_no_llm_mode = bool(clean_val) or bool(replay_val)
 
             env: Optional[Dict[str, str]] = None
-            api_key = body.get("api_key", "").strip()
-            # Fallback: use key saved in .ui_settings.json when field is empty
-            if not api_key:
-                api_key = self.server.ui_settings.get_api_key()  # type: ignore[attr-defined]
-            if api_key:
-                env = {"OPENAI_API_KEY": api_key}
-            else:
-                # No key anywhere — fail fast with a clear message before even launching
-                self._send_json({"error": "No API key. Enter it in the API Key field or click '保存到本地' to save it locally first."}, status=HTTPStatus.BAD_REQUEST)
-                return
+            if not is_no_llm_mode:
+                api_key = body.get("api_key", "").strip()
+                # Fallback: use key saved in .ui_settings.json when field is empty
+                if not api_key:
+                    api_key = self.server.ui_settings.get_api_key()  # type: ignore[attr-defined]
+                if api_key:
+                    env = {"OPENAI_API_KEY": api_key}
+                else:
+                    # No key anywhere — fail fast with a clear message before even launching
+                    self._send_json({"error": "No API key. Enter it in the API Key field or click '保存到本地' to save it locally first."}, status=HTTPStatus.BAD_REQUEST)
+                    return
 
             params = {k: v for k, v in body.items() if k not in ("api_key",)}
             try:
@@ -883,6 +1239,29 @@ class _JellyHandler(BaseHTTPRequestHandler):
             ui.save(settings)
             self._send_json({"ok": True, "has_api_key": bool(settings.get("api_key"))})
             return
+
+        # ── Load a local JSON file by absolute path ────────────────────────
+        if path == "/api/load_local_json":
+            file_path = body.get("file_path", "").strip()
+            if not file_path:
+                self._send_json({"error": "file_path is required"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            try:
+                p = Path(file_path).resolve()
+                if not p.exists() or not p.is_file():
+                    self._send_json({"error": f"File not found: {file_path}"}, status=HTTPStatus.NOT_FOUND)
+                    return
+                if p.suffix.lower() not in (".json",):
+                    self._send_json({"error": "Only .json files are supported"}, status=HTTPStatus.BAD_REQUEST)
+                    return
+                data = json.loads(p.read_text(encoding="utf-8"))
+                self._send_json({"ok": True, "data": data, "path": str(p)})
+            except json.JSONDecodeError as exc:
+                self._send_json({"error": f"Invalid JSON: {exc}"}, status=HTTPStatus.BAD_REQUEST)
+            except Exception as exc:
+                self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+            return
+
         if path == "/api/mkdir":
             dir_path = body.get("path", "").strip()
             if not dir_path:

@@ -1,0 +1,174 @@
+{
+  "scene": "Kitchen_TestRoom",
+  "version": "1.0",
+  "total_bugs": 10,
+  "oracles": [
+    {
+      "id": "BUG-001",
+      "category": "crash",
+      "severity": "high",
+      "title": "NullReferenceException in StoveController.FinishCooking",
+      "script": "StoveController.cs",
+      "method": "FinishCooking",
+      "trigger_condition": "Complete cooking on stove (cookDuration elapses after TryStartCooking succeeds)",
+      "expected_behavior": "AudioSource plays a completion sound",
+      "actual_behavior": "NullReferenceException — no AudioSource component is attached to Stove_Main",
+      "detection": {
+        "type": "exception",
+        "pattern": "NullReferenceException.*StoveController"
+      }
+    },
+    {
+      "id": "BUG-002",
+      "category": "functional",
+      "severity": "medium",
+      "title": "Stove starts cooking without bowl on hob",
+      "script": "StoveController.cs",
+      "method": "TryStartCooking",
+      "trigger_condition": "Activate stove without placing Bowl_Mixing on MixingBowlSocket hob",
+      "expected_behavior": "Cooking should only start when hobSocket.HasBowl is true",
+      "actual_behavior": "Cooking timer starts even with no bowl present",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-002:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-003",
+      "category": "state",
+      "severity": "medium",
+      "title": "Power toggle-off does not reset RecipeController.PowerEnabled",
+      "script": "PowerSwitchController.cs",
+      "method": "Toggle",
+      "trigger_condition": "Toggle power ON then OFF",
+      "expected_behavior": "PowerEnabled should return to false when switch turns off",
+      "actual_behavior": "PowerEnabled stays true — downstream gates remain open permanently",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-003:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-004",
+      "category": "functional",
+      "severity": "medium",
+      "title": "Sink wash timer not reset — instant wash on retry",
+      "script": "SinkWashStation.cs",
+      "method": "OnIngredientPlaced",
+      "trigger_condition": "Place ingredient → remove before wash done → place again",
+      "expected_behavior": "_washTimer should reset to 0 on each placement",
+      "actual_behavior": "Accumulated time carries over; wash completes immediately on re-place",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-004:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-005",
+      "category": "functional",
+      "severity": "low",
+      "title": "Cabinet slides in wrong direction (sign error)",
+      "script": "LockedCabinetController.cs",
+      "method": "Start",
+      "trigger_condition": "Open Cabinet_Ingredients after unlocking pantry door",
+      "expected_behavior": "Cabinet slides outward (negative Z local offset)",
+      "actual_behavior": "Cabinet slides into wall (positive Z — sign error in openLocalPosition)",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-005:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-006",
+      "category": "functional",
+      "severity": "high",
+      "title": "ServingPlateSocket accepts uncooked dish",
+      "script": "ServingPlateSocket.cs",
+      "method": "OnDishPlaced",
+      "trigger_condition": "Place uncombined/uncooked Bowl_Mixing onto Plate_Serving",
+      "expected_behavior": "Socket should reject dish if RecipeController.DishCooked is false",
+      "actual_behavior": "DishCooked guard is commented out — plating always succeeds",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-006:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-007",
+      "category": "state",
+      "severity": "medium",
+      "title": "RecipeController allows power without opening pantry",
+      "script": "RecipeController.cs",
+      "method": "SetPowerEnabled",
+      "trigger_condition": "Pick up Key_Pantry → toggle power without inserting key into lock",
+      "expected_behavior": "Power gate checks doorPantryUnlocked",
+      "actual_behavior": "Gate checks hasPantryKey — picking up key is sufficient to skip pantry-open step",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-007:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-008",
+      "category": "visual",
+      "severity": "low",
+      "title": "Badge panel stays red after successful kitchen unlock",
+      "script": "KitchenBadgeUnlockReceiver.cs",
+      "method": "OnBadgeInserted",
+      "trigger_condition": "Scan badge without power (panel goes red) → enable power → scan badge again (succeeds but panel stays red)",
+      "expected_behavior": "Panel material updates to materialUnlocked on success path",
+      "actual_behavior": "Success path does not call panelRenderer.sharedMaterial = materialUnlocked",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-008:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-009",
+      "category": "functional",
+      "severity": "medium",
+      "title": "CuttingBoard calls SetIngredientCut(false) before validation",
+      "script": "CuttingBoardController.cs",
+      "method": "TryCut",
+      "trigger_condition": "Interact with Board_Cutting when Tool_Knife NOT in knife slot",
+      "expected_behavior": "SetIngredientCut should only be called after all validation passes",
+      "actual_behavior": "SetIngredientCut(false) called immediately — RecipeController emits spurious FAIL warning",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-009:TRIGGERED]"
+      }
+    },
+    {
+      "id": "BUG-010",
+      "category": "state",
+      "severity": "medium",
+      "title": "ResetAllState does not reset downstream controller flags",
+      "script": "RecipeController.cs",
+      "method": "ResetAllState",
+      "trigger_condition": "Call ResetAllState() between test iterations",
+      "expected_behavior": "All downstream controllers (StoveController, SinkWashStation, etc.) should also reset",
+      "actual_behavior": "Only RecipeController flags are reset — downstream _isUnlocked/_hasWashed/CurrentState are stale",
+      "detection": {
+        "type": "oracle_marker",
+        "pattern": "[ORACLE:BUG-010:TRIGGERED]"
+      }
+    }
+  ],
+  "state_oracles": [
+    {
+      "id": "STATE-001",
+      "label": "recipe_monotonic",
+      "description": "Recipe flags must be set in strict order 1-10"
+    },
+    {
+      "id": "STATE-002",
+      "label": "completion_consistency",
+      "description": "CompletedSuccessfully=true implies all 10 flags true"
+    },
+    {
+      "id": "STATE-003",
+      "label": "power_state_sync",
+      "description": "PowerSwitchController.IsOn must match RecipeController.PowerEnabled"
+    }
+  ]
+}

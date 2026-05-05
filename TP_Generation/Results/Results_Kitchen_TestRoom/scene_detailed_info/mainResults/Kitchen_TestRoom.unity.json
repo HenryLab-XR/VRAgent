@@ -1,10 +1,10 @@
 {
   "guid": null,
-  "file_path": "d:\\--UnityProject\\HenryLabXR\\VRAgent\\VRAgent\\Assets/SampleScene/Kitchen_TestRoom/Kitchen_TestRoom.unity",
+  "file_path": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets/SampleScene/Kitchen_TestRoom/Kitchen_TestRoom.unity",
   "name": "Kitchen_TestRoom",
   "type": "unity",
-  "file_size": 447485,
-  "num_components": 811,
+  "file_size": 506381,
+  "num_components": 903,
   "COMPONENTS": [
     {
       "id": "1",
@@ -3628,6 +3628,256 @@
             },
             {
               "type": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "69777615",
+      "GameObject": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "serializedVersion": "6"
+        },
+        {
+          "m_Component": [
+            {
+              "- component": [
+                {
+                  "fileID": "69777617"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "69777616"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Layer": "0"
+        },
+        {
+          "m_Name": "HenryLab.EntityManager (Singleton)"
+        },
+        {
+          "m_TagString": "Untagged"
+        },
+        {
+          "m_Icon": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_NavMeshLayer": "0"
+        },
+        {
+          "m_StaticEditorFlags": "0"
+        },
+        {
+          "m_IsActive": "1"
+        }
+      ]
+    },
+    {
+      "id": "69777616",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "69777615"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "9adf4d592730f184f931354948d3cec6"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "vrexplorerMono": [
+            {
+              "fileID": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "69777617",
+      "Transform": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "69777615"
+            }
+          ]
+        },
+        {
+          "m_LocalRotation": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "0"
+            },
+            {
+              "w": "1"
+            }
+          ]
+        },
+        {
+          "m_LocalPosition": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "0"
+            }
+          ]
+        },
+        {
+          "m_LocalScale": [
+            {
+              "x": "1"
+            },
+            {
+              "y": "1"
+            },
+            {
+              "z": "1"
+            }
+          ]
+        },
+        {
+          "m_ConstrainProportionsScale": "0"
+        },
+        {
+          "m_Children": "[]"
+        },
+        {
+          "m_Father": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_RootOrder": "9"
+        },
+        {
+          "m_LocalEulerAnglesHint": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "0"
             }
           ]
         }
@@ -10068,7 +10318,7 @@
       ]
     },
     {
-      "id": "2058",
+      "id": "2103",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -10080,7 +10330,7 @@
       ]
     },
     {
-      "id": "2061",
+      "id": "2106",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -10092,7 +10342,7 @@
       ]
     },
     {
-      "id": "2064",
+      "id": "2109",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -14342,6 +14592,20 @@
                   "fileID": "351089453"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "351089455"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "351089456"
+                }
+              ]
             }
           ]
         },
@@ -14825,6 +15089,601 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "351089455",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "351089451"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetPantryDoorUnlocked"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    },
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "789745780"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "Unlock"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    },
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1854153240"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "Toggle"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3153",
+      "m_Activated": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3156",
+      "m_Deactivated": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3162",
+      "m_OnFirstHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3165",
+      "m_OnLastHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3168",
+      "m_OnHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3171",
+      "m_OnHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3174",
+      "m_OnSelectEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3177",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3180",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3183",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3186",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "351089456",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "351089451"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -16477,6 +17336,386 @@
       ]
     },
     {
+      "id": "463121671",
+      "PrefabInstance": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "serializedVersion": "2"
+        },
+        {
+          "m_Modification": [
+            {
+              "m_TransformParent": [
+                {
+                  "fileID": "0"
+                }
+              ]
+            },
+            {
+              "m_Modifications": [
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950257"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_Name"
+                },
+                {
+                  "value": "VRExplorer"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950257"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_IsActive"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_RootOrder"
+                },
+                {
+                  "value": "1"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalPosition.x"
+                },
+                {
+                  "value": "5.4072027"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalPosition.y"
+                },
+                {
+                  "value": "1.185"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalPosition.z"
+                },
+                {
+                  "value": "-4.4847035"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalRotation.w"
+                },
+                {
+                  "value": "1"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalRotation.x"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalRotation.y"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalRotation.z"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalEulerAnglesHint.x"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalEulerAnglesHint.y"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                },
+                {
+                  "- target": [
+                    {
+                      "fileID": "8080720548095950262"
+                    },
+                    {
+                      "guid": "220046a189ec53d4e9d8c2c88e544bff"
+                    },
+                    {
+                      "type": "3"
+                    }
+                  ]
+                },
+                {
+                  "propertyPath": "m_LocalEulerAnglesHint.z"
+                },
+                {
+                  "value": "0"
+                },
+                {
+                  "objectReference": [
+                    {
+                      "fileID": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "m_RemovedComponents": "[]"
+            }
+          ]
+        },
+        {
+          "m_SourcePrefab": [
+            {
+              "fileID": "100100000"
+            },
+            {
+              "guid": "220046a189ec53d4e9d8c2c88e544bff"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "469710505",
       "GameObject": [
         {
@@ -16734,7 +17973,7 @@
           ]
         },
         {
-          "m_RootOrder": "4"
+          "m_RootOrder": "5"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -19169,7 +20408,7 @@
       ]
     },
     {
-      "id": "3901",
+      "id": "4162",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -19181,7 +20420,7 @@
       ]
     },
     {
-      "id": "3904",
+      "id": "4165",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -19193,7 +20432,7 @@
       ]
     },
     {
-      "id": "3907",
+      "id": "4168",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -19205,7 +20444,7 @@
       ]
     },
     {
-      "id": "3910",
+      "id": "4171",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -26006,6 +27245,20 @@
                   "fileID": "677490825"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "677490827"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "677490828"
+                }
+              ]
             }
           ]
         },
@@ -26468,6 +27721,513 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "677490827",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "677490823"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetIngredientCut"
+                    },
+                    {
+                      "m_Mode": "6"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "1"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5741",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5744",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5747",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5750",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "677490828",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "677490823"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -27962,7 +29722,53 @@
             {
               "m_PersistentCalls": [
                 {
-                  "m_Calls": "[]"
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "ResetAllState"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
                 }
               ]
             }
@@ -28053,55 +29859,59 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "6114",
+      "m_OnLastHoverExited": [
         {
-          "m_OnLastHoverExited": [
+          "m_PersistentCalls": [
             {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnHoverEntered": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnHoverExited": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnSelectEntered": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
+              "m_Calls": "[]"
             }
           ]
         }
       ]
     },
     {
-      "id": "5722",
+      "id": "6117",
+      "m_OnHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6120",
+      "m_OnHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6123",
+      "m_OnSelectEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6126",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -28113,7 +29923,7 @@
       ]
     },
     {
-      "id": "5725",
+      "id": "6129",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -28125,7 +29935,7 @@
       ]
     },
     {
-      "id": "5728",
+      "id": "6132",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -28137,7 +29947,7 @@
       ]
     },
     {
-      "id": "5731",
+      "id": "6135",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -30168,6 +31978,20 @@
                   "fileID": "779129202"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "779129206"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "779129205"
+                }
+              ]
             }
           ]
         },
@@ -30596,6 +32420,555 @@
             },
             {
               "type": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "779129205",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "779129200"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "d3b05e8f39c90dc4fad20aaf0100ad81"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.3"
+        },
+        {
+          "triggerringTime": "0.5"
+        },
+        {
+          "deltaRotation": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "0"
+            }
+          ]
+        },
+        {
+          "deltaScale": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "0"
+            }
+          ]
+        },
+        {
+          "deltaPosition": [
+            {
+              "x": "0"
+            },
+            {
+              "y": "0"
+            },
+            {
+              "z": "-0.35"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "779129206",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "779129200"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "196765818"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "TryOpen"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6747",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6750",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6753",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6756",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
             }
           ]
         }
@@ -31670,7 +34043,7 @@
         {
           "destination": [
             {
-              "fileID": "0"
+              "fileID": "1770515125"
             }
           ]
         }
@@ -32450,6 +34823,20 @@
                   "fileID": "807955243"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "807955245"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "807955246"
+                }
+              ]
             }
           ]
         },
@@ -32937,6 +35324,513 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "807955245",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "807955241"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetDishPlated"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7330",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7333",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7336",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7339",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "807955246",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "807955241"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "1.5"
         }
       ]
     },
@@ -35816,6 +38710,20 @@
                   "fileID": "904396786"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "904396790"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "904396789"
+                }
+              ]
             }
           ]
         },
@@ -36250,6 +39158,146 @@
       ]
     },
     {
+      "id": "904396789",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "904396784"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "005b36b8fc16f6649ac98d1464b1c1f3"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "usePhysicsOnRelease": "0"
+        },
+        {
+          "GrabPhysics": "1"
+        },
+        {
+          "GrabMechanic": "0"
+        },
+        {
+          "destination": [
+            {
+              "fileID": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "904396790",
+      "Rigidbody": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "904396784"
+            }
+          ]
+        },
+        {
+          "serializedVersion": "2"
+        },
+        {
+          "m_Mass": "0.5"
+        },
+        {
+          "m_Drag": "0"
+        },
+        {
+          "m_AngularDrag": "0.05"
+        },
+        {
+          "m_UseGravity": "1"
+        },
+        {
+          "m_IsKinematic": "0"
+        },
+        {
+          "m_Interpolate": "0"
+        },
+        {
+          "m_Constraints": "0"
+        },
+        {
+          "m_CollisionDetection": "0"
+        }
+      ]
+    },
+    {
       "id": "915335388",
       "GameObject": [
         {
@@ -36320,6 +39368,13 @@
               "- component": [
                 {
                   "fileID": "915335393"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "915335395"
                 }
               ]
             }
@@ -36826,7 +39881,7 @@
         {
           "destination": [
             {
-              "fileID": "0"
+              "fileID": "351089452"
             }
           ]
         }
@@ -36896,6 +39951,443 @@
       ]
     },
     {
+      "id": "915335395",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "915335388"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetHasPantryKey"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8274",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8277",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8280",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8283",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "934798471",
       "GameObject": [
         {
@@ -36945,6 +40437,20 @@
               "- component": [
                 {
                   "fileID": "934798473"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "934798475"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "934798476"
                 }
               ]
             }
@@ -37409,6 +40915,513 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "934798475",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "934798471"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1200882481"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "TryStartCooking"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8495",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8498",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8501",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8504",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "934798476",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "934798471"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "2"
         }
       ]
     },
@@ -39342,7 +43355,7 @@
           ]
         },
         {
-          "m_RootOrder": "5"
+          "m_RootOrder": "6"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -40880,6 +44893,20 @@
                   "fileID": "1062148657"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1062148659"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1062148660"
+                }
+              ]
             }
           ]
         },
@@ -41382,6 +45409,562 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "1062148659",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1062148655"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetFinalDoorUnlocked"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    },
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1841690636"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "Unlock"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9420",
+      "m_OnLastHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9423",
+      "m_OnHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9426",
+      "m_OnHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9429",
+      "m_OnSelectEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9432",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9435",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9438",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9441",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1062148660",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1062148655"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -42768,7 +47351,7 @@
       ]
     },
     {
-      "id": "8676",
+      "id": "9769",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -42780,7 +47363,7 @@
       ]
     },
     {
-      "id": "8679",
+      "id": "9772",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -42792,7 +47375,7 @@
       ]
     },
     {
-      "id": "8682",
+      "id": "9775",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -42804,7 +47387,7 @@
       ]
     },
     {
-      "id": "8685",
+      "id": "9778",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -43055,7 +47638,7 @@
           ]
         },
         {
-          "m_RootOrder": "6"
+          "m_RootOrder": "7"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -43129,6 +47712,20 @@
               "- component": [
                 {
                   "fileID": "1110666210"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1110666214"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1110666213"
                 }
               ]
             }
@@ -43561,6 +48158,146 @@
               "type": "0"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "1110666213",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1110666208"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "005b36b8fc16f6649ac98d1464b1c1f3"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "usePhysicsOnRelease": "0"
+        },
+        {
+          "GrabPhysics": "1"
+        },
+        {
+          "GrabMechanic": "0"
+        },
+        {
+          "destination": [
+            {
+              "fileID": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1110666214",
+      "Rigidbody": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1110666208"
+            }
+          ]
+        },
+        {
+          "serializedVersion": "2"
+        },
+        {
+          "m_Mass": "0.5"
+        },
+        {
+          "m_Drag": "0"
+        },
+        {
+          "m_AngularDrag": "0.05"
+        },
+        {
+          "m_UseGravity": "1"
+        },
+        {
+          "m_IsKinematic": "0"
+        },
+        {
+          "m_Interpolate": "0"
+        },
+        {
+          "m_Constraints": "0"
+        },
+        {
+          "m_CollisionDetection": "0"
         }
       ]
     },
@@ -48037,6 +52774,13 @@
                   "fileID": "1200882481"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1200882482"
+                }
+              ]
             }
           ]
         },
@@ -48301,6 +53045,130 @@
         },
         {
           "cookDuration": "3"
+        }
+      ]
+    },
+    {
+      "id": "1200882482",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1200882479"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": [
+            {
+              "- m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1200882481"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": "StoveController, Assembly-CSharp"
+                    },
+                    {
+                      "m_MethodName": "TryStartCooking"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": "UnityEngine.Object, UnityEngine"
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -49951,7 +54819,7 @@
       ]
     },
     {
-      "id": "10117",
+      "id": "11274",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -49963,7 +54831,7 @@
       ]
     },
     {
-      "id": "10120",
+      "id": "11277",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -49975,7 +54843,7 @@
       ]
     },
     {
-      "id": "10123",
+      "id": "11280",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -49987,7 +54855,7 @@
       ]
     },
     {
-      "id": "10126",
+      "id": "11283",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -52577,7 +57445,7 @@
                   "propertyPath": "m_RootOrder"
                 },
                 {
-                  "value": "1"
+                  "value": "2"
                 },
                 {
                   "objectReference": [
@@ -53005,6 +57873,13 @@
               "- component": [
                 {
                   "fileID": "1334793357"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1334793359"
                 }
               ]
             }
@@ -53504,7 +58379,7 @@
         {
           "destination": [
             {
-              "fileID": "0"
+              "fileID": "934798472"
             }
           ]
         }
@@ -53896,6 +58771,443 @@
             },
             {
               "z": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1334793359",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1334793350"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetIngredientsCombined"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12158",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12161",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12164",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "12167",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
             }
           ]
         }
@@ -55539,7 +60851,7 @@
         {
           "destination": [
             {
-              "fileID": "0"
+              "fileID": "677490824"
             }
           ]
         }
@@ -55851,7 +61163,7 @@
           ]
         },
         {
-          "m_RootOrder": "3"
+          "m_RootOrder": "4"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -64976,6 +70288,20 @@
                   "fileID": "1676569310"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1676569314"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1676569313"
+                }
+              ]
             }
           ]
         },
@@ -65406,6 +70732,146 @@
               "type": "0"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "1676569313",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1676569308"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "005b36b8fc16f6649ac98d1464b1c1f3"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "usePhysicsOnRelease": "0"
+        },
+        {
+          "GrabPhysics": "1"
+        },
+        {
+          "GrabMechanic": "0"
+        },
+        {
+          "destination": [
+            {
+              "fileID": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1676569314",
+      "Rigidbody": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1676569308"
+            }
+          ]
+        },
+        {
+          "serializedVersion": "2"
+        },
+        {
+          "m_Mass": "0.5"
+        },
+        {
+          "m_Drag": "0"
+        },
+        {
+          "m_AngularDrag": "0.05"
+        },
+        {
+          "m_UseGravity": "1"
+        },
+        {
+          "m_IsKinematic": "0"
+        },
+        {
+          "m_Interpolate": "0"
+        },
+        {
+          "m_Constraints": "0"
+        },
+        {
+          "m_CollisionDetection": "0"
         }
       ]
     },
@@ -68436,7 +73902,7 @@
         {
           "destination": [
             {
-              "fileID": "0"
+              "fileID": "2088852901"
             }
           ]
         }
@@ -69049,6 +74515,20 @@
                   "fileID": "1770515126"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1770515128"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "1770515129"
+                }
+              ]
             }
           ]
         },
@@ -69551,6 +75031,562 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "1770515128",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1770515124"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetKitchenDoorUnlocked"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    },
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1341467255"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "Unlock"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15400",
+      "m_OnLastHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15403",
+      "m_OnHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15406",
+      "m_OnHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15409",
+      "m_OnSelectEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15412",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15415",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15418",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15421",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1770515129",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "1770515124"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -73388,7 +79424,53 @@
             {
               "m_PersistentCalls": [
                 {
-                  "m_Calls": "[]"
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "1854153240"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "Toggle"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
                 }
               ]
             }
@@ -73479,55 +79561,59 @@
               ]
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "16265",
+      "m_OnLastHoverExited": [
         {
-          "m_OnLastHoverExited": [
+          "m_PersistentCalls": [
             {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnHoverEntered": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnHoverExited": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "m_OnSelectEntered": [
-            {
-              "m_PersistentCalls": [
-                {
-                  "m_Calls": "[]"
-                }
-              ]
+              "m_Calls": "[]"
             }
           ]
         }
       ]
     },
     {
-      "id": "14816",
+      "id": "16268",
+      "m_OnHoverEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16271",
+      "m_OnHoverExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16274",
+      "m_OnSelectEntered": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "16277",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -73539,7 +79625,7 @@
       ]
     },
     {
-      "id": "14819",
+      "id": "16280",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -73551,7 +79637,7 @@
       ]
     },
     {
-      "id": "14822",
+      "id": "16283",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -73563,7 +79649,7 @@
       ]
     },
     {
-      "id": "14825",
+      "id": "16286",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [
@@ -74891,7 +80977,7 @@
           ]
         },
         {
-          "m_RootOrder": "2"
+          "m_RootOrder": "3"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -75499,7 +81585,7 @@
           "m_StaticEditorFlags": "0"
         },
         {
-          "m_IsActive": "1"
+          "m_IsActive": "0"
         }
       ]
     },
@@ -75597,7 +81683,7 @@
           ]
         },
         {
-          "m_RootOrder": "7"
+          "m_RootOrder": "8"
         },
         {
           "m_LocalEulerAnglesHint": [
@@ -78552,6 +84638,20 @@
                   "fileID": "2088852902"
                 }
               ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "2088852904"
+                }
+              ]
+            },
+            {
+              "- component": [
+                {
+                  "fileID": "2088852905"
+                }
+              ]
             }
           ]
         },
@@ -79038,6 +85138,513 @@
               "z": "1"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "2088852904",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "2088852900"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "8a35f6cfbfba9b548aaa00d52cfe8a50"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "m_InteractionManager": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_Colliders": "[]"
+        },
+        {
+          "m_InteractionLayerMask": [
+            {
+              "serializedVersion": "2"
+            },
+            {
+              "m_Bits": "4294967295"
+            }
+          ]
+        },
+        {
+          "m_InteractionLayers": [
+            {
+              "m_Bits": "1"
+            }
+          ]
+        },
+        {
+          "m_DistanceCalculationMode": "1"
+        },
+        {
+          "m_SelectMode": "0"
+        },
+        {
+          "m_FocusMode": "1"
+        },
+        {
+          "m_CustomReticle": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_AllowGazeInteraction": "0"
+        },
+        {
+          "m_AllowGazeSelect": "0"
+        },
+        {
+          "m_OverrideGazeTimeToSelect": "0"
+        },
+        {
+          "m_GazeTimeToSelect": "0.5"
+        },
+        {
+          "m_OverrideTimeToAutoDeselectGaze": "0"
+        },
+        {
+          "m_TimeToAutoDeselectGaze": "3"
+        },
+        {
+          "m_AllowGazeAssistance": "0"
+        },
+        {
+          "m_FirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_HoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastSelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": [
+                    {
+                      "- m_Target": [
+                        {
+                          "fileID": "553705493"
+                        }
+                      ]
+                    },
+                    {
+                      "m_TargetAssemblyTypeName": ""
+                    },
+                    {
+                      "m_MethodName": "SetIngredientWashed"
+                    },
+                    {
+                      "m_Mode": "1"
+                    },
+                    {
+                      "m_Arguments": [
+                        {
+                          "m_ObjectArgument": [
+                            {
+                              "fileID": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "m_ObjectArgumentAssemblyTypeName": ""
+                        },
+                        {
+                          "m_IntArgument": "0"
+                        },
+                        {
+                          "m_FloatArgument": "0"
+                        },
+                        {
+                          "m_StringArgument": ""
+                        },
+                        {
+                          "m_BoolArgument": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "m_CallState": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_SelectExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FirstFocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_LastFocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_FocusExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Activated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_Deactivated": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_StartingHoverFilters": "[]"
+        },
+        {
+          "m_StartingSelectFilters": "[]"
+        },
+        {
+          "m_StartingInteractionStrengthFilters": "[]"
+        },
+        {
+          "m_OnFirstHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnLastHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnHoverExited": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "m_OnSelectEntered": [
+            {
+              "m_PersistentCalls": [
+                {
+                  "m_Calls": "[]"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17490",
+      "m_OnSelectExited": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17493",
+      "m_OnSelectCanceled": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17496",
+      "m_OnActivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "17499",
+      "m_OnDeactivate": [
+        {
+          "m_PersistentCalls": [
+            {
+              "m_Calls": "[]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2088852905",
+      "MonoBehaviour": [
+        {
+          "m_ObjectHideFlags": "0"
+        },
+        {
+          "m_CorrespondingSourceObject": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabInstance": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_PrefabAsset": [
+            {
+              "fileID": "0"
+            }
+          ]
+        },
+        {
+          "m_GameObject": [
+            {
+              "fileID": "2088852900"
+            }
+          ]
+        },
+        {
+          "m_Enabled": "1"
+        },
+        {
+          "m_EditorHideFlags": "0"
+        },
+        {
+          "m_Script": [
+            {
+              "fileID": "11500000"
+            },
+            {
+              "guid": "ea063aa6194c2234cac095d8da6e035e"
+            },
+            {
+              "type": "3"
+            }
+          ]
+        },
+        {
+          "m_Name": ""
+        },
+        {
+          "m_EditorClassIdentifier": ""
+        },
+        {
+          "triggerringEvents": "[]"
+        },
+        {
+          "triggerredEvents": "[]"
+        },
+        {
+          "triggeringTime": "0.5"
         }
       ]
     },
@@ -81476,7 +88083,7 @@
       ]
     },
     {
-      "id": "16433",
+      "id": "18025",
       "m_OnSelectExited": [
         {
           "m_PersistentCalls": [
@@ -81488,7 +88095,7 @@
       ]
     },
     {
-      "id": "16436",
+      "id": "18028",
       "m_OnSelectCanceled": [
         {
           "m_PersistentCalls": [
@@ -81500,7 +88107,7 @@
       ]
     },
     {
-      "id": "16439",
+      "id": "18031",
       "m_OnActivate": [
         {
           "m_PersistentCalls": [
@@ -81512,7 +88119,7 @@
       ]
     },
     {
-      "id": "16442",
+      "id": "18034",
       "m_OnDeactivate": [
         {
           "m_PersistentCalls": [

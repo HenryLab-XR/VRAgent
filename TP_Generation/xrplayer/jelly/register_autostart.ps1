@@ -4,11 +4,33 @@
 )
 
 $ScriptDir   = Split-Path -Parent $MyInvocation.MyCommand.Path
-$LauncherBat = Join-Path $ScriptDir "start_jelly.bat"
-$LogPath     = "D:\--UnityProject\HenryLabXR\VRAgent2.0-PVEO_core\_log\jelly_schtask.log"
+$TpGenerationDir = (Resolve-Path (Join-Path $ScriptDir "..\..")).Path
+$LauncherPs1 = Join-Path $TpGenerationDir "start_jelly.ps1"
+$PowerShellExe = Join-Path $env:WINDIR "System32\WindowsPowerShell\v1.0\powershell.exe"
+$LogPath     = Join-Path $TpGenerationDir ".jelly.log"
 $LogDir      = Split-Path -Parent $LogPath
 $UserId      = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $IsAdmin     = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+$workspaceRoot = Split-Path -Parent $TpGenerationDir
+$PythonCandidates = @(
+  $env:XRPLAYER_JELLY_PYTHON,
+  "E:\--SoftWare\python.exe",
+  (Join-Path $workspaceRoot ".venv\Scripts\python.exe")
+)
+$PythonExe = $PythonCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+$TaskArguments = @(
+  "-NoProfile",
+  "-NonInteractive",
+  "-ExecutionPolicy", "Bypass",
+  "-WindowStyle", "Hidden",
+  "-File", ('"{0}"' -f $LauncherPs1),
+  "-Port", $Port
+)
+if ($PythonExe) {
+  $TaskArguments += @("-Python", ('"{0}"' -f $PythonExe))
+}
+$TaskArgumentsText = $TaskArguments -join " "
 
 if (-not (Test-Path $LogDir)) { New-Item -ItemType Directory -Path $LogDir | Out-Null }
 
@@ -38,8 +60,8 @@ $xml = @"
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>cmd.exe</Command>
-      <Arguments>/c "$LauncherBat"</Arguments>
+      <Command>$PowerShellExe</Command>
+      <Arguments>$TaskArgumentsText</Arguments>
     </Exec>
   </Actions>
 </Task>

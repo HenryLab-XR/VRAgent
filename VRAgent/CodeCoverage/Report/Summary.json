@@ -1,38 +1,39 @@
 {
   "summary": {
-    "generatedon": "2026-03-31T03:06:27Z",
-    "parser": "MultiReportParser (2x OpenCoverParser)",
+    "generatedon": "2026-05-05T08:21:31Z",
+    "parser": "MultiReportParser (3x OpenCoverParser)",
     "assemblies": 1,
-    "classes": 15,
-    "files": 15,
-    "coveredlines": 204,
-    "uncoveredlines": 290,
-    "coverablelines": 494,
-    "totallines": 1001,
-    "linecoverage": 41.2,
+    "classes": 16,
+    "files": 16,
+    "coveredlines": 324,
+    "uncoveredlines": 218,
+    "coverablelines": 542,
+    "totallines": 1214,
+    "linecoverage": 59.7,
     "coveredbranches": 0,
     "totalbranches": 0,
-    "coveredmethods": 62,
-    "totalmethods": 101,
-    "methodcoverage": 61.3
+    "coveredmethods": 79,
+    "totalmethods": 111,
+    "methodcoverage": 71.1
  },
   "coverage": {
     "assemblies": [
-      { "name": "Assembly-CSharp", "classes": 15, "coverage": 41.2, "coveredlines": 204, "coverablelines": 494, "totallines": 1001, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 61.3, "coveredmethods": 62, "totalmethods": 101, "classesinassembly": [
-        { "name": "CuttingBoardController", "coverage": 64, "coveredlines": 16, "coverablelines": 25, "totallines": 59, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 80, "coveredmethods": 4, "totalmethods": 5 },
+      { "name": "Assembly-CSharp", "classes": 16, "coverage": 59.7, "coveredlines": 324, "coverablelines": 542, "totallines": 1214, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 71.1, "coveredmethods": 79, "totalmethods": 111, "classesinassembly": [
+        { "name": "CuttingBoardController", "coverage": 66.6, "coveredlines": 18, "coverablelines": 27, "totallines": 65, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 80, "coveredmethods": 4, "totalmethods": 5 },
         { "name": "FinalExitTrigger", "coverage": 26, "coveredlines": 6, "coverablelines": 23, "totallines": 48, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 4, "totalmethods": 4 },
         { "name": "GrabbableKeyController", "coverage": 11.1, "coveredlines": 1, "coverablelines": 9, "totallines": 24, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 33.3, "coveredmethods": 1, "totalmethods": 3 },
-        { "name": "KitchenBadgeUnlockReceiver", "coverage": 37.5, "coveredlines": 9, "coverablelines": 24, "totallines": 54, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 75, "coveredmethods": 3, "totalmethods": 4 },
-        { "name": "KnifeSlotDetector", "coverage": 57.8, "coveredlines": 11, "coverablelines": 19, "totallines": 41, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 71.4, "coveredmethods": 5, "totalmethods": 7 },
-        { "name": "LockedCabinetController", "coverage": 82, "coveredlines": 32, "coverablelines": 39, "totallines": 77, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 75, "coveredmethods": 6, "totalmethods": 8 },
-        { "name": "MixingBowlController", "coverage": 45, "coveredlines": 9, "coverablelines": 20, "totallines": 43, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 60, "coveredmethods": 3, "totalmethods": 5 },
+        { "name": "KitchenBadgeUnlockReceiver", "coverage": 91.6, "coveredlines": 22, "coverablelines": 24, "totallines": 60, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 4, "totalmethods": 4 },
+        { "name": "KnifeSlotDetector", "coverage": 100, "coveredlines": 19, "coverablelines": 19, "totallines": 41, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 7, "totalmethods": 7 },
+        { "name": "LockedCabinetController", "coverage": 86.9, "coveredlines": 40, "coverablelines": 46, "totallines": 87, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 75, "coveredmethods": 6, "totalmethods": 8 },
+        { "name": "MixingBowlController", "coverage": 80, "coveredlines": 16, "coverablelines": 20, "totallines": 43, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 80, "coveredmethods": 4, "totalmethods": 5 },
         { "name": "MixingBowlSocket", "coverage": 57.8, "coveredlines": 11, "coverablelines": 19, "totallines": 41, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 71.4, "coveredmethods": 5, "totalmethods": 7 },
-        { "name": "PantryKeyUnlockReceiver", "coverage": 50, "coveredlines": 9, "coverablelines": 18, "totallines": 45, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 75, "coveredmethods": 3, "totalmethods": 4 },
-        { "name": "PowerSwitchController", "coverage": 100, "coveredlines": 20, "coverablelines": 20, "totallines": 47, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 6, "totalmethods": 6 },
-        { "name": "RecipeController", "coverage": 20.9, "coveredlines": 31, "coverablelines": 148, "totallines": 243, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 28, "coveredmethods": 7, "totalmethods": 25 },
-        { "name": "ServingCounterSocket", "coverage": 39.1, "coveredlines": 9, "coverablelines": 23, "totallines": 54, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 60, "coveredmethods": 3, "totalmethods": 5 },
-        { "name": "ServingPlateSocket", "coverage": 40.9, "coveredlines": 9, "coverablelines": 22, "totallines": 51, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 60, "coveredmethods": 3, "totalmethods": 5 },
-        { "name": "SinkWashStation", "coverage": 34, "coveredlines": 17, "coverablelines": 50, "totallines": 88, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 57.1, "coveredmethods": 4, "totalmethods": 7 },
-        { "name": "StoveController", "coverage": 40, "coveredlines": 14, "coverablelines": 35, "totallines": 86, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 83.3, "coveredmethods": 5, "totalmethods": 6 } ] } ]
+        { "name": "OracleRegistry", "coverage": 36.3, "coveredlines": 12, "coverablelines": 33, "totallines": 159, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 20, "coveredmethods": 2, "totalmethods": 10 },
+        { "name": "PantryKeyUnlockReceiver", "coverage": 94.4, "coveredlines": 17, "coverablelines": 18, "totallines": 45, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 4, "totalmethods": 4 },
+        { "name": "PowerSwitchController", "coverage": 100, "coveredlines": 22, "coverablelines": 22, "totallines": 52, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 6, "totalmethods": 6 },
+        { "name": "RecipeController", "coverage": 54.9, "coveredlines": 83, "coverablelines": 151, "totallines": 253, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 64, "coveredmethods": 16, "totalmethods": 25 },
+        { "name": "ServingCounterSocket", "coverage": 69.5, "coveredlines": 16, "coverablelines": 23, "totallines": 54, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 80, "coveredmethods": 4, "totalmethods": 5 },
+        { "name": "ServingPlateSocket", "coverage": 90, "coveredlines": 18, "coverablelines": 20, "totallines": 56, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 80, "coveredmethods": 4, "totalmethods": 5 },
+        { "name": "SinkWashStation", "coverage": 33.3, "coveredlines": 17, "coverablelines": 51, "totallines": 92, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 57.1, "coveredmethods": 4, "totalmethods": 7 },
+        { "name": "StoveController", "coverage": 16.2, "coveredlines": 6, "coverablelines": 37, "totallines": 94, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 66.6, "coveredmethods": 4, "totalmethods": 6 } ] } ]
   }
 }

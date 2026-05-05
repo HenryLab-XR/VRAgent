@@ -2,7 +2,7 @@
   "ProjectName": "C# Project",
   "ProjectDirectory": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets",
   "DirectoryPath": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets",
-  "LOC": 6126,
+  "LOC": 6339,
   "ConfigurationFile": "Config.json",
   "ProjectLanguage": "C#",
   "ProjectLanguageVersion": "CSharp8",
@@ -52067,7 +52067,7 @@
       "Name": "CuttingBoardController",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\CuttingBoardController.cs",
       "Language": "C#",
-      "Loc": 59,
+      "Loc": 65,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -52131,7 +52131,7 @@
                   "FullName": "CuttingBoardController.UpdateVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\CuttingBoardController.cs",
-                  "DefinitionLine": 54,
+                  "DefinitionLine": 60,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -52169,7 +52169,7 @@
                   "FullName": "RecipeController.SetIngredientCut(bool)",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 136,
+                  "DefinitionLine": 140,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -52180,19 +52180,19 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 35
+                  "Line": 39
                 },
                 {
                   "Name": "UpdateVisual",
                   "FullName": "CuttingBoardController.UpdateVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\CuttingBoardController.cs",
-                  "DefinitionLine": 54,
+                  "DefinitionLine": 60,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 50
+                  "Line": 56
                 },
                 {
                   "Name": "Debug.Log",
@@ -52210,7 +52210,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 51
+                  "Line": 57
                 }
               ],
               "Variables": [
@@ -52230,7 +52230,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 48,
+                    "AssignmentLine": 54,
                     "VariableKind": "Field",
                     "FullName": "CuttingBoardController._hasBeenCut",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -52257,7 +52257,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 48,
+                    "UseLine": 54,
                     "UseKind": "Literal",
                     "AssignedTo": "_hasBeenCut",
                     "Value": "true",
@@ -52325,7 +52325,60 @@
                   "DanglingElse": true,
                   "Depth": 1,
                   "EndLine": 41,
-                  "StartLine": 37,
+                  "StartLine": 40,
+                  "Invocations": [
+                    {
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "\"BUG-009\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "\"SetIngredientCut(false) called before validation\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 41
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "knifePresent"
+                    ],
+                    "Properties": [],
+                    "Fields": [],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "!knifePresent",
+                    "ExpressionType": "LogicalNotExpression",
+                    "Kind": "Method"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 47,
+                  "StartLine": 43,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -52343,7 +52396,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 39
+                      "Line": 45
                     }
                   ],
                   "Variables": [],
@@ -52358,7 +52411,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 40
+                      "Line": 46
                     }
                   ]
                 },
@@ -52384,8 +52437,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 47,
-                  "StartLine": 43,
+                  "EndLine": 53,
+                  "StartLine": 49,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -52403,7 +52456,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 45
+                      "Line": 51
                     }
                   ],
                   "Variables": [],
@@ -52418,7 +52471,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 46
+                      "Line": 52
                     }
                   ]
                 }
@@ -52449,7 +52502,7 @@
                     "Type": "?",
                     "Assignment": "_hasBeenCut ? materialCut : materialUncut",
                     "Kind": "Assignment",
-                    "AssignmentLine": 56,
+                    "AssignmentLine": 62,
                     "VariableKind": null,
                     "FullName": null,
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -52476,7 +52529,7 @@
                     "Name": "_hasBeenCut ? materialCut : materialUncut",
                     "Type": "?",
                     "Kind": "Use",
-                    "UseLine": 56,
+                    "UseLine": 62,
                     "UseKind": "Conditional",
                     "AssignedTo": "boardRenderer.sharedMaterial",
                     "Value": null,
@@ -52509,8 +52562,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 56,
-                  "StartLine": 56,
+                  "EndLine": 62,
+                  "StartLine": 62,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -52524,7 +52577,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 56
+                      "Line": 62
                     }
                   ]
                 }
@@ -52533,7 +52586,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 54
+              "Line": 60
             }
           ],
           "Fields": [
@@ -53001,7 +53054,7 @@
                         "FullName": "RecipeController.PrintStateSnapshot()",
                         "ReturnType": "Void",
                         "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                        "DefinitionLine": 218,
+                        "DefinitionLine": 222,
                         "Kind": "SourceFile",
                         "Module": null,
                         "ReferenceFound": true,
@@ -53089,7 +53142,7 @@
                       "FullName": "RecipeController.PrintStateSnapshot()",
                       "ReturnType": "Void",
                       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                      "DefinitionLine": 218,
+                      "DefinitionLine": 222,
                       "Kind": "SourceFile",
                       "Module": null,
                       "ReferenceFound": true,
@@ -53446,7 +53499,7 @@
       "Name": "KitchenBadgeUnlockReceiver",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\KitchenBadgeUnlockReceiver.cs",
       "Language": "C#",
-      "Loc": 54,
+      "Loc": 60,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -53586,7 +53639,7 @@
                   "FullName": "RecipeController.SetKitchenDoorUnlocked()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 108,
+                  "DefinitionLine": 112,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -53621,7 +53674,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 46
+                  "Line": 52
                 }
               ],
               "Variables": [
@@ -53852,69 +53905,52 @@
                     "Tokens": [
                       "panelRenderer",
                       "null",
-                      "materialUnlocked",
-                      "null"
+                      "panelRenderer.sharedMaterial",
+                      "materialNoPower"
                     ],
                     "Properties": [],
                     "Fields": [
                       "KitchenBadgeUnlockReceiver.panelRenderer",
-                      "KitchenBadgeUnlockReceiver.materialUnlocked"
+                      "KitchenBadgeUnlockReceiver.panelRenderer",
+                      "KitchenBadgeUnlockReceiver.materialNoPower"
                     ],
                     "Invocations": [],
                     "Type": "bool",
-                    "Statement": "panelRenderer != null && materialUnlocked != null",
+                    "Statement": "panelRenderer != null && panelRenderer.sharedMaterial == materialNoPower",
                     "ExpressionType": "LogicalAndExpression",
                     "Kind": "Literal"
                   },
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 44,
-                  "StartLine": 43,
-                  "Invocations": [],
-                  "Variables": [
+                  "EndLine": 50,
+                  "StartLine": 49,
+                  "Invocations": [
                     {
-                      "Variable": {
-                        "Name": "panelRenderer.sharedMaterial",
-                        "Type": "?",
-                        "Assignment": "materialUnlocked",
-                        "Kind": "Assignment",
-                        "AssignmentLine": 43,
-                        "VariableKind": null,
-                        "FullName": null,
-                        "AssignmentKind": "SimpleAssignmentExpression",
-                        "Cascades": [
-                          {
-                            "Tokens": [
-                              "panelRenderer"
-                            ],
-                            "Properties": [],
-                            "Fields": [
-                              "KitchenBadgeUnlockReceiver.panelRenderer"
-                            ],
-                            "Invocations": [],
-                            "Type": "Renderer",
-                            "Statement": "panelRenderer",
-                            "ExpressionType": "IdentifierName",
-                            "Kind": "Field"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "Variable": {
-                        "Name": "materialUnlocked",
-                        "Type": "?",
-                        "Kind": "Use",
-                        "UseLine": 43,
-                        "UseKind": "FieldReference",
-                        "AssignedTo": "panelRenderer.sharedMaterial",
-                        "Value": null,
-                        "Operation": "SimpleAssignmentExpression",
-                        "VariablesList": []
-                      }
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "\"BUG-008\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "\"Panel stuck on red despite successful unlock\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 50
                     }
                   ],
+                  "Variables": [],
                   "WhileBlocks": [],
                   "ForBlocks": [],
                   "IfBlocks": [],
@@ -53969,8 +54005,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 52,
-                  "StartLine": 51,
+                  "EndLine": 58,
+                  "StartLine": 57,
                   "Invocations": [
                     {
                       "Name": "_socket.selectEntered.RemoveListener",
@@ -53988,7 +54024,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 52
+                      "Line": 58
                     }
                   ],
                   "Variables": [],
@@ -54006,7 +54042,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 49
+              "Line": 55
             }
           ],
           "Fields": [
@@ -54639,7 +54675,7 @@
       "Name": "LockedCabinetController",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\LockedCabinetController.cs",
       "Language": "C#",
-      "Loc": 77,
+      "Loc": 87,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -54731,12 +54767,12 @@
                   "FullName": "LockedCabinetController.UpdateLockVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\LockedCabinetController.cs",
-                  "DefinitionLine": 72,
+                  "DefinitionLine": 82,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 30
+                  "Line": 32
                 }
               ],
               "Variables": [
@@ -54772,9 +54808,9 @@
                   "Variable": {
                     "Name": "_openLocalPosition",
                     "Type": "Vector3",
-                    "Assignment": "_closedLocalPosition + new Vector3(0f, 0f, -openDistance)",
+                    "Assignment": "_closedLocalPosition + new Vector3(0f, 0f, openDistance)",
                     "Kind": "Assignment",
-                    "AssignmentLine": 28,
+                    "AssignmentLine": 30,
                     "VariableKind": "Field",
                     "FullName": "LockedCabinetController._openLocalPosition",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -54811,10 +54847,10 @@
                 },
                 {
                   "Variable": {
-                    "Name": "_closedLocalPosition + new Vector3(0f, 0f, -openDistance)",
+                    "Name": "_closedLocalPosition + new Vector3(0f, 0f, openDistance)",
                     "Type": "Vector3",
                     "Kind": "Use",
-                    "UseLine": 28,
+                    "UseLine": 30,
                     "UseKind": "BinaryOperator",
                     "AssignedTo": "_openLocalPosition",
                     "Value": null,
@@ -54824,7 +54860,7 @@
                         "Name": "_closedLocalPosition",
                         "Type": "Vector3",
                         "Kind": "Use",
-                        "UseLine": 28,
+                        "UseLine": 30,
                         "UseKind": "FieldReference",
                         "AssignedTo": "_openLocalPosition",
                         "Value": null,
@@ -54832,10 +54868,10 @@
                         "VariablesList": []
                       },
                       {
-                        "Name": "new Vector3(0f, 0f, -openDistance)",
+                        "Name": "new Vector3(0f, 0f, openDistance)",
                         "Type": "Vector3",
                         "Kind": "Use",
-                        "UseLine": 28,
+                        "UseLine": 30,
                         "UseKind": "Invalid",
                         "AssignedTo": "_openLocalPosition",
                         "Value": null,
@@ -54896,7 +54932,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 36
+                  "Line": 38
                 }
               ],
               "Variables": [
@@ -54907,7 +54943,7 @@
                     "FullName": null,
                     "Assignment": "_isOpen ? _openLocalPosition : _closedLocalPosition",
                     "Kind": "Definition",
-                    "DefinitionLine": 34
+                    "DefinitionLine": 36
                   }
                 },
                 {
@@ -54916,7 +54952,7 @@
                     "Type": "?",
                     "Assignment": "Vector3.Lerp(transform.localPosition, target, Time.deltaTime * animationSpeed)",
                     "Kind": "Assignment",
-                    "AssignmentLine": 35,
+                    "AssignmentLine": 37,
                     "VariableKind": null,
                     "FullName": null,
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -54928,7 +54964,7 @@
                     "Name": "Vector3.Lerp(transform.localPosition, target, Time.deltaTime * animationSpeed)",
                     "Type": "?",
                     "Kind": "Use",
-                    "UseLine": 35,
+                    "UseLine": 37,
                     "UseKind": "Invalid",
                     "AssignedTo": "transform.localPosition",
                     "Value": null,
@@ -54946,7 +54982,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 33
+              "Line": 35
             },
             {
               "HasBody": true,
@@ -54977,7 +55013,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 60
+                  "Line": 70
                 }
               ],
               "Variables": [
@@ -54987,7 +55023,7 @@
                     "Type": "bool",
                     "Assignment": "!_isOpen",
                     "Kind": "Assignment",
-                    "AssignmentLine": 58,
+                    "AssignmentLine": 60,
                     "VariableKind": "Field",
                     "FullName": "LockedCabinetController._isOpen",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -55014,7 +55050,7 @@
                     "Name": "!_isOpen",
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 58,
+                    "UseLine": 60,
                     "UseKind": "UnaryOperator",
                     "AssignedTo": "_isOpen",
                     "Value": null,
@@ -55046,8 +55082,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 57,
-                  "StartLine": 45,
+                  "EndLine": 59,
+                  "StartLine": 47,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -55074,8 +55110,8 @@
                       },
                       "Else": {
                         "ElseStatement": "{\r\n                Debug.LogWarning($\"[LockedCabinetController] FAIL — {gameObject.name} is locked. Open pantry door first.\");\r\n                return;\r\n            }",
-                        "EndLine": 56,
-                        "StartLine": 52,
+                        "EndLine": 58,
+                        "StartLine": 54,
                         "Invocations": [
                           {
                             "Name": "Debug.LogWarning",
@@ -55093,7 +55129,7 @@
                                 "IsLiteral": false
                               }
                             ],
-                            "Line": 54
+                            "Line": 56
                           }
                         ],
                         "Variables": [],
@@ -55108,26 +55144,181 @@
                           {
                             "ReturnStatement": null,
                             "ReturnType": "void",
-                            "Line": 55
+                            "Line": 57
                           }
                         ]
                       },
                       "DanglingElse": false,
                       "Depth": 2,
-                      "EndLine": 56,
-                      "StartLine": 48,
+                      "EndLine": 58,
+                      "StartLine": 50,
                       "Invocations": [
                         {
                           "Name": "Unlock",
                           "FullName": "LockedCabinetController.Unlock()",
                           "ReturnType": "Void",
                           "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\LockedCabinetController.cs",
-                          "DefinitionLine": 64,
+                          "DefinitionLine": 74,
                           "Kind": "SourceFile",
                           "Module": null,
                           "ReferenceFound": true,
                           "Arguments": [],
-                          "Line": 50
+                          "Line": 52
+                        }
+                      ],
+                      "Variables": [],
+                      "WhileBlocks": [],
+                      "ForBlocks": [],
+                      "IfBlocks": [],
+                      "SwitchBlocks": [],
+                      "ForEachBlocks": [],
+                      "ElseBlocks": [],
+                      "TryBlocks": [],
+                      "Returns": []
+                    }
+                  ],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "_isOpen"
+                    ],
+                    "Properties": [],
+                    "Fields": [
+                      "LockedCabinetController._isOpen"
+                    ],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "_isOpen",
+                    "ExpressionType": "IdentifierName",
+                    "Kind": "Field"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 69,
+                  "StartLine": 63,
+                  "Invocations": [],
+                  "Variables": [
+                    {
+                      "Variable": {
+                        "Name": "expectedDir",
+                        "Type": "Vector3",
+                        "FullName": null,
+                        "Assignment": "new Vector3(0f, 0f, -openDistance)",
+                        "Kind": "Definition",
+                        "DefinitionLine": 64
+                      }
+                    },
+                    {
+                      "Variable": {
+                        "Name": "actualDir",
+                        "Type": "Vector3",
+                        "FullName": null,
+                        "Assignment": "_openLocalPosition - _closedLocalPosition",
+                        "Kind": "Definition",
+                        "DefinitionLine": 65
+                      }
+                    }
+                  ],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [
+                    {
+                      "Condition": {
+                        "Tokens": [
+                          "Vector3.DotexpectedDir.normalized,",
+                          "actualDir.normalized",
+                          "0f"
+                        ],
+                        "Properties": [],
+                        "Fields": [],
+                        "Invocations": [
+                          {
+                            "Name": "Vector3.Dot",
+                            "FullName": "Vector3.Dot",
+                            "ReturnType": null,
+                            "FileName": null,
+                            "DefinitionLine": 1,
+                            "Kind": null,
+                            "Module": null,
+                            "ReferenceFound": false,
+                            "Arguments": [
+                              {
+                                "Argument": "expectedDir.normalized",
+                                "IsInvocation": false,
+                                "IsLiteral": false
+                              },
+                              {
+                                "Argument": "actualDir.normalized",
+                                "IsInvocation": false,
+                                "IsLiteral": false
+                              }
+                            ],
+                            "Line": 67
+                          }
+                        ],
+                        "Type": "bool",
+                        "Statement": "Vector3.Dot(expectedDir.normalized, actualDir.normalized) < 0f",
+                        "ExpressionType": "LessThanExpression",
+                        "Kind": "Literal"
+                      },
+                      "Else": null,
+                      "DanglingElse": true,
+                      "Depth": 2,
+                      "EndLine": 68,
+                      "StartLine": 67,
+                      "Invocations": [
+                        {
+                          "Name": "Vector3.Dot",
+                          "FullName": "Vector3.Dot",
+                          "ReturnType": null,
+                          "FileName": null,
+                          "DefinitionLine": 1,
+                          "Kind": null,
+                          "Module": null,
+                          "ReferenceFound": false,
+                          "Arguments": [
+                            {
+                              "Argument": "expectedDir.normalized",
+                              "IsInvocation": false,
+                              "IsLiteral": false
+                            },
+                            {
+                              "Argument": "actualDir.normalized",
+                              "IsInvocation": false,
+                              "IsLiteral": false
+                            }
+                          ],
+                          "Line": 67
+                        },
+                        {
+                          "Name": "Trigger",
+                          "FullName": "OracleRegistry.Trigger(string, string)",
+                          "ReturnType": "Void",
+                          "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                          "DefinitionLine": 104,
+                          "Kind": "SourceFile",
+                          "Module": null,
+                          "ReferenceFound": true,
+                          "Arguments": [
+                            {
+                              "Argument": "\"BUG-005\"",
+                              "IsInvocation": false,
+                              "IsLiteral": false
+                            },
+                            {
+                              "Argument": "\"Cabinet slides in wrong direction\"",
+                              "IsInvocation": false,
+                              "IsLiteral": false
+                            }
+                          ],
+                          "Line": 68
                         }
                       ],
                       "Variables": [],
@@ -55152,7 +55343,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 43
+              "Line": 45
             },
             {
               "HasBody": true,
@@ -55172,12 +55363,12 @@
                   "FullName": "LockedCabinetController.UpdateLockVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\LockedCabinetController.cs",
-                  "DefinitionLine": 72,
+                  "DefinitionLine": 82,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 68
+                  "Line": 78
                 },
                 {
                   "Name": "Debug.Log",
@@ -55195,7 +55386,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 69
+                  "Line": 79
                 }
               ],
               "Variables": [
@@ -55205,7 +55396,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 66,
+                    "AssignmentLine": 76,
                     "VariableKind": "Field",
                     "FullName": "LockedCabinetController._isUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -55232,7 +55423,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 66,
+                    "UseLine": 76,
                     "UseKind": "Literal",
                     "AssignedTo": "_isUnlocked",
                     "Value": "true",
@@ -55264,8 +55455,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 66,
-                  "StartLine": 66,
+                  "EndLine": 76,
+                  "StartLine": 76,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -55279,7 +55470,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 66
+                      "Line": 76
                     }
                   ]
                 }
@@ -55288,7 +55479,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 64
+              "Line": 74
             },
             {
               "HasBody": true,
@@ -55310,7 +55501,7 @@
                     "Type": "?",
                     "Assignment": "_isUnlocked ? materialUnlocked : materialLocked",
                     "Kind": "Assignment",
-                    "AssignmentLine": 74,
+                    "AssignmentLine": 84,
                     "VariableKind": null,
                     "FullName": null,
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -55337,7 +55528,7 @@
                     "Name": "_isUnlocked ? materialUnlocked : materialLocked",
                     "Type": "?",
                     "Kind": "Use",
-                    "UseLine": 74,
+                    "UseLine": 84,
                     "UseKind": "Conditional",
                     "AssignedTo": "lockIndicatorRenderer.sharedMaterial",
                     "Value": null,
@@ -55370,8 +55561,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 74,
-                  "StartLine": 74,
+                  "EndLine": 84,
+                  "StartLine": 84,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -55385,7 +55576,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 74
+                      "Line": 84
                     }
                   ]
                 }
@@ -55394,7 +55585,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 72
+              "Line": 82
             }
           ],
           "Fields": [
@@ -55698,7 +55889,7 @@
                   "FullName": "RecipeController.SetIngredientsCombined()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 155,
+                  "DefinitionLine": 159,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -56529,6 +56720,961 @@
       "Line": 1
     },
     {
+      "Name": "OracleRegistry",
+      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+      "Language": "C#",
+      "Loc": 159,
+      "Interfaces": [],
+      "Namespaces": [],
+      "Classes": [
+        {
+          "Name": "OracleRegistry",
+          "FullName": "OracleRegistry",
+          "FullInheritanceName": "object",
+          "InnerClasses": [],
+          "ClassConstraints": [],
+          "Modifiers": [
+            "public",
+            "static"
+          ],
+          "Inheritance": "object",
+          "Interfaces": [],
+          "Properties": [
+            {
+              "Name": "TotalBugs",
+              "Type": "int",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "IsAutoProperty": false,
+              "Initializer": false,
+              "InitializerValue": null,
+              "Accessor": [],
+              "HasExpressionBody": true,
+              "ExpressionBody": {
+                "Tokens": [
+                  "_bugs.Count"
+                ],
+                "Properties": [
+                  "System.Collections.Generic.Dictionary<string, OracleRegistry.BugInfo>.Count"
+                ],
+                "Fields": [
+                  "OracleRegistry._bugs"
+                ],
+                "Invocations": [],
+                "Type": "int",
+                "Statement": "_bugs.Count",
+                "ExpressionType": "SimpleMemberAccessExpression",
+                "Kind": "Property"
+              },
+              "Line": 93
+            },
+            {
+              "Name": "TriggeredCount",
+              "Type": "int",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "IsAutoProperty": false,
+              "Initializer": false,
+              "InitializerValue": null,
+              "Accessor": [],
+              "HasExpressionBody": true,
+              "ExpressionBody": {
+                "Tokens": [
+                  "_triggered.Count"
+                ],
+                "Properties": [],
+                "Fields": [
+                  "OracleRegistry._triggered"
+                ],
+                "Invocations": [],
+                "Type": "?",
+                "Statement": "_triggered.Count",
+                "ExpressionType": "SimpleMemberAccessExpression",
+                "Kind": "Literal"
+              },
+              "Line": 96
+            },
+            {
+              "Name": "AllBugs",
+              "Type": "IReadOnlyDictionary<string, BugInfo>",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "IsAutoProperty": false,
+              "Initializer": false,
+              "InitializerValue": null,
+              "Accessor": [],
+              "HasExpressionBody": true,
+              "ExpressionBody": {
+                "Tokens": [
+                  "_bugs"
+                ],
+                "Properties": [],
+                "Fields": [
+                  "OracleRegistry._bugs"
+                ],
+                "Invocations": [],
+                "Type": "System.Collections.Generic.Dictionary<string, OracleRegistry.BugInfo>",
+                "Statement": "_bugs",
+                "ExpressionType": "IdentifierName",
+                "Kind": "Field"
+              },
+              "Line": 141
+            }
+          ],
+          "Methods": [
+            {
+              "HasBody": true,
+              "HasExpressionBody": false,
+              "Name": "Trigger",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.Trigger(string, string)",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "void",
+              "Parameters": [
+                {
+                  "Name": "bugId",
+                  "Type": "string",
+                  "Assignment": null,
+                  "Attributes": []
+                },
+                {
+                  "Name": "detail",
+                  "Type": "string",
+                  "Assignment": "\"\"",
+                  "Attributes": []
+                }
+              ],
+              "Invocations": [
+                {
+                  "Name": "_triggered.Add",
+                  "FullName": "_triggered.Add",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [
+                    {
+                      "Argument": "bugId",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 109
+                },
+                {
+                  "Name": "Debug.LogWarning",
+                  "FullName": "Debug.LogWarning",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [
+                    {
+                      "Argument": "msg",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 115
+                }
+              ],
+              "Variables": [
+                {
+                  "Variable": {
+                    "Name": "info",
+                    "Type": "var",
+                    "FullName": "OracleRegistry.BugInfo",
+                    "Assignment": "_bugs[bugId]",
+                    "Kind": "Definition",
+                    "DefinitionLine": 109
+                  }
+                },
+                {
+                  "Variable": {
+                    "Name": "msg",
+                    "Type": "string",
+                    "FullName": "string",
+                    "Assignment": "$\"[ORACLE:{bugId}:TRIGGERED] [{info.category}/{info.severity}] {info.title}\"",
+                    "Kind": "Definition",
+                    "DefinitionLine": 110
+                  }
+                }
+              ],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [],
+              "ForBlocks": [],
+              "IfBlocks": [
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "_bugs.ContainsKeybugId"
+                    ],
+                    "Properties": [],
+                    "Fields": [
+                      "OracleRegistry._bugs"
+                    ],
+                    "Invocations": [
+                      {
+                        "Name": "ContainsKey",
+                        "FullName": "System.Collections.Generic.Dictionary<string, OracleRegistry.BugInfo>.ContainsKey(string)",
+                        "ReturnType": "Boolean",
+                        "FileName": null,
+                        "DefinitionLine": 1,
+                        "Kind": "MetadataFile",
+                        "Module": "CommonLanguageRuntimeLibrary",
+                        "ReferenceFound": true,
+                        "Arguments": [
+                          {
+                            "Argument": "bugId",
+                            "IsInvocation": false,
+                            "IsLiteral": false
+                          }
+                        ],
+                        "Line": 106
+                      }
+                    ],
+                    "Type": "bool",
+                    "Statement": "!_bugs.ContainsKey(bugId)",
+                    "ExpressionType": "LogicalNotExpression",
+                    "Kind": "Method"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 106,
+                  "StartLine": 106,
+                  "Invocations": [
+                    {
+                      "Name": "ContainsKey",
+                      "FullName": "System.Collections.Generic.Dictionary<string, OracleRegistry.BugInfo>.ContainsKey(string)",
+                      "ReturnType": "Boolean",
+                      "FileName": null,
+                      "DefinitionLine": 1,
+                      "Kind": "MetadataFile",
+                      "Module": "CommonLanguageRuntimeLibrary",
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "bugId",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 106
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": [
+                    {
+                      "ReturnStatement": null,
+                      "ReturnType": "void",
+                      "Line": 106
+                    }
+                  ]
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "_triggered.ContainsbugId"
+                    ],
+                    "Properties": [],
+                    "Fields": [
+                      "OracleRegistry._triggered"
+                    ],
+                    "Invocations": [
+                      {
+                        "Name": "_triggered.Contains",
+                        "FullName": "_triggered.Contains",
+                        "ReturnType": null,
+                        "FileName": null,
+                        "DefinitionLine": 1,
+                        "Kind": null,
+                        "Module": null,
+                        "ReferenceFound": false,
+                        "Arguments": [
+                          {
+                            "Argument": "bugId",
+                            "IsInvocation": false,
+                            "IsLiteral": false
+                          }
+                        ],
+                        "Line": 107
+                      }
+                    ],
+                    "Type": "?",
+                    "Statement": "_triggered.Contains(bugId)",
+                    "ExpressionType": "InvocationExpression",
+                    "Kind": "Literal"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 107,
+                  "StartLine": 107,
+                  "Invocations": [
+                    {
+                      "Name": "_triggered.Contains",
+                      "FullName": "_triggered.Contains",
+                      "ReturnType": null,
+                      "FileName": null,
+                      "DefinitionLine": 1,
+                      "Kind": null,
+                      "Module": null,
+                      "ReferenceFound": false,
+                      "Arguments": [
+                        {
+                          "Argument": "bugId",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 107
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": [
+                    {
+                      "ReturnStatement": null,
+                      "ReturnType": "void",
+                      "Line": 107
+                    }
+                  ]
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "string.IsNullOrEmptydetail"
+                    ],
+                    "Properties": [],
+                    "Fields": [],
+                    "Invocations": [
+                      {
+                        "Name": "IsNullOrEmpty",
+                        "FullName": "string.IsNullOrEmpty(string)",
+                        "ReturnType": "Boolean",
+                        "FileName": null,
+                        "DefinitionLine": 1,
+                        "Kind": "MetadataFile",
+                        "Module": "CommonLanguageRuntimeLibrary",
+                        "ReferenceFound": true,
+                        "Arguments": [
+                          {
+                            "Argument": "detail",
+                            "IsInvocation": false,
+                            "IsLiteral": false
+                          }
+                        ],
+                        "Line": 112
+                      }
+                    ],
+                    "Type": "bool",
+                    "Statement": "!string.IsNullOrEmpty(detail)",
+                    "ExpressionType": "LogicalNotExpression",
+                    "Kind": "Method"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 113,
+                  "StartLine": 112,
+                  "Invocations": [
+                    {
+                      "Name": "IsNullOrEmpty",
+                      "FullName": "string.IsNullOrEmpty(string)",
+                      "ReturnType": "Boolean",
+                      "FileName": null,
+                      "DefinitionLine": 1,
+                      "Kind": "MetadataFile",
+                      "Module": "CommonLanguageRuntimeLibrary",
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "detail",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 112
+                    }
+                  ],
+                  "Variables": [
+                    {
+                      "Variable": {
+                        "Name": "msg",
+                        "Type": "string",
+                        "Assignment": "$\" | {detail}\"",
+                        "Kind": "Assignment",
+                        "AssignmentLine": 112,
+                        "VariableKind": "Local",
+                        "FullName": "msg",
+                        "AssignmentKind": "AddAssignmentExpression",
+                        "Cascades": []
+                      }
+                    },
+                    {
+                      "Variable": {
+                        "Name": "$\" | {detail}\"",
+                        "Type": "string",
+                        "Kind": "Use",
+                        "UseLine": 112,
+                        "UseKind": "InterpolatedString",
+                        "AssignedTo": "msg",
+                        "Value": null,
+                        "Operation": "AddAssignmentExpression",
+                        "VariablesList": []
+                      }
+                    }
+                  ],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                }
+              ],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": null,
+              "Line": 104
+            },
+            {
+              "HasBody": true,
+              "HasExpressionBody": false,
+              "Name": "Check",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.Check(string, bool, string)",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "void",
+              "Parameters": [
+                {
+                  "Name": "bugId",
+                  "Type": "string",
+                  "Assignment": null,
+                  "Attributes": []
+                },
+                {
+                  "Name": "condition",
+                  "Type": "bool",
+                  "Assignment": null,
+                  "Attributes": []
+                },
+                {
+                  "Name": "detail",
+                  "Type": "string",
+                  "Assignment": "\"\"",
+                  "Attributes": []
+                }
+              ],
+              "Invocations": [],
+              "Variables": [],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [],
+              "ForBlocks": [],
+              "IfBlocks": [
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "condition"
+                    ],
+                    "Properties": [],
+                    "Fields": [],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "condition",
+                    "ExpressionType": "IdentifierName",
+                    "Kind": "Parameter"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 123,
+                  "StartLine": 123,
+                  "Invocations": [
+                    {
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "bugId",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "detail",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 123
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                }
+              ],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": null,
+              "Line": 121
+            },
+            {
+              "HasBody": true,
+              "HasExpressionBody": false,
+              "Name": "StateAssert",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.StateAssert(string, string)",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "void",
+              "Parameters": [
+                {
+                  "Name": "label",
+                  "Type": "string",
+                  "Assignment": null,
+                  "Attributes": []
+                },
+                {
+                  "Name": "stateDescription",
+                  "Type": "string",
+                  "Assignment": null,
+                  "Attributes": []
+                }
+              ],
+              "Invocations": [
+                {
+                  "Name": "Debug.Log",
+                  "FullName": "Debug.Log",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [
+                    {
+                      "Argument": "$\"[ORACLE:STATE:{label}] {stateDescription}\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 134
+                }
+              ],
+              "Variables": [],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [],
+              "ForBlocks": [],
+              "IfBlocks": [],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": null,
+              "Line": 132
+            },
+            {
+              "HasBody": false,
+              "HasExpressionBody": true,
+              "Name": "IsTriggered",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.IsTriggered(string)",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "bool",
+              "Parameters": [
+                {
+                  "Name": "bugId",
+                  "Type": "string",
+                  "Assignment": null,
+                  "Attributes": []
+                }
+              ],
+              "Invocations": [],
+              "Variables": [],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [],
+              "ForBlocks": [],
+              "IfBlocks": [],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": {
+                "Tokens": [
+                  "_triggered.ContainsbugId"
+                ],
+                "Properties": [],
+                "Fields": [
+                  "OracleRegistry._triggered"
+                ],
+                "Invocations": [
+                  {
+                    "Name": "_triggered.Contains",
+                    "FullName": "_triggered.Contains",
+                    "ReturnType": null,
+                    "FileName": null,
+                    "DefinitionLine": 1,
+                    "Kind": null,
+                    "Module": null,
+                    "ReferenceFound": false,
+                    "Arguments": [
+                      {
+                        "Argument": "bugId",
+                        "IsInvocation": false,
+                        "IsLiteral": false
+                      }
+                    ],
+                    "Line": 139
+                  }
+                ],
+                "Type": "?",
+                "Statement": "_triggered.Contains(bugId)",
+                "ExpressionType": "InvocationExpression",
+                "Kind": "Literal"
+              },
+              "Line": 139
+            },
+            {
+              "HasBody": true,
+              "HasExpressionBody": false,
+              "Name": "PrintSummary",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.PrintSummary()",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "void",
+              "Parameters": [],
+              "Invocations": [
+                {
+                  "Name": "Debug.Log",
+                  "FullName": "Debug.Log",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [
+                    {
+                      "Argument": "$\"[ORACLE:SUMMARY] {_triggered.Count}/{_bugs.Count} bugs triggered\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 146
+                }
+              ],
+              "Variables": [],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [
+                {
+                  "Iterator": "kvp",
+                  "IteratorType": "var",
+                  "Iterable": "_bugs",
+                  "IterableType": "System.Collections.Generic.Dictionary<string, OracleRegistry.BugInfo>",
+                  "Invocation": null,
+                  "Property": null,
+                  "ExpressionIsInvocation": false,
+                  "ExpressionIsProperty": false,
+                  "Depth": 1,
+                  "EndLine": 151,
+                  "StartLine": 147,
+                  "Invocations": [
+                    {
+                      "Name": "_triggered.Contains",
+                      "FullName": "_triggered.Contains",
+                      "ReturnType": null,
+                      "FileName": null,
+                      "DefinitionLine": 1,
+                      "Kind": null,
+                      "Module": null,
+                      "ReferenceFound": false,
+                      "Arguments": [
+                        {
+                          "Argument": "kvp.Key",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 149
+                    },
+                    {
+                      "Name": "Debug.Log",
+                      "FullName": "Debug.Log",
+                      "ReturnType": null,
+                      "FileName": null,
+                      "DefinitionLine": 1,
+                      "Kind": null,
+                      "Module": null,
+                      "ReferenceFound": false,
+                      "Arguments": [
+                        {
+                          "Argument": "$\"[ORACLE:SUMMARY] {kvp.Key} [{status}] {kvp.Value.title}\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 150
+                    }
+                  ],
+                  "Variables": [
+                    {
+                      "Variable": {
+                        "Name": "status",
+                        "Type": "string",
+                        "FullName": "string",
+                        "Assignment": "_triggered.Contains(kvp.Key) ? \"TRIGGERED\" : \"NOT_HIT\"",
+                        "Kind": "Definition",
+                        "DefinitionLine": 148
+                      }
+                    }
+                  ],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                }
+              ],
+              "ForBlocks": [],
+              "IfBlocks": [],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": null,
+              "Line": 144
+            },
+            {
+              "HasBody": true,
+              "HasExpressionBody": false,
+              "Name": "Reset",
+              "IsEmpty": false,
+              "FullName": "OracleRegistry.Reset()",
+              "Modifiers": [
+                "public",
+                "static"
+              ],
+              "Attributes": [],
+              "ReturnType": "void",
+              "Parameters": [],
+              "Invocations": [
+                {
+                  "Name": "_triggered.Clear",
+                  "FullName": "_triggered.Clear",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [],
+                  "Line": 157
+                }
+              ],
+              "Variables": [],
+              "Statements": [],
+              "WhileBlocks": [],
+              "ForEachBlocks": [],
+              "ForBlocks": [],
+              "IfBlocks": [],
+              "SwitchBlocks": [],
+              "Returns": [],
+              "TryBlocks": [],
+              "ExpressionBody": null,
+              "Line": 155
+            }
+          ],
+          "Fields": [
+            {
+              "Name": "id",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.id",
+              "Line": 17
+            },
+            {
+              "Name": "category",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.category",
+              "Line": 18
+            },
+            {
+              "Name": "severity",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.severity",
+              "Line": 19
+            },
+            {
+              "Name": "title",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.title",
+              "Line": 20
+            },
+            {
+              "Name": "script",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.script",
+              "Line": 21
+            },
+            {
+              "Name": "method",
+              "Type": "string",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.method",
+              "Line": 22
+            },
+            {
+              "Name": "triggered",
+              "Type": "bool",
+              "Modifiers": [
+                "public"
+              ],
+              "Assignment": null,
+              "Attributes": [],
+              "FullName": "OracleRegistry.BugInfo.triggered",
+              "Line": 23
+            },
+            {
+              "Name": "_bugs",
+              "Type": "Dictionary<string, BugInfo>",
+              "Modifiers": [
+                "private",
+                "static",
+                "readonly"
+              ],
+              "Assignment": "new()\r\n    {\r\n        [\"BUG-001\"] = new BugInfo\r\n        {\r\n            id = \"BUG-001\", category = \"crash\", severity = \"high\",\r\n            title = \"NullReferenceException in StoveController.FinishCooking\",\r\n            script = \"StoveController.cs\", method = \"FinishCooking\"\r\n        },\r\n        [\"BUG-002\"] = new BugInfo\r\n        {\r\n            id = \"BUG-002\", category = \"functional\", severity = \"medium\",\r\n            title = \"Stove starts cooking without bowl on hob\",\r\n            script = \"StoveController.cs\", method = \"TryStartCooking\"\r\n        },\r\n        [\"BUG-003\"] = new BugInfo\r\n        {\r\n            id = \"BUG-003\", category = \"state\", severity = \"medium\",\r\n            title = \"Power toggle-off does not reset RecipeController.PowerEnabled\",\r\n            script = \"PowerSwitchController.cs\", method = \"Toggle\"\r\n        },\r\n        [\"BUG-004\"] = new BugInfo\r\n        {\r\n            id = \"BUG-004\", category = \"functional\", severity = \"medium\",\r\n            title = \"Sink wash timer not reset — instant wash on retry\",\r\n            script = \"SinkWashStation.cs\", method = \"OnIngredientPlaced\"\r\n        },\r\n        [\"BUG-005\"] = new BugInfo\r\n        {\r\n            id = \"BUG-005\", category = \"functional\", severity = \"low\",\r\n            title = \"Cabinet slides in wrong direction (sign error)\",\r\n            script = \"LockedCabinetController.cs\", method = \"Start\"\r\n        },\r\n        [\"BUG-006\"] = new BugInfo\r\n        {\r\n            id = \"BUG-006\", category = \"functional\", severity = \"high\",\r\n            title = \"ServingPlateSocket accepts uncooked dish — skips cooking gate\",\r\n            script = \"ServingPlateSocket.cs\", method = \"OnDishPlaced\"\r\n        },\r\n        [\"BUG-007\"] = new BugInfo\r\n        {\r\n            id = \"BUG-007\", category = \"state\", severity = \"medium\",\r\n            title = \"RecipeController allows power without opening pantry (wrong precondition)\",\r\n            script = \"RecipeController.cs\", method = \"SetPowerEnabled\"\r\n        },\r\n        [\"BUG-008\"] = new BugInfo\r\n        {\r\n            id = \"BUG-008\", category = \"visual\", severity = \"low\",\r\n            title = \"Badge panel stays red after successful kitchen unlock\",\r\n            script = \"KitchenBadgeUnlockReceiver.cs\", method = \"OnBadgeInserted\"\r\n        },\r\n        [\"BUG-009\"] = new BugInfo\r\n        {\r\n            id = \"BUG-009\", category = \"functional\", severity = \"medium\",\r\n            title = \"CuttingBoard calls SetIngredientCut(false) before validation\",\r\n            script = \"CuttingBoardController.cs\", method = \"TryCut\"\r\n        },\r\n        [\"BUG-010\"] = new BugInfo\r\n        {\r\n            id = \"BUG-010\", category = \"state\", severity = \"medium\",\r\n            title = \"ResetAllState does not reset downstream controller flags\",\r\n            script = \"RecipeController.cs\", method = \"ResetAllState\"\r\n        }\r\n    }",
+              "Attributes": [],
+              "FullName": "OracleRegistry._bugs",
+              "Line": 26
+            },
+            {
+              "Name": "_triggered",
+              "Type": "HashSet<string>",
+              "Modifiers": [
+                "private",
+                "static",
+                "readonly"
+              ],
+              "Assignment": "new()",
+              "Attributes": [],
+              "FullName": "OracleRegistry._triggered",
+              "Line": 90
+            }
+          ],
+          "Constructors": [],
+          "Attributes": [],
+          "Line": 12
+        }
+      ],
+      "Usings": [
+        {
+          "Name": "System.Collections.Generic",
+          "Line": 1
+        },
+        {
+          "Name": "UnityEngine",
+          "Line": 2
+        }
+      ],
+      "Line": 1
+    },
+    {
       "Name": "PantryKeyUnlockReceiver",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PantryKeyUnlockReceiver.cs",
       "Language": "C#",
@@ -57043,7 +58189,7 @@
       "Name": "PowerSwitchController",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PowerSwitchController.cs",
       "Language": "C#",
-      "Loc": 47,
+      "Loc": 52,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -57152,7 +58298,7 @@
                   "FullName": "PowerSwitchController.UpdateVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PowerSwitchController.cs",
-                  "DefinitionLine": 36,
+                  "DefinitionLine": 41,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -57190,7 +58336,7 @@
                   "FullName": "PowerSwitchController.UpdateVisual()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\PowerSwitchController.cs",
-                  "DefinitionLine": 36,
+                  "DefinitionLine": 41,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -57213,7 +58359,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 33
+                  "Line": 38
                 }
               ],
               "Variables": [
@@ -57307,6 +58453,67 @@
                   "ElseBlocks": [],
                   "TryBlocks": [],
                   "Returns": []
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "IsOn",
+                      "RecipeController.Instance",
+                      "null",
+                      "RecipeController.Instance.PowerEnabled"
+                    ],
+                    "Properties": [
+                      "PowerSwitchController.IsOn",
+                      "RecipeController.Instance",
+                      "RecipeController.PowerEnabled",
+                      "RecipeController.Instance"
+                    ],
+                    "Fields": [],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "!IsOn && RecipeController.Instance != null && RecipeController.Instance.PowerEnabled",
+                    "ExpressionType": "LogicalAndExpression",
+                    "Kind": "Literal"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 36,
+                  "StartLine": 35,
+                  "Invocations": [
+                    {
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "\"BUG-003\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "\"IsOn=false but PowerEnabled=true\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 36
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
                 }
               ],
               "SwitchBlocks": [],
@@ -57342,8 +58549,8 @@
                   "ExpressionIsInvocation": false,
                   "ExpressionIsProperty": false,
                   "Depth": 1,
-                  "EndLine": 45,
-                  "StartLine": 41,
+                  "EndLine": 50,
+                  "StartLine": 46,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -57366,8 +58573,8 @@
                       "Else": null,
                       "DanglingElse": true,
                       "Depth": 2,
-                      "EndLine": 44,
-                      "StartLine": 43,
+                      "EndLine": 49,
+                      "StartLine": 48,
                       "Invocations": [],
                       "Variables": [
                         {
@@ -57376,7 +58583,7 @@
                             "Type": "?",
                             "Assignment": "IsOn",
                             "Kind": "Assignment",
-                            "AssignmentLine": 43,
+                            "AssignmentLine": 48,
                             "VariableKind": null,
                             "FullName": null,
                             "AssignmentKind": "SimpleAssignmentExpression",
@@ -57388,7 +58595,7 @@
                             "Name": "IsOn",
                             "Type": "?",
                             "Kind": "Use",
-                            "UseLine": 43,
+                            "UseLine": 48,
                             "UseKind": "PropertyReference",
                             "AssignedTo": "light.enabled",
                             "Value": null,
@@ -57435,8 +58642,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 39,
-                  "StartLine": 38,
+                  "EndLine": 44,
+                  "StartLine": 43,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -57445,7 +58652,7 @@
                         "Type": "?",
                         "Assignment": "IsOn ? materialOn : materialOff",
                         "Kind": "Assignment",
-                        "AssignmentLine": 38,
+                        "AssignmentLine": 43,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -57472,7 +58679,7 @@
                         "Name": "IsOn ? materialOn : materialOff",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 38,
+                        "UseLine": 43,
                         "UseKind": "Conditional",
                         "AssignedTo": "switchRenderer.sharedMaterial",
                         "Value": null,
@@ -57495,7 +58702,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 36
+              "Line": 41
             }
           ],
           "Fields": [
@@ -57575,7 +58782,7 @@
       "Name": "RecipeController",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
       "Language": "C#",
-      "Loc": 243,
+      "Loc": 253,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -58411,7 +59618,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 103
+                  "Line": 107
                 },
                 {
                   "Name": ".Invoke",
@@ -58423,7 +59630,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 104
+                  "Line": 108
                 }
               ],
               "Variables": [
@@ -58433,7 +59640,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 101,
+                    "AssignmentLine": 105,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.powerEnabled",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -58460,7 +59667,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 101,
+                    "UseLine": 105,
                     "UseKind": "Literal",
                     "AssignedTo": "powerEnabled",
                     "Value": "true",
@@ -58477,23 +59684,23 @@
                 {
                   "Condition": {
                     "Tokens": [
-                      "doorPantryUnlocked"
+                      "hasPantryKey"
                     ],
                     "Properties": [],
                     "Fields": [
-                      "RecipeController.doorPantryUnlocked"
+                      "RecipeController.hasPantryKey"
                     ],
                     "Invocations": [],
                     "Type": "bool",
-                    "Statement": "!doorPantryUnlocked",
+                    "Statement": "!hasPantryKey",
                     "ExpressionType": "LogicalNotExpression",
                     "Kind": "Method"
                   },
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 100,
-                  "StartLine": 96,
+                  "EndLine": 102,
+                  "StartLine": 98,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -58506,12 +59713,12 @@
                       "ReferenceFound": false,
                       "Arguments": [
                         {
-                          "Argument": "\"[RecipeController] FAIL — tried to enable power before opening pantry.\"",
+                          "Argument": "\"[RecipeController] FAIL — tried to enable power before picking up key.\"",
                           "IsInvocation": false,
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 98
+                      "Line": 100
                     }
                   ],
                   "Variables": [],
@@ -58526,9 +59733,66 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 99
+                      "Line": 101
                     }
                   ]
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
+                      "hasPantryKey",
+                      "doorPantryUnlocked"
+                    ],
+                    "Properties": [],
+                    "Fields": [
+                      "RecipeController.hasPantryKey",
+                      "RecipeController.doorPantryUnlocked"
+                    ],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "hasPantryKey && !doorPantryUnlocked",
+                    "ExpressionType": "LogicalAndExpression",
+                    "Kind": "Literal"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 104,
+                  "StartLine": 103,
+                  "Invocations": [
+                    {
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "\"BUG-007\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "\"Power enabled without opening pantry door\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 104
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
                 },
                 {
                   "Condition": {
@@ -58548,8 +59812,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 101,
-                  "StartLine": 101,
+                  "EndLine": 105,
+                  "StartLine": 105,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -58563,7 +59827,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 101
+                      "Line": 105
                     }
                   ]
                 }
@@ -58603,7 +59867,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 117
+                  "Line": 121
                 },
                 {
                   "Name": ".Invoke",
@@ -58615,7 +59879,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 118
+                  "Line": 122
                 }
               ],
               "Variables": [
@@ -58625,7 +59889,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 115,
+                    "AssignmentLine": 119,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.doorKitchenUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -58652,7 +59916,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 115,
+                    "UseLine": 119,
                     "UseKind": "Literal",
                     "AssignedTo": "doorKitchenUnlocked",
                     "Value": "true",
@@ -58684,8 +59948,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 114,
-                  "StartLine": 110,
+                  "EndLine": 118,
+                  "StartLine": 114,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -58703,7 +59967,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 112
+                      "Line": 116
                     }
                   ],
                   "Variables": [],
@@ -58718,7 +59982,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 113
+                      "Line": 117
                     }
                   ]
                 },
@@ -58740,8 +60004,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 115,
-                  "StartLine": 115,
+                  "EndLine": 119,
+                  "StartLine": 119,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -58755,7 +60019,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 115
+                      "Line": 119
                     }
                   ]
                 }
@@ -58764,7 +60028,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 108
+              "Line": 112
             },
             {
               "HasBody": true,
@@ -58795,7 +60059,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 131
+                  "Line": 135
                 },
                 {
                   "Name": ".Invoke",
@@ -58807,7 +60071,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 132
+                  "Line": 136
                 }
               ],
               "Variables": [
@@ -58817,7 +60081,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 129,
+                    "AssignmentLine": 133,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientWashed",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -58844,7 +60108,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 129,
+                    "UseLine": 133,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientWashed",
                     "Value": "true",
@@ -58876,8 +60140,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 128,
-                  "StartLine": 124,
+                  "EndLine": 132,
+                  "StartLine": 128,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -58895,7 +60159,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 126
+                      "Line": 130
                     }
                   ],
                   "Variables": [],
@@ -58910,7 +60174,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 127
+                      "Line": 131
                     }
                   ]
                 },
@@ -58932,8 +60196,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 129,
-                  "StartLine": 129,
+                  "EndLine": 133,
+                  "StartLine": 133,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -58947,7 +60211,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 129
+                      "Line": 133
                     }
                   ]
                 }
@@ -58956,7 +60220,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 122
+              "Line": 126
             },
             {
               "HasBody": true,
@@ -58994,7 +60258,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 150
+                  "Line": 154
                 },
                 {
                   "Name": ".Invoke",
@@ -59006,7 +60270,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 151
+                  "Line": 155
                 }
               ],
               "Variables": [
@@ -59016,7 +60280,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 148,
+                    "AssignmentLine": 152,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientCut",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -59043,7 +60307,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 148,
+                    "UseLine": 152,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientCut",
                     "Value": "true",
@@ -59075,8 +60339,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 142,
-                  "StartLine": 138,
+                  "EndLine": 146,
+                  "StartLine": 142,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59094,7 +60358,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 140
+                      "Line": 144
                     }
                   ],
                   "Variables": [],
@@ -59109,7 +60373,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 141
+                      "Line": 145
                     }
                   ]
                 },
@@ -59129,8 +60393,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 147,
-                  "StartLine": 143,
+                  "EndLine": 151,
+                  "StartLine": 147,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59148,7 +60412,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 145
+                      "Line": 149
                     }
                   ],
                   "Variables": [],
@@ -59163,7 +60427,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 146
+                      "Line": 150
                     }
                   ]
                 },
@@ -59185,8 +60449,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 148,
-                  "StartLine": 148,
+                  "EndLine": 152,
+                  "StartLine": 152,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -59200,7 +60464,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 148
+                      "Line": 152
                     }
                   ]
                 }
@@ -59209,7 +60473,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 136
+              "Line": 140
             },
             {
               "HasBody": true,
@@ -59240,7 +60504,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 164
+                  "Line": 168
                 },
                 {
                   "Name": ".Invoke",
@@ -59252,7 +60516,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 165
+                  "Line": 169
                 }
               ],
               "Variables": [
@@ -59262,7 +60526,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 162,
+                    "AssignmentLine": 166,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientsCombined",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -59289,7 +60553,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 162,
+                    "UseLine": 166,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientsCombined",
                     "Value": "true",
@@ -59321,8 +60585,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 161,
-                  "StartLine": 157,
+                  "EndLine": 165,
+                  "StartLine": 161,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59340,7 +60604,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 159
+                      "Line": 163
                     }
                   ],
                   "Variables": [],
@@ -59355,7 +60619,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 160
+                      "Line": 164
                     }
                   ]
                 },
@@ -59377,8 +60641,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 162,
-                  "StartLine": 162,
+                  "EndLine": 166,
+                  "StartLine": 166,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -59392,7 +60656,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 162
+                      "Line": 166
                     }
                   ]
                 }
@@ -59401,7 +60665,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 155
+              "Line": 159
             },
             {
               "HasBody": true,
@@ -59432,7 +60696,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 183
+                  "Line": 187
                 },
                 {
                   "Name": ".Invoke",
@@ -59444,7 +60708,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 184
+                  "Line": 188
                 }
               ],
               "Variables": [
@@ -59454,7 +60718,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 181,
+                    "AssignmentLine": 185,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.dishCooked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -59481,7 +60745,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 181,
+                    "UseLine": 185,
                     "UseKind": "Literal",
                     "AssignedTo": "dishCooked",
                     "Value": "true",
@@ -59513,8 +60777,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 175,
-                  "StartLine": 171,
+                  "EndLine": 179,
+                  "StartLine": 175,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59532,7 +60796,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 173
+                      "Line": 177
                     }
                   ],
                   "Variables": [],
@@ -59547,7 +60811,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 174
+                      "Line": 178
                     }
                   ]
                 },
@@ -59569,8 +60833,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 180,
-                  "StartLine": 176,
+                  "EndLine": 184,
+                  "StartLine": 180,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59588,7 +60852,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 178
+                      "Line": 182
                     }
                   ],
                   "Variables": [],
@@ -59603,7 +60867,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 179
+                      "Line": 183
                     }
                   ]
                 },
@@ -59625,8 +60889,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 181,
-                  "StartLine": 181,
+                  "EndLine": 185,
+                  "StartLine": 185,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -59640,7 +60904,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 181
+                      "Line": 185
                     }
                   ]
                 }
@@ -59649,7 +60913,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 169
+              "Line": 173
             },
             {
               "HasBody": true,
@@ -59680,7 +60944,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 197
+                  "Line": 201
                 },
                 {
                   "Name": ".Invoke",
@@ -59692,7 +60956,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 198
+                  "Line": 202
                 }
               ],
               "Variables": [
@@ -59702,7 +60966,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 195,
+                    "AssignmentLine": 199,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.dishPlated",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -59729,7 +60993,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 195,
+                    "UseLine": 199,
                     "UseKind": "Literal",
                     "AssignedTo": "dishPlated",
                     "Value": "true",
@@ -59761,8 +61025,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 194,
-                  "StartLine": 190,
+                  "EndLine": 198,
+                  "StartLine": 194,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59780,7 +61044,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 192
+                      "Line": 196
                     }
                   ],
                   "Variables": [],
@@ -59795,7 +61059,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 193
+                      "Line": 197
                     }
                   ]
                 },
@@ -59817,8 +61081,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 195,
-                  "StartLine": 195,
+                  "EndLine": 199,
+                  "StartLine": 199,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -59832,7 +61096,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 195
+                      "Line": 199
                     }
                   ]
                 }
@@ -59841,7 +61105,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 188
+              "Line": 192
             },
             {
               "HasBody": true,
@@ -59872,7 +61136,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 211
+                  "Line": 215
                 },
                 {
                   "Name": ".Invoke",
@@ -59884,7 +61148,7 @@
                   "Module": null,
                   "ReferenceFound": false,
                   "Arguments": [],
-                  "Line": 212
+                  "Line": 216
                 }
               ],
               "Variables": [
@@ -59894,7 +61158,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 209,
+                    "AssignmentLine": 213,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.finalDoorUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -59921,7 +61185,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 209,
+                    "UseLine": 213,
                     "UseKind": "Literal",
                     "AssignedTo": "finalDoorUnlocked",
                     "Value": "true",
@@ -59953,8 +61217,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 208,
-                  "StartLine": 204,
+                  "EndLine": 212,
+                  "StartLine": 208,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -59972,7 +61236,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 206
+                      "Line": 210
                     }
                   ],
                   "Variables": [],
@@ -59987,7 +61251,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 207
+                      "Line": 211
                     }
                   ]
                 },
@@ -60009,8 +61273,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 209,
-                  "StartLine": 209,
+                  "EndLine": 213,
+                  "StartLine": 213,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -60024,7 +61288,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 209
+                      "Line": 213
                     }
                   ]
                 }
@@ -60033,7 +61297,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 202
+              "Line": 206
             },
             {
               "HasBody": true,
@@ -60064,7 +61328,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 220
+                  "Line": 224
                 }
               ],
               "Variables": [],
@@ -60077,7 +61341,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 218
+              "Line": 222
             },
             {
               "HasBody": true,
@@ -60092,6 +61356,29 @@
               "ReturnType": "void",
               "Parameters": [],
               "Invocations": [
+                {
+                  "Name": "Trigger",
+                  "FullName": "OracleRegistry.Trigger(string, string)",
+                  "ReturnType": "Void",
+                  "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                  "DefinitionLine": 104,
+                  "Kind": "SourceFile",
+                  "Module": null,
+                  "ReferenceFound": true,
+                  "Arguments": [
+                    {
+                      "Argument": "\"BUG-010\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    },
+                    {
+                      "Argument": "\"ResetAllState called but downstream controllers not reset\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 249
+                },
                 {
                   "Name": "Debug.Log",
                   "FullName": "Debug.Log",
@@ -60108,7 +61395,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 241
+                  "Line": 251
                 }
               ],
               "Variables": [
@@ -60118,7 +61405,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 230,
+                    "AssignmentLine": 234,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.hasPantryKey",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60146,7 +61433,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 231,
+                    "AssignmentLine": 235,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.doorPantryUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60174,7 +61461,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 232,
+                    "AssignmentLine": 236,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.powerEnabled",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60202,7 +61489,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 233,
+                    "AssignmentLine": 237,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.doorKitchenUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60230,7 +61517,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 234,
+                    "AssignmentLine": 238,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientWashed",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60258,7 +61545,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 235,
+                    "AssignmentLine": 239,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientCut",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60286,7 +61573,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 236,
+                    "AssignmentLine": 240,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.ingredientsCombined",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60314,7 +61601,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 237,
+                    "AssignmentLine": 241,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.dishCooked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60342,7 +61629,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 238,
+                    "AssignmentLine": 242,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.dishPlated",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60370,7 +61657,7 @@
                     "Type": "bool",
                     "Assignment": "false",
                     "Kind": "Assignment",
-                    "AssignmentLine": 239,
+                    "AssignmentLine": 243,
                     "VariableKind": "Field",
                     "FullName": "RecipeController.finalDoorUnlocked",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -60397,7 +61684,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 230,
+                    "UseLine": 234,
                     "UseKind": "Literal",
                     "AssignedTo": "hasPantryKey",
                     "Value": "false",
@@ -60410,7 +61697,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 231,
+                    "UseLine": 235,
                     "UseKind": "Literal",
                     "AssignedTo": "doorPantryUnlocked",
                     "Value": "false",
@@ -60423,7 +61710,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 232,
+                    "UseLine": 236,
                     "UseKind": "Literal",
                     "AssignedTo": "powerEnabled",
                     "Value": "false",
@@ -60436,7 +61723,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 233,
+                    "UseLine": 237,
                     "UseKind": "Literal",
                     "AssignedTo": "doorKitchenUnlocked",
                     "Value": "false",
@@ -60449,7 +61736,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 234,
+                    "UseLine": 238,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientWashed",
                     "Value": "false",
@@ -60462,7 +61749,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 235,
+                    "UseLine": 239,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientCut",
                     "Value": "false",
@@ -60475,7 +61762,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 236,
+                    "UseLine": 240,
                     "UseKind": "Literal",
                     "AssignedTo": "ingredientsCombined",
                     "Value": "false",
@@ -60488,7 +61775,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 237,
+                    "UseLine": 241,
                     "UseKind": "Literal",
                     "AssignedTo": "dishCooked",
                     "Value": "false",
@@ -60501,7 +61788,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 238,
+                    "UseLine": 242,
                     "UseKind": "Literal",
                     "AssignedTo": "dishPlated",
                     "Value": "false",
@@ -60514,7 +61801,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 239,
+                    "UseLine": 243,
                     "UseKind": "Literal",
                     "AssignedTo": "finalDoorUnlocked",
                     "Value": "false",
@@ -60532,7 +61819,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 229
+              "Line": 233
             }
           ],
           "Fields": [
@@ -60982,7 +62269,7 @@
                   "FullName": "RecipeController.SetFinalDoorUnlocked()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 202,
+                  "DefinitionLine": 206,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
@@ -61426,7 +62713,7 @@
       "Name": "ServingPlateSocket",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\ServingPlateSocket.cs",
       "Language": "C#",
-      "Loc": 51,
+      "Loc": 56,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -61595,12 +62882,12 @@
                   "FullName": "RecipeController.SetDishPlated()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 188,
+                  "DefinitionLine": 192,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 38
+                  "Line": 43
                 },
                 {
                   "Name": "Debug.Log",
@@ -61618,7 +62905,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 43
+                  "Line": 48
                 }
               ],
               "Variables": [
@@ -61628,7 +62915,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 36,
+                    "AssignmentLine": 41,
                     "VariableKind": "Field",
                     "FullName": "ServingPlateSocket._hasPlated",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -61655,7 +62942,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 36,
+                    "UseLine": 41,
                     "UseKind": "Literal",
                     "AssignedTo": "_hasPlated",
                     "Value": "true",
@@ -61721,33 +63008,38 @@
                     "Fields": [],
                     "Invocations": [],
                     "Type": "bool",
-                    "Statement": "RecipeController.Instance == null || !RecipeController.Instance.DishCooked",
-                    "ExpressionType": "LogicalOrExpression",
+                    "Statement": "RecipeController.Instance != null && !RecipeController.Instance.DishCooked",
+                    "ExpressionType": "LogicalAndExpression",
                     "Kind": "Literal"
                   },
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 35,
-                  "StartLine": 31,
+                  "EndLine": 40,
+                  "StartLine": 39,
                   "Invocations": [
                     {
-                      "Name": "Debug.LogWarning",
-                      "FullName": "Debug.LogWarning",
-                      "ReturnType": null,
-                      "FileName": null,
-                      "DefinitionLine": 1,
-                      "Kind": null,
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
                       "Module": null,
-                      "ReferenceFound": false,
+                      "ReferenceFound": true,
                       "Arguments": [
                         {
-                          "Argument": "\"[ServingPlateSocket] FAIL — dish is not cooked yet. Cook on Stove_Main first.\"",
+                          "Argument": "\"BUG-006\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "\"Dish plated without cooking\"",
                           "IsInvocation": false,
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 33
+                      "Line": 40
                     }
                   ],
                   "Variables": [],
@@ -61758,13 +63050,7 @@
                   "ForEachBlocks": [],
                   "ElseBlocks": [],
                   "TryBlocks": [],
-                  "Returns": [
-                    {
-                      "ReturnStatement": null,
-                      "ReturnType": "void",
-                      "Line": 34
-                    }
-                  ]
+                  "Returns": []
                 },
                 {
                   "Condition": {
@@ -61788,8 +63074,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 41,
-                  "StartLine": 40,
+                  "EndLine": 46,
+                  "StartLine": 45,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -61798,7 +63084,7 @@
                         "Type": "?",
                         "Assignment": "materialPlated",
                         "Kind": "Assignment",
-                        "AssignmentLine": 40,
+                        "AssignmentLine": 45,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -61825,7 +63111,7 @@
                         "Name": "materialPlated",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 40,
+                        "UseLine": 45,
                         "UseKind": "FieldReference",
                         "AssignedTo": "plateRenderer.sharedMaterial",
                         "Value": null,
@@ -61888,8 +63174,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 49,
-                  "StartLine": 48,
+                  "EndLine": 54,
+                  "StartLine": 53,
                   "Invocations": [
                     {
                       "Name": "_socket.selectEntered.RemoveListener",
@@ -61907,7 +63193,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 49
+                      "Line": 54
                     }
                   ],
                   "Variables": [],
@@ -61925,7 +63211,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 46
+              "Line": 51
             }
           ],
           "Fields": [
@@ -62014,7 +63300,7 @@
       "Name": "SinkWashStation",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\SinkWashStation.cs",
       "Language": "C#",
-      "Loc": 88,
+      "Loc": 92,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -62273,7 +63559,7 @@
                       "FullName": "SinkWashStation.CompleteWash()",
                       "ReturnType": "Void",
                       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\SinkWashStation.cs",
-                      "DefinitionLine": 74,
+                      "DefinitionLine": 78,
                       "Kind": "SourceFile",
                       "Module": null,
                       "ReferenceFound": true,
@@ -62376,7 +63662,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 59
+                  "Line": 63
                 }
               ],
               "Variables": [
@@ -62410,34 +63696,6 @@
                 },
                 {
                   "Variable": {
-                    "Name": "_washTimer",
-                    "Type": "float",
-                    "Assignment": "0f",
-                    "Kind": "Assignment",
-                    "AssignmentLine": 53,
-                    "VariableKind": "Field",
-                    "FullName": "SinkWashStation._washTimer",
-                    "AssignmentKind": "SimpleAssignmentExpression",
-                    "Cascades": [
-                      {
-                        "Tokens": [
-                          "_washTimer"
-                        ],
-                        "Properties": [],
-                        "Fields": [
-                          "SinkWashStation._washTimer"
-                        ],
-                        "Invocations": [],
-                        "Type": "float",
-                        "Statement": "_washTimer",
-                        "ExpressionType": "IdentifierName",
-                        "Kind": "Field"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "Variable": {
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
@@ -62445,19 +63703,6 @@
                     "UseKind": "Literal",
                     "AssignedTo": "_isWashing",
                     "Value": "true",
-                    "Operation": "SimpleAssignmentExpression",
-                    "VariablesList": []
-                  }
-                },
-                {
-                  "Variable": {
-                    "Name": null,
-                    "Type": "float",
-                    "Kind": "Use",
-                    "UseLine": 53,
-                    "UseKind": "Literal",
-                    "AssignedTo": "_washTimer",
-                    "Value": "0f",
                     "Operation": "SimpleAssignmentExpression",
                     "VariablesList": []
                   }
@@ -62568,6 +63813,62 @@
                 {
                   "Condition": {
                     "Tokens": [
+                      "_washTimer",
+                      "0f"
+                    ],
+                    "Properties": [],
+                    "Fields": [
+                      "SinkWashStation._washTimer"
+                    ],
+                    "Invocations": [],
+                    "Type": "bool",
+                    "Statement": "_washTimer > 0f",
+                    "ExpressionType": "GreaterThanExpression",
+                    "Kind": "Method"
+                  },
+                  "Else": null,
+                  "DanglingElse": true,
+                  "Depth": 1,
+                  "EndLine": 58,
+                  "StartLine": 57,
+                  "Invocations": [
+                    {
+                      "Name": "Trigger",
+                      "FullName": "OracleRegistry.Trigger(string, string)",
+                      "ReturnType": "Void",
+                      "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                      "DefinitionLine": 104,
+                      "Kind": "SourceFile",
+                      "Module": null,
+                      "ReferenceFound": true,
+                      "Arguments": [
+                        {
+                          "Argument": "\"BUG-004\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        },
+                        {
+                          "Argument": "$\"washTimer={_washTimer:F2} carried over\"",
+                          "IsInvocation": false,
+                          "IsLiteral": false
+                        }
+                      ],
+                      "Line": 58
+                    }
+                  ],
+                  "Variables": [],
+                  "WhileBlocks": [],
+                  "ForBlocks": [],
+                  "IfBlocks": [],
+                  "SwitchBlocks": [],
+                  "ForEachBlocks": [],
+                  "ElseBlocks": [],
+                  "TryBlocks": [],
+                  "Returns": []
+                },
+                {
+                  "Condition": {
+                    "Tokens": [
                       "waterFXRenderer",
                       "null",
                       "materialWashing",
@@ -62587,8 +63888,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 57,
-                  "StartLine": 56,
+                  "EndLine": 61,
+                  "StartLine": 60,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -62597,7 +63898,7 @@
                         "Type": "?",
                         "Assignment": "materialWashing",
                         "Kind": "Assignment",
-                        "AssignmentLine": 56,
+                        "AssignmentLine": 60,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -62624,7 +63925,7 @@
                         "Name": "materialWashing",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 56,
+                        "UseLine": 60,
                         "UseKind": "FieldReference",
                         "AssignedTo": "waterFXRenderer.sharedMaterial",
                         "Value": null,
@@ -62693,8 +63994,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 68,
-                  "StartLine": 64,
+                  "EndLine": 72,
+                  "StartLine": 68,
                   "Invocations": [
                     {
                       "Name": "Debug.LogWarning",
@@ -62712,7 +64013,7 @@
                           "IsLiteral": false
                         }
                       ],
-                      "Line": 67
+                      "Line": 71
                     }
                   ],
                   "Variables": [
@@ -62722,7 +64023,7 @@
                         "Type": "bool",
                         "Assignment": "false",
                         "Kind": "Assignment",
-                        "AssignmentLine": 65,
+                        "AssignmentLine": 69,
                         "VariableKind": "Field",
                         "FullName": "SinkWashStation._isWashing",
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -62749,7 +64050,7 @@
                         "Name": null,
                         "Type": "bool",
                         "Kind": "Use",
-                        "UseLine": 65,
+                        "UseLine": 69,
                         "UseKind": "Literal",
                         "AssignedTo": "_isWashing",
                         "Value": "false",
@@ -62789,8 +64090,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 71,
-                  "StartLine": 70,
+                  "EndLine": 75,
+                  "StartLine": 74,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -62799,7 +64100,7 @@
                         "Type": "?",
                         "Assignment": "materialIdle",
                         "Kind": "Assignment",
-                        "AssignmentLine": 70,
+                        "AssignmentLine": 74,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -62826,7 +64127,7 @@
                         "Name": "materialIdle",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 70,
+                        "UseLine": 74,
                         "UseKind": "FieldReference",
                         "AssignedTo": "waterFXRenderer.sharedMaterial",
                         "Value": null,
@@ -62849,7 +64150,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 62
+              "Line": 66
             },
             {
               "HasBody": true,
@@ -62869,12 +64170,12 @@
                   "FullName": "RecipeController.SetIngredientWashed()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 122,
+                  "DefinitionLine": 126,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 78
+                  "Line": 82
                 },
                 {
                   "Name": "Debug.Log",
@@ -62892,7 +64193,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 79
+                  "Line": 83
                 }
               ],
               "Variables": [
@@ -62902,7 +64203,7 @@
                     "Type": "bool",
                     "Assignment": "true",
                     "Kind": "Assignment",
-                    "AssignmentLine": 76,
+                    "AssignmentLine": 80,
                     "VariableKind": "Field",
                     "FullName": "SinkWashStation._hasWashed",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -62929,7 +64230,7 @@
                     "Name": null,
                     "Type": "bool",
                     "Kind": "Use",
-                    "UseLine": 76,
+                    "UseLine": 80,
                     "UseKind": "Literal",
                     "AssignedTo": "_hasWashed",
                     "Value": "true",
@@ -62961,8 +64262,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 76,
-                  "StartLine": 76,
+                  "EndLine": 80,
+                  "StartLine": 80,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -62976,7 +64277,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 76
+                      "Line": 80
                     }
                   ]
                 }
@@ -62985,7 +64286,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 74
+              "Line": 78
             },
             {
               "HasBody": true,
@@ -63016,7 +64317,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 85
+                  "Line": 89
                 },
                 {
                   "Name": "_socket.selectExited.RemoveListener",
@@ -63034,7 +64335,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 86
+                  "Line": 90
                 }
               ],
               "Variables": [],
@@ -63062,8 +64363,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 84,
-                  "StartLine": 84,
+                  "EndLine": 88,
+                  "StartLine": 88,
                   "Invocations": [],
                   "Variables": [],
                   "WhileBlocks": [],
@@ -63077,7 +64378,7 @@
                     {
                       "ReturnStatement": null,
                       "ReturnType": "void",
-                      "Line": 84
+                      "Line": 88
                     }
                   ]
                 }
@@ -63086,7 +64387,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 82
+              "Line": 86
             }
           ],
           "Fields": [
@@ -63222,7 +64523,7 @@
       "Name": "StoveController",
       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\StoveController.cs",
       "Language": "C#",
-      "Loc": 86,
+      "Loc": 94,
       "Interfaces": [],
       "Namespaces": [],
       "Classes": [
@@ -63444,7 +64745,7 @@
                       "FullName": "StoveController.FinishCooking()",
                       "ReturnType": "Void",
                       "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\StoveController.cs",
-                      "DefinitionLine": 76,
+                      "DefinitionLine": 80,
                       "Kind": "SourceFile",
                       "Module": null,
                       "ReferenceFound": true,
@@ -63483,6 +64784,34 @@
               "Parameters": [],
               "Invocations": [
                 {
+                  "Name": "Check",
+                  "FullName": "OracleRegistry.Check(string, bool, string)",
+                  "ReturnType": "Void",
+                  "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\OracleRegistry.cs",
+                  "DefinitionLine": 121,
+                  "Kind": "SourceFile",
+                  "Module": null,
+                  "ReferenceFound": true,
+                  "Arguments": [
+                    {
+                      "Argument": "\"BUG-002\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    },
+                    {
+                      "Argument": "hobSocket != null && !hobSocket.HasBowl",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    },
+                    {
+                      "Argument": "$\"hobSocket.HasBowl={hobSocket?.HasBowl}\"",
+                      "IsInvocation": false,
+                      "IsLiteral": false
+                    }
+                  ],
+                  "Line": 68
+                },
+                {
                   "Name": "Debug.Log",
                   "FullName": "Debug.Log",
                   "ReturnType": null,
@@ -63498,7 +64827,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 73
+                  "Line": 77
                 }
               ],
               "Variables": [
@@ -63518,7 +64847,7 @@
                     "Type": "StoveController.StoveState",
                     "Assignment": "StoveState.Cooking",
                     "Kind": "Assignment",
-                    "AssignmentLine": 66,
+                    "AssignmentLine": 70,
                     "VariableKind": "Property",
                     "FullName": "StoveController.CurrentState",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -63546,7 +64875,7 @@
                     "Type": "float",
                     "Assignment": "0f",
                     "Kind": "Assignment",
-                    "AssignmentLine": 67,
+                    "AssignmentLine": 71,
                     "VariableKind": "Field",
                     "FullName": "StoveController._cookTimer",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -63573,7 +64902,7 @@
                     "Name": "StoveState.Cooking",
                     "Type": "StoveController.StoveState",
                     "Kind": "Use",
-                    "UseLine": 66,
+                    "UseLine": 70,
                     "UseKind": "FieldReference",
                     "AssignedTo": "CurrentState",
                     "Value": null,
@@ -63586,7 +64915,7 @@
                     "Name": null,
                     "Type": "float",
                     "Kind": "Use",
-                    "UseLine": 67,
+                    "UseLine": 71,
                     "UseKind": "Literal",
                     "AssignedTo": "_cookTimer",
                     "Value": "0f",
@@ -63776,8 +65105,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 71,
-                  "StartLine": 70,
+                  "EndLine": 75,
+                  "StartLine": 74,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -63786,7 +65115,7 @@
                         "Type": "?",
                         "Assignment": "materialCooking",
                         "Kind": "Assignment",
-                        "AssignmentLine": 70,
+                        "AssignmentLine": 74,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -63813,7 +65142,7 @@
                         "Name": "materialCooking",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 70,
+                        "UseLine": 74,
                         "UseKind": "FieldReference",
                         "AssignedTo": "burnerRenderer.sharedMaterial",
                         "Value": null,
@@ -63856,12 +65185,36 @@
                   "FullName": "RecipeController.SetDishCooked()",
                   "ReturnType": "Void",
                   "FileName": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\RecipeController.cs",
-                  "DefinitionLine": 169,
+                  "DefinitionLine": 173,
                   "Kind": "SourceFile",
                   "Module": null,
                   "ReferenceFound": true,
                   "Arguments": [],
-                  "Line": 83
+                  "Line": 87
+                },
+                {
+                  "Name": "GetComponent<AudioSource>().Play",
+                  "FullName": "GetComponent<AudioSource>().Play",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [],
+                  "Line": 90
+                },
+                {
+                  "Name": "GetComponent<AudioSource>",
+                  "FullName": "GetComponent<AudioSource>",
+                  "ReturnType": null,
+                  "FileName": null,
+                  "DefinitionLine": 1,
+                  "Kind": null,
+                  "Module": null,
+                  "ReferenceFound": false,
+                  "Arguments": [],
+                  "Line": 90
                 },
                 {
                   "Name": "Debug.Log",
@@ -63879,7 +65232,7 @@
                       "IsLiteral": false
                     }
                   ],
-                  "Line": 84
+                  "Line": 92
                 }
               ],
               "Variables": [
@@ -63889,7 +65242,7 @@
                     "Type": "StoveController.StoveState",
                     "Assignment": "StoveState.Done",
                     "Kind": "Assignment",
-                    "AssignmentLine": 77,
+                    "AssignmentLine": 81,
                     "VariableKind": "Property",
                     "FullName": "StoveController.CurrentState",
                     "AssignmentKind": "SimpleAssignmentExpression",
@@ -63916,7 +65269,7 @@
                     "Name": "StoveState.Done",
                     "Type": "StoveController.StoveState",
                     "Kind": "Use",
-                    "UseLine": 77,
+                    "UseLine": 81,
                     "UseKind": "FieldReference",
                     "AssignedTo": "CurrentState",
                     "Value": null,
@@ -63952,8 +65305,8 @@
                   "Else": null,
                   "DanglingElse": true,
                   "Depth": 1,
-                  "EndLine": 81,
-                  "StartLine": 80,
+                  "EndLine": 85,
+                  "StartLine": 84,
                   "Invocations": [],
                   "Variables": [
                     {
@@ -63962,7 +65315,7 @@
                         "Type": "?",
                         "Assignment": "materialDone",
                         "Kind": "Assignment",
-                        "AssignmentLine": 80,
+                        "AssignmentLine": 84,
                         "VariableKind": null,
                         "FullName": null,
                         "AssignmentKind": "SimpleAssignmentExpression",
@@ -63989,7 +65342,7 @@
                         "Name": "materialDone",
                         "Type": "?",
                         "Kind": "Use",
-                        "UseLine": 80,
+                        "UseLine": 84,
                         "UseKind": "FieldReference",
                         "AssignedTo": "burnerRenderer.sharedMaterial",
                         "Value": null,
@@ -64012,7 +65365,7 @@
               "Returns": [],
               "TryBlocks": [],
               "ExpressionBody": null,
-              "Line": 76
+              "Line": 80
             }
           ],
           "Fields": [

@@ -124,6 +124,10 @@ class ExecutorAgent(BaseAgent):
 
     def _execute_via_bridge(self, action: Dict, action_type: str, source_name: str) -> TraceEntry:
         """Send action to Unity via TCP and parse the response."""
+        # Sanitize: strip any non-dict elements from event lists to prevent
+        # Unity JSON deserialization errors (e.g. "XRSelect" string in triggerring_events)
+        action = self._sanitize_action(action)
+
         entry = TraceEntry(
             action=f"{action_type}:{source_name}",
             state_before={},
@@ -309,6 +313,27 @@ class ExecutorAgent(BaseAgent):
             sort_keys=True,
             ensure_ascii=False,
         )
+
+    @staticmethod
+    def _sanitize_action(action: Dict[str, Any]) -> Dict[str, Any]:
+        """Return a shallow copy of action with non-dict event-unit elements removed.
+
+        Guards against Planner outputs like ``triggerring_events: ["XRSelect"]``
+        which cause Unity JSON deserialization errors.
+        """
+        action = dict(action)
+        for event_key in ("triggerring_events", "triggerred_events"):
+            raw = action.get(event_key)
+            if isinstance(raw, list):
+                cleaned = [e for e in raw if isinstance(e, dict)]
+                if len(cleaned) != len(raw):
+                    dropped = [e for e in raw if not isinstance(e, dict)]
+                    print(
+                        f"[EXECUTOR] sanitize: dropped {len(dropped)} non-dict element(s) "
+                        f"from {event_key}: {dropped}"
+                    )
+                action[event_key] = cleaned
+        return action
 
     @staticmethod
     def _event_keys(trace_entry: TraceEntry) -> Iterable[str]:
