@@ -122,3 +122,4 @@ venv/
 # Unity project subdirectory
 /VRAgent/CodeCoverage/
 /VRAgent/_Experiment/
+/TP_Generation/llm_cache
