@@ -5,6 +5,8 @@ from jsonschema import Draft202012Validator, exceptions as js_exceptions
 import networkx as nx
 import argparse
 
+from vragent2.utils.path_layout import resolve_gobj_hierarchy_path, resolve_scene_meta_dir
+
 # -----------------------------
 # 场景索引结构（基于GML文件的graph查询）
 # -----------------------------
@@ -847,7 +849,7 @@ if __name__ == "__main__":
     results_dir = args.results_dir
     llm_model = args.llm_model
     llm_responses_dir = os.path.join(results_dir, "llm_responses", llm_model)
-    scene_info_dir = os.path.join(results_dir, "scene_detailed_info", "mainResults")
+    scene_info_dir = resolve_scene_meta_dir(results_dir)
     evaluate_dic = {}
     for dir_name in os.listdir(llm_responses_dir):
         test_plan_dir = os.path.join(llm_responses_dir, dir_name)
@@ -855,7 +857,7 @@ if __name__ == "__main__":
             if file.endswith("consolidated_test_plans.json"):
                 plan = json.load(open(os.path.join(test_plan_dir, file)))
                 scene_index = load_scene_index_from_gml(os.path.join(scene_info_dir, dir_name+".unity.json_graph.gml"))
-                hierarchy_index = json.load(open(os.path.join(results_dir, dir_name+"_gobj_hierarchy.json")))
+                hierarchy_index = json.load(open(resolve_gobj_hierarchy_path(results_dir, dir_name)))
                 gobj_ratio = coverage_gobj_ratio(plan, hierarchy_index)
                 findings, correctness_number, consistency_number, duplicate_number, action_num = evaluate_policies(plan, scene_index)
                 evaluate_dic["CER@100AU"] = correctness_number / action_num * 100

@@ -45,11 +45,11 @@ namespace HenryLab.VRAgent
 
             if(obj is GameObject go)
             {
-                // prefab instance: 取最后一段
+                // prefab instance: 取场景中的 m_PrefabInstance ID（倒数第二段）
                 // 普通对象: 取倒数第二段
                 if(go.scene.isLoaded && PrefabUtility.IsPartOfPrefabInstance(go))
                 {
-                    if(long.TryParse(parts[parts.Length - 1], out fileID))
+                    if(long.TryParse(parts[parts.Length - 2], out fileID))
                         return fileID;
                 }
                 else

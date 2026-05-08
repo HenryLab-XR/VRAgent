@@ -7,9 +7,9 @@ Supports:
     - Configurable model, temperature, retries
     - Response parsing (JSON extraction, think-tag stripping)
 
-Implementation uses the ``requests`` library (stdlib-adjacent, always available)
-to call the OpenAI-compatible REST endpoint directly, avoiding the ``openai``
-and ``httpx`` packages which require Python >=3.7.1.
+Implementation uses Python stdlib ``urllib`` to call the OpenAI-compatible
+REST endpoint directly, avoiding the ``openai``, ``httpx``, and ``requests``
+packages.
 """
 
 from __future__ import annotations
@@ -18,8 +18,8 @@ import json
 import re
 import time
 from typing import Any, Dict, List, Optional
-
-import requests
+from urllib import error as urllib_error
+from urllib import request as urllib_request
 
 # Regex to strip <think>...</think> blocks (some reasoning models emit these)
 _THINK_RE = re.compile(r"<\s*think\s*>.*?<\s*/\s*think\s*>", re.IGNORECASE | re.DOTALL)
@@ -62,14 +62,15 @@ class LLMClient:
         # Token usage accumulator: {caller: {prompt_tokens, completion_tokens, total_tokens, calls}}
         self._token_usage: Dict[str, Dict[str, int]] = {}
 
-        # Build a requests.Session with optional proxy
-        self._session = requests.Session()
-        self._session.headers.update({
+        self._headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
-        })
+        }
         if proxy_url:
-            self._session.proxies = {"http": proxy_url, "https": proxy_url}
+            proxy_handler = urllib_request.ProxyHandler({"http": proxy_url, "https": proxy_url})
+            self._opener = urllib_request.build_opener(proxy_handler)
+        else:
+            self._opener = urllib_request.build_opener()
 
     # ------------------------------------------------------------------
     # Core API call
@@ -101,15 +102,23 @@ class LLMClient:
         }
 
         for attempt in range(1, retries + 1):
-            resp = None
+            response_status = None
+            response_text = ""
+            response_headers: Dict[str, str] = {}
+            error: Optional[Exception] = None
             try:
-                resp = self._session.post(
+                request = urllib_request.Request(
                     self._endpoint,
-                    json=payload,
-                    timeout=120,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers=self._headers,
+                    method="POST",
                 )
-                resp.raise_for_status()
-                data = resp.json()
+                with self._opener.open(request, timeout=120) as response:
+                    response_status = response.getcode()
+                    response_headers = dict(response.headers.items())
+                    response_text = response.read().decode("utf-8", errors="replace")
+
+                data = json.loads(response_text)
 
                 # Accumulate token usage
                 self._accumulate_usage(data, caller or model)
@@ -119,15 +128,23 @@ class LLMClient:
                     return choices[0].get("message", {}).get("content")
                 print("[LLM] Empty response from API")
                 return None
+            except urllib_error.HTTPError as exc:
+                response_status = exc.code
+                response_headers = dict(exc.headers.items()) if exc.headers else {}
+                response_text = exc.read().decode("utf-8", errors="replace")
+                error = exc
             except Exception as exc:
+                error = exc
+
+            if error is not None:
                 # Show HTTP status + response body snippet to aid debugging
-                if resp is not None:
-                    _snippet = (resp.text or "")[:300].replace("\n", " ")
-                    print(f"[LLM] Attempt {attempt}/{retries} failed (HTTP {resp.status_code}): {exc} | body: {_snippet}")
+                if response_status is not None:
+                    _snippet = response_text[:300].replace("\n", " ")
+                    print(f"[LLM] Attempt {attempt}/{retries} failed (HTTP {response_status}): {error} | body: {_snippet}")
                     # If server returned HTML, this is a config error (wrong endpoint),
                     # not a rate limit — no point waiting the full retry_delay
-                    content_type = resp.headers.get("Content-Type", "")
-                    is_html = "text/html" in content_type or (resp.text or "").lstrip().startswith("<!DOCTYPE")
+                    content_type = response_headers.get("Content-Type", "")
+                    is_html = "text/html" in content_type or response_text.lstrip().startswith("<!DOCTYPE")
                     if is_html:
                         print("[LLM] Response is HTML — likely wrong endpoint. Check API Base URL.")
                         # Short delay only; no benefit to 30s wait
@@ -135,7 +152,7 @@ class LLMClient:
                     else:
                         wait = self.retry_delay
                 else:
-                    print(f"[LLM] Attempt {attempt}/{retries} failed: {exc}")
+                    print(f"[LLM] Attempt {attempt}/{retries} failed: {error}")
                     wait = self.retry_delay
                 if attempt < retries:
                     time.sleep(wait)

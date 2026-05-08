@@ -13,13 +13,14 @@ from typing import Any, Dict, List, Optional
 import networkx as nx
 
 from ..utils.file_utils import load_text
+from ..utils.path_layout import resolve_script_data_dir
 
 
 class ScriptIndexer:
     """Provides script source code retrieval for MonoBehaviour components."""
 
     def __init__(self, results_dir: str, scene_graphs: Dict[str, nx.Graph]):
-        self.script_data_dir = os.path.join(results_dir, "script_detailed_info")
+        self.script_data_dir = str(resolve_script_data_dir(results_dir))
         self.scene_graphs = scene_graphs  # scene_name → nx.Graph
 
     # ------------------------------------------------------------------

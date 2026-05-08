@@ -4,6 +4,14 @@ import networkx as nx
 import argparse
 from typing import List, Dict, Any
 
+from vragent2.utils.path_layout import (
+    get_step2_gobj_hierarchy_path,
+    get_step2_source_code_files_path,
+    resolve_gobj_layer_path,
+    resolve_gobj_tag_path,
+    resolve_scene_meta_dir,
+)
+
 def GenerateTestPlan(G, results_dir, scene_name):
     """
     生成测试计划，筛选出所有需要进行测试的GameObject列表
@@ -24,7 +32,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
     all_source_code_files = set()
     
     # 加载 gobj_tag.json 文件
-    gobj_tag_file = os.path.join(results_dir, f'{scene_name}_gobj_tag.json')
+    gobj_tag_file = resolve_gobj_tag_path(results_dir, scene_name)
     gobj_tag_data = {}
     if os.path.exists(gobj_tag_file):
         try:
@@ -35,7 +43,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
             print(f"加载 gobj_tag.json 文件失败: {e}")
     
     # 加载 gobj_layer.json 文件
-    gobj_layer_file = os.path.join(results_dir, f'{scene_name}_gobj_layer.json')
+    gobj_layer_file = resolve_gobj_layer_path(results_dir, scene_name)
     gobj_layer_data = {}
     if os.path.exists(gobj_layer_file):
         try:
@@ -1042,7 +1050,8 @@ def GenerateTestPlan(G, results_dir, scene_name):
                             print()
     
     # 保存测试计划到JSON文件
-    test_plan_file = os.path.join(results_dir, f'{scene_name}_gobj_hierarchy.json')
+    test_plan_file = get_step2_gobj_hierarchy_path(results_dir, scene_name)
+    test_plan_file.parent.mkdir(parents=True, exist_ok=True)
     with open(test_plan_file, 'w', encoding='utf-8') as f:
         json.dump(test_objects, f, indent=2, ensure_ascii=False)
     
@@ -1050,8 +1059,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
     
     # 保存源代码文件名列表
     source_code_files_list = sorted(list(all_source_code_files))
-    project_name = str(results_dir).replace('\\', '').split('_')[1]
-    source_code_file = os.path.join(results_dir, f'{project_name}_{scene_name}_source_code_files.json')
+    source_code_file = get_step2_source_code_files_path(results_dir, scene_name)
     with open(source_code_file, 'w', encoding='utf-8') as f:
         json.dump(source_code_files_list, f, indent=2, ensure_ascii=False)
     
@@ -1195,9 +1203,12 @@ def find_gml_files(results_dir: str) -> List[str]:
         List[str]: GML文件路径列表
     """
     gml_files = []
+    scene_meta_dir = resolve_scene_meta_dir(results_dir)
+    if not scene_meta_dir.is_dir():
+        return gml_files
     
     # 遍历目录查找GML文件
-    for root, dirs, files in os.walk(results_dir):
+    for root, dirs, files in os.walk(scene_meta_dir):
         for file in files:
             if file.endswith('.gml'):
                 gml_files.append(os.path.join(root, file))
