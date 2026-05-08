@@ -14,6 +14,11 @@ namespace HenryLab.VRAgent
         /// </summary>
         public static UnityEvent CreateUnityEvent(eventUnit e, bool useFileID = true)
         {
+            return CreateUnityEvent(e, null, useFileID);
+        }
+
+        public static UnityEvent CreateUnityEvent(eventUnit e, IEnumerable<GameObject> fallbackRoots, bool useFileID = true)
+        {
             var manager = UnityEngine.Object.FindAnyObjectByType<FileIDContainer>();
             UnityEvent evt = new UnityEvent();
             if(e.methodCallUnits == null) return evt;
@@ -28,7 +33,11 @@ namespace HenryLab.VRAgent
                 if(component == null)
                 {
                     Debug.LogWarning($"{Str.Tags.LogsTag} Component with script FileID {methodCallUnit.script} not found");
-                    continue;
+                    component = FindFallbackComponent(methodCallUnit.methodName, fallbackRoots);
+                    if(component == null)
+                        continue;
+
+                    Debug.LogWarning($"{Str.Tags.LogsTag} Fallback bound {component.GetType().Name}.{methodCallUnit.methodName} by method name");
                 }
 
                 // 改进的方法查找，支持第三方库
@@ -86,6 +95,44 @@ namespace HenryLab.VRAgent
                 }
             }
             return evt;
+        }
+
+        private static MonoBehaviour FindFallbackComponent(string methodName, IEnumerable<GameObject> fallbackRoots)
+        {
+            if(fallbackRoots == null || string.IsNullOrEmpty(methodName))
+                return null;
+
+            HashSet<MonoBehaviour> visited = new HashSet<MonoBehaviour>();
+            foreach(GameObject root in fallbackRoots)
+            {
+                if(root == null)
+                    continue;
+
+                foreach(MonoBehaviour component in root.GetComponentsInChildren<MonoBehaviour>(true))
+                {
+                    if(component == null || !visited.Add(component))
+                        continue;
+
+                    if(HasParameterlessMethod(component, methodName))
+                        return component;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool HasParameterlessMethod(MonoBehaviour component, string methodName)
+        {
+            MethodInfo[] methods = component.GetType().GetMethods(
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach(MethodInfo method in methods)
+            {
+                if(method.Name == methodName && method.GetParameters().Length == 0)
+                    return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -329,12 +376,17 @@ namespace HenryLab.VRAgent
         /// </summary>
         public static void BindEventList(List<eventUnit> eventUnits, List<UnityEvent> targetList, bool useFileID = true)
         {
+            BindEventList(eventUnits, targetList, null, useFileID);
+        }
+
+        public static void BindEventList(List<eventUnit> eventUnits, List<UnityEvent> targetList, IEnumerable<GameObject> fallbackRoots, bool useFileID = true)
+        {
             targetList.Clear();
             if(eventUnits == null) return;
 
             foreach(var e in eventUnits)
             {
-                targetList.Add(CreateUnityEvent(e, useFileID));
+                targetList.Add(CreateUnityEvent(e, fallbackRoots, useFileID));
             }
         }
     }

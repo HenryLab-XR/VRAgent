@@ -17,8 +17,17 @@ import argparse
 import time
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Set
-import requests
+from urllib import error as urllib_error
+from urllib import request as urllib_request
 import networkx as nx
+
+from vragent2.utils.path_layout import (
+    get_step2_gobj_hierarchy_path,
+    resolve_gobj_hierarchy_path,
+    resolve_scene_data_dir,
+    resolve_scene_meta_dir,
+    resolve_script_data_dir,
+)
 
 # Ensure stdout/stderr can handle Unicode (emoji) even on Windows GBK consoles
 if hasattr(sys.stdout, 'reconfigure'):
@@ -50,10 +59,11 @@ class TagLogicPreprocessor:
         self.results_dir = results_dir
         self.scene_name = scene_name
         self.app_name = app_name or "escapeVr"
-        self.gobj_hierarchy_path = os.path.join(results_dir, f"{scene_name}_gobj_hierarchy.json")
-        self.scene_data_dir = os.path.join(results_dir, "scene_detailed_info")
-        self.script_data_dir = os.path.join(results_dir, "script_detailed_info")
-        self.scene_meta_dir = os.path.join(results_dir, "scene_detailed_info", "mainResults")
+        self.gobj_hierarchy_path = str(get_step2_gobj_hierarchy_path(results_dir, scene_name))
+        self.gobj_hierarchy_input_path = str(resolve_gobj_hierarchy_path(results_dir, scene_name))
+        self.scene_data_dir = str(resolve_scene_data_dir(results_dir))
+        self.script_data_dir = str(resolve_script_data_dir(results_dir))
+        self.scene_meta_dir = str(resolve_scene_meta_dir(results_dir))
         
         # 加载gobj_hierarchy.json
         self.gobj_hierarchy = self._load_gobj_hierarchy()
@@ -76,7 +86,7 @@ class TagLogicPreprocessor:
     def _load_gobj_hierarchy(self) -> List[Dict[str, Any]]:
         """加载gobj_hierarchy.json文件"""
         try:
-            with open(self.gobj_hierarchy_path, 'r', encoding='utf-8') as f:
+            with open(self.gobj_hierarchy_input_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
             print(f"❌ 加载gobj_hierarchy.json失败: {e}")
@@ -131,6 +141,7 @@ class TagLogicPreprocessor:
     def _save_gobj_hierarchy(self):
         """保存gobj_hierarchy.json文件"""
         try:
+            os.makedirs(os.path.dirname(self.gobj_hierarchy_path), exist_ok=True)
             with open(self.gobj_hierarchy_path, 'w', encoding='utf-8') as f:
                 json.dump(self.gobj_hierarchy, f, indent=2, ensure_ascii=False)
             print(f"✅ 已保存gobj_hierarchy.json")
@@ -165,15 +176,21 @@ class TagLogicPreprocessor:
                     ],
                     "temperature": 1
                 }
-                
-                response = requests.post(
+
+                request_data = json.dumps(data).encode('utf-8')
+                request = urllib_request.Request(
                     f"{basicUrl_gpt35}chat/completions",
+                    data=request_data,
                     headers=headers,
-                    json=data
+                    method='POST'
                 )
-                
-                if response.status_code == 200:
-                    result = response.json()
+
+                with urllib_request.urlopen(request) as response:
+                    status_code = response.getcode()
+                    response_text = response.read().decode('utf-8')
+
+                if status_code == 200:
+                    result = json.loads(response_text)
                     if result['choices'] and len(result['choices']) > 0:
                         content = result['choices'][0]['message']['content']
                         print("    ✅ LLM API调用成功")
@@ -182,9 +199,12 @@ class TagLogicPreprocessor:
                         print("    ❌ LLM响应为空")
                         return None
                 else:
-                    print(f"    ❌ LLM API调用失败: {response.status_code} - {response.text}")
+                    print(f"    ❌ LLM API调用失败: {status_code} - {response_text}")
                     return None
-                    
+            except urllib_error.HTTPError as e:
+                error_text = e.read().decode('utf-8', errors='replace')
+                print(f"    ❌ LLM API调用失败: {e.code} - {error_text}")
+                return None
             except Exception as e:
                 print(f"    ❌ LLM API调用失败 (尝试 {attempt + 1}/{max_retries}): {e}")
                 if attempt < max_retries - 1:
@@ -1047,7 +1067,7 @@ def discover_scene_names(results_dir: str) -> List[str]:
     Returns:
         场景名称列表
     """
-    scene_meta_dir = os.path.join(results_dir, 'scene_detailed_info', 'mainResults')
+    scene_meta_dir = resolve_scene_meta_dir(results_dir)
     scene_names = []
     
     if not os.path.exists(scene_meta_dir):

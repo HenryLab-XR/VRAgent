@@ -20,6 +20,12 @@ from typing import Any, Dict, List, Optional, Tuple
 import networkx as nx
 
 from ..utils.file_utils import load_json, find_files
+from ..utils.path_layout import (
+    resolve_gobj_layer_path,
+    resolve_gobj_tag_path,
+    resolve_scene_meta_dir,
+    resolve_script_data_dir,
+)
 
 
 class SceneAnalyzer:
@@ -28,8 +34,8 @@ class SceneAnalyzer:
     def __init__(self, results_dir: str, scene_name: str):
         self.results_dir = results_dir
         self.scene_name = scene_name
-        self.scene_meta_dir = os.path.join(results_dir, "scene_detailed_info", "mainResults")
-        self.script_data_dir = os.path.join(results_dir, "script_detailed_info")
+        self.scene_meta_dir = str(resolve_scene_meta_dir(results_dir))
+        self.script_data_dir = str(resolve_script_data_dir(results_dir))
 
         # Lazy-loaded caches
         self._graph: Optional[nx.Graph] = None
@@ -67,14 +73,14 @@ class SceneAnalyzer:
     @property
     def tag_data(self) -> Dict:
         if self._tag_data is None:
-            path = os.path.join(self.results_dir, f"{self.scene_name}_gobj_tag.json")
+            path = str(resolve_gobj_tag_path(self.results_dir, self.scene_name))
             self._tag_data = load_json(path) if os.path.exists(path) else {}
         return self._tag_data
 
     @property
     def layer_data(self) -> Dict:
         if self._layer_data is None:
-            path = os.path.join(self.results_dir, f"{self.scene_name}_gobj_layer.json")
+            path = str(resolve_gobj_layer_path(self.results_dir, self.scene_name))
             self._layer_data = load_json(path) if os.path.exists(path) else {}
         return self._layer_data
 

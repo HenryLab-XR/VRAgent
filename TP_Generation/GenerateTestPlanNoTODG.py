@@ -21,6 +21,13 @@ import time
 import shutil
 import re
 
+from vragent2.utils.path_layout import (
+    resolve_gobj_hierarchy_path,
+    resolve_scene_data_dir,
+    resolve_scene_meta_dir,
+    resolve_script_data_dir,
+)
+
 forbid_lis = ["XR Origin", "Player", "Camera", "TMP", "XR Interaction Manager", "EventSystem"]
 THINK_RE = re.compile(r'<\s*think\s*>.*?<\s*/\s*think\s*>', re.IGNORECASE | re.DOTALL)
 
@@ -55,10 +62,10 @@ class GenerateTestPlanModified:
         self.scene_name = scene_name  # Keep original value, don't set default
         self.app_name = app_name or self.DEFAULT_APP_NAME
         self.enable_llm = enable_llm
-        self.gobj_hierarchy_path = os.path.join(results_dir, f"{scene_name}_gobj_hierarchy.json")
-        self.scene_data_dir = os.path.join(results_dir, "scene_detailed_info")
-        self.script_data_dir = os.path.join(results_dir, "script_detailed_info")
-        self.scene_meta_dir = os.path.join(results_dir, 'scene_detailed_info', 'mainResults')
+        self.gobj_hierarchy_path = str(resolve_gobj_hierarchy_path(results_dir, scene_name))
+        self.scene_data_dir = str(resolve_scene_data_dir(results_dir))
+        self.script_data_dir = str(resolve_script_data_dir(results_dir))
+        self.scene_meta_dir = str(resolve_scene_meta_dir(results_dir))
         
         # Setup OpenAI API (only when LLM is enabled)
         if self.enable_llm:
@@ -1129,7 +1136,7 @@ def discover_scene_names(results_dir: str) -> List[str]:
     Returns:
         Scene name list
     """
-    scene_meta_dir = os.path.join(results_dir, 'scene_detailed_info', 'mainResults')
+    scene_meta_dir = resolve_scene_meta_dir(results_dir)
     scene_names = []
     
     if not os.path.exists(scene_meta_dir):

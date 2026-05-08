@@ -22,6 +22,8 @@ FORBIDDEN_NAMES = [
     "XR Interaction Manager", "EventSystem",
 ]
 
+from ..utils.path_layout import resolve_gobj_hierarchy_path
+
 
 class HierarchyBuilder:
     """In-memory index over ``gobj_hierarchy.json``."""
@@ -29,7 +31,7 @@ class HierarchyBuilder:
     def __init__(self, results_dir: str, scene_name: str):
         self.results_dir = results_dir
         self.scene_name = scene_name
-        self._hierarchy_path = os.path.join(results_dir, f"{scene_name}_gobj_hierarchy.json")
+        self._hierarchy_path = str(resolve_gobj_hierarchy_path(results_dir, scene_name))
         self._data: List[Dict[str, Any]] = []
         self._index_by_id: Dict[str, Dict[str, Any]] = {}
         self._processed_ids: Set[str] = set()

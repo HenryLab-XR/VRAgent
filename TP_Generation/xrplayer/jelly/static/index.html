@@ -189,7 +189,7 @@
   <button data-tab="overview" data-tip="实时总览：场景名、迭代数&#10;覆盖率代理、模式和预算">Overview</button>
   <button data-tab="scene" data-tip="场景理解结果&#10;关键对象、禁止对象、角色分类">Scene</button>
   <button data-tab="agents" data-tip="Agent 决策历史&#10;Planner/Verifier/Observer 的每轮输出">Agents</button>
-  <button data-tab="coverage" data-tip="覆盖率指标&#10;代理覆盖 + Unity Code Coverage XML">Coverage</button>
+  <button data-tab="diagnose" data-tip="诊断视图&#10;代理覆盖 + Unity Code Coverage 映射诊断">Diagnose</button>
   <button data-tab="gate" data-tip="门控图可视化&#10;状态节点 + 成功/失败交互边">Gate Graph</button>
   <button data-tab="iterations" data-tip="迭代日志&#10;每轮测试对象、动作数、覆盖增量">Iterations</button>
   <button data-tab="timeline" data-tip="时间线视图&#10;按迭代顺序展示模式切换与覆盖变化">Timeline</button>
@@ -273,7 +273,7 @@
       <h2>1 &middot; 场景依赖提取 <span class="tag" id="step1Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
       <span class="meta" style="margin-left:8px;font-size:11px">ExtractSceneDependency.py</span>
       <span style="flex:1"></span>
-      <button class="btn primary sm" id="step1Btn" onclick="runStep(1);event.stopPropagation()" data-tip="提取 Unity 场景脚本依赖图（GML）&#10;生成 scene_detailed_info/ 和 script_detailed_info/">&#x25B6; 运行</button>
+      <button class="btn primary sm" id="step1Btn" onclick="runStep(1);event.stopPropagation()" data-tip="提取 Unity 场景脚本依赖图（GML）&#10;输出到 workflow/step1_extract_scene/ 下的 scene_detailed_info/ 和 script_detailed_info/">&#x25B6; 运行</button>
       <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
     </div>
     <div class="wf-step-body" style="margin-top:10px">
@@ -283,8 +283,8 @@
         <button class="btn-browse" onclick="browseDir('ppProjectRoot')" title="浏览">&#x1F4C2;</button>
       </div>
       <div class="field-row">
-        <label data-tip="结果输出目录（相对工作目录）&#10;建议格式：Results/Results_{场景名}&#10;选择 Scene 后自动填充">结果目录</label>
-        <input id="ppResultsDir" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <label data-tip="结果输出目录（相对工作目录）&#10;建议格式：Results/{场景名}&#10;选择 Scene 后自动填充">结果目录</label>
+        <input id="ppResultsDir" placeholder="Results/Kitchen_TestRoom" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('ppResultsDir')" title="浏览">&#x1F4C2;</button>
       </div>
       <div class="field-row">
@@ -303,13 +303,13 @@
       <h2>2 &middot; 层级遍历 <span class="tag" id="step2Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
       <span class="meta" style="margin-left:8px;font-size:11px">TraverseSceneHierarchy.py</span>
       <span style="flex:1"></span>
-      <button class="btn primary sm" id="step2Btn" onclick="runStep(2);event.stopPropagation()" data-tip="遍历场景层级，生成 {SceneName}_gobj_hierarchy.json&#10;依赖 Step 1 的输出">&#x25B6; 运行</button>
+      <button class="btn primary sm" id="step2Btn" onclick="runStep(2);event.stopPropagation()" data-tip="遍历场景层级，生成 workflow/step2_traverse_hierarchy/{SceneName}_gobj_hierarchy.json&#10;依赖 Step 1 的输出">&#x25B6; 运行</button>
       <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
     </div>
     <div class="wf-step-body" style="margin-top:10px">
       <div class="field-row">
         <label data-tip="Step 1 的结果目录（自动同步自 Step 1）">结果目录</label>
-        <input id="ppResultsDir2" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <input id="ppResultsDir2" placeholder="Results/Kitchen_TestRoom" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('ppResultsDir2')" title="浏览">&#x1F4C2;</button>
       </div>
       <div class="meta" style="margin-top:6px;margin-left:118px;line-height:2">
@@ -330,7 +330,7 @@
     <div class="wf-step-body" style="margin-top:10px">
       <div class="field-row">
         <label data-tip="Step 1/2 的结果目录（自动同步）">结果目录</label>
-        <input id="ppResultsDir3" placeholder="Results/Results_Kitchen_TestRoom" style="flex:1" />
+        <input id="ppResultsDir3" placeholder="Results/Kitchen_TestRoom" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('ppResultsDir3')" title="浏览">&#x1F4C2;</button>
       </div>
       <div class="field-row">
@@ -513,14 +513,14 @@
   <div id="agentsTableWrap"></div>
 </section>
 
-<section id="tab-coverage" class="panel">
+<section id="tab-diagnose" class="panel">
   <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
     <h2 class="sec" data-tip="代理覆盖率（Proxy Coverage）是真实代码覆盖率的近似估算&#10;通过统计已测试对象数、组件类型、动作类型占总体的比例得出&#10;&#10;与 Unity Code Coverage 的区别：&#10;&#10;· 代理覆盖率：无需 Unity Play Mode，实时可用&#10;· Unity Code Coverage：需安装 Code Coverage 包并进入 Play Mode&#10;  能精确统计行覆盖率/分支覆盖率&#10;&#10;代理覆盖率 = 0 表示尚未开始探索&#10;代理覆盖率 = 1.0 表示所有已知对象均已被测试" class="tip-below" style="margin:0">代理覆盖率 (Proxy)</h2>
     <span style="flex:1"></span>
     <span class="meta" style="font-size:11px" id="covLocalLabel"></span>
-    <input id="covLocalPathInput" type="text" placeholder="本地 summary.json 路径" style="width:300px;font-size:11px;padding:3px 6px;background:var(--panel2);border:1px solid var(--border);color:var(--fg);border-radius:4px" />
-    <button class="btn ghost sm" onclick="browseFile('covLocalPathInput')" data-tip="浏览选择本地 summary.json 文件">&#x1F4C2;</button>
-    <button class="btn ghost sm" onclick="loadLocalCoverage()" data-tip="从指定路径加载覆盖率文件">加载</button>
+    <input id="covLocalPathInput" type="text" placeholder="运行目录，例如 Results/<scene>/<model>" style="width:300px;font-size:11px;padding:3px 6px;background:var(--panel2);border:1px solid var(--border);color:var(--fg);border-radius:4px" />
+    <button class="btn ghost sm" onclick="browseFile('covLocalPathInput')" data-tip="可选择运行目录下任意文件后手动改成目录；Diagnose 不再直接读取 summary.json">&#x1F4C2;</button>
+    <button class="btn ghost sm" onclick="loadLocalCoverage()" data-tip="按运行目录读取 run_metadata.json 与真实 Unity report">加载</button>
   </div>
   <div class="cov-grid" id="covProxyGrid"><div class="empty">loading...</div></div>
   <div class="row">
@@ -530,11 +530,11 @@
     </div>
     <div class="col">
       <h3 class="sec" style="display:flex;align-items:center;gap:8px">
-        Unity Code Coverage
-        <span class="meta" style="font-size:10px;font-weight:400" data-tip="需在 Unity Editor 开启 Code Coverage&#10;并运行一次 Play Mode 后生成 Summary.xml&#10;路径：VRAgent/CodeCoverage/Report/Summary.xml">(?)</span>
+        Code Coverage Diagnose
+        <span class="meta" style="font-size:10px;font-weight:400" data-tip="需在 Unity Editor 开启 Code Coverage&#10;并运行一次 Play Mode 生成 Report 目录&#10;Diagnose 会读取 report html/history nodes，再结合 run_metadata.json 做映射">(?)</span>
         <button class="btn ghost sm" style="margin-left:auto" onclick="refreshUnityCoverage()">&#x27F3;</button>
       </h3>
-      <div id="covUnityWrap"><div class="empty">loading Unity coverage...</div></div>
+      <div id="covUnityWrap"><div class="empty">loading diagnose data...</div></div>
       <div id="covSnapshotsWrap" style="margin-top:12px"></div>
       <div id="covHistoryWrap" style="margin-top:12px"></div>
     </div>
@@ -754,9 +754,64 @@ let logLineIdx    = 0;
 let _cfg          = {projects:[], python_exe:"", work_dir:"", default_model:"gpt-4o"};
 let _activeTab        = "workflow";
 let _editingProjName  = null;  // null = new, string = editing existing project
+let _preferredRunDir  = "";
 
 /* ---- utils ---- */
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function _normalizeRunDir(path){
+  return String(path||"")
+    .replace(/\\/g,"/")
+    .replace(/\/+/g,"/")
+    .replace(/^\.\//,"")
+    .replace(/\/$/,"");
+}
+function _predictRunDir(outputBase, sceneName, modelName){
+  const scene=_normalizeRunDir(sceneName);
+  const model=_normalizeRunDir(modelName);
+  if(!scene||!model) return "";
+
+  let predicted=_normalizeRunDir(outputBase||"Results");
+  const parts=predicted.split("/").filter(Boolean);
+  const tail=parts[parts.length-1]||"";
+  const prev=parts[parts.length-2]||"";
+  if(tail===model){
+    // already fully qualified
+  } else if(tail===scene || prev===scene){
+    predicted=_normalizeRunDir(predicted+"/"+model);
+  } else {
+    predicted=_normalizeRunDir(predicted+"/"+scene+"/"+model);
+  }
+
+  const root=_normalizeRunDir(_resultsRoot);
+  if(root && /^[A-Za-z]:\//.test(predicted) && predicted.startsWith(root+"/")){
+    return predicted.slice(root.length+1);
+  }
+  return predicted;
+}
+function _defaultWorkflowResultsDir(){
+  const p=selProj();
+  const base=(p&&p.work_dir)||_cfg.work_dir||_resultsRoot||"";
+  const sceneName=((document.getElementById("ppSceneName")||{}).value||"").trim()||(((document.getElementById("wfSceneSel")||{}).value)||"").trim();
+  const runDir=_normalizeRunDir(currentRun);
+
+  if(runDir && runDir!=="."){
+    const parts=runDir.split("/").filter(Boolean);
+    if(parts.length){
+      if(parts[0].toLowerCase()==="results" && parts.length>=2){
+        return _resolveDir(parts.slice(0,2).join("/"), _resultsRoot||base);
+      }
+      if(_resultsRoot && /[\\/]Results$/i.test(_resultsRoot)){
+        return _resolveDir(parts[0], _resultsRoot);
+      }
+      return _resolveDir("Results/"+parts[0], base);
+    }
+  }
+
+  if(sceneName){
+    return _resolveDir("Results/"+sceneName, base);
+  }
+  return "";
+}
 
 async function api(path, params={}){
   const qs = new URLSearchParams(params);
@@ -829,13 +884,14 @@ function fmtBytes(n){if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixe
 
 /* ---- tabs ---- */
 function setTab(name){
+  if(name==="coverage") name="diagnose";
   _activeTab=name;
   $$("nav button[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));
   $$(".panel").forEach(p=>p.classList.toggle("active",p.id==="tab-"+name));
   if(name==="overview")    refreshOverview();
   if(name==="scene")       refreshScene();
   if(name==="agents")      refreshAgents();
-  if(name==="coverage")    refreshCoverage();
+  if(name==="diagnose")    refreshCoverage();
   if(name==="gate")        refreshGate();
   if(name==="iterations")  refreshIterations();
   if(name==="timeline")    refreshTimeline();
@@ -848,21 +904,38 @@ $$("nav button[data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.da
 /* ---- run selector ---- */
 async function refreshRuns(){
   const data = await apiRaw("/api/runs");
-  const sel=$("#runSelect"), prev=sel.value;
+  const sel=$("#runSelect"), prev=_normalizeRunDir(sel.value), preferred=_normalizeRunDir(_preferredRunDir);
   sel.innerHTML="";
   const runs=data.runs||[];
-  if(!runs.length){ sel.innerHTML=`<option value=".">(results root)</option>`; }
-  else runs.forEach(r=>{
+  if(!runs.length){
+    sel.innerHTML=`<option value=".">(results root)</option>`;
+  } else runs.forEach(r=>{
     const o=document.createElement("option");
     o.value=r.run_dir; o.textContent=r.run_dir+(r.has_status?"  \u25CF":""); sel.appendChild(o);
   });
-  if(prev) sel.value=prev;
+
+  let nextValue="";
+  if(preferred){
+    const preferredRun=runs.find(r=>_normalizeRunDir(r.run_dir)===preferred);
+    if(preferredRun){
+      nextValue=preferredRun.run_dir;
+      _preferredRunDir="";
+    }
+  }
+  if(!nextValue && prev){
+    const prevRun=runs.find(r=>_normalizeRunDir(r.run_dir)===prev);
+    if(prevRun) nextValue=prevRun.run_dir;
+  }
+  if(!nextValue){
+    nextValue=runs.length ? runs[0].run_dir : ".";
+  }
+  sel.value=nextValue;
   currentRun=sel.value;
 }
-$("#runSelect").addEventListener("change",()=>{ currentRun=$("#runSelect").value; refreshActiveTab(); });
+$("#runSelect").addEventListener("change",()=>{ _preferredRunDir=""; currentRun=$("#runSelect").value; refreshActiveTab(); });
 function refreshActiveTab(){
   const map={overview:refreshOverview,scene:refreshScene,agents:refreshAgents,
-             coverage:refreshCoverage,gate:refreshGate,iterations:refreshIterations,
+             diagnose:refreshCoverage,coverage:refreshCoverage,gate:refreshGate,iterations:refreshIterations,
              timeline:refreshTimeline,oracle:refreshOracle,benchmark:refreshBenchmark,
              files:refreshFiles};
   if(map[_activeTab]) map[_activeTab]();
@@ -926,10 +999,14 @@ async function _postLoadLocalJson(path){
 }
 async function loadLocalCoverage(){
   const path=$("#covLocalPathInput").value.trim();
-  if(!path){alert("请先输入或浏览选择 summary.json 路径");return;}
-  const data=await _postLoadLocalJson(path);
-  if(!data)return;
-  $("#covLocalLabel").textContent="📂 "+path.split(/[\\/]/).pop();
+  if(!path){alert("请先输入运行目录，例如 Results/<scene>/<model> 或 Results/<scene>/<model>/<run_id>");return;}
+  if(/\.(json|xml|html?)$/i.test(path)){
+    alert("Diagnose 不再直接加载 summary.json/xml/html；请提供运行目录，由后端读取 run_metadata.json 与真实 Unity report。");
+    return;
+  }
+  const data=await apiRaw("/api/run_coverage",{run_dir:path});
+  if(data.error){alert("加载失败: "+data.error);return;}
+  $("#covLocalLabel").textContent="📂 "+path.replace(/\\/g,"/").split("/").filter(Boolean).slice(-2).join("/");
   _renderCoverageData(data);
 }
 async function loadLocalOracle(){
@@ -955,83 +1032,121 @@ async function refreshCoverage(){
 }
 function _renderCoverageData(d){
   const ex=d.explorer||{};
-  const metrics=[
-    {k:"总覆盖代理",v:(d.total_actions??d.total_traces??ex.total_coverage??0),fmt:"num"},
+  const proxyWrap=$("#covProxyGrid");
+  const tokenWrap=$("#covTokenWrap");
+  const wrap=$("#covUnityWrap");
+  const metaWrap=$("#covSnapshotsWrap");
+  const histWrap=$("#covHistoryWrap");
+
+  function _renderCoverageMappingStatus(status){
+    if(status==="mapped") return tag("mapped","good");
+    if(status==="unmapped") return tag("unmapped","warn");
+    if(status==="missing") return tag("missing","warn");
+    return tag("no report","bad");
+  }
+  const proxyMetrics=[
+    {k:"总动作数",v:(d.total_actions??d.total_traces??0),fmt:"num"},
     {k:"覆盖代理",v:ex.total_coverage??0,fmt:"pct"},
-    {k:"迭代数",v:d.iterations??0,fmt:"num"},
-    {k:"动作总数",v:d.total_actions??0,fmt:"num"},
     {k:"Gate 总数",v:d.gate_graph_edges??0,fmt:"num"},
     {k:"已解 Gate",v:ex.gates_solved??0,fmt:"num"},
-    {k:"剩余预算",v:ex.budget_remaining??"--",fmt:"raw"},
     {k:"探索模式",v:ex.mode||"--",fmt:"raw"},
+    {k:"剩余预算",v:ex.budget_remaining??"--",fmt:"raw"},
   ];
-  const cardsHtml=metrics.map(m=>{
-    let disp="--";
-    if(m.fmt==="pct"){const pv=typeof m.v==="number"?m.v:0;disp=`<div class="cv">${(pv*100).toFixed(1)}%</div>${covBar(pv*100)}`;}
-    else if(m.fmt==="num"){disp=`<div class="cv">${m.v}</div>`;}
-    else{disp=`<div class="cv" style="font-size:14px">${esc(String(m.v))}</div>`;}
+  proxyWrap.innerHTML=proxyMetrics.map(m=>{
+    let disp=`<div class="cv">${esc(String(m.v))}</div>`;
+    if(m.fmt==="pct"){
+      const pv=typeof m.v==="number"?m.v:0;
+      disp=`<div class="cv">${(pv*100).toFixed(1)}%</div>${covBar(pv*100)}`;
+    }else if(m.fmt==="num"){
+      disp=`<div class="cv">${Number(m.v||0).toLocaleString()}</div>`;
+    }
     return `<div class="cov-card"><h4>${m.k}</h4>${disp}</div>`;
   }).join("");
-  $("#covProxyGrid").innerHTML=cardsHtml||`<div class="empty">No coverage data yet.</div>`;
-  // Token usage table
+
   const tok=d.token_usage||{};
-  const tokTotal=tok._total||{};
   const agents=Object.entries(tok).filter(([k])=>k!=="total"&&k!=="total_tokens"&&k!=="calls"&&k!=="_total");
   if(agents.length){
-    let th=`<table><thead><tr><th>Agent</th><th data-tip="模型输入 token">输入</th><th data-tip="模型输出 token">输出</th><th>总计</th><th>调用次数</th></tr></thead><tbody>`;
-    let rows=agents.map(([k,v])=>{const vv=v||{};return `<tr><td>${esc(k)}</td><td>${(vv.prompt_tokens||0).toLocaleString()}</td><td>${(vv.completion_tokens||0).toLocaleString()}</td><td style="color:var(--accent)">${(vv.total_tokens||0).toLocaleString()}</td><td>${vv.calls||0}</td></tr>`;}).join("");
-    const tot=tokTotal;
-    rows+=`<tr style="font-weight:700;border-top:2px solid var(--border)"><td>合计</td><td>${(tot.prompt_tokens||0).toLocaleString()}</td><td>${(tot.completion_tokens||0).toLocaleString()}</td><td style="color:var(--accent)">${(tot.total_tokens||0).toLocaleString()}</td><td>${tot.calls||0}</td></tr>`;
-    $("#covTokenWrap").innerHTML=th+rows+`</tbody></table>`;
+    const totalTokens=Number(tok.total_tokens??tok.total??0).toLocaleString();
+    const rows=agents.map(([k,v])=>{
+      const vv=v||{};
+      return `<tr><td>${esc(k)}</td><td>${(vv.prompt_tokens||0).toLocaleString()}</td><td>${(vv.completion_tokens||0).toLocaleString()}</td><td style="color:var(--accent)">${(vv.total_tokens||0).toLocaleString()}</td><td>${vv.calls||0}</td></tr>`;
+    }).join("");
+    tokenWrap.innerHTML=`<table><thead><tr><th>Agent</th><th data-tip="模型输入 token">输入</th><th data-tip="模型输出 token">输出</th><th>总计</th><th>调用次数</th></tr></thead><tbody>${rows}</tbody></table><div class="meta" style="margin-top:6px">总 Token: ${totalTokens}</div>`;
   } else {
-    $("#covTokenWrap").innerHTML=`<div class="empty">No token data.</div>`;
+    tokenWrap.innerHTML=`<div class="empty" style="font-size:11px">当前运行没有可显示的 token 统计。</div>`;
   }
-  refreshUnityCoverage();
-}
-async function refreshUnityCoverage(){
-  const p=selProj();
-  const params={};
-  if(p && p.assets_path) params.project_path=p.assets_path;
-  if(currentRun && currentRun!==".") params.run=currentRun;
-  // Use run_coverage: checks snapshot first, falls back to live Unity report
-  const d=await apiRaw("/api/run_coverage",params);
-  _renderUnityCovData(d);
-  _refreshCoverageSnapshots();
-  _refreshCoverageHistory();
-}
-function _renderUnityCovData(d){
-  const wrap=$("#covUnityWrap");
-  if(!d||!d.found){
-    const msg=(d&&d.error)||"Coverage report not found";
-    wrap.innerHTML=`<div class="empty" style="font-size:11px">${esc(msg)}<br>
-      <span class="meta">在 Unity Editor 中 Window &gt; Analysis &gt; Code Coverage 运行 Play Mode 后生成报告，然后点击 📸 保存快照。</span></div>`;
-    return;
+
+  const md=d.metadata||{};
+  const runParts=(currentRun||"").replace(/\\/g,"/").split("/").filter(Boolean);
+  const runScene=(runParts[0]==="Results"?runParts[1]:runParts[0])||"--";
+  const runModel=(runParts[0]==="Results"?runParts[2]:runParts[1])||"--";
+  const fallbackScene=md.scene||runScene;
+  const fallbackModel=md.model||runModel;
+  const fallbackPlan=md.test_plan_name||md.test_plan_id||(currentRun&&currentRun!=="."?"未记录":"--");
+  const fallbackRunId=md.run_id||(currentRun&&currentRun!=="."?runParts[runParts.length-1]||"--":"--");
+  const fallbackResultDir=md.result_dir||(currentRun&&currentRun!=="."?currentRun:"--");
+  const mappingStatus=d.mapping_status||"no_report";
+  const statusTag=_renderCoverageMappingStatus(mappingStatus);
+  const realReportTag=d.is_real_report?tag("real report","good"):tag("not real","bad");
+  const metaRows=[
+    ["场景",fallbackScene],
+    ["模型",fallbackModel],
+    ["Test Plan",fallbackPlan],
+    ["Test Plan ID",md.test_plan_id||fallbackPlan],
+    ["Run ID",fallbackRunId],
+    ["结果目录",fallbackResultDir],
+    ["开始时间",md.start_time||"--"],
+    ["结束时间",md.end_time||"--"],
+    ["报告目录",d.report_dir||"--"],
+    ["报告文件",d.report_path||"--"],
+  ].map(([k,v])=>`<tr><th style="width:112px">${k}</th><td class="meta" style="font-size:11px;word-break:break-all">${esc(String(v))}</td></tr>`).join("");
+  metaWrap.innerHTML=`<div class="card"><h3 style="margin-bottom:8px">Run / Report Metadata</h3><table>${metaRows}</table></div>`;
+
+  const lp=Number(d.line_coverage||0);
+  const mp=Number(d.method_coverage||0);
+  const highest=d.highest_code_coverage==null?"--":`${Number(d.highest_code_coverage).toFixed(1)}%`;
+  const headerText=[
+    `scene: ${esc(String(fallbackScene))}`,
+    `model: ${esc(String(fallbackModel))}`,
+    `test plan: ${esc(String(fallbackPlan))}`,
+  ].join(" · ");
+  const lineCoverageHtml=d.is_real_report
+    ?`<div class="cv">${lp.toFixed(1)}%</div>${covBar(lp)}`
+    :`<div class="cv">--</div>`;
+  const methodCoverageHtml=d.is_real_report
+    ?`<div class="cv">${mp.toFixed(1)}%</div>${covBar(mp)}`
+    :`<div class="cv">--</div>`;
+  const summaryCards=`
+      <div class="cov-card"><h4>映射状态</h4><div style="margin-top:4px">${statusTag}</div></div>
+      <div class="cov-card"><h4>真实报告</h4><div style="margin-top:4px">${realReportTag}</div></div>
+      <div class="cov-card"><h4>当前行覆盖率</h4>${lineCoverageHtml}</div>
+      <div class="cov-card"><h4>当前方法覆盖率</h4>${methodCoverageHtml}</div>
+      <div class="cov-card"><h4>匹配 History Nodes</h4><div class="cv">${d.matched_history_node_count||0}<span class="meta">/${d.history_node_count||0}</span></div></div>
+      <div class="cov-card"><h4>当前 Test Plan 最高 Code Coverage</h4><div class="cv" style="font-size:18px">${highest}</div></div>
+      <div class="cov-card"><h4>覆盖行</h4><div class="cv" style="font-size:13px">${d.covered_lines||0}<span class="meta">/${d.coverable_lines||0}</span></div></div>
+      <div class="cov-card"><h4>覆盖方法</h4><div class="cv" style="font-size:13px">${d.covered_methods||0}<span class="meta">/${d.total_methods||0}</span></div></div>`;
+
+  const historyNodes=(d.history_nodes||[]);
+  if(historyNodes.length){
+    const matchedSet=new Set((d.matched_history_nodes||[]).map(n=>`${n.index}|${n.time_iso||n.time}`));
+    const rows=historyNodes.map(node=>{
+      const key=`${node.index}|${node.time_iso||node.time}`;
+      const matched=matchedSet.has(key);
+      return `<tr style="${matched?'background:rgba(63,185,80,.08);':''}">`+
+        `<td>${matched?tag('matched','good'):''}</td>`+
+        `<td class="meta">${esc(node.time_iso||node.time||'--')}</td>`+
+        `<td><span style="font-weight:600;color:${matched?'var(--good)':'var(--fg)'}">${Number(node.line_coverage||0).toFixed(1)}%</span></td>`+
+        `<td class="meta">${node.covered_lines||0}/${node.coverable_lines||0}</td>`+
+        `<td class="meta">${node.total_lines||0}</td>`+
+      `</tr>`;
+    }).join('');
+    histWrap.innerHTML=`<div class="card"><h3 style="margin-bottom:8px">Report History Nodes</h3><table><thead><tr><th>状态</th><th>时间</th><th>Line Coverage</th><th>覆盖行</th><th>Total Lines</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  } else {
+    histWrap.innerHTML=`<div class="empty" style="font-size:11px">report 中没有可解析的 history nodes。</div>`;
   }
-  // Header: snapshot badge / live badge + timestamp + HTML report button
-  const isSnap=!!d.is_snapshot;
-  const snapLabel=isSnap
-    ?`<span class="tag good" style="font-size:10px">📸 快照${d.snapshot_model?" · "+esc(d.snapshot_model):""}</span>`
-    :`<span class="tag" style="font-size:10px;background:var(--accent2)">📡 实时</span>`;
-  const tsLabel=d.generated_on?`<span class="meta" style="font-size:11px">生成: ${esc(d.generated_on)}</span>`:"";
-  const snapTimeLabel=(isSnap&&d.snapshot_time)?`<span class="meta" style="font-size:10px">快照时间: ${esc(d.snapshot_time.replace("T"," ").replace("Z",""))}</span>`:"";
-  const _pp=encodeURIComponent((selProj()||{}).assets_path||'');
-  const htmlBtn=d.index_htm_path
-    ?`<button class="btn ghost sm" onclick="window.open('/coverage_report/index.htm?project_path=${_pp}')" data-tip="在浏览器中打开完整 HTML 覆盖率报告&#10;（通过本地服务器代理，无 file:// 限制）">🔗 HTML 报告</button>`:"";
-  const snapBtn=`<button class="btn ghost sm" onclick="saveCoverageSnapshot()" data-tip="将当前 Unity 覆盖率报告快照保存到当前 Run 目录&#10;Replay 完成后也会自动保存">📸 保存快照</button>`;
 
-  // Summary cards
-  const lp=d.line_coverage||0, mp=d.method_coverage||0;
-  const cardsHtml=`
-    <div class="cov-card"><h4 data-tip="行覆盖率 (Line Coverage)&#10;已覆盖代码行 / 可覆盖代码行">行覆盖率</h4><div class="cv">${lp.toFixed(1)}%</div>${covBar(lp)}</div>
-    <div class="cov-card"><h4 data-tip="方法覆盖率 (Method Coverage)&#10;已覆盖方法数 / 总方法数">方法覆盖率</h4><div class="cv">${mp.toFixed(1)}%</div>${covBar(mp)}</div>
-    <div class="cov-card"><h4>覆盖行</h4><div class="cv" style="font-size:13px">${d.covered_lines||0}<span class="meta">/${d.coverable_lines||0}</span></div></div>
-    <div class="cov-card"><h4>覆盖方法</h4><div class="cv" style="font-size:13px">${d.covered_methods||0}<span class="meta">/${d.total_methods||0}</span></div></div>
-    <div class="cov-card"><h4>未覆盖行</h4><div class="cv" style="font-size:13px;color:var(--bad)">${d.uncovered_lines||0}</div></div>
-    <div class="cov-card"><h4>类数</h4><div class="cv">${(d.classes||[]).length||d.num_classes||0}</div></div>`;
-
-  // Per-class table (sorted by line coverage desc)
-  const classes=(d.classes||[]).slice().sort((a,b)=>(b.coverage||0)-(a.coverage||0));
   let classTable="";
+  const classes=(d.classes||[]).slice().sort((a,b)=>(b.coverage||0)-(a.coverage||0));
   if(classes.length){
     classTable=`<div style="overflow-x:auto;margin-top:10px">
       <table style="font-size:11px;min-width:500px">
@@ -1058,14 +1173,7 @@ function _renderUnityCovData(d){
       `</tbody></table></div>`;
   }
 
-  wrap.innerHTML=`
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      ${snapLabel} ${tsLabel} ${snapTimeLabel}
-      <span style="flex:1"></span>
-      ${htmlBtn} ${snapBtn}
-    </div>
-    <div class="cov-grid">${cardsHtml}</div>
-    ${classTable}`;
+  wrap.innerHTML=`<div class="card"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:8px"><span class="meta">${headerText}</span><span style="flex:1"></span>${statusTag} ${realReportTag}</div><div class="cov-grid">${summaryCards}</div><div class="meta" style="margin-top:10px">Diagnose 只使用真实 Unity report 及其 history nodes；缺失或无法映射时会显示 no report / missing / unmapped。</div>${classTable}</div>`;
 }
 async function saveCoverageSnapshot(){
   const p=selProj();
@@ -1401,10 +1509,26 @@ async function clearApiKey(){
   } else { alert("清除失败: "+(r.error||JSON.stringify(r))); }
 }
 
+const WORKFLOW_DIR_NAME="workflow";
+const STEP1_OUTPUT_DIR_NAME="step1_extract_scene";
+const STEP2_OUTPUT_DIR_NAME="step2_traverse_hierarchy";
+function _pathSep(path){ return (path.includes("\\")&&!path.includes("/"))?"\\":"/"; }
+function _trimPathSep(path){ return path.replace(/[\\/]+$/,""); }
+function _step1OutputDir(resultsDir){ const sep=_pathSep(resultsDir); return _trimPathSep(resultsDir)+sep+WORKFLOW_DIR_NAME+sep+STEP1_OUTPUT_DIR_NAME; }
+function _step2OutputDir(resultsDir){ const sep=_pathSep(resultsDir); return _trimPathSep(resultsDir)+sep+WORKFLOW_DIR_NAME+sep+STEP2_OUTPUT_DIR_NAME; }
+function _sceneGmlPath(resultsDir, scene){ const step1Dir=_step1OutputDir(resultsDir); const sep=_pathSep(step1Dir); return step1Dir+sep+"scene_detailed_info"+sep+"mainResults"+sep+scene+".unity.json_graph.gml"; }
+function _hierarchyJsonPath(resultsDir, scene){ const step2Dir=_step2OutputDir(resultsDir); const sep=_pathSep(step2Dir); return step2Dir+sep+scene+"_gobj_hierarchy.json"; }
+
 async function refreshPreprocessState(){
-  const results_dir1=$("#ppResultsDir").value.trim();
-  const results_dir2=$("#ppResultsDir2").value.trim()||results_dir1;
-  const results_dir3=$("#ppResultsDir3").value.trim()||results_dir2||results_dir1;
+  const p=selProj();
+  const baseDir=(p&&p.work_dir)||_cfg.work_dir||_resultsRoot||"";
+  const fallbackResultsDir=_defaultWorkflowResultsDir();
+  const rawResultsDir1=$("#ppResultsDir").value.trim()||fallbackResultsDir;
+  const rawResultsDir2=$("#ppResultsDir2").value.trim()||rawResultsDir1;
+  const rawResultsDir3=$("#ppResultsDir3").value.trim()||rawResultsDir2||rawResultsDir1;
+  const results_dir1=_resolveDir(rawResultsDir1, baseDir);
+  const results_dir2=_resolveDir(rawResultsDir2, baseDir);
+  const results_dir3=_resolveDir(rawResultsDir3, baseDir);
   const scene_name=$("#ppSceneName").value.trim()||$("#wfSceneSel").value.trim();
 
   if(!results_dir1&&!results_dir2&&!results_dir3){
@@ -1445,7 +1569,7 @@ async function runStep(n){
     const sname=$("#ppSceneName").value.trim()||$("#wfSceneSel").value;
     if(sname&&_resultsRoot){
       const sep=_resultsRoot.includes("\\")?"\\":"/";
-      results_dir=_resultsRoot.replace(/[\\/]+$/,"")+sep+"Results"+sep+"Results_"+sname;
+      results_dir=_resultsRoot.replace(/[\\/]+$/,"")+sep+"Results"+sep+sname;
       $("#"+rdirId).value=results_dir; saveRunCfg();
       appendLog("[jelly] Auto-corrected results_dir to: "+results_dir,"warn");
     }
@@ -1475,14 +1599,12 @@ function autoFillAfterStep(n){
   if(n===1){
     const rdir=$("#ppResultsDir").value.trim();
     if(rdir&&scene&&!$("#cfgSceneGml").value){
-      const sep=(rdir.includes("\\")&&!rdir.includes("/"))?"\\\\": "/";
-      $("#cfgSceneGml").value=rdir.replace(/[\\/]+$/,"")+sep+"scene_detailed_info"+sep+"mainResults"+sep+scene+".unity.json_graph.gml";
+      $("#cfgSceneGml").value=_sceneGmlPath(rdir, scene);
     }
   } else if(n===2){
     const rdir=$("#ppResultsDir2").value.trim();
     if(rdir&&scene&&!$("#cfgHierarchyJson").value){
-      const sep=(rdir.includes("\\")&&!rdir.includes("/"))?"\\\\": "/";
-      $("#cfgHierarchyJson").value=rdir.replace(/[\\/]+$/,"")+sep+scene+"_gobj_hierarchy.json";
+      $("#cfgHierarchyJson").value=_hierarchyJsonPath(rdir, scene);
     }
   }
   saveRunCfg();
@@ -1582,13 +1704,13 @@ function onSceneChange(forcedScene){
   const base=(p&&p.work_dir)||_cfg.work_dir||_resultsRoot;
   const sep=(base&&base.includes("\\")?"\\":"/");
   const rbase=base?base.replace(/[\\/]+$/,"")+sep:"";
-  const rdir=rbase+"Results"+sep+"Results_"+sname;
+  const rdir=rbase+"Results"+sep+sname;
   $("#ppSceneName").value=sname;
   $("#ppResultsDir").value=rdir;
   $("#ppResultsDir2").value=rdir;
   $("#ppResultsDir3").value=rdir;
-  $("#cfgHierarchyJson").value=rdir+sep+sname+"_gobj_hierarchy.json";
-  $("#cfgSceneGml").value=rdir+sep+"scene_detailed_info"+sep+"mainResults"+sep+sname+".unity.json_graph.gml";
+  $("#cfgHierarchyJson").value=_hierarchyJsonPath(rdir, sname);
+  $("#cfgSceneGml").value=_sceneGmlPath(rdir, sname);
   saveRunCfg();
   refreshPreprocessState();
 }
@@ -1691,6 +1813,7 @@ async function startRun(){
   };
   const r=await post("/api/run/start",body);
   if(r.error){alert("Failed to start: "+r.error);return;}
+  _preferredRunDir=_predictRunDir(body.output, scene_name||"", body.model||$("#cfgModel").value.trim()||((p&&p.default_model)||_cfg.default_model||""));
   logLineIdx=0; clearLog();
   appendLog(`[jelly] Run started -- PID ${r.pid||"?"}`,"ok");
   appendLog(`[jelly] cmd: ${(r.cmd||[]).join(" ")}`);
@@ -1717,6 +1840,11 @@ function appendLog(text,cls=""){
 }
 function clearLog(){$("#logBox").innerHTML=""; logLineIdx=0;}
 let _pollOnDone=null;
+async function syncGuiAfterRunCompletion(){
+  await refreshRuns();
+  await refreshPreprocessState();
+  refreshActiveTab();
+}
 function startLogPoll(onDone){
   _pollOnDone=onDone||null;
   if(logPollHandle) clearInterval(logPollHandle);
@@ -1728,7 +1856,15 @@ async function pollLog(){
   (d.lines||[]).forEach(l=>appendLog(l));
   logLineIdx=d.total||logLineIdx;
   setRunState(d.state||"idle");
-  if(d.state!=="running"){clearInterval(logPollHandle);logPollHandle=null;if(_pollOnDone){_pollOnDone(d.state);_pollOnDone=null;}}
+  if(d.state!=="running"){
+    clearInterval(logPollHandle);
+    logPollHandle=null;
+    if(_pollOnDone){
+      await _pollOnDone(d.state);
+      _pollOnDone=null;
+    }
+    await syncGuiAfterRunCompletion();
+  }
 }
 function setRunState(state){
   const badge=$("#logStateBadge");
@@ -2039,6 +2175,14 @@ async function refreshBenchmark(){
     const wd=pj.work_dir||_cfg.work_dir||""; const rd=pj.results_dir||"";
     if(rd){ const full=_resolveDir(rd,wd); if(full) dirsSet.add(full); }
   });
+  if(!dirsSet.size && _resultsRoot){
+    const rootNorm=_resultsRoot.replace(/[\\/]+$/,"");
+    if(/[\\/]Results$/i.test(rootNorm)) dirsSet.add(rootNorm);
+    else {
+      const sep=rootNorm.includes("\\")?"\\":"/";
+      dirsSet.add(rootNorm+sep+"Results");
+    }
+  }
   let d;
   if(dirsSet.size){
     const wd=_cfg.work_dir||"";
@@ -2060,6 +2204,7 @@ function _renderBenchmarkData(entries){
     html+=`<table><thead><tr>
       <th>模型</th>
       <th data-tip="覆盖率代理值">覆盖代理</th>
+      <th data-tip="真实 Unity Code Coverage&#10;复用 Diagnose 后端的 history-node 映射结果">Code Coverage</th>
       <th data-tip="探索迭代轮数">迭代数</th>
       <th data-tip="总动作数">动作数</th>
       <th data-tip="已解 Gate 数">Gate 解决</th>
@@ -2073,6 +2218,16 @@ function _renderBenchmarkData(entries){
       const cov=ex.total_coverage||0;
       const barW=Math.round((cov/Math.max(maxCov,0.001))*80);
       const tok=e.summary?.token_usage?._total?.total_tokens||0;
+      const cc=e.code_coverage||{};
+      let codeCoverageTxt=tag('no report','bad');
+      if(cc.mapping_status==="mapped"){
+        const ccv=Number(cc.highest_code_coverage!=null?cc.highest_code_coverage:cc.line_coverage||0);
+        codeCoverageTxt=`<span style="font-weight:700;color:var(--good)">${ccv.toFixed(1)}%</span><span class="meta" style="margin-left:6px">${cc.matched_history_node_count||0} node</span>`;
+      }else if(cc.mapping_status==="unmapped"){
+        codeCoverageTxt=tag('unmapped','warn');
+      }else if(cc.mapping_status==="missing"){
+        codeCoverageTxt=tag('missing','warn');
+      }
       const oracle=e.oracle;
       let oracleTxt="--";
       if(Array.isArray(oracle)&&oracle.length){
@@ -2085,6 +2240,7 @@ function _renderBenchmarkData(entries){
           <div class="bench-bar-wrap"><span class="bench-bar-fill" style="width:${barW}px"></span></div>
           <span>${cov.toFixed(4)}</span>
         </div></td>
+        <td>${codeCoverageTxt}</td>
         <td>${e.summary?.iterations??0}</td>
         <td>${e.summary?.total_actions??0}</td>
         <td>${ex.gates_solved??0}</td>

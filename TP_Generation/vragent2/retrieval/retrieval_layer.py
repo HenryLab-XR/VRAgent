@@ -23,6 +23,7 @@ from .scene_analyzer import SceneAnalyzer
 from .hierarchy_builder import HierarchyBuilder
 from .script_indexer import ScriptIndexer
 from .symbolic_retriever import SymbolicRetriever
+from ..utils.path_layout import resolve_scene_meta_dir, resolve_script_data_dir
 from .keyword_retriever import KeywordRetriever
 from .condition_inference import infer_conditions, InferredCondition
 from ..utils.file_utils import find_files
@@ -56,7 +57,7 @@ class RetrievalLayer:
         # ⑤ Keyword retriever (heuristic text search — 路线 B: swap for embedding)
         self.keyword = KeywordRetriever(
             self.scene, self.hierarchy,
-            script_data_dir=os.path.join(results_dir, "script_detailed_info"),
+            script_data_dir=str(resolve_script_data_dir(results_dir)),
         )
 
     # ------------------------------------------------------------------
@@ -64,7 +65,7 @@ class RetrievalLayer:
     # ------------------------------------------------------------------
 
     def _load_all_scene_graphs(self) -> Dict[str, nx.Graph]:
-        meta_dir = os.path.join(self.results_dir, "scene_detailed_info", "mainResults")
+        meta_dir = str(resolve_scene_meta_dir(self.results_dir))
         graphs: Dict[str, nx.Graph] = {}
         for path in find_files(meta_dir, ".gml"):
             fname = os.path.basename(path)

@@ -6,6 +6,14 @@ from networkx.algorithms.bipartite.cluster import latapy_clustering
 import config
 import networkx as nx
 
+from vragent2.utils.path_layout import (
+    get_step1_build_asset_dir,
+    get_step1_prefab_dir,
+    get_step1_results_dir,
+    get_step1_scene_meta_dir,
+    get_step1_tag_manager_dir,
+)
+
 
 def find_scene_path_by_name(project_path, scene_name):
     """Find <scene_name>.unity under Assets recursively and return project-relative path."""
@@ -1847,21 +1855,24 @@ def main():
 
     args = parser.parse_args()
 
+    step1_results_dir = get_step1_results_dir(args.results_dir)
+    step1_results_dir.mkdir(parents=True, exist_ok=True)
+
     if True:
         layer_lis = []
         # Find the EditorBuildSettings.asset
         asset_path = get_editor_build_settings_path(args.project_path)
         
         # Analyze the asset
-        analyze_asset(asset_path, os.path.join(args.results_dir, "BuildAsset_info"))
+        analyze_asset(asset_path, str(get_step1_build_asset_dir(args.results_dir)))
 
         tagManager_path = os.path.join(args.project_path, 'ProjectSettings', 'TagManager.asset')
-        layer_lis = analyze_tagManager(tagManager_path, os.path.join(args.results_dir, "TagManager_info"))
+        layer_lis = analyze_tagManager(tagManager_path, str(get_step1_tag_manager_dir(args.results_dir)))
         
         # Determine the correct results directory
         asset_name = os.path.basename(asset_path)
         results_subdir = 'mainResults' if not asset_name.endswith('.meta') else 'metaResults'
-        json_file_path = os.path.join(args.results_dir, 'BuildAsset_info', results_subdir, f'{asset_name}.json')
+        json_file_path = step1_results_dir / 'BuildAsset_info' / results_subdir / f'{asset_name}.json'
 
         # Extract scene paths from the JSON file or use specified scene
         scene_paths = []
@@ -1893,35 +1904,35 @@ def main():
                 full_scene_path = os.path.join(args.project_path, scene_path)
                 if not os.path.exists(full_scene_path):
                     print(f"Warning: scene path does not exist: {scene_path}")
-            analyze_scenes(args.project_path, scene_paths, args.results_dir)
+            analyze_scenes(args.project_path, scene_paths, str(step1_results_dir))
         else:
             print("Warning: No scenes to analyze. "
                   "Use --scene-path or set enabled scenes in Build Settings.")
 
         
         print("Analyzing Script Meta File:")
-        script_lis = analyze_csharp_meta(os.path.join(args.project_path, 'Assets'), args.results_dir)
+        script_lis = analyze_csharp_meta(os.path.join(args.project_path, 'Assets'), str(step1_results_dir))
 
         print("Analyzing Script CSharp File:")
-        analyze_script(os.path.join(args.project_path, 'Assets'), args.results_dir)
+        analyze_script(os.path.join(args.project_path, 'Assets'), str(step1_results_dir))
 
         print("Analyzing script structure File:")
-        analyze_structure_script(args.results_dir)
+        analyze_structure_script(str(step1_results_dir))
 
         print("Analyzing Prefab Asset:")
-        prefab_tag_dir = os.path.join(args.results_dir, 'scene_detailed_info', 'prefabResults')
+        prefab_tag_dir = get_step1_prefab_dir(args.results_dir)
         asset_path = os.path.join(args.project_path, 'Assets')
-        analyze_prefab_asset(asset_path, prefab_tag_dir)
+        analyze_prefab_asset(asset_path, str(prefab_tag_dir))
         
 
         print("Creating Scene Database:")
         # Determine the scene JSON files path
-        scene_db_dir = os.path.join(args.results_dir, 'scene_detailed_info', 'mainResults')
-        if os.path.exists(scene_db_dir):
+        scene_db_dir = get_step1_scene_meta_dir(args.results_dir)
+        if scene_db_dir.exists():
             scene_json_files = [f for f in os.listdir(scene_db_dir) if f.endswith('.unity.json')]
             # Create databases for each scene
             if scene_json_files:
-                create_scene_database(scene_json_files, args.project_path, args.results_dir, script_lis, layer_lis)
+                create_scene_database(scene_json_files, args.project_path, str(step1_results_dir), script_lis, layer_lis)
             else:
                 print("Warning: No scene JSON files found")
         else:

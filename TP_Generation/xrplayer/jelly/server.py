@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -44,12 +45,15 @@ import time
 import threading
 import webbrowser
 from collections import deque
+from datetime import datetime, timedelta
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from socketserver import ThreadingMixIn
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import parse_qs, urlsplit
+
+from vragent2.utils.path_layout import get_step2_results_dir, resolve_gobj_hierarchy_path, resolve_scene_meta_dir
 
 
 # ---------------------------------------------------------------------------
@@ -326,6 +330,7 @@ _ARTEFACT_NAMES = {
     "all_actions":         "all_actions.json",
     "oracle_bugs":         "oracle_bugs.json",
     "coverage_snapshot":   "coverage_snapshot.json",
+    "run_metadata":        "run_metadata.json",
 }
 
 
@@ -554,13 +559,269 @@ def _parse_coverage_report_dir(report_dir: Path) -> Dict[str, Any]:
             "report_dir": str(report_dir)}
 
 
+def _parse_time_value(value: Any) -> Optional[datetime]:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    normalized = text[:-1] if text.endswith("Z") else text
+    for fmt in (
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y/%m/%d - %H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+    ):
+        try:
+            return datetime.strptime(normalized, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def _format_time_value(value: Optional[datetime], fallback: str = "") -> str:
+    if value is None:
+        return fallback
+    return value.isoformat(timespec="seconds") + "Z"
+
+
+def _resolve_unity_project_root(project_path: str) -> Optional[Path]:
+    if not project_path:
+        return None
+    current = Path(project_path).resolve()
+    for _ in range(12):
+        if (current / "Assets").is_dir() and (current / "ProjectSettings").is_dir():
+            return current
+        parent = current.parent
+        if parent == current:
+            break
+        current = parent
+    return None
+
+
+def _resolve_coverage_report_dir(project_path: str, metadata: Dict[str, Any]) -> Optional[Path]:
+    candidates: List[Path] = []
+
+    metadata_report_dir = str(metadata.get("coverage_report_dir", "") or "").strip()
+    if metadata_report_dir:
+        try:
+            candidates.append(Path(metadata_report_dir).resolve())
+        except OSError:
+            pass
+
+    unity_root = _resolve_unity_project_root(project_path)
+    if unity_root is not None:
+        candidates.extend([
+            unity_root / "CodeCoverage" / "Report",
+            unity_root / "CodeCoverage",
+            unity_root / "Coverage" / "Report",
+        ])
+
+    for candidate in candidates:
+        if not candidate.is_dir():
+            continue
+        if any((candidate / name).is_file() for name in ("Summary.json", "Summary.xml", "index.htm", "index.html")):
+            return candidate
+    return None
+
+
+def _parse_report_history_nodes(report_dir: Path) -> List[Dict[str, Any]]:
+    index_path: Optional[Path] = None
+    for name in ("index.htm", "index.html"):
+        candidate = report_dir / name
+        if candidate.is_file():
+            index_path = candidate
+            break
+    if index_path is None:
+        return []
+
+    try:
+        html_text = index_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+
+    match = re.search(
+        r'var\s+historyChartData[0-9a-fA-F]+\s*=\s*\{(?P<body>[\s\S]*?)\};',
+        html_text,
+    )
+    if match is None:
+        return []
+
+    body = match.group("body")
+    tooltip_match = re.search(r'"tooltips"\s*:\s*\[(?P<tooltips>[\s\S]*?)\]\s*', body)
+    if tooltip_match is None:
+        return []
+
+    nodes: List[Dict[str, Any]] = []
+    for index, raw_tooltip in enumerate(re.findall(r"'([^']*)'", tooltip_match.group("tooltips"))):
+        tooltip = raw_tooltip.replace("\\'", "'")
+        time_match = re.search(r"<h3>([^<]+)</h3>", tooltip)
+        coverage_match = re.search(r"Line coverage:\s*([0-9.]+)%\s*\((\d+)/(\d+)\)", tooltip)
+        total_match = re.search(r"Total lines:\s*(\d+)", tooltip)
+        time_text = time_match.group(1).strip() if time_match else ""
+        node_time = _parse_time_value(time_text)
+        nodes.append({
+            "index": index,
+            "time": time_text,
+            "time_iso": _format_time_value(node_time, time_text),
+            "line_coverage": float(coverage_match.group(1)) if coverage_match else 0.0,
+            "covered_lines": int(coverage_match.group(2)) if coverage_match else 0,
+            "coverable_lines": int(coverage_match.group(3)) if coverage_match else 0,
+            "total_lines": int(total_match.group(1)) if total_match else 0,
+        })
+    return nodes
+
+
+def _load_run_metadata(results_root: Path, run_dir: Optional[str]) -> Dict[str, Any]:
+    metadata: Dict[str, Any] = {}
+    raw = _read_json(_resolve_artefact(results_root, run_dir, "run_metadata"))
+    if isinstance(raw, dict) and not raw.get("_jelly_error"):
+        metadata.update(raw)
+
+    safe_dir = Path(run_dir.replace("\\", "/")) if run_dir else Path()
+    parts = safe_dir.parts
+    if parts:
+        metadata.setdefault("scene", parts[0])
+        metadata.setdefault("model", parts[1] if len(parts) > 1 else parts[0])
+        metadata.setdefault("run_id", parts[-1])
+        metadata.setdefault("result_dir", str((results_root / safe_dir).resolve()))
+
+    if not metadata.get("start_time") or not metadata.get("end_time"):
+        iteration_logs = _read_json(_resolve_artefact(results_root, run_dir, "iterations"))
+        if isinstance(iteration_logs, list):
+            timestamps = [
+                str(item.get("timestamp", "")).strip()
+                for item in iteration_logs
+                if isinstance(item, dict) and str(item.get("timestamp", "")).strip()
+            ]
+            if timestamps:
+                timestamps.sort()
+                metadata.setdefault("start_time", timestamps[0])
+                metadata.setdefault("end_time", timestamps[-1])
+
+    test_plan_name = str(metadata.get("test_plan_name", "") or "").strip()
+    if not test_plan_name:
+        scene = str(metadata.get("scene", "") or "").strip()
+        model = str(metadata.get("model", "") or "").strip()
+        test_plan_name = f"{scene}_{model}".strip("_")
+        metadata["test_plan_name"] = test_plan_name
+
+    metadata.setdefault("test_plan_id", metadata.get("test_plan_name") or metadata.get("run_id") or "")
+    return metadata
+
+
+def _match_history_nodes_to_run(
+    history_nodes: List[Dict[str, Any]],
+    metadata: Dict[str, Any],
+    tolerance_seconds: int = 180,
+) -> List[Dict[str, Any]]:
+    start_time = _parse_time_value(metadata.get("start_time"))
+    end_time = _parse_time_value(metadata.get("end_time"))
+    if start_time is None or end_time is None:
+        return []
+    if end_time < start_time:
+        end_time = start_time
+
+    lower = start_time - timedelta(seconds=tolerance_seconds)
+    upper = end_time + timedelta(seconds=tolerance_seconds)
+    matched: List[Dict[str, Any]] = []
+    for node in history_nodes:
+        node_time = _parse_time_value(node.get("time") or node.get("time_iso"))
+        if node_time is None:
+            continue
+        if lower <= node_time <= upper:
+            matched.append(node)
+    return matched
+
+
+def _build_run_coverage_diagnosis(
+    results_root: Path,
+    run_dir: Optional[str],
+    project_path: str = "",
+) -> Dict[str, Any]:
+    metadata = _load_run_metadata(results_root, run_dir)
+    report_dir = _resolve_coverage_report_dir(project_path, metadata)
+    diagnosis: Dict[str, Any] = {
+        "found": False,
+        "coverage_source": "unity_summary_report",
+        "is_real_report": False,
+        "mapping_status": "missing",
+        "metadata": metadata,
+        "report_dir": str(report_dir) if report_dir is not None else str(metadata.get("coverage_report_dir", "") or ""),
+        "history_nodes": [],
+        "matched_history_nodes": [],
+        "history_node_count": 0,
+        "matched_history_node_count": 0,
+        "highest_code_coverage": None,
+    }
+    if report_dir is None:
+        diagnosis["mapping_status"] = "no_report"
+        diagnosis["error"] = "Unity Code Coverage report not found"
+        return diagnosis
+
+    parsed = _parse_coverage_report_dir(report_dir)
+    if not parsed.get("found"):
+        diagnosis.update(parsed)
+        diagnosis["mapping_status"] = "no_report"
+        return diagnosis
+
+    history_nodes = _parse_report_history_nodes(report_dir)
+    if not history_nodes and parsed.get("generated_on"):
+        history_nodes = [{
+            "index": 0,
+            "time": str(parsed.get("generated_on", "")),
+            "time_iso": _format_time_value(_parse_time_value(parsed.get("generated_on")), str(parsed.get("generated_on", ""))),
+            "line_coverage": float(parsed.get("line_coverage", 0) or 0),
+            "covered_lines": int(parsed.get("covered_lines", 0) or 0),
+            "coverable_lines": int(parsed.get("coverable_lines", 0) or 0),
+            "total_lines": int(parsed.get("total_lines", 0) or 0),
+        }]
+
+    matched_nodes = _match_history_nodes_to_run(history_nodes, metadata)
+    has_time_window = _parse_time_value(metadata.get("start_time")) is not None and _parse_time_value(metadata.get("end_time")) is not None
+    if matched_nodes:
+        mapping_status = "mapped"
+    elif history_nodes and has_time_window:
+        mapping_status = "unmapped"
+    else:
+        mapping_status = "missing"
+
+    highest_code_coverage = None
+    if matched_nodes:
+        highest_code_coverage = max(float(node.get("line_coverage", 0) or 0) for node in matched_nodes)
+
+    diagnosis.update(parsed)
+    diagnosis.update({
+        "found": True,
+        "is_real_report": True,
+        "mapping_status": mapping_status,
+        "metadata": metadata,
+        "report_dir": str(report_dir),
+        "report_path": str(report_dir / ("index.htm" if (report_dir / "index.htm").is_file() else "index.html")),
+        "history_nodes": history_nodes,
+        "matched_history_nodes": matched_nodes,
+        "history_node_count": len(history_nodes),
+        "matched_history_node_count": len(matched_nodes),
+        "highest_code_coverage": highest_code_coverage,
+    })
+    return diagnosis
+
+
+def _resolve_benchmark_scan_root(root: Path) -> Tuple[Path, str]:
+    if not root.is_dir():
+        return root, ""
+    nested_results = root / "Results"
+    if nested_results.is_dir():
+        return nested_results, "Results/"
+    return root, ""
+
+
 def _scan_benchmark_data(root: Path) -> List[Dict[str, Any]]:
     """Scan results root for all <scene>/<model>/summary.json entries."""
     entries: List[Dict[str, Any]] = []
-    if not root.is_dir():
+    scan_root, run_prefix = _resolve_benchmark_scan_root(root)
+    if not scan_root.is_dir():
         return entries
     try:
-        for scene_dir in sorted(root.iterdir()):
+        for scene_dir in sorted(scan_root.iterdir()):
             if not scene_dir.is_dir():
                 continue
             for model_dir in sorted(scene_dir.iterdir()):
@@ -571,13 +832,15 @@ def _scan_benchmark_data(root: Path) -> List[Dict[str, Any]]:
                     continue
                 oracle = _read_json(model_dir / "oracle_bugs.json")
                 status = _read_json(model_dir / "jelly_status.json")
+                run_dir = f"{run_prefix}{scene_dir.name}/{model_dir.name}"
                 entries.append({
                     "scene": scene_dir.name,
                     "model": model_dir.name,
-                    "run_dir": f"{scene_dir.name}/{model_dir.name}",
+                    "run_dir": run_dir,
                     "summary": summary,
                     "oracle": oracle,
                     "status": status,
+                    "code_coverage": _build_run_coverage_diagnosis(root, run_dir),
                 })
     except Exception:
         pass
@@ -597,7 +860,7 @@ def _infer_scene_name_from_dir(results_dir: Optional[Path]) -> str:
     if results_dir is None or not results_dir.is_dir():
         return ""
 
-    scene_meta_dir = results_dir / "scene_detailed_info" / "mainResults"
+    scene_meta_dir = resolve_scene_meta_dir(results_dir)
     if scene_meta_dir.is_dir():
         suffixes = (
             ".unity.json_graph.gml",
@@ -609,8 +872,11 @@ def _infer_scene_name_from_dir(results_dir: Optional[Path]) -> str:
                 return path.name[: -len(suffix)]
 
     hierarchy_suffix = "_gobj_hierarchy.json"
-    for path in sorted(results_dir.glob(f"*{hierarchy_suffix}")):
-        return path.name[: -len(hierarchy_suffix)]
+    for candidate_dir in (get_step2_results_dir(results_dir), results_dir):
+        if not candidate_dir.is_dir():
+            continue
+        for path in sorted(candidate_dir.glob(f"*{hierarchy_suffix}")):
+            return path.name[: -len(hierarchy_suffix)]
 
     return ""
 
@@ -649,13 +915,13 @@ def _build_preprocess_status(results_dir1: Optional[Path], results_dir2: Optiona
     database_path = None
     scene_json_path = None
     if step1_dir is not None and scene_name:
-        scene_meta_dir = step1_dir / "scene_detailed_info" / "mainResults"
+        scene_meta_dir = resolve_scene_meta_dir(step1_dir)
         graph_path = scene_meta_dir / f"{scene_name}.unity.json_graph.gml"
         database_path = scene_meta_dir / f"{scene_name}.unity.json_database.json"
         scene_json_path = scene_meta_dir / f"{scene_name}.unity.json"
 
-    hierarchy_path2 = (step2_dir / f"{scene_name}_gobj_hierarchy.json") if step2_dir is not None and scene_name else None
-    hierarchy_path3 = (step3_dir / f"{scene_name}_gobj_hierarchy.json") if step3_dir is not None and scene_name else None
+    hierarchy_path2 = resolve_gobj_hierarchy_path(step2_dir, scene_name) if step2_dir is not None and scene_name else None
+    hierarchy_path3 = resolve_gobj_hierarchy_path(step3_dir, scene_name) if step3_dir is not None and scene_name else None
 
     step1_done = any(path is not None and path.is_file() for path in (graph_path, database_path, scene_json_path))
     step2_done = hierarchy_path2 is not None and hierarchy_path2.is_file()
@@ -1123,56 +1389,11 @@ class _JellyHandler(BaseHTTPRequestHandler):
 
         # ── Run coverage: check snapshot first, fall back to live report ────
         if path == "/api/run_coverage":
-            # 1. Check saved snapshot in run dir
-            if run_dir:
-                snap_p = _resolve_artefact(self._root, run_dir, "coverage_snapshot")
-                snap_d = _read_json(snap_p)
-                if isinstance(snap_d, dict) and snap_d.get("found") and not snap_d.get("_jelly_error"):
-                    snap_d["is_snapshot"] = True
-                    # Re-attach index_htm_path from live install if reachable
-                    assets_path_rc = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
-                    if assets_path_rc:
-                        p_rc = Path(assets_path_rc).resolve()
-                        for _ in range(12):
-                            if (p_rc / "Assets").is_dir() and (p_rc / "ProjectSettings").is_dir():
-                                idx_rc = p_rc / "CodeCoverage" / "Report" / "index.htm"
-                                if idx_rc.exists():
-                                    snap_d["index_htm_path"] = str(idx_rc)
-                                    self.server.coverage_report_dir = idx_rc.parent
-                                break
-                            nxt_rc = p_rc.parent
-                            if nxt_rc == p_rc:
-                                break
-                            p_rc = nxt_rc
-                    self._send_json(snap_d)
-                    return
-            # 2. Fall back to live coverage report
-            assets_path_rc2 = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
-            unity_root_rc: Optional[Path] = None
-            if assets_path_rc2:
-                p2 = Path(assets_path_rc2).resolve()
-                for _ in range(12):
-                    if (p2 / "Assets").is_dir() and (p2 / "ProjectSettings").is_dir():
-                        unity_root_rc = p2
-                        break
-                    nxt2 = p2.parent
-                    if nxt2 == p2:
-                        break
-                    p2 = nxt2
-            if unity_root_rc is None:
-                self._send_json({"found": False, "error": "Cannot find Unity project root. Provide project_path."})
-                return
-            data_rc = _parse_coverage_report_dir(unity_root_rc / "CodeCoverage" / "Report")
-            if not data_rc.get("found"):
-                for sub_rc2 in (unity_root_rc / "CodeCoverage", unity_root_rc / "Coverage" / "Report"):
-                    if sub_rc2.is_dir():
-                        data_rc = _parse_coverage_report_dir(sub_rc2)
-                        if data_rc.get("found"):
-                            break
-            # Cache coverage report dir for /coverage_report/ serving
+            project_path_rc = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
+            data_rc = _build_run_coverage_diagnosis(self._root, run_dir, project_path_rc)
             if data_rc.get("found") and data_rc.get("report_dir"):
                 try:
-                    self.server.coverage_report_dir = Path(data_rc["report_dir"])
+                    self.server.coverage_report_dir = Path(str(data_rc["report_dir"]))
                 except Exception:
                     pass
             self._send_json(data_rc)
