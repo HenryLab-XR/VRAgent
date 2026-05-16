@@ -45,5 +45,9 @@ namespace HenryLab.VRAgent
     public class SocketActionUnit : ActionUnit
     {
         [JsonProperty("socket_mode")] public string socketMode; // "insert" or "remove"
+        // Optional: the interactable object being inserted/removed (as a scene FileID).
+        // When provided, SocketAction will populate SelectEnter/ExitEventArgs.interactableObject
+        // so socket receivers can validate the inserted object.
+        [JsonProperty("inserted_object_fileID")] public string? insertedObjectFileId;
     }
 }

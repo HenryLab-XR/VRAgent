@@ -59,8 +59,8 @@ Room_A_Lobby（入口大厅，8×8m）
 ├── Key_Pantry                ← GrabbableKeyController + Rigidbody
 ├── Switch_MainPower          ← PowerSwitchController + XRTriggerable
 └── DoorFrame_Pantry
-    ├── Door_Pantry           ← DoorController (startLocked=true)
-    ├── Handle_Pantry         ← XRTriggerable → Toggle
+    ├── Door_Pantry           ← DoorController（requiresKey=true, requiredKeyObject=Key_Pantry）
+    ├── Handle_Pantry         ← XRTriggerable → Open/Close
     └── Socket_PantryLock     ← PantryKeyUnlockReceiver
 
 Room_B_Pantry（储藏间，6×8m）
@@ -73,8 +73,8 @@ Room_B_Pantry（储藏间，6×8m）
 Room_C_Kitchen（厨房，8×8m）
 ├── Floor/Ceiling/Walls
 ├── DoorFrame_Kitchen
-│   ├── Door_Kitchen          ← DoorController (startLocked=true)
-│   ├── Handle_Kitchen        ← XRTriggerable → Toggle
+│   ├── Door_Kitchen          ← DoorController（requiresKey=true, requiredKeyObject=Badge_Kitchen）
+│   ├── Handle_Kitchen        ← XRTriggerable → Open/Close
 │   └── Socket_KitchenBadge  ← KitchenBadgeUnlockReceiver
 ├── Sink_WashStation
 │   └── Socket_WashSlot       ← SinkWashStation（1.5s清洗计时）
@@ -90,12 +90,25 @@ Room_C_Kitchen（厨房，8×8m）
 Room_D_Exit（终点区，8×8m）
 ├── Floor/Ceiling/Walls
 ├── DoorFrame_FinalExit
-│   ├── Door_FinalExit        ← DoorController (startLocked=true)
-│   └── Handle_FinalExit      ← XRTriggerable → Toggle
+│   ├── Door_FinalExit        ← DoorController（requiresKey=true，交付后由 ServingCounterSocket 解锁）
+│   └── Handle_FinalExit      ← XRTriggerable → Open/Close
 ├── Counter_Serving
 │   └── Socket_DeliverySlot   ← ServingCounterSocket（解锁终点门）
 └── Trigger_FinalExit         ← FinalExitTrigger（BoxCollider isTrigger）
 ```
+
+---
+
+## 门禁配置
+
+| 门 | requiresKey | requiredKeyObject | 解锁来源 |
+|------|-------------|-------------------|----------|
+| `Door_A_Lobby` | `false` | — | 可直接 `Open()` |
+| `Door_Pantry` | `true` | `Key_Pantry` | `PantryKeyUnlockReceiver.TryUnlockWith(insertedObject)` |
+| `Door_Kitchen` | `true` | `Badge_Kitchen` | `KitchenBadgeUnlockReceiver.TryUnlockWith(insertedObject)`，且需要 `PowerEnabled` |
+| `Door_FinalExit` | `true` | — | `ServingCounterSocket` 在已装盘交付后调用 `Unlock()` |
+
+门把手 / XRTriggerable 只保留 `DoorController.Open()` / `Close()` 类安全开关路径，不直接调用 `Unlock()`；socket receiver 负责物体校验和状态推进。
 
 ---
 
@@ -105,15 +118,17 @@ Room_D_Exit（终点区，8×8m）
 [A] 抓 Key_Pantry
       └→ hasPantryKey = true
            └→ 插入 Socket_PantryLock
-                └→ doorPantryUnlocked = true → Door_Pantry.Unlock()
-                     └→ Cabinet_Ingredients 可开（容器门控）
+                 └→ pantryDoorController.TryUnlockWith(insertedObject) 成功（Key_Pantry 才会成功）
+                      └→ doorPantryUnlocked = true
+                      └→ Cabinet_Ingredients 可开（容器门控）
 
 [A] 触发 Switch_MainPower
-      └→ powerEnabled = true（电源门控）
+      └→ 需要 doorPantryUnlocked==true 才会 powerEnabled = true（电源门控）
 
 [B] Badge_Kitchen 插入 Socket_KitchenBadge
       └→ 检查 powerEnabled（无电 → 红色面板 FAIL）
-           └→ doorKitchenUnlocked = true → Door_Kitchen.Unlock()
+           └→ kitchenDoorController.TryUnlockWith(insertedObject) 成功（Badge_Kitchen 才会成功）
+                └→ doorKitchenUnlocked = true
 
 [C] Ingredient_Tomato 放入 Socket_WashSlot（等1.5s）
       └→ ingredientWashed = true
@@ -131,10 +146,22 @@ Room_D_Exit（终点区，8×8m）
       └→ dishPlated = true
 
 [D] 盘子放入 Socket_DeliverySlot
-      └→ finalDoorUnlocked = true → Door_FinalExit.Unlock()
+      └→ finalDoorUnlocked = true → Door_FinalExit.Unlock()（由 ServingCounterSocket 调用）
 
 [D] 玩家进入 Trigger_FinalExit → SUCCESS
 ```
+
+---
+
+## Gold Test Plan 更新
+
+`TP_Generation/Results/Kitchen_TestRoom/gold-manual-kitchen-v1/test_plan.json` 已同步新门禁逻辑：
+
+- `Socket_PantryLock` 插入动作带 `inserted_object_fileID=Key_Pantry`。
+- `Socket_KitchenBadge` 插入动作带 `inserted_object_fileID=Badge_Kitchen`。
+- 不再直接调用 `DoorController.Unlock()`、`SetPantryDoorUnlocked()`、`SetKitchenDoorUnlocked()`、`SetFinalDoorUnlocked()`。
+- 门动作只触发 `Open()`，由 `DoorController.CanOpen()` 决定是否真正开门。
+- 流程顺序为先插入 pantry key 解锁 Pantry，再开启电源，匹配 `SetPowerEnabled()` 对 `doorPantryUnlocked` 的前置检查。
 
 ---
 

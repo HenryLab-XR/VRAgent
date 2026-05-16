@@ -27,6 +27,9 @@ public class KitchenBadgeUnlockReceiver : MonoBehaviour
     private void OnBadgeInserted(SelectEnterEventArgs args)
     {
         if (_hasUnlocked) return;
+        if (kitchenDoorController == null) return;
+
+        GameObject insertedObject = args.interactableObject?.transform?.gameObject;
 
         if (RecipeController.Instance == null || !RecipeController.Instance.PowerEnabled)
         {
@@ -36,9 +39,14 @@ public class KitchenBadgeUnlockReceiver : MonoBehaviour
             return;
         }
 
+        if (!kitchenDoorController.TryUnlockWith(insertedObject))
+        {
+            Debug.LogWarning($"[KitchenBadgeUnlockReceiver] Wrong object inserted: {(insertedObject != null ? insertedObject.name : "null")}.");
+            return;
+        }
+
         _hasUnlocked = true;
         RecipeController.Instance.SetKitchenDoorUnlocked();
-        kitchenDoorController?.Unlock();
 
         // BUG-008: Panel material not updated on successful scan.
         // If badge was previously scanned without power (panel set to red/materialNoPower),

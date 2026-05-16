@@ -18,11 +18,13 @@ namespace HenryLab
 
         private readonly XRSocketInteractor _socket;
         private readonly Mode _mode;
+        private readonly IXRSelectInteractable _interactableObject;
 
-        public SocketAction(XRSocketInteractor socket, Mode mode)
+        public SocketAction(XRSocketInteractor socket, Mode mode, IXRSelectInteractable interactableObject = null)
         {
             _socket = socket;
             _mode = mode;
+            _interactableObject = interactableObject;
             Name = mode == Mode.Insert ? "SocketInsertAction" : "SocketRemoveAction";
         }
 
@@ -45,13 +47,21 @@ namespace HenryLab
 
             if (_mode == Mode.Insert)
             {
-                var args = new SelectEnterEventArgs { interactorObject = interactor };
+                var args = new SelectEnterEventArgs
+                {
+                    interactorObject = interactor,
+                    interactableObject = _interactableObject,
+                };
                 _socket.selectEntered.Invoke(args);
                 Debug.Log($"[SocketAction] Insert simulated on {_socket.gameObject.name}");
             }
             else
             {
-                var args = new SelectExitEventArgs { interactorObject = interactor };
+                var args = new SelectExitEventArgs
+                {
+                    interactorObject = interactor,
+                    interactableObject = _interactableObject,
+                };
                 _socket.selectExited.Invoke(args);
                 Debug.Log($"[SocketAction] Remove simulated on {_socket.gameObject.name}");
             }

@@ -4,7 +4,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 /// <summary>
 /// Socket receiver for the pantry door lock.
 /// When Key_Pantry is inserted, notifies RecipeController to advance the
-/// pantry-unlock step, then calls DoorController.Unlock().
+/// pantry-unlock step.
 /// Attach to the XRSocketInteractor on the pantry door lock socket.
 /// </summary>
 [RequireComponent(typeof(XRSocketInteractor))]
@@ -26,10 +26,18 @@ public class PantryKeyUnlockReceiver : MonoBehaviour
     private void OnItemInserted(SelectEnterEventArgs args)
     {
         if (_hasUnlocked) return;
+        if (pantryDoorController == null) return;
+
+        GameObject insertedObject = args.interactableObject?.transform?.gameObject;
+        if (!pantryDoorController.TryUnlockWith(insertedObject))
+        {
+            Debug.LogWarning($"[PantryKeyUnlockReceiver] Wrong object inserted: {(insertedObject != null ? insertedObject.name : "null")}.");
+            return;
+        }
+
         _hasUnlocked = true;
 
         RecipeController.Instance?.SetPantryDoorUnlocked();
-        pantryDoorController?.Unlock();
 
         if (socketIndicatorRenderer != null && unlockedMaterial != null)
             socketIndicatorRenderer.sharedMaterial = unlockedMaterial;

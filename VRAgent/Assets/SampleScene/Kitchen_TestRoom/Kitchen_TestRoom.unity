@@ -1049,8 +1049,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: Door_Kitchen
       objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiresKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiredKeyObject
+      value:
+      objectReference: {fileID: 780225929}
+    - target: {fileID: 4044343917111326146, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: kitchenDoorController
+      value:
+      objectReference: {fileID: 151369365}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1100,6 +1112,11 @@ PrefabInstance:
 --- !u!4 &151369364 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+  m_PrefabInstance: {fileID: 151369363}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &151369365 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
   m_PrefabInstance: {fileID: 151369363}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &154837325
@@ -3298,7 +3315,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: Door_FinalExit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiresKey
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
@@ -3349,6 +3370,11 @@ PrefabInstance:
 --- !u!4 &451301371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+  m_PrefabInstance: {fileID: 451301370}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &451301372 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
   m_PrefabInstance: {fileID: 451301370}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &463121671
@@ -8475,7 +8501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 991cddff530dc494b828bf533d5d87de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finalExitDoor: {fileID: 0}
+  finalExitDoor: {fileID: 451301372}
   counterRenderer: {fileID: 1673849597}
   materialComplete: {fileID: 2100000, guid: 240fe4422e31744439ac06196a0faa03, type: 2}
   materialWaiting: {fileID: 2100000, guid: a5a3a8866c5109b498f278c24b4a5ea8, type: 2}
@@ -8589,31 +8615,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 553705493}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SetFinalDoorUnlocked
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Unlock
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -10802,15 +10804,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4194219831183206924, guid: f6ce8c876147a3548a19d0d08d3a759b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.5
+      value: -0.454
       objectReference: {fileID: 0}
     - target: {fileID: 4194219831183206924, guid: f6ce8c876147a3548a19d0d08d3a759b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.58
+      value: 1.131
       objectReference: {fileID: 0}
     - target: {fileID: 4194219831183206924, guid: f6ce8c876147a3548a19d0d08d3a759b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.62
+      value: 2.321
       objectReference: {fileID: 0}
     - target: {fileID: 4194219831183206924, guid: f6ce8c876147a3548a19d0d08d3a759b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -15016,8 +15018,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: Door_B_Pantry
+      value: Door_Pantry
       objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiresKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiredKeyObject
+      value:
+      objectReference: {fileID: 915335388}
+    - target: {fileID: 8123456789012345678, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: pantryDoorController
+      value:
+      objectReference: {fileID: 1906010130}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -15067,6 +15081,11 @@ PrefabInstance:
 --- !u!4 &1906010129 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+  m_PrefabInstance: {fileID: 1906010128}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1906010130 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
   m_PrefabInstance: {fileID: 1906010128}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1914359841

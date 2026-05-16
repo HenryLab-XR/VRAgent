@@ -459,7 +459,25 @@ namespace HenryLab.VRAgent.Online
                     SocketAction.Mode mode = (socketAU.socketMode == "remove")
                         ? SocketAction.Mode.Remove
                         : SocketAction.Mode.Insert;
-                    task.Add(new SocketAction(socket, mode));
+
+                    UnityEngine.XR.Interaction.Toolkit.IXRSelectInteractable interactableObject = null;
+                    if(!string.IsNullOrEmpty(socketAU.insertedObjectFileId))
+                    {
+                        GameObject insertedObj = _fileIdContainer.GetObject(socketAU.insertedObjectFileId);
+                        if(insertedObj != null)
+                        {
+                            var xrInteractable = insertedObj.GetComponent<UnityEngine.XR.Interaction.Toolkit.XRBaseInteractable>();
+                            if(xrInteractable == null)
+                                xrInteractable = insertedObj.GetComponentInParent<UnityEngine.XR.Interaction.Toolkit.XRBaseInteractable>();
+                            interactableObject = xrInteractable;
+                        }
+                        else
+                        {
+                            response.exceptions.Add($"Socket inserted_object_fileID not found: fileID={socketAU.insertedObjectFileId}");
+                        }
+                    }
+
+                    task.Add(new SocketAction(socket, mode, interactableObject));
                     _stateCollector.RecordEvent($"socket_{socketAU.socketMode}:{sourceObj.name}");
                     break;
                 }

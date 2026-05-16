@@ -532,7 +532,26 @@ namespace HenryLab.VRAgent
                     SocketAction.Mode mode = (socketAction.socketMode == "remove")
                         ? SocketAction.Mode.Remove
                         : SocketAction.Mode.Insert;
-                    task.Add(new SocketAction(socket, mode));
+
+                    UnityEngine.XR.Interaction.Toolkit.IXRSelectInteractable interactableObject = null;
+                    if(!string.IsNullOrEmpty(socketAction.insertedObjectFileId))
+                    {
+                        var insertedObj = GetOrCreateManager().GetObject(socketAction.insertedObjectFileId);
+                        if(insertedObj != null)
+                        {
+                            // Prefer XRBaseInteractable (implements IXRSelectInteractable)
+                            var xrInteractable = insertedObj.GetComponent<UnityEngine.XR.Interaction.Toolkit.XRBaseInteractable>();
+                            if(xrInteractable == null)
+                                xrInteractable = insertedObj.GetComponentInParent<UnityEngine.XR.Interaction.Toolkit.XRBaseInteractable>();
+                            interactableObject = xrInteractable;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"Socket inserted_object_fileID not found: fileID={socketAction.insertedObjectFileId}");
+                        }
+                    }
+
+                    task.Add(new SocketAction(socket, mode, interactableObject));
                 }
             }
             return task;

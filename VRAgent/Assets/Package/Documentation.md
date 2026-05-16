@@ -613,7 +613,8 @@ Socket actions are particularly useful for testing workflows that depend on obje
   "type": "Socket",
   "source_object_name": "<string>",       // Name of the object with the XRSocketInteractor
   "source_object_fileID": <long>,         // FileID of the socket object in the Unity scene
-  "socket_mode": "<string>"               // "insert" or "remove"
+  "socket_mode": "<string>",              // "insert" or "remove"
+  "inserted_object_fileID": <long>        // (Optional) FileID of the interactable being inserted/removed
 }
 ```
 
@@ -623,6 +624,7 @@ Socket actions are particularly useful for testing workflows that depend on obje
 | source_object_name   | string | Optional     | Name of the socket object (for readability)                  |
 | source_object_fileID | long   | **Required** | FileID of the GameObject that has the XRSocketInteractor     |
 | socket_mode          | string | **Required** | Either `"insert"` (fires `selectEntered`) or `"remove"` (fires `selectExited`) |
+| inserted_object_fileID | long | Optional     | FileID of the inserted/removed interactable; when provided, the action populates `SelectEnter/ExitEventArgs.interactableObject` |
 
 #### Requirement for Action Objects
 
@@ -637,7 +639,8 @@ The **source object** must contain an **`XRSocketInteractor` component** in Unit
   "type": "Socket",
   "source_object_name": "Socket_PantryLock",
   "source_object_fileID": 351089451,
-  "socket_mode": "insert"
+  "socket_mode": "insert",
+  "inserted_object_fileID": 915335388
 }
 ```
 
@@ -736,6 +739,7 @@ The **source object** must contain an **`XRSocketInteractor` component** in Unit
 > public class SocketActionUnit : ActionUnit
 > {
 >  [JsonProperty("socket_mode")] public string socketMode; // "insert" or "remove"
+>  [JsonProperty("inserted_object_fileID")] public string? insertedObjectFileId; // optional
 > }
 > ```
 

@@ -93,15 +93,11 @@ public class RecipeController : MonoBehaviour
     /// <summary>Called by Switch_MainPower after pantry ingredients are collected.</summary>
     public void SetPowerEnabled()
     {
-        // BUG-007: Wrong precondition — checks hasPantryKey instead of doorPantryUnlocked
-        // Fix: should be if (!doorPantryUnlocked)
-        if (!hasPantryKey)
+        if (!doorPantryUnlocked)
         {
-            Debug.LogWarning("[RecipeController] FAIL — tried to enable power before picking up key.");
+            Debug.LogWarning("[RecipeController] FAIL — tried to enable power before unlocking pantry door.");
             return;
         }
-        if (hasPantryKey && !doorPantryUnlocked)
-            OracleRegistry.Trigger("BUG-007", "Power enabled without opening pantry door");
         if (powerEnabled) return;
         powerEnabled = true;
         Debug.Log("[RecipeController] Step 3 PASSED — main power enabled.");
