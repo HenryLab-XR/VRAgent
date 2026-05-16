@@ -1,24 +1,26 @@
 using UnityEngine;
 
 /// <summary>
-/// Controls door open/close animation with an optional key requirement.
+/// Controls door open/close animation with optional locked state.
+/// Unlock() must be called before Toggle()/Open() have any effect.
 /// </summary>
 public class DoorController : MonoBehaviour
 {
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float animationSpeed = 3f;
-    public bool requiresKey = false;
-    public GameObject requiredKeyObject;
+    [SerializeField] private bool startLocked = true;
 
-    [SerializeField] private bool unlockedByKey = false;
+    private bool isLocked;
     private bool isOpen = false;
     private Quaternion closedRotation;
     private Quaternion targetOpenRotation;
 
-    public bool IsLocked => !CanOpen();
+    public bool IsLocked => isLocked;
 
     private void Awake()
     {
+        isLocked = startLocked;
+        // 在 Awake 中初始化旋转目标，确保早于任何运行时调用
         closedRotation = transform.localRotation;
         targetOpenRotation = Quaternion.Euler(0f, openAngle, 0f) * closedRotation;
     }
@@ -29,60 +31,36 @@ public class DoorController : MonoBehaviour
         transform.localRotation = Quaternion.Lerp(transform.localRotation, target, Time.deltaTime * animationSpeed);
     }
 
-    public bool CanOpen()
-    {
-        return !requiresKey || unlockedByKey;
-    }
-
-    public bool TryUnlockWith(GameObject insertedObject)
-    {
-        if (!requiresKey)
-        {
-            unlockedByKey = true;
-            return true;
-        }
-
-        if (requiredKeyObject == null)
-        {
-            Debug.LogWarning($"[DoorController] {gameObject.name} requires a key but has no requiredKeyObject assigned.");
-            return false;
-        }
-
-        if (insertedObject == null)
-        {
-            Debug.LogWarning($"[DoorController] {gameObject.name} received a null unlock object.");
-            return false;
-        }
-
-        Transform insertedTransform = insertedObject.transform;
-        Transform requiredTransform = requiredKeyObject.transform;
-        if (insertedTransform == requiredTransform || insertedTransform.IsChildOf(requiredTransform))
-        {
-            unlockedByKey = true;
-            Debug.Log($"[DoorController] {gameObject.name} unlocked by {insertedObject.name}.");
-            return true;
-        }
-
-        Debug.LogWarning($"[DoorController] {gameObject.name} rejected unlock object {insertedObject.name}; required {requiredKeyObject.name}.");
-        return false;
-    }
-
-    /// <summary>Opens the door if its key requirement has been satisfied.</summary>
+    /// <summary>Opens the door. No effect if locked.</summary>
     public void Open()
     {
-        if (CanOpen()) isOpen = true;
+        // 若被调用到 prefab asset 而非场景实例，转发给所有场景实例
+        if (!gameObject.scene.isLoaded)
+        {
+            foreach (var dc in FindObjectsOfType<DoorController>())
+                dc.Open();
+            return;
+        }
+        if (!isLocked) isOpen = true;
     }
 
-    /// <summary>Closes the door regardless of key state.</summary>
+    /// <summary>Closes the door regardless of lock state.</summary>
     public void Close()
     {
         isOpen = false;
     }
 
-    /// <summary>Compatibility/debug entry point. Socket receivers should use TryUnlockWith().</summary>
+    /// <summary>Removes the lock so the door can be opened.</summary>
     public void Unlock()
     {
-        unlockedByKey = true;
+        // 若被调用到 prefab asset 而非场景实例，转发给所有场景实例
+        if (!gameObject.scene.isLoaded)
+        {
+            foreach (var dc in FindObjectsOfType<DoorController>())
+                dc.Unlock();
+            return;
+        }
+        isLocked = false;
         Debug.Log($"[DoorController] {gameObject.name} unlocked.");
     }
 }
