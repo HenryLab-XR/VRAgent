@@ -1,0 +1,5 @@
+# Core runtime dependencies for the TP_Generation pipeline.
+# Keep this file small and focused on packages imported by the shipped scripts.
+networkx
+openai
+jsonschema

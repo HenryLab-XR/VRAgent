@@ -19,6 +19,10 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Set
 from urllib import error as urllib_error
 from urllib import request as urllib_request
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx"], "SpecialLogicPreprocessor.py")
+
 import networkx as nx
 
 from vragent2.utils.path_layout import (

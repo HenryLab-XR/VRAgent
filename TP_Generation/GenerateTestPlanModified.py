@@ -15,6 +15,10 @@ import argparse
 import importlib
 from datetime import datetime
 from typing import Dict, List, Any, Optional, Set, Tuple
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx", "openai"], "GenerateTestPlanModified.py")
+
 import networkx as nx
 import openai
 import time

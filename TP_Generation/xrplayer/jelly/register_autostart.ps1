@@ -15,7 +15,6 @@ $IsAdmin     = ([Security.Principal.WindowsPrincipal][Security.Principal.Windows
 $workspaceRoot = Split-Path -Parent $TpGenerationDir
 $PythonCandidates = @(
   $env:XRPLAYER_JELLY_PYTHON,
-  "E:\--SoftWare\python.exe",
   (Join-Path $workspaceRoot ".venv\Scripts\python.exe")
 )
 $PythonExe = $PythonCandidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1

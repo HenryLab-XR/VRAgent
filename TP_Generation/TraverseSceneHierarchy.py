@@ -1,8 +1,12 @@
 import os
 import json
-import networkx as nx
 import argparse
 from typing import List, Dict, Any
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx"], "TraverseSceneHierarchy.py")
+
+import networkx as nx
 
 from vragent2.utils.path_layout import (
     get_step2_gobj_hierarchy_path,

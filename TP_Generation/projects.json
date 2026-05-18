@@ -1,10 +1,10 @@
 {
   "projects": [
     {
-      "name": "SampleScenes",
-      "assets_path": "D:\\--UnityProject\\HenryLabXR\\VRAgent2.0-PVEO_core\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom",
+      "name": "Kitchen",
+      "assets_path": "{repo_root}\\VRAgent",
       "python_exe": "",
-      "work_dir": "",
+      "work_dir": "{tp_generation}",
       "default_model": "gpt-4o",
       "results_dir": "Results"
     }

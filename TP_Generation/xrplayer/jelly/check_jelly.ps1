@@ -24,10 +24,11 @@ try {
 } catch {
     Write-Host "[HTTP] Jelly DOWN (port $Port not responding)"
 }
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$TpGenerationDir = (Resolve-Path (Join-Path $ScriptDir "..\..")).Path
 $LogCandidates = @(
-    "D:\--UnityProject\HenryLabXR\VRAgent2.0-PVEO_core\TP_Generation\.jelly.log",
-    "D:\--UnityProject\HenryLabXR\VRAgent2.0-PVEO_core\TP_Generation\.jelly.log.err",
-    "D:\--UnityProject\HenryLabXR\VRAgent2.0-PVEO_core\_log\jelly.log"
+    (Join-Path $TpGenerationDir ".jelly.log"),
+    (Join-Path $TpGenerationDir ".jelly.log.err")
 ) | Where-Object { Test-Path $_ }
 
 if ($LogCandidates) {

@@ -81,11 +81,11 @@ class _RunManager:
             if self._state == "running":
                 raise ValueError("A run is already in progress. Stop it first.")
             self._log.clear()
-            self._state = "running"
             self._start_time = time.time()
             self._returncode = None
             self._params = params
             self._env = env
+            self._proc = None
         proc_env = os.environ.copy()
         # Force unbuffered output so log lines appear even if process exits immediately
         proc_env["PYTHONUNBUFFERED"] = "1"
@@ -95,12 +95,22 @@ class _RunManager:
         _extra: Dict[str, Any] = {}
         if sys.platform == "win32":
             _extra["creationflags"] = subprocess.CREATE_NO_WINDOW
-        self._proc = subprocess.Popen(
-            cmd, cwd=cwd,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-            text=True, bufsize=1, encoding="utf-8", errors="replace",
-            env=proc_env, **_extra,
-        )
+        try:
+            proc = subprocess.Popen(
+                cmd, cwd=cwd,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                text=True, bufsize=1, encoding="utf-8", errors="replace",
+                env=proc_env, **_extra,
+            )
+        except Exception as exc:
+            with self._lock:
+                self._state = "error"
+                self._log.append(f"[jelly] failed to start process: {exc}")
+                self._log.append(f"[jelly] cmd: {' '.join(cmd)}")
+            raise
+        with self._lock:
+            self._proc = proc
+            self._state = "running"
         t = threading.Thread(target=self._reader, daemon=True)
         t.start()
 
@@ -127,6 +137,11 @@ class _RunManager:
                 self._proc.terminate()
             except Exception:
                 pass
+        else:
+            with self._lock:
+                if self._state == "running":
+                    self._state = "error"
+                    self._log.append("[jelly] stopped stale running state")
 
     def get_status(self) -> Dict[str, Any]:
         with self._lock:
@@ -196,7 +211,39 @@ class _ProjectsConfig:
 
     def __init__(self, results_root: Path) -> None:
         self._path = results_root / "projects.json"
+        self._results_root = results_root
         self._lock = threading.Lock()
+
+    def _resolve_config_path(self, value: Any) -> Path:
+        return _resolve_user_path(value, self._results_root)
+
+    def _sanitize_optional_path(self, value: Any, *, want_file: bool = False, want_dir: bool = False) -> str:
+        raw = str(value or "").strip()
+        if not raw:
+            return ""
+        p = self._resolve_config_path(raw)
+        if want_file and not p.is_file():
+            return ""
+        if want_dir and not p.is_dir():
+            return ""
+        return raw
+
+    def _sanitize_loaded(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        cleaned = dict(data)
+        cleaned["python_exe"] = self._sanitize_optional_path(cleaned.get("python_exe"), want_file=True)
+        cleaned["work_dir"] = self._sanitize_optional_path(cleaned.get("work_dir"), want_dir=True)
+
+        projects: List[Dict[str, Any]] = []
+        for raw_project in cleaned.get("projects", []) or []:
+            if not isinstance(raw_project, dict):
+                continue
+            project = dict(raw_project)
+            project["python_exe"] = self._sanitize_optional_path(project.get("python_exe"), want_file=True)
+            project["work_dir"] = self._sanitize_optional_path(project.get("work_dir"), want_dir=True)
+            project["assets_path"] = self._sanitize_optional_path(project.get("assets_path"), want_dir=True)
+            projects.append(project)
+        cleaned["projects"] = projects
+        return cleaned
 
     def load(self) -> Dict[str, Any]:
         try:
@@ -204,7 +251,7 @@ class _ProjectsConfig:
             # Merge with defaults so new keys are always present
             merged = dict(self._DEFAULT)
             merged.update(data)
-            return merged
+            return self._sanitize_loaded(merged)
         except FileNotFoundError:
             return dict(self._DEFAULT)
         except (OSError, json.JSONDecodeError) as exc:
@@ -216,6 +263,72 @@ class _ProjectsConfig:
                 json.dumps(data, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
+
+
+def _repo_root_from_results(results_root: Path) -> Path:
+    if results_root.name == "TP_Generation":
+        return results_root.parent
+    return results_root
+
+
+_PATH_TOKENS = ("{repo}", "{repo_root}", "{tp_generation}")
+
+
+def _has_path_token(path_value: Any) -> bool:
+    raw = str(path_value or "")
+    return any(token in raw for token in _PATH_TOKENS)
+
+
+def _resolve_user_path(path_value: Any, results_root: Path) -> Path:
+    raw = str(path_value or "").strip()
+    if not raw:
+        return Path("")
+    repo_root = _repo_root_from_results(results_root)
+    expanded = os.path.expandvars(os.path.expanduser(raw))
+    expanded = (
+        expanded
+        .replace("{repo}", str(repo_root))
+        .replace("{repo_root}", str(repo_root))
+        .replace("{tp_generation}", str(results_root))
+    )
+    p = Path(expanded)
+    if p.is_absolute():
+        return p
+    for base in (repo_root, results_root):
+        candidate = base / p
+        if candidate.exists():
+            return candidate
+    return repo_root / p
+
+
+def _default_python(results_root: Path) -> str:
+    repo_root = _repo_root_from_results(results_root)
+    candidates = (
+        os.environ.get("XRPLAYER_JELLY_PYTHON", ""),
+        str(repo_root / ".venv" / "Scripts" / "python.exe"),
+        sys.executable,
+    )
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    return sys.executable
+
+
+def _resolve_python(path_value: Any, results_root: Path) -> str:
+    p = _resolve_user_path(path_value, results_root)
+    if str(p) and p.is_file():
+        return str(p)
+    return _default_python(results_root)
+
+
+def _resolve_work_dir(path_value: Any, results_root: Path) -> str:
+    raw = str(path_value or "").strip()
+    if not raw or raw in (".", "./", ".\\"):
+        return str(results_root)
+    p = _resolve_user_path(path_value, results_root)
+    if str(p) and p.is_dir():
+        return str(p)
+    return str(results_root)
 
 
 # ---------------------------------------------------------------------------
@@ -583,10 +696,10 @@ def _format_time_value(value: Optional[datetime], fallback: str = "") -> str:
     return value.isoformat(timespec="seconds") + "Z"
 
 
-def _resolve_unity_project_root(project_path: str) -> Optional[Path]:
+def _resolve_unity_project_root(project_path: str, results_root: Optional[Path] = None) -> Optional[Path]:
     if not project_path:
         return None
-    current = Path(project_path).resolve()
+    current = (_resolve_user_path(project_path, results_root) if results_root is not None else Path(project_path)).resolve()
     for _ in range(12):
         if (current / "Assets").is_dir() and (current / "ProjectSettings").is_dir():
             return current
@@ -597,17 +710,20 @@ def _resolve_unity_project_root(project_path: str) -> Optional[Path]:
     return None
 
 
-def _resolve_coverage_report_dir(project_path: str, metadata: Dict[str, Any]) -> Optional[Path]:
+def _resolve_coverage_report_dir(project_path: str, metadata: Dict[str, Any], results_root: Optional[Path] = None) -> Optional[Path]:
     candidates: List[Path] = []
 
     metadata_report_dir = str(metadata.get("coverage_report_dir", "") or "").strip()
     if metadata_report_dir:
         try:
-            candidates.append(Path(metadata_report_dir).resolve())
+            if results_root is not None:
+                candidates.append(_resolve_user_path(metadata_report_dir, results_root).resolve())
+            else:
+                candidates.append(Path(metadata_report_dir).resolve())
         except OSError:
             pass
 
-    unity_root = _resolve_unity_project_root(project_path)
+    unity_root = _resolve_unity_project_root(project_path, results_root)
     if unity_root is not None:
         candidates.extend([
             unity_root / "CodeCoverage" / "Report",
@@ -738,7 +854,7 @@ def _build_run_coverage_diagnosis(
     project_path: str = "",
 ) -> Dict[str, Any]:
     metadata = _load_run_metadata(results_root, run_dir)
-    report_dir = _resolve_coverage_report_dir(project_path, metadata)
+    report_dir = _resolve_coverage_report_dir(project_path, metadata, results_root)
     diagnosis: Dict[str, Any] = {
         "found": False,
         "coverage_source": "unity_summary_report",
@@ -847,11 +963,12 @@ def _scan_benchmark_data(root: Path) -> List[Dict[str, Any]]:
     return entries
 
 
-def _normalize_preprocess_dir(path_value: str) -> Optional[Path]:
+def _normalize_preprocess_dir(path_value: str, results_root: Optional[Path] = None) -> Optional[Path]:
     if not path_value:
         return None
     try:
-        return Path(path_value).resolve()
+        path = _resolve_user_path(path_value, results_root) if results_root is not None else Path(path_value)
+        return path.resolve()
     except OSError:
         return None
 
@@ -1036,7 +1153,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
             pp_cr = (qs.get("project_path") or qs.get("assets_path") or [""])[0].strip()
             report_dir_cr: Optional[Path] = None
             if pp_cr:
-                p_cr = Path(pp_cr).resolve()
+                p_cr = _resolve_user_path(pp_cr, self._root).resolve()
                 for _ in range(12):
                     if (p_cr / "Assets").is_dir() and (p_cr / "ProjectSettings").is_dir():
                         for _cov_sub in ("CodeCoverage/Report", "Coverage/Report", "CodeCoverage"):
@@ -1084,7 +1201,15 @@ class _JellyHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/health":
-            self._send_json({"ok": True, "results_root": str(self._root)})
+            repo_root = _repo_root_from_results(self._root)
+            self._send_json({
+                "ok": True,
+                "results_root": str(self._root),
+                "repo_root": str(repo_root),
+                "default_python": _default_python(self._root),
+                "default_work_dir": str(self._root),
+                "venv_python": str(repo_root / ".venv" / "Scripts" / "python.exe"),
+            })
             return
 
         # ── Serve archived snapshot HTML report files ─────────────────────────
@@ -1190,7 +1315,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
             if not project_path:
                 self._send_json({"error": "missing project_path"}, status=HTTPStatus.BAD_REQUEST)
                 return
-            self._send_json({"scenes": _find_scenes(project_path)})
+            self._send_json({"scenes": _find_scenes(str(_resolve_user_path(project_path, self._root)))})
             return
 
         if path == "/api/run/status":
@@ -1207,6 +1332,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 "from": from_idx,
                 "total": rm.total_lines(),
                 "state": status["state"],
+                "params": status.get("params", {}),
             })
             return
 
@@ -1217,9 +1343,9 @@ class _JellyHandler(BaseHTTPRequestHandler):
             dir3 = (qs.get("results_dir3") or [shared_dir or dir2 or dir1])[0].strip()
             scene_name = (qs.get("scene_name") or [""])[0].strip()
             self._send_json(_build_preprocess_status(
-                _normalize_preprocess_dir(dir1),
-                _normalize_preprocess_dir(dir2),
-                _normalize_preprocess_dir(dir3),
+                _normalize_preprocess_dir(dir1, self._root),
+                _normalize_preprocess_dir(dir2, self._root),
+                _normalize_preprocess_dir(dir3, self._root),
                 scene_name,
             ))
             return
@@ -1247,7 +1373,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
             if not search_path:
                 self._send_json({"found": False, "project_root": ""})
                 return
-            p = Path(search_path).resolve()
+            p = _resolve_user_path(search_path, self._root).resolve()
             for _ in range(12):
                 if (p / "Assets").is_dir() and (p / "ProjectSettings").is_dir():
                     self._send_json({"found": True, "project_root": str(p)})
@@ -1274,7 +1400,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
                     browse_path = "/"
             if browse_path:
                 try:
-                    bp = Path(browse_path)
+                    bp = _resolve_user_path(browse_path, self._root) if _has_path_token(browse_path) else Path(browse_path)
                     if not bp.exists() or not bp.is_dir():
                         self._send_json({"error": "path not found"}, status=HTTPStatus.BAD_REQUEST)
                         return
@@ -1297,17 +1423,14 @@ class _JellyHandler(BaseHTTPRequestHandler):
         if path == "/api/replay_options":
             dirs_param = (qs.get("dirs") or [""])[0].strip()
             work_dir_param = (qs.get("work_dir") or [""])[0].strip()
+            work_dir_root = _resolve_user_path(work_dir_param, self._root) if work_dir_param else self._root
             roots: List[Path] = []
             if dirs_param:
                 for raw in dirs_param.split(","):
                     raw = raw.strip()
                     if not raw:
                         continue
-                    p_dir = Path(raw)
-                    if not p_dir.is_absolute() and work_dir_param:
-                        p_dir = Path(work_dir_param) / raw
-                    elif not p_dir.is_absolute():
-                        p_dir = self._root / raw
+                    p_dir = _resolve_user_path(raw, self._root) if (Path(raw).is_absolute() or _has_path_token(raw)) else (work_dir_root / raw)
                     try:
                         p_dir = p_dir.resolve()
                     except Exception:
@@ -1331,7 +1454,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
         if path == "/api/unity_coverage":
             xml_param = (qs.get("xml_path") or [None])[0]
             if xml_param:
-                xml_path = Path(xml_param)
+                xml_path = _resolve_user_path(xml_param, self._root)
             else:
                 # Walk up from results_root to find a Unity project root
                 candidate = self._root.parent
@@ -1355,19 +1478,9 @@ class _JellyHandler(BaseHTTPRequestHandler):
             unity_root_param = (qs.get("unity_root") or [""])[0].strip()
             unity_root: Optional[Path] = None
             if unity_root_param:
-                pr = Path(unity_root_param)
-                if (pr / "Assets").is_dir() and (pr / "ProjectSettings").is_dir():
-                    unity_root = pr
+                unity_root = _resolve_unity_project_root(unity_root_param, self._root)
             if unity_root is None and assets_path:
-                p = Path(assets_path).resolve()
-                for _ in range(12):
-                    if (p / "Assets").is_dir() and (p / "ProjectSettings").is_dir():
-                        unity_root = p
-                        break
-                    nxt = p.parent
-                    if nxt == p:
-                        break
-                    p = nxt
+                unity_root = _resolve_unity_project_root(assets_path, self._root)
             if unity_root is None:
                 self._send_json({"found": False,
                                  "error": "Cannot find Unity project root. Provide project_path.",
@@ -1515,7 +1628,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
             if not assets_path:
                 self._send_json({"found": False, "error": "missing project_path"})
                 return
-            base = Path(assets_path)
+            base = _resolve_user_path(assets_path, self._root)
             if not base.is_dir():
                 self._send_json({"found": False, "error": f"project_path not a directory: {assets_path}"})
                 return
@@ -1561,18 +1674,14 @@ class _JellyHandler(BaseHTTPRequestHandler):
         if path == "/api/smart_benchmark":
             dirs_param = (qs.get("results_dirs") or [""])[0].strip()
             work_dir_bm = (qs.get("work_dir") or [""])[0].strip()
+            work_dir_root_bm = _resolve_user_path(work_dir_bm, self._root) if work_dir_bm else self._root
             bm_roots: List[Path] = []
             if dirs_param:
                 for raw in dirs_param.split(","):
                     raw = raw.strip()
                     if not raw:
                         continue
-                    p_bm = Path(raw)
-                    if not p_bm.is_absolute():
-                        if work_dir_bm:
-                            p_bm = Path(work_dir_bm) / raw
-                        else:
-                            p_bm = self._root / raw
+                    p_bm = _resolve_user_path(raw, self._root) if (Path(raw).is_absolute() or _has_path_token(raw)) else (work_dir_root_bm / raw)
                     try:
                         p_bm = p_bm.resolve()
                     except Exception:
@@ -1663,8 +1772,8 @@ class _JellyHandler(BaseHTTPRequestHandler):
         # ── Start a vragent2 run ───────────────────────────────────────────
         if path == "/api/run/start":
             cfg = self.server.projects_config.load()  # type: ignore[attr-defined]
-            python_exe = body.get("python_exe") or cfg.get("python_exe") or sys.executable
-            work_dir   = body.get("work_dir")   or cfg.get("work_dir")   or str(self.server.results_root)  # type: ignore[attr-defined]
+            python_exe = _resolve_python(body.get("python_exe") or cfg.get("python_exe"), self._root)
+            work_dir   = _resolve_work_dir(body.get("work_dir") or cfg.get("work_dir"), self._root)
 
             # Build CLI args
             cmd = [python_exe, "-m", "vragent2"]
@@ -1729,6 +1838,8 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 self._send_json({"ok": True, "cmd": cmd, "pid": self.server.run_manager._proc.pid})  # type: ignore[attr-defined]
             except ValueError as exc:
                 self._send_json({"error": str(exc)}, status=HTTPStatus.CONFLICT)
+            except Exception as exc:
+                self._send_json({"error": f"Failed to start process: {exc}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             return
 
         # ── Stop the running process ───────────────────────────────────────
@@ -1761,19 +1872,9 @@ class _JellyHandler(BaseHTTPRequestHandler):
             # Resolve Unity project root
             unity_root_cs: Optional[Path] = None
             if unity_root_param_cs:
-                pr_cs = Path(unity_root_param_cs)
-                if (pr_cs / "Assets").is_dir() and (pr_cs / "ProjectSettings").is_dir():
-                    unity_root_cs = pr_cs
+                unity_root_cs = _resolve_unity_project_root(unity_root_param_cs, self._root)
             if unity_root_cs is None and assets_path_cs:
-                p_cs = Path(assets_path_cs).resolve()
-                for _ in range(12):
-                    if (p_cs / "Assets").is_dir() and (p_cs / "ProjectSettings").is_dir():
-                        unity_root_cs = p_cs
-                        break
-                    nxt_cs = p_cs.parent
-                    if nxt_cs == p_cs:
-                        break
-                    p_cs = nxt_cs
+                unity_root_cs = _resolve_unity_project_root(str(assets_path_cs), self._root)
             if unity_root_cs is None:
                 self._send_json({"error": "Cannot find Unity project root. Provide assets_path."},
                                 status=HTTPStatus.BAD_REQUEST)
@@ -1881,12 +1982,13 @@ class _JellyHandler(BaseHTTPRequestHandler):
         # ── Start a preprocessing step ─────────────────────────────────────
         if path == "/api/preprocess/start":
             cfg = self.server.projects_config.load()  # type: ignore[attr-defined]
-            python_exe = body.get("python_exe") or cfg.get("python_exe") or sys.executable
+            python_exe = _resolve_python(body.get("python_exe") or cfg.get("python_exe"), self._root)
             # Preprocessing scripts always run from the TP_Generation directory (results_root)
             preprocess_cwd = str(self.server.results_root)  # type: ignore[attr-defined]
-            work_dir = preprocess_cwd  # alias for clarity
             step        = body.get("step", "").strip()
             results_dir = body.get("results_dir", "").strip()
+            if _has_path_token(results_dir):
+                results_dir = str(_resolve_user_path(results_dir, self._root))
             if step == "extract_scene":
                 project_path = body.get("project_path", "").strip()
                 if not project_path:
@@ -1895,6 +1997,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 if not results_dir:
                     self._send_json({"error": "results_dir required"}, status=HTTPStatus.BAD_REQUEST)
                     return
+                project_path = str(_resolve_user_path(project_path, self._root))
                 cmd = [python_exe, "ExtractSceneDependency.py", "-p", project_path, "-r", results_dir]
                 scene_name = body.get("scene_name", "").strip()
                 if scene_name:
@@ -1921,6 +2024,8 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 self._send_json({"ok": True, "cmd": cmd, "pid": self.server.run_manager._proc.pid})  # type: ignore[attr-defined]
             except ValueError as exc:
                 self._send_json({"error": str(exc)}, status=HTTPStatus.CONFLICT)
+            except Exception as exc:
+                self._send_json({"error": f"Failed to start process: {exc}"}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             return
 
         # ── File write (Results/ only, .json/.md/.txt) ────────────────────

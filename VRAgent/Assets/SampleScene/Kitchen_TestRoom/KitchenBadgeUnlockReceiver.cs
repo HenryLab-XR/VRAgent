@@ -14,6 +14,7 @@ public class KitchenBadgeUnlockReceiver : MonoBehaviour
     [SerializeField] private Renderer panelRenderer;
     [SerializeField] private Material materialUnlocked;
     [SerializeField] private Material materialNoPower;
+    [SerializeField] private string requiredObjectName = "Badge_Kitchen";
 
     private XRSocketInteractor _socket;
     private bool _hasUnlocked = false;
@@ -39,6 +40,12 @@ public class KitchenBadgeUnlockReceiver : MonoBehaviour
             return;
         }
 
+        if (!MatchesObjectName(insertedObject, requiredObjectName))
+        {
+            Debug.LogWarning($"[KitchenBadgeUnlockReceiver] Wrong object inserted: {(insertedObject != null ? insertedObject.name : "null")}.");
+            return;
+        }
+
         if (!kitchenDoorController.TryUnlockWith(insertedObject))
         {
             Debug.LogWarning($"[KitchenBadgeUnlockReceiver] Wrong object inserted: {(insertedObject != null ? insertedObject.name : "null")}.");
@@ -58,6 +65,21 @@ public class KitchenBadgeUnlockReceiver : MonoBehaviour
             OracleRegistry.Trigger("BUG-008", "Panel stuck on red despite successful unlock");
 
         Debug.Log("[KitchenBadgeUnlockReceiver] Badge accepted — kitchen door unlocked.");
+    }
+
+    private static bool MatchesObjectName(GameObject insertedObject, string expectedName)
+    {
+        if (insertedObject == null || string.IsNullOrWhiteSpace(expectedName))
+            return false;
+
+        for (Transform current = insertedObject.transform; current != null; current = current.parent)
+        {
+            string objectName = current.gameObject.name;
+            if (objectName == expectedName || objectName == expectedName + "(Clone)")
+                return true;
+        }
+
+        return false;
     }
 
     private void OnDestroy()
