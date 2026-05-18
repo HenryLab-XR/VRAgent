@@ -30,6 +30,15 @@ namespace HenryLab.VRAgent
 
                 // MonoBehaviour component = FindComponentByFileID(methodCallUnit.script);
                 MonoBehaviour component = manager.GetComponent(methodCallUnit.script);
+                if(component != null && fallbackRoots != null && !IsWithinFallbackRoots(component, fallbackRoots))
+                {
+                    MonoBehaviour sourceLocalComponent = FindFallbackComponent(methodCallUnit.methodName, fallbackRoots);
+                    if(sourceLocalComponent != null)
+                    {
+                        Debug.LogWarning($"{Str.Tags.LogsTag} Rebound {methodCallUnit.methodName} to source-local {sourceLocalComponent.GetType().Name} because FileID resolved outside the action source");
+                        component = sourceLocalComponent;
+                    }
+                }
                 if(component == null)
                 {
                     Debug.LogWarning($"{Str.Tags.LogsTag} Component with script FileID {methodCallUnit.script} not found");
@@ -95,6 +104,25 @@ namespace HenryLab.VRAgent
                 }
             }
             return evt;
+        }
+
+        private static bool IsWithinFallbackRoots(MonoBehaviour component, IEnumerable<GameObject> fallbackRoots)
+        {
+            if(component == null || fallbackRoots == null)
+                return false;
+
+            Transform componentTransform = component.transform;
+            foreach(GameObject root in fallbackRoots)
+            {
+                if(root == null)
+                    continue;
+
+                Transform rootTransform = root.transform;
+                if(componentTransform == rootTransform || componentTransform.IsChildOf(rootTransform))
+                    return true;
+            }
+
+            return false;
         }
 
         private static MonoBehaviour FindFallbackComponent(string methodName, IEnumerable<GameObject> fallbackRoots)

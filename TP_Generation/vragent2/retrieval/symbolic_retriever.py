@@ -132,7 +132,9 @@ class SymbolicRetriever:
             if s == script_node_id and e.get("type") == "Source_Code_File":
                 node_data = g.nodes.get(t, {})
                 props = node_data.get("properties", {})
-                fp = props.get("file_path", "") if isinstance(props, dict) else ""
+                fp = ""
+                if isinstance(props, dict):
+                    fp = props.get("file_path") or props.get("filepath") or props.get("filePath") or ""
                 if fp:
                     from ..utils.file_utils import load_text
                     src = load_text(fp.replace(".meta", "") if fp.endswith(".meta") else fp)

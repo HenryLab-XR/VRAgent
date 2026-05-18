@@ -2,6 +2,10 @@ import os
 import json
 import subprocess
 import argparse
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx"], "ExtractSceneDependency.py")
+
 from networkx.algorithms.bipartite.cluster import latapy_clustering
 import config
 import networkx as nx

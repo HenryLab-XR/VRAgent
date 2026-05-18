@@ -4,7 +4,7 @@
     PID is saved to .jelly.pid so stop_jelly.ps1 can terminate it.
 .USAGE
     .\start_jelly.ps1
-    .\start_jelly.ps1 -Port 2000 -Python "E:\--SoftWare\python.exe"
+    .\start_jelly.ps1 -Port 2000 -Python "<repo>\.venv\Scripts\python.exe"
 #>
 param(
     [int]$Port    = 2000,
@@ -26,7 +26,6 @@ function Resolve-JellyPython {
     $candidates = @(
         $Requested,
         $env:XRPLAYER_JELLY_PYTHON,
-        "E:\--SoftWare\python.exe",
         (Join-Path $workspaceRoot ".venv\Scripts\python.exe")
     )
 
@@ -41,10 +40,11 @@ function Resolve-JellyPython {
         return $pythonCmd.Source
     }
 
-    throw "[jelly] No usable Python interpreter found. Set -Python or XRPLAYER_JELLY_PYTHON."
+    throw "[jelly] No usable Python interpreter found. Create .venv first or set -Python / XRPLAYER_JELLY_PYTHON."
 }
 
 $Python = Resolve-JellyPython -Requested $Python -TpGenerationDir $ScriptDir
+Write-Host "[jelly] Using Python: $Python" -ForegroundColor DarkGray
 
 # Check if already running
 if (Test-Path $PidFile) {

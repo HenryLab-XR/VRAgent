@@ -19,6 +19,10 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Set
 from urllib import error as urllib_error
 from urllib import request as urllib_request
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx"], "SpecialLogicPreprocessor.py")
+
 import networkx as nx
 
 from vragent2.utils.path_layout import (
@@ -28,6 +32,26 @@ from vragent2.utils.path_layout import (
     resolve_scene_meta_dir,
     resolve_script_data_dir,
 )
+
+def _property_value(data: Any, *keys: str) -> Optional[str]:
+    if isinstance(data, dict):
+        for key in keys:
+            value = data.get(key)
+            if value not in (None, ""):
+                return str(value)
+        for value in data.values():
+            found = _property_value(value, *keys)
+            if found:
+                return found
+    elif isinstance(data, list):
+        for item in data:
+            found = _property_value(item, *keys)
+            if found:
+                return found
+    return None
+
+def _node_file_path(node: Dict[str, Any]) -> Optional[str]:
+    return _property_value(node.get('properties', {}), 'file_path', 'filepath', 'filePath')
 
 # Ensure stdout/stderr can handle Unicode (emoji) even on Windows GBK consoles
 if hasattr(sys.stdout, 'reconfigure'):
@@ -237,36 +261,16 @@ class TagLogicPreprocessor:
                     # 从target节点的properties中获取file_path
                     if target in scene_graph.nodes:
                         target_node = scene_graph.nodes[target]
-                        if 'properties' in target_node:
-                            properties = target_node['properties']
-                            
-                            # 检查properties是字典还是列表
-                            if isinstance(properties, dict):
-                                # properties是字典，直接查找file_path
-                                if 'file_path' in properties:
-                                    file_path = properties['file_path']
-                                    # 处理file_path字段，以'.meta'进行strip，截取.strip[0]的字段
-                                    if file_path.endswith('.meta'):
-                                        file_path = file_path[:-5]  # 移除.meta后缀
-                                    
-                                    # 尝试加载脚本文件
-                                    script_content = self._load_script_file(file_path)
-                                    if script_content:
-                                        return script_content
-                                        
-                            elif isinstance(properties, list):
-                                # properties是列表，遍历查找file_path
-                                for prop in properties:
-                                    if isinstance(prop, dict) and 'file_path' in prop:
-                                        file_path = prop['file_path']
-                                        # 处理file_path字段，以'.meta'进行strip，截取.strip[0]的字段
-                                        if file_path.endswith('.meta'):
-                                            file_path = file_path[:-5]  # 移除.meta后缀
-                                        
-                                        # 尝试加载脚本文件
-                                        script_content = self._load_script_file(file_path)
-                                        if script_content:
-                                            return script_content
+                        file_path = _node_file_path(target_node)
+                        if file_path:
+                            # 处理file_path字段，以'.meta'进行strip，截取.strip[0]的字段
+                            if file_path.endswith('.meta'):
+                                file_path = file_path[:-5]  # 移除.meta后缀
+
+                            # 尝试加载脚本文件
+                            script_content = self._load_script_file(file_path)
+                            if script_content:
+                                return script_content
         
         return None
     

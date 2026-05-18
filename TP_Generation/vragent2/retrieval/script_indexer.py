@@ -174,13 +174,15 @@ class ScriptIndexer:
     def _extract_file_path(props) -> Optional[str]:
         """Extract ``file_path`` from node properties (may be dict or list)."""
         if isinstance(props, dict):
-            fp = props.get("file_path")
+            fp = props.get("file_path") or props.get("filepath") or props.get("filePath")
             if fp:
                 return fp[:-5] if fp.endswith(".meta") else fp
         elif isinstance(props, list):
             for p in props:
-                if isinstance(p, dict) and "file_path" in p:
-                    fp = p["file_path"]
+                if isinstance(p, dict):
+                    fp = p.get("file_path") or p.get("filepath") or p.get("filePath")
+                    if not fp:
+                        continue
                     return fp[:-5] if fp.endswith(".meta") else fp
         return None
 

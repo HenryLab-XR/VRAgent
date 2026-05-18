@@ -399,8 +399,8 @@ namespace HenryLab.VRAgent.Online
                     if(transformAU.trigerringTime != null)
                         transformable.triggerringTime = (float)transformAU.trigerringTime;
 
-                    ParameterResolver.BindEventList(transformAU.triggerringEvents, transformable.triggerringEvents);
-                    ParameterResolver.BindEventList(transformAU.triggerredEvents, transformable.triggerredEvents);
+                    ParameterResolver.BindEventList(transformAU.triggerringEvents, transformable.triggerringEvents, new[] { sourceObj });
+                    ParameterResolver.BindEventList(transformAU.triggerredEvents, transformable.triggerredEvents, new[] { sourceObj });
 
                     task.AddRange(TransformTask(transformable));
                     break;
@@ -419,8 +419,8 @@ namespace HenryLab.VRAgent.Online
                     if(trigger.trigerringTime != null)
                         triggerable.triggeringTime = (float)trigger.trigerringTime;
 
-                    ParameterResolver.BindEventList(trigger.triggerringEvents, triggerable.triggerringEvents);
-                    ParameterResolver.BindEventList(trigger.triggerredEvents, triggerable.triggerredEvents);
+                    ParameterResolver.BindEventList(trigger.triggerringEvents, triggerable.triggerringEvents, new[] { sourceObj });
+                    ParameterResolver.BindEventList(trigger.triggerredEvents, triggerable.triggerredEvents, new[] { sourceObj });
 
                     task.AddRange(TriggerTask(triggerable));
                     break;
@@ -575,6 +575,17 @@ namespace HenryLab.VRAgent.Online
                     {
                         _fileIdContainer.AddComponents(trigger.triggerringEvents, ref compTotal, ref compFound);
                         _fileIdContainer.AddComponents(trigger.triggerredEvents, ref compTotal, ref compFound);
+                    }
+
+                    if(action is SocketActionUnit socket && !string.IsNullOrEmpty(socket.insertedObjectFileId))
+                    {
+                        objTotal++;
+                        GameObject insertedObj = FileIDResolver.FindGameObject(socket.insertedObjectFileId, cmd.useFileId);
+                        if(insertedObj != null)
+                        {
+                            objFound++;
+                            _fileIdContainer.Add(socket.insertedObjectFileId, insertedObj);
+                        }
                     }
                 }
             }

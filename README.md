@@ -1,54 +1,56 @@
 # LLM-based Automated Testing with Dependency Analysis for VR Apps
 
-This repository couples a Python pipeline for automated Unity scene analysis and test-plan generation (**TP_Generation**) with a Unity runtime agent that imports and executes those plans in VR (**VRAgent**). Use it to turn Unity scenes into structured, reproducible interaction tests.
+This repository combines two parts:
+
+- `TP_Generation`: Python tooling that analyzes a Unity project, extracts scene dependencies, and generates test plans.
+- `VRAgent`: Unity-side runtime components that import and execute those plans in VR.
 
 ## Repository Layout
-- [TP_Generation/README.md](TP_Generation/README.md) — Python scripts for extracting scene data, preprocessing logic, and producing test plans.
-- [VRAgent/README.md](VRAgent/README.md) — Unity-side package for importing, validating, and running test plans in VRExplorer.
-- [VRAgent/Documentation.md](VRAgent/Documentation.md) — Detailed Unity setup, usage, and test-plan schema.
-- Analyzer configs and results: `TP_Generation/CodeStructureAnalyzer/`, `TP_Generation/CSharpScriptAnalyzer/`, `TP_Generation/Results*/`, `TP_Generation/UnityDataAnalyzer/`.
+
+- [TP_Generation/README.md](TP_Generation/README.md): Python environment setup, dependency installation, and pipeline usage.
+- [VRAgent/README.md](VRAgent/README.md): Unity-side package overview.
+- `TP_Generation/UnityDataAnalyzer/`, `TP_Generation/CSharpScriptAnalyzer/`, `TP_Generation/CodeStructureAnalyzer/`: bundled analyzers used by the Python pipeline.
 
 ## Prerequisites
-- Python 3.10+ on Windows (for TP_Generation scripts).
-- Unity 2021.3.45f1c2 (recommended) with XR setup.
-- Unity packages installed via Git URL in Package Manager:
-  - VRExplorer: `https://github.com/TsingPig/VRExplorer_Release.git`
-  - VRAgent: `https://github.com/TsingPig/VRAgent_Release.git`
-- OpenAI API key if using LLM-based plan generation.
+
+- Windows
+- Unity 2021.3.x LTS for the Unity project
+- Python `3.8.x` recommended for `TP_Generation`
+- An OpenAI API key if you want to run the LLM-based plan generation stages
+
+## New Machine Setup
+
+After cloning on a new machine, set up the Python environment before running any `TP_Generation` script:
+
+```powershell
+cd <repo-root>
+py -3.8 -m venv .venv
+.\.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python TP_Generation\check_env.py
+```
+
+That installs the Python dependencies recorded in version control and verifies that the bundled analyzers are present.
 
 ## End-to-End Workflow
-1. **Analyze the Unity project** with TP_Generation to extract scenes, hierarchies, and C# relationships.
-2. **Generate a test plan** (LLM-assisted or manual) in the expected JSON format.
-3. **Import and validate** the plan in Unity via VRAgent/VRExplorer (FileIdManager, NavMesh, bindings).
-4. **Run and iterate** tests in-editor or at runtime; optionally record coverage.
 
-## TP_Generation (Python)
-Purpose: Build structured, LLM-ready context from Unity scenes and emit executable test plans.
-- Key scripts: `ExtractSceneDependency.py` → `TraverseSceneHierarchy.py` → `TagLogicPreprocessor.py` → `GenerateTestPlanModified.py` (or original `GenerateTestPlan.py`).
-- External analyzers: `UnityDataAnalyzer.exe`, `CSharpAnalyzer.exe`, `CodeStructureAnalyzer.exe` (paths configured in `config.py`).
-- Typical run:
-  ```bash
-  python ExtractSceneDependency.py -p <unity_project_path> -r <results_dir>
-  python TraverseSceneHierarchy.py -r <results_dir>
-  python TagLogicPreprocessor.py -r <results_dir> -s <scene_name> -a <app_name>
-  python GenerateTestPlanModified.py -r <results_dir> -s <scene_name> -a <app_name>
-  ```
-- Outputs: GML graphs, `gobj_hierarchy.json`, tag metadata, and `test_plan_conversations_*.json` under `Results*` directories.
+1. Use `TP_Generation` to analyze the Unity project and produce scene metadata.
+2. Generate or refine test plans from the extracted data.
+3. Import the test plans into Unity through `VRAgent`.
+4. Execute and iterate inside the target Unity scene.
 
-## VRAgent (Unity)
-Purpose: Execute generated plans inside Unity/VRExplorer with automated bindings and runtime control.
-- Setup highlights (see [VRAgent/Documentation.md](VRAgent/Documentation.md)):
-  - Add VRAgent prefab to the target scene.
-  - Bake NavMesh for static geometry (Window → AI → Navigation).
-  - Ensure FileIdManager is generated and fileID mappings are valid.
-- Usage:
-  - Import plan: Tools → VRExplorer → Import Test Plan.
-  - Validate bindings and optional code-coverage package setup.
-- Test plan schema and action types (Grab, Trigger, etc.) are fully documented in [VRAgent/Documentation.md](VRAgent/Documentation.md).
+## Dependency Management
 
-## Quick Start Checklist
-- Install Python deps (`networkx`, `requests`, `openai`, etc.) for TP_Generation.
-- Configure `config.py` with analyzer paths and API keys.
-- Run the TP_Generation pipeline against your Unity project; review experiment results under `Results*/`.
-- Open the Unity project, install VRExplorer + VRAgent packages, add the prefab, bake NavMesh.
-- Import the generated plan and execute;/'
+The Python dependencies are now tracked in:
+
+- `requirements.txt`: root convenience entry point
+- `TP_Generation/requirements.txt`: runtime dependencies
+- `TP_Generation/requirements-dev.txt`: runtime dependencies plus test-only tools
+
+If a required package is missing, the main Python entry scripts now print an installation hint instead of only failing with a raw `ModuleNotFoundError`.
+
+## Where To Read Next
+
+- Python pipeline setup and commands: [TP_Generation/README.md](TP_Generation/README.md)
+- Unity runtime usage: [VRAgent/README.md](VRAgent/README.md)

@@ -279,7 +279,7 @@
     <div class="wf-step-body" style="margin-top:10px">
       <div class="field-row">
         <label data-tip="Unity 项目根目录（含 ProjectSettings/ 的目录）&#10;通常是 Assets 路径的上一级目录&#10;选择项目后自动填充">项目根目录</label>
-        <input id="ppProjectRoot" placeholder="D:\MyProject\VRAgent" style="flex:1" />
+        <input id="ppProjectRoot" placeholder="Unity project root" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('ppProjectRoot')" title="浏览">&#x1F4C2;</button>
       </div>
       <div class="field-row">
@@ -303,7 +303,7 @@
       <h2>2 &middot; 层级遍历 <span class="tag" id="step2Badge" style="margin-left:6px;font-size:11px">idle</span></h2>
       <span class="meta" style="margin-left:8px;font-size:11px">TraverseSceneHierarchy.py</span>
       <span style="flex:1"></span>
-      <button class="btn primary sm" id="step2Btn" onclick="runStep(2);event.stopPropagation()" data-tip="遍历场景层级，生成 workflow/step2_traverse_hierarchy/{SceneName}_gobj_hierarchy.json&#10;依赖 Step 1 的输出">&#x25B6; 运行</button>
+      <button class="btn primary sm" id="step2Btn" onclick="runStep(2);event.stopPropagation()" data-tip="遍历场景层级，生成 {SceneName}_gobj_hierarchy.json&#10;依赖 Step 1 的输出">&#x25B6; 运行</button>
       <span class="wf-step-chevron" style="margin-left:8px">&#x25B2;</span>
     </div>
     <div class="wf-step-body" style="margin-top:10px">
@@ -626,17 +626,17 @@
       <div class="field-row"><label data-tip="项目唯一标识名称">名称 *</label><input id="apName" placeholder="EscapeGameVR" /></div>
       <div class="field-row">
         <label data-tip="Unity 项目 Assets 目录的绝对路径&#10;用于扫描 .unity 场景文件">Assets 路径</label>
-        <input id="apAssetsPath" placeholder="D:\MyUnityProject\Assets" style="flex:1" />
+        <input id="apAssetsPath" placeholder="Unity project root or Assets path" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('apAssetsPath')" title="浏览本地文件夹">&#x1F4C2;</button>
       </div>
       <div class="field-row">
         <label data-tip="用于运行 vragent2 的 Python 可执行文件路径">Python 路径</label>
-        <input id="apPython" placeholder="E:\--SoftWare\python.exe" style="flex:1" />
+        <input id="apPython" placeholder="auto: Jelly Python or repo .venv" style="flex:1" />
         <button class="btn-browse" onclick="browseFile('apPython')" title="浏览文件">&#x1F4C2;</button>
       </div>
       <div class="field-row">
         <label data-tip="vragent2 的工作目录&#10;通常为 TP_Generation 文件夹">工作目录</label>
-        <input id="apWorkDir" placeholder="D:\...\TP_Generation" style="flex:1" />
+        <input id="apWorkDir" placeholder="auto: TP_Generation" style="flex:1" />
         <button class="btn-browse" onclick="browseDir('apWorkDir')" title="浏览本地文件夹">&#x1F4C2;</button>
       </div>
       <div class="field-row"><label data-tip="该项目默认使用的 LLM 模型">默认模型</label><input id="apModel" placeholder="gpt-4o" /></div>
@@ -752,6 +752,9 @@ let currentRun    = "";
 let logPollHandle = null;
 let logLineIdx    = 0;
 let _cfg          = {projects:[], python_exe:"", work_dir:"", default_model:"gpt-4o"};
+let _serverInfo   = {};
+let _lastRunState = "";
+let _restoredRunCfg = {};
 let _activeTab        = "workflow";
 let _editingProjName  = null;  // null = new, string = editing existing project
 let _preferredRunDir  = "";
@@ -764,6 +767,15 @@ function _normalizeRunDir(path){
     .replace(/\/+/g,"/")
     .replace(/^\.\//,"")
     .replace(/\/$/,"");
+}
+function expandPathTokens(path){
+  let value=String(path||"");
+  if(!value) return "";
+  const repo=_serverInfo.repo_root||"";
+  const tp=_serverInfo.results_root||_resultsRoot||"";
+  if(repo) value=value.replace(/\{repo_root\}|\{repo\}/g,repo);
+  if(tp) value=value.replace(/\{tp_generation\}/g,tp);
+  return value;
 }
 function _predictRunDir(outputBase, sceneName, modelName){
   const scene=_normalizeRunDir(sceneName);
@@ -1475,6 +1487,19 @@ function setStepState(n,state){
   if(btn) btn.disabled=(state==="running");
 }
 
+function workflowStepFromParams(params){
+  const stepMap={extract_scene:1,traverse_hierarchy:2,special_logic:3};
+  return params&&stepMap[params.step] ? stepMap[params.step] : 0;
+}
+function applyFinishedWorkflowStatus(status){
+  const n=workflowStepFromParams(status&&status.params);
+  if(!n) return;
+  const state=status.state==="finished"?"done":status.state==="error"?"error":"";
+  if(!state) return;
+  setStepState(n,state);
+  if(state==="done") autoFillAfterStep(n);
+}
+
 // ---------------------------------------------------------------------------
 // API key local storage helpers
 // ---------------------------------------------------------------------------
@@ -1511,13 +1536,11 @@ async function clearApiKey(){
 
 const WORKFLOW_DIR_NAME="workflow";
 const STEP1_OUTPUT_DIR_NAME="step1_extract_scene";
-const STEP2_OUTPUT_DIR_NAME="step2_traverse_hierarchy";
 function _pathSep(path){ return (path.includes("\\")&&!path.includes("/"))?"\\":"/"; }
 function _trimPathSep(path){ return path.replace(/[\\/]+$/,""); }
 function _step1OutputDir(resultsDir){ const sep=_pathSep(resultsDir); return _trimPathSep(resultsDir)+sep+WORKFLOW_DIR_NAME+sep+STEP1_OUTPUT_DIR_NAME; }
-function _step2OutputDir(resultsDir){ const sep=_pathSep(resultsDir); return _trimPathSep(resultsDir)+sep+WORKFLOW_DIR_NAME+sep+STEP2_OUTPUT_DIR_NAME; }
 function _sceneGmlPath(resultsDir, scene){ const step1Dir=_step1OutputDir(resultsDir); const sep=_pathSep(step1Dir); return step1Dir+sep+"scene_detailed_info"+sep+"mainResults"+sep+scene+".unity.json_graph.gml"; }
-function _hierarchyJsonPath(resultsDir, scene){ const step2Dir=_step2OutputDir(resultsDir); const sep=_pathSep(step2Dir); return step2Dir+sep+scene+"_gobj_hierarchy.json"; }
+function _hierarchyJsonPath(resultsDir, scene){ const base=_trimPathSep(resultsDir); const sep=_pathSep(base); return base+sep+scene+"_gobj_hierarchy.json"; }
 
 async function refreshPreprocessState(){
   const p=selProj();
@@ -1575,10 +1598,22 @@ async function runStep(n){
     }
   }
   if(!results_dir){alert("请填写结果目录");scrollToStep("wfSec"+n);return;}
-  const body={step,python_exe,work_dir,results_dir};
+  const resolvedWorkDir=expandPathTokens(work_dir||_resultsRoot||"");
+  const body={
+    step,
+    python_exe: expandPathTokens(python_exe||"")||python_exe,
+    work_dir: resolvedWorkDir||work_dir,
+    results_dir: _resolveDir(results_dir,resolvedWorkDir)
+  };
   if(n===1){
-    const proot=$("#ppProjectRoot").value.trim();
+    let proot=$("#ppProjectRoot").value.trim();
     if(!proot){alert("请填写 Unity 项目根目录");scrollToStep("wfSec1");return;}
+    const rootCheck=await apiRaw("/api/find_project_root",{path:proot});
+    if(rootCheck&&rootCheck.found&&rootCheck.project_root){
+      proot=rootCheck.project_root;
+      $("#ppProjectRoot").value=proot;
+      saveRunCfg();
+    }
     body.project_path=proot;
     const sn=$("#ppSceneName").value.trim(); if(sn) body.scene_name=sn;
   }
@@ -1614,7 +1649,8 @@ function autoFillAfterStep(n){
 let _resultsRoot=""; // set on boot from /api/health
 const _RUN_CFG_KEYS=["cfgModel","cfgApiBase","cfgBudget","cfgLimit","cfgOutput","cfgScriptsDir",
   "cfgHierarchyJson","cfgSceneGml","cfgUnityHost","cfgUnityPort",
-  "ppProjectRoot","ppResultsDir","ppResultsDir2","ppResultsDir3","ppSceneName","ppAppName"];
+  "ppProjectRoot","ppResultsDir","ppResultsDir2","ppResultsDir3","ppSceneName","ppAppName",
+  "wfProjectSel","wfSceneSel"];
 const _RUN_CFG_CHECKS=["cfgUnity","cfgResume","cfgNoInfoSharing"];
 function saveRunCfg(){
   const data={};
@@ -1627,6 +1663,7 @@ function restoreRunCfg(){
     const raw=localStorage.getItem("xrplayer_run_cfg");
     if(!raw) return;
     const data=JSON.parse(raw);
+    _restoredRunCfg=data||{};
     _RUN_CFG_KEYS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.value=data[k];});
     _RUN_CFG_CHECKS.forEach(k=>{const el=document.getElementById(k);if(el&&data[k]!==undefined)el.checked=!!data[k];});
   }catch(e){}
@@ -1653,8 +1690,23 @@ function sanitizeSceneDerivedState(){
 /* ---- projects ---- */
 async function loadProjects(){
   _cfg=await apiRaw("/api/projects")||_cfg;
+  applyPortablePlaceholders();
   renderProjList(); renderProjSel();
   const p=selProj(); if(p) await fillFromProj(p);
+}
+function applyPortablePlaceholders(){
+  const py=_serverInfo.default_python||"auto: Jelly Python";
+  const wd=_serverInfo.default_work_dir||_resultsRoot||"TP_Generation";
+  const repo=_serverInfo.repo_root||"";
+  const unityHint=repo ? repo.replace(/[\\/]+$/,"")+"/VRAgent" : "Unity project root";
+  const pairs=[
+    ["apPython", py],
+    ["gcPython", py],
+    ["apWorkDir", wd],
+    ["gcWorkDir", wd],
+    ["ppProjectRoot", unityHint],
+  ];
+  pairs.forEach(([id,val])=>{ const el=document.getElementById(id); if(el&&val) el.placeholder=val; });
 }
 function selProj(){ const n=$("#wfProjectSel").value; return (_cfg.projects||[]).find(p=>p.name===n)||null; }
 
@@ -1669,8 +1721,10 @@ function renderProjList(){
 }
 function renderProjSel(){
   const sel=$("#wfProjectSel"), prev=sel.value, ps=_cfg.projects||[];
+  const saved=_restoredRunCfg.wfProjectSel||"";
   sel.innerHTML=ps.length===0?`<option value="">-- no projects --</option>`:ps.map(p=>`<option value="${esc(p.name)}">${esc(p.name)}</option>`).join("");
-  if(prev) sel.value=prev;
+  const wanted=saved||prev;
+  if(wanted && ps.some(p=>p.name===wanted)) sel.value=wanted;
 }
 function fillFromProj(p){ return _fillFromProjAsync(p); }
 async function _fillFromProjAsync(p){
@@ -1689,7 +1743,7 @@ async function _fillFromProjAsync(p){
       $("#ppProjectRoot").value=norm.replace(/\/[^\/]*$/,"");
     }
   }
-  refreshScenes();
+  await refreshScenes();
 }
 $("#wfProjectSel").addEventListener("change",async ()=>{ const p=selProj(); if(p) await fillFromProj(p); if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay(); });
 function onSceneChange(forcedScene){
@@ -1699,6 +1753,8 @@ function onSceneChange(forcedScene){
       ? forcedScene.target.value
       : "");
   const sname=sceneValue||$("#wfSceneSel").value; if(!sname) return;
+  const sceneSel=$("#wfSceneSel");
+  if(sceneSel&&Array.from(sceneSel.options).some(o=>o.value===sname)) sceneSel.value=sname;
   const p=selProj();
   // Use work_dir, or fall back to _resultsRoot (TP_Generation path from server)
   const base=(p&&p.work_dir)||_cfg.work_dir||_resultsRoot;
@@ -1713,6 +1769,9 @@ function onSceneChange(forcedScene){
   $("#cfgSceneGml").value=_sceneGmlPath(rdir, sname);
   saveRunCfg();
   refreshPreprocessState();
+}
+function currentWorkflowSceneName(){
+  return ($("#ppSceneName").value||$("#wfSceneSel").value||"").trim();
 }
 $("#wfSceneSel").addEventListener("change", ()=>{ onSceneChange(); if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay(); });
 // Sync ppResultsDir to steps 2/3 on change
@@ -1733,7 +1792,10 @@ async function refreshScenes(){
   const d=await apiRaw("/api/scenes",{project_path:base});
   const sc=d.scenes||[];
   const sel=$("#wfSceneSel");
+  const wanted=($("#ppSceneName").value||_restoredRunCfg.wfSceneSel||sel.value||"").trim();
   sel.innerHTML=sc.length===0?`<option value="">-- no .unity files --</option>`:sc.map(s=>`<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("");
+  if(wanted&&sc.some(s=>s.name===wanted)) sel.value=wanted;
+  if(typeof _updateAppSettingsDisplay==="function") _updateAppSettingsDisplay();
 }
 
 function openAddProject(){
@@ -1794,7 +1856,7 @@ async function startRun(){
   // Leave python_exe/work_dir undefined if not configured — server uses sys.executable
   const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
   const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
-  const scene_name=$("#wfSceneSel").value||undefined;
+  const scene_name=currentWorkflowSceneName()||undefined;
   const body={python_exe,work_dir,scene_name,
     model:$("#cfgModel").value.trim()||undefined,
     api_base:$("#cfgApiBase").value.trim()||undefined,
@@ -1862,16 +1924,19 @@ async function pollLog(){
     if(_pollOnDone){
       await _pollOnDone(d.state);
       _pollOnDone=null;
+    } else {
+      applyFinishedWorkflowStatus(d);
     }
     await syncGuiAfterRunCompletion();
   }
 }
 function setRunState(state){
+  _lastRunState=state||"idle";
   const badge=$("#logStateBadge");
   badge.textContent=state; badge.className="tag";
   if(state==="running") badge.classList.add("good");
   else if(state==="error") badge.classList.add("bad");
-  else if(state==="finished") badge.classList.add("purple");
+  else if(state==="finished") badge.classList.add("good");
   $("#btnStart").disabled=(state==="running");
   $("#btnStop").disabled=(state!=="running");
   $("#runStateLabel").textContent=state==="running"?"Running...":state==="finished"?"Completed.":state==="error"?"Exited with error.":"";
@@ -1890,11 +1955,12 @@ function _fbDefaultBase(){
 }
 // 解析路径：若相对路径则 base+sep+rel；若绝对路径直接用
 function _fbResolvePath(val){
-  if(!val) return _fbDefaultBase();
+  if(!val) return expandPathTokens(_fbDefaultBase());
+  val=expandPathTokens(val);
   // Windows absolute: starts with drive letter or UNC; Unix: starts with /
   if(/^[A-Za-z]:\\/.test(val)||/^\//.test(val)) return val;
   // Relative path — join with work_dir
-  const base=_fbDefaultBase();
+  const base=expandPathTokens(_fbDefaultBase());
   if(!base) return val;
   const sep=(base.includes("\\")&&!base.includes("/"))?"\\":"/";
   return base.replace(/[\\/]+$/,"")+sep+val;
@@ -2099,7 +2165,7 @@ async function refreshTimeline(){
 async function refreshOracle(){
   // Smart-load: try Unity-side oracle file first (next to .unity scene), fall back to results dir
   const p=selProj();
-  const sceneName=$("#wfSceneSel").value||"";
+  const sceneName=currentWorkflowSceneName();
   if(p && p.assets_path){
     const sd=await apiRaw("/api/smart_oracle",{project_path:p.assets_path, scene_name:sceneName});
     if(sd && sd.found){
@@ -2281,6 +2347,8 @@ async function refreshReplayOptions(){
 // Helper: if path is relative, join with workDir; otherwise return as-is
 function _resolveDir(dir,workDir){
   if(!dir) return "";
+  dir=expandPathTokens(dir);
+  workDir=expandPathTokens(workDir||"");
   // detect Windows absolute or Unix absolute
   if(/^[A-Za-z]:[\\\/]/.test(dir)||dir.startsWith("/")) return dir;
   return workDir ? workDir.replace(/[\\\/]+$/,"")+"/"+dir : dir;
@@ -2295,7 +2363,7 @@ async function startReplay(){
     python_exe,work_dir,
     replay:replayPath,
     unity:$("#replayUnity").checked,
-    scene_name:$("#wfSceneSel").value||undefined,
+    scene_name:currentWorkflowSceneName()||undefined,
     output:$("#cfgOutput").value.trim()||"Results",
     api_key:$("#cfgApiKey").value.trim()||undefined,
     model:$("#cfgModel").value.trim()||undefined,
@@ -2337,7 +2405,7 @@ async function startClean(){
   const cleanMode=$("#cleanMode").value;
   if(!confirm(`确定要清除 "${cleanMode}" 缓存吗？此操作不可撤销。`))return;
   const body={python_exe,work_dir,clean:cleanMode,
-    scene_name:$("#wfSceneSel").value||undefined,
+    scene_name:currentWorkflowSceneName()||undefined,
     output:$("#cfgOutput").value.trim()||"Results",
   };
   const r=await post("/api/run/start",body);
@@ -2372,7 +2440,9 @@ async function startClean(){
   await refreshRuns();
   // Get results_root from server (needed for computing default paths)
   const health=await apiRaw("/api/health");
+  _serverInfo=health||{};
   _resultsRoot=health.results_root||"";
+  applyPortablePlaceholders();
   await loadProjects();
   sanitizeSceneDerivedState();
   // If a scene name was saved in localStorage, refresh all derived paths now
@@ -2393,7 +2463,12 @@ async function startClean(){
   } else { setRunState(rs.state||"idle"); }
   setInterval(async()=>{
     const rs2=await apiRaw("/api/run/status");
+    const prevState=_lastRunState;
     setRunState(rs2.state||"idle");
+    if(prevState==="running"&&rs2.state!=="running"){
+      applyFinishedWorkflowStatus(rs2);
+      await syncGuiAfterRunCompletion();
+    }
     if(_activeTab==="overview") refreshOverview();
     else{ const st=await api("/api/status"); $("#pulse").classList.toggle("live",!st.finished); $("#lastTick").textContent=new Date().toLocaleTimeString(); }
   }, 5000);

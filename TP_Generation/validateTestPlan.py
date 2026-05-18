@@ -1,6 +1,10 @@
 import json
 import os
 from typing import Dict, Any, List, Optional, Union
+from dependency_guard import ensure_packages
+
+ensure_packages(["jsonschema", "networkx"], "validateTestPlan.py")
+
 from jsonschema import Draft202012Validator, exceptions as js_exceptions
 import networkx as nx
 import argparse

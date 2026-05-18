@@ -1,8 +1,12 @@
 import os
 import json
-import networkx as nx
 import argparse
 from typing import List, Dict, Any
+from dependency_guard import ensure_packages
+
+ensure_packages(["networkx"], "TraverseSceneHierarchy.py")
+
+import networkx as nx
 
 from vragent2.utils.path_layout import (
     get_step2_gobj_hierarchy_path,
@@ -11,6 +15,47 @@ from vragent2.utils.path_layout import (
     resolve_gobj_tag_path,
     resolve_scene_meta_dir,
 )
+
+def get_property_value(data, *keys):
+    if isinstance(data, dict):
+        for key in keys:
+            value = data.get(key)
+            if value not in (None, ""):
+                return value
+        for value in data.values():
+            found = get_property_value(value, *keys)
+            if found not in (None, ""):
+                return found
+    elif isinstance(data, list):
+        for item in data:
+            found = get_property_value(item, *keys)
+            if found not in (None, ""):
+                return found
+    return None
+
+def get_modified_property_value(data, *property_names):
+    if isinstance(data, list):
+        for i, item in enumerate(data):
+            if isinstance(item, dict) and item.get("propertyPath") in property_names:
+                for next_item in data[i + 1:]:
+                    if isinstance(next_item, dict) and next_item.get("propertyPath"):
+                        break
+                    value = get_property_value(next_item, "value")
+                    if value not in (None, ""):
+                        return value
+            found = get_modified_property_value(item, *property_names)
+            if found not in (None, ""):
+                return found
+    elif isinstance(data, dict):
+        for value in data.values():
+            found = get_modified_property_value(value, *property_names)
+            if found not in (None, ""):
+                return found
+    return None
+
+def get_script_file_path(node_data: Dict[str, Any]) -> str:
+    value = get_property_value(node_data.get("properties", {}), "file_path", "filepath", "filePath")
+    return str(value) if value else ""
 
 def GenerateTestPlan(G, results_dir, scene_name):
     """
@@ -134,8 +179,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
                 # 检查script节点的properties
                 if script_node_id in G.nodes:
                     script_node_data = G.nodes[script_node_id]
-                    properties = script_node_data.get('properties', {})
-                    file_path = properties.get('file_path', '')
+                    file_path = get_script_file_path(script_node_data)
                     
                     # 如果file_path包含"PackageCache"（Unity包缓存）且不包含"Interactable"或"Interaction"，则忽略
                     # 注意：项目资源中的Library文件夹（如Assets\_Course Library）不应该被过滤
@@ -196,7 +240,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
         if isinstance(data, dict):
             for key, value in data.items():
                 # 查找m_Calls字段
-                if key == 'm_Calls':
+                if key in ('m_Calls', 'mCalls'):
                     # 找到了m_Calls字段，检查其值
                     if isinstance(value, str):
                         # 如果是字符串，检查是否为'[]'
@@ -227,12 +271,12 @@ def GenerateTestPlan(G, results_dir, scene_name):
                         # 对于其他类型，认为可能是非空的
                         return True
                 # 查找m_PersistentCalls字段（然后递归检查其中的内容）
-                elif key == 'm_PersistentCalls':
+                elif key in ('m_PersistentCalls', 'mPersistentCalls'):
                     if isinstance(value, (list, dict)):
                         if has_non_empty_calls(value):
                             return True
                 # 查找包含"event"或"on"或"On"的字段（Unity事件字段，如m_OnClick, m_OnValueChanged等）
-                elif isinstance(key, str) and (key.startswith('m_') and ('On' in key or 'event' in key.lower() or 'on' in key.lower())):
+                elif isinstance(key, str) and ((key.startswith('m_') or key.startswith('m')) and ('On' in key or 'event' in key.lower() or 'on' in key.lower())):
                     if isinstance(value, (list, dict, str)):
                         if isinstance(value, str):
                             # 如果是字符串，可能是占位符，不需要检查
@@ -276,8 +320,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
                 # 检查script节点的properties
                 if script_node_id in G.nodes:
                     script_node_data = G.nodes[script_node_id]
-                    properties = script_node_data.get('properties', {})
-                    file_path = properties.get('file_path', '')
+                    file_path = get_script_file_path(script_node_data)
                     
                     # 如果file_path包含"PackageCache"（Unity包缓存）且不包含"Interactable"或"Interaction"，则忽略
                     # 注意：项目资源中的Library文件夹（如Assets\_Course Library）不应该被过滤
@@ -434,7 +477,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
                             'mono_property': G.nodes[target].get('properties', {}) if target in G.nodes else {},
                             'valid_source_code_files': [{
                                 'script_id': script_id,
-                                'file_path': G.nodes[script_id].get('properties', {}).get('file_path', '') if script_id in G.nodes else ''
+                                'file_path': get_script_file_path(G.nodes[script_id]) if script_id in G.nodes else ''
                             } for script_id in valid_source_code_files]
                         })
                     
@@ -573,7 +616,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
                     'mono_property': G.nodes[mono_target].get('properties', {}) if mono_target in G.nodes else {},
                     'valid_source_code_files': [{
                         'script_id': script_id,
-                        'file_path': G.nodes[script_id].get('properties', {}).get('file_path', '') if script_id in G.nodes else ''
+                        'file_path': get_script_file_path(G.nodes[script_id]) if script_id in G.nodes else ''
                     } for script_id in valid_source_code_files]
                 })
             
@@ -694,7 +737,7 @@ def GenerateTestPlan(G, results_dir, scene_name):
                         'mono_property': target_properties,
                         'valid_source_code_files': [{
                             'script_id': script_id,
-                            'file_path': G.nodes[script_id].get('properties', {}).get('file_path', '') if script_id in G.nodes else ''
+                            'file_path': get_script_file_path(G.nodes[script_id]) if script_id in G.nodes else ''
                         } for script_id in valid_source_code_files]
                     })
         
@@ -1078,6 +1121,15 @@ def get_gameobject_name(node_data: Dict[str, Any]) -> str:
     Returns:
         str: GameObject名称，如果未找到则返回"Unknown"
     """
+    properties = node_data.get('properties', {})
+    direct_name = get_property_value(properties, 'm_Name', 'mName')
+    if isinstance(direct_name, str) and direct_name.strip():
+        return direct_name.strip()
+
+    modified_name = get_modified_property_value(properties, 'm_Name', 'mName')
+    if isinstance(modified_name, str) and modified_name.strip():
+        return modified_name.strip()
+
     # 首先检查是否有直接的m_Name字段
 
     if 'properties' in node_data:

@@ -2,13 +2,15 @@ using UnityEngine;
 
 /// <summary>
 /// Controls door open/close animation with optional locked state.
-/// Unlock() must be called before Toggle()/Open() have any effect.
+/// Unlock() or TryUnlockWith() must be called before Open() has any effect.
 /// </summary>
 public class DoorController : MonoBehaviour
 {
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float animationSpeed = 3f;
     [SerializeField] private bool startLocked = true;
+    [SerializeField] private bool requiresKey = false;
+    [SerializeField] private GameObject requiredKeyObject;
 
     private bool isLocked;
     private bool isOpen = false;
@@ -20,7 +22,7 @@ public class DoorController : MonoBehaviour
     private void Awake()
     {
         isLocked = startLocked;
-        // 在 Awake 中初始化旋转目标，确保早于任何运行时调用
+        // Initialize rotation targets before runtime triggers can call Open().
         closedRotation = transform.localRotation;
         targetOpenRotation = Quaternion.Euler(0f, openAngle, 0f) * closedRotation;
     }
@@ -31,17 +33,63 @@ public class DoorController : MonoBehaviour
         transform.localRotation = Quaternion.Lerp(transform.localRotation, target, Time.deltaTime * animationSpeed);
     }
 
+    public bool CanOpen()
+    {
+        return !isLocked;
+    }
+
+    public bool TryUnlockWith(GameObject insertedObject)
+    {
+        if (!gameObject.scene.isLoaded)
+        {
+            bool unlocked = false;
+            foreach (DoorController doorController in FindObjectsOfType<DoorController>())
+                unlocked |= doorController.TryUnlockWith(insertedObject);
+            return unlocked;
+        }
+
+        if (insertedObject == null)
+        {
+            Debug.LogWarning($"[DoorController] {gameObject.name} received a null unlock object.");
+            return false;
+        }
+
+        if (requiresKey && requiredKeyObject == null)
+        {
+            Debug.LogWarning($"[DoorController] {gameObject.name} requires a key but has no requiredKeyObject assigned.");
+            return false;
+        }
+
+        if (requiredKeyObject != null && !MatchesRequiredObject(insertedObject, requiredKeyObject))
+        {
+            Debug.LogWarning($"[DoorController] {gameObject.name} rejected unlock object {insertedObject.name}; required {requiredKeyObject.name}.");
+            return false;
+        }
+
+        Unlock();
+        return true;
+    }
+
+    private static bool MatchesRequiredObject(GameObject insertedObject, GameObject requiredObject)
+    {
+        Transform inserted = insertedObject.transform;
+        Transform required = requiredObject.transform;
+        return inserted == required || inserted.IsChildOf(required);
+    }
+
     /// <summary>Opens the door. No effect if locked.</summary>
     public void Open()
     {
-        // 若被调用到 prefab asset 而非场景实例，转发给所有场景实例
+        // If a prefab asset receives the event, forward it to scene instances.
         if (!gameObject.scene.isLoaded)
         {
-            foreach (var dc in FindObjectsOfType<DoorController>())
-                dc.Open();
+            foreach (DoorController doorController in FindObjectsOfType<DoorController>())
+                doorController.Open();
             return;
         }
-        if (!isLocked) isOpen = true;
+
+        if (CanOpen())
+            isOpen = true;
     }
 
     /// <summary>Closes the door regardless of lock state.</summary>
@@ -53,13 +101,14 @@ public class DoorController : MonoBehaviour
     /// <summary>Removes the lock so the door can be opened.</summary>
     public void Unlock()
     {
-        // 若被调用到 prefab asset 而非场景实例，转发给所有场景实例
+        // If a prefab asset receives the event, forward it to scene instances.
         if (!gameObject.scene.isLoaded)
         {
-            foreach (var dc in FindObjectsOfType<DoorController>())
-                dc.Unlock();
+            foreach (DoorController doorController in FindObjectsOfType<DoorController>())
+                doorController.Unlock();
             return;
         }
+
         isLocked = false;
         Debug.Log($"[DoorController] {gameObject.name} unlocked.");
     }

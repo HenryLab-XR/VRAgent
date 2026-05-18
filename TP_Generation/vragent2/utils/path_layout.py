@@ -60,11 +60,11 @@ def get_step1_gobj_layer_path(results_dir: PathLike, scene_name: str) -> Path:
 
 
 def get_step2_gobj_hierarchy_path(results_dir: PathLike, scene_name: str) -> Path:
-    return get_step2_results_dir(results_dir) / f"{scene_name}_gobj_hierarchy.json"
+    return _as_path(results_dir) / f"{scene_name}_gobj_hierarchy.json"
 
 
 def get_step2_source_code_files_path(results_dir: PathLike, scene_name: str) -> Path:
-    return get_step2_results_dir(results_dir) / f"coreTP_{scene_name}_source_code_files.json"
+    return _as_path(results_dir) / f"coreTP_{scene_name}_source_code_files.json"
 
 
 def _legacy_scene_data_dir(results_dir: PathLike) -> Path:

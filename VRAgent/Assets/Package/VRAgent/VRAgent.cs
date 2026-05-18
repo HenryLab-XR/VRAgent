@@ -250,6 +250,18 @@ namespace HenryLab.VRAgent
                                 counter.hitObjCount++;
                                 manager.Add(action.objectA, objA);
                             }
+
+                            SocketActionUnit socketAction = action as SocketActionUnit;
+                            if(socketAction != null && !string.IsNullOrEmpty(socketAction.insertedObjectFileId))
+                            {
+                                counter.objCount++;
+                                GameObject insertedObj = FileIDResolver.FindGameObject(socketAction.insertedObjectFileId, useFileID);
+                                if(insertedObj != null)
+                                {
+                                    counter.hitObjCount++;
+                                    manager.Add(socketAction.insertedObjectFileId, insertedObj);
+                                }
+                            }
                         }
                         break;
                     }
@@ -451,8 +463,8 @@ namespace HenryLab.VRAgent
                     Debug.Log($"Added XRTriggerable component to {objA.name}");
 
                     if(triggerAction.trigerringTime != null) triggerable.triggeringTime = (float)triggerAction.trigerringTime;
-                    ParameterResolver.BindEventList(triggerAction.triggerringEvents, triggerable.triggerringEvents);
-                    ParameterResolver.BindEventList(triggerAction.triggerredEvents, triggerable.triggerredEvents);
+                    ParameterResolver.BindEventList(triggerAction.triggerringEvents, triggerable.triggerringEvents, new[] { objA });
+                    ParameterResolver.BindEventList(triggerAction.triggerredEvents, triggerable.triggerredEvents, new[] { objA });
 
                     task.AddRange(TriggerTask(triggerable));
                 }

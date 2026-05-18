@@ -1,243 +1,154 @@
-# TP_Generation - Python Scripts Documentation
+# TP_Generation
 
-This project contains a collection of Python scripts for analyzing Unity projects and generating test plans. The scripts work together to extract scene dependencies, analyze code structure, and generate comprehensive test plans for Unity GameObjects.
+`TP_Generation` contains the Python-side pipeline for Unity scene analysis, dependency extraction, hierarchy traversal, and LLM-assisted test-plan generation.
 
-## Project Overview
+## What This Folder Does
 
-The project is designed to:
-1. Extract and analyze Unity scene dependencies
-2. Parse C# scripts and their relationships
-3. Generate test plans for GameObjects with MonoBehavior components
-4. Create hierarchical representations of scene objects
-5. Use LLM (Large Language Model) APIs to generate intelligent test plans
+The pipeline is typically used in this order:
 
-## Python Scripts and Their Functions
+1. `ExtractSceneDependency.py`
+2. `TraverseSceneHierarchy.py`
+3. `SpecialLogicPreprocessor.py` or other preprocessing steps as needed
+4. `GenerateTestPlanModified.py`
 
-### 1. `ExtractSceneDependency.py` - Main Scene Analysis Script
-**Purpose**: This is the primary script that orchestrates the entire analysis process.
+It also includes:
 
-**Main Functions**:
-- Analyzes Unity project settings and scene files
-- Extracts GameObject hierarchies and component relationships
-- Processes C# scripts and their metadata
-- Creates scene databases with NetworkX graphs
-- Generates relationship mappings between GameObjects
+- bundled analyzer executables
+- the `vragent2` Python package
+- the Jelly dashboard server
+- verification and test scripts
 
-**Key Features**:
-- Uses UnityDataAnalyzer.exe to parse Unity assets
-- Uses CSharpAnalyzer.exe to analyze C# scripts
-- Uses CodeStructureAnalyzer.exe to analyze code structure
-- Creates GML (Graph Modeling Language) files for scene representation
-- Handles Prefab instances and their relationships
-- Extracts tag information and logic relationships
+## Python Environment
 
-**Execution**: Run this script first to set up the analysis infrastructure.
+Use a dedicated virtual environment on every machine. The project is currently recommended to run on Python `3.8.x` for consistency with the existing workflow.
 
-### 2. `TraverseSceneHierarchy.py` - Scene Hierarchy Traversal
-**Purpose**: Traverses the scene hierarchy and generates test plans for GameObjects.
+### First-Time Setup On A New Machine
 
-**Main Functions**:
-- Loads GML files created by ExtractSceneDependency.py
-- Traverses GameObject hierarchies in a structured manner
-- Identifies GameObjects with MonoBehavior components
-- Generates hierarchical test plans
-- Creates gobj_hierarchy.json with structured GameObject information
+From the repository root:
 
-**Key Features**:
-- Recursive traversal of GameObject hierarchies
-- Identification of testable objects (those with MonoBehavior components)
-- Generation of structured test plans
-- Support for Prefab instances and their modifications
-- Tag logic relationship processing
+```powershell
+cd <repo-root>
+py -3.8 -m venv .venv
+.\.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python TP_Generation\check_env.py
+```
 
-**Execution**: Run after ExtractSceneDependency.py to generate the hierarchy structure.
+If you also want the test-only dependencies:
 
-### 3. `TagLogicPreprocessor.py` - Tag Logic Preprocessing
-**Purpose**: Preprocesses tag logic information and generates sorted target logic info.
+```powershell
+python -m pip install -r TP_Generation\requirements-dev.txt
+python TP_Generation\check_env.py --dev
+```
 
-**Main Functions**:
-- Processes tag_logic_info from GameObject hierarchies
-- Uses LLM API to filter and sort tag-related GameObjects
-- Generates sorted_target_logic_info for efficient test plan generation
-- Updates gobj_hierarchy.json with processed tag information
+### Daily Use
 
-**Key Features**:
-- LLM-based filtering of relevant GameObjects
-- Tag relationship analysis
-- Preprocessing for efficient test plan generation
-- Integration with OpenAI API for intelligent filtering
+Each time you open a new terminal:
 
-**Execution**: Run after TraverseSceneHierarchy.py to preprocess tag logic.
+```powershell
+cd <repo-root>
+.\.venv\Scripts\activate
+```
 
-### 4. `GenerateTestPlan.py` - Test Plan Generation (Original)
-**Purpose**: Generates comprehensive test plans using LLM APIs.
+Check which interpreter is active:
 
-**Main Functions**:
-- Creates test plan conversations with LLM
-- Handles multi-turn dialogues for complex test scenarios
-- Processes tag logic information dynamically
-- Generates structured test plans in JSON format
+```powershell
+python -c "import sys; print(sys.executable)"
+```
 
-**Key Features**:
-- Multi-turn conversation handling
-- Dynamic tag logic processing
-- Comprehensive test plan generation
-- Support for complex GameObject relationships
+### Jelly GUI Paths
 
-**Execution**: Run after TagLogicPreprocessor.py for original test plan generation.
+The Jelly GUI is designed to be portable across machines:
 
-### 5. `GenerateTestPlanModified.py` - Test Plan Generation (Modified)
-**Purpose**: Modified version that uses preprocessed tag logic information.
+- Leave `Python Path` empty to use the Python interpreter that started Jelly, preferring the repo-local `.venv` when available.
+- Leave `Work Dir` empty to use this `TP_Generation` folder.
+- Use relative project paths when possible, for example `VRAgent` for the Unity project inside this repository.
+- Supported path tokens in GUI config: `{repo}`, `{repo_root}`, `{tp_generation}`.
+- Stale absolute paths from another machine are ignored at load time, so the GUI falls back to local defaults instead of launching an old drive path.
 
-**Main Functions**:
-- Uses sorted_target_logic_info from preprocessing
-- Generates test plans with pre-filtered tag information
-- More efficient than the original version
-- Simplified tag logic handling
+## Dependency Files
 
-**Key Features**:
-- Uses preprocessed tag information
-- More efficient test plan generation
-- Simplified conversation flow
-- Better performance for large scenes
+- `requirements.txt`: runtime dependencies used by the shipped scripts
+- `requirements-dev.txt`: runtime dependencies plus `pytest`
+- `check_env.py`: verifies Python version, required packages, and bundled analyzers
 
-**Execution**: Run after TagLogicPreprocessor.py for optimized test plan generation.
+The main entry scripts now fail with a friendly installation message if a required package such as `networkx` is missing.
 
+## Runtime Dependencies
 
-### 6. `config.py` - Configuration File
-**Purpose**: Contains all configuration settings and prompt templates.
+The committed runtime dependency list currently includes:
 
-**Main Functions**:
-- Defines file paths for analyzers
-- Contains prompt templates for LLM interactions
-- Sets up API configurations
-- Defines test plan formats
+- `networkx`
+- `openai`
+- `jsonschema`
 
-**Key Features**:
-- Centralized configuration management
-- Prompt template definitions
-- API key and endpoint configurations
-- Test plan format specifications
+Development-only extras:
 
-**Execution**: Imported by other scripts, not run directly.
+- `pytest`
 
-## Execution Order
+## External Analyzers
 
-The scripts should be executed in the following order for a complete analysis:
+These analyzers are expected to exist inside this folder:
 
-### Phase 1: Data Extraction and Analysis
-1. **`ExtractSceneDependency.py`**
-   ```bash
-   python ExtractSceneDependency.py -p <unity_project_path> -r <results_directory>
-   ```
-   - Analyzes Unity project
-   - Extracts scene dependencies
-   - Creates initial data structures
+- `UnityDataAnalyzer/UnityDataAnalyzer.exe`
+- `CSharpScriptAnalyzer/CSharpAnalyzer.exe`
+- `CodeStructureAnalyzer/CodeStructureAnalyzer.exe`
 
-### Phase 2: Hierarchy Processing
-2. **`TraverseSceneHierarchy.py`**
-   ```bash
-   python TraverseSceneHierarchy.py -r <results_directory>
-   ```
-   - Traverses scene hierarchies
-   - Generates gobj_hierarchy.json
-   - Identifies testable objects
+Run the environment check to verify all three:
 
-### Phase 3: Tag Logic Preprocessing (Optional but Recommended)
-3. **`TagLogicPreprocessor.py`**
-   ```bash
-   python TagLogicPreprocessor.py -r <results_directory> -s <scene_name> -a <app_name>
-   ```
-   - Preprocesses tag logic information
-   - Updates gobj_hierarchy.json with sorted_target_logic_info
-
-### Phase 4: Test Plan Generation
-4. **`GenerateTestPlanModified.py`** (Recommended)
-   ```bash
-   python GenerateTestPlanModified.py -r <results_directory> -s <scene_name> -a <app_name>
-   ```
-   - Generates test plans using preprocessed information
-   - More efficient and reliable
-
-   OR
-
-   **`GenerateTestPlan.py`** (Original)
-   ```bash
-   python GenerateTestPlan.py -r <results_directory> -s <scene_name> -a <app_name>
-   ```
-   - Generates test plans with dynamic tag processing
-   - More complex but comprehensive
-
-## Dependencies
-
-### External Tools
-- **UnityDataAnalyzer.exe**: Analyzes Unity project files
-- **CSharpAnalyzer.exe**: Analyzes C# scripts
-- **CodeStructureAnalyzer.exe**: Analyzes code structure
-
-### Python Libraries
-- `networkx`: Graph manipulation and analysis
-- `json`: JSON data handling
-- `os`: File system operations
-- `argparse`: Command-line argument parsing
-- `openai`: LLM API integration
-- `requests`: HTTP requests for API calls
-- `matplotlib`: Graph visualization (optional)
-
-## Output Files
-
-The scripts generate several output files:
-
-1. **`gobj_hierarchy.json`**: Structured GameObject hierarchy information
-2. **`gobj_tag.json`**: GameObject tag mappings
-3. **`*.gml`**: Graph files representing scene structures
-4. **`test_plan_conversations_*.json`**: Generated test plans
-5. **`llm_responses/`**: Directory containing LLM interaction logs
+```powershell
+python TP_Generation\check_env.py
+```
 
 ## Configuration
 
-Before running the scripts, ensure:
+Before running the LLM stages, review `config.py` and confirm:
 
-1. **API Configuration**: Update `config.py` with your OpenAI API key
-2. **Tool Paths**: Verify paths to UnityDataAnalyzer.exe, CSharpAnalyzer.exe, and CodeStructureAnalyzer.exe
-3. **Project Path**: Have the Unity project path ready
-4. **Results Directory**: Create or specify a results directory
+- analyzer paths are correct
+- API key or base URL configuration matches your environment
+- prompt templates are the ones you want to use
 
-## Usage Examples
+## Typical Commands
 
-### Complete Analysis Workflow
-```bash
-# Step 1: Extract scene dependencies
-python ExtractSceneDependency.py -p "C:/UnityProjects/MyGame" -r "Results_MyGame"
+Run from `TP_Generation`:
 
-# Step 2: Traverse hierarchy
-python TraverseSceneHierarchy.py -r "Results_MyGame"
-
-# Step 3: Preprocess tag logic
-python TagLogicPreprocessor.py -r "Results_MyGame" -s "MainScene" -a "MyGame"
-
-# Step 4: Generate test plans
-python GenerateTestPlanModified.py -r "Results_MyGame" -s "MainScene" -a "MyGame"
+```powershell
+cd <repo-root>\TP_Generation
+python .\ExtractSceneDependency.py -p "<UnityProjectPath>" -r "<ResultsDir>"
+python .\TraverseSceneHierarchy.py -r "<ResultsDir>"
+python .\SpecialLogicPreprocessor.py -r "<ResultsDir>" -s "<SceneName>" -a "<AppName>"
+python .\GenerateTestPlanModified.py -r "<ResultsDir>" -s "<SceneName>" -a "<AppName>"
 ```
 
-### Testing with Simulated LLM (No API calls)
-```bash
-python GenerateTestPlanModified.py -r "Results_MyGame" -s "MainScene" -a "MyGame" --disable-llm
+If you only want to verify environment readiness before a handoff or machine migration:
+
+```powershell
+python .\check_env.py
 ```
-
-## Notes
-
-- The scripts are designed to work with Unity projects containing C# scripts
-- LLM API calls require internet connectivity and valid API keys
-- Large projects may take significant time to process
-- The modified version (GenerateTestPlanModified.py) is recommended for better performance
-- All scripts include comprehensive error handling and logging
 
 ## Troubleshooting
 
-1. **File Not Found Errors**: Ensure all analyzer executables are in the correct paths
-2. **API Errors**: Check API key configuration and internet connectivity
-3. **Memory Issues**: For large projects, consider processing scenes individually
-4. **Permission Errors**: Ensure write permissions for the results directory
+### `ModuleNotFoundError: No module named 'networkx'`
 
-This documentation provides a comprehensive overview of the Python scripts in the Unity Dependency Extract project. Each script serves a specific purpose in the analysis pipeline, and they work together to provide a complete solution for Unity project analysis and test plan generation.
+Your Python environment has not installed the project dependencies yet.
+
+```powershell
+cd <repo-root>
+.\.venv\Scripts\activate
+python -m pip install -r requirements.txt
+```
+
+Then rerun:
+
+```powershell
+python TP_Generation\check_env.py
+```
+
+### Analyzer File Not Found
+
+If `check_env.py` reports a missing analyzer executable, confirm that the corresponding folder is present in the repository checkout and that no file was excluded during copy or sync.
+
+### Different Machines Use Different Python Interpreters
+
+Prefer the repo-local `.venv` on every machine. `start_jelly.ps1` now looks for `.venv\Scripts\python.exe` before falling back to a machine-specific global Python path.
