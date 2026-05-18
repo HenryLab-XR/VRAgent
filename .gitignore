@@ -124,6 +124,14 @@ venv/
 /VRAgent/_Experiment/
 /TP_Generation/llm_cache
 /TP_Generation/Results
-/TP_Generation/Results
 _doc/todo.md
 /_doc/ICSE27_VRAgent2.0_PVEO
+/TP_Generation/vragent2/__pycache__
+/TP_Generation/vragent2/agents/__pycache__
+
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
