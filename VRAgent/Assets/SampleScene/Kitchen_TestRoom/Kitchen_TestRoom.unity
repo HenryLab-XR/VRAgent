@@ -2585,7 +2585,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: DoorNode_A_Lobby
       objectReference: {fileID: 0}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
@@ -15024,7 +15024,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: DoorNode_B_Pantry
       objectReference: {fileID: 0}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
@@ -15070,6 +15070,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: openAngle
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiresKey
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4570469119082599206, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
+      propertyPath: requiredKeyObject
+      value: 
+      objectReference: {fileID: 915335388}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
 --- !u!4 &1906010129 stripped
