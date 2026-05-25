@@ -104,7 +104,6 @@ Thumbs.db
 
 # TP generation outputs
 TP_Generation/Results_VRAgent2.0/
-TP_Generation/Results/
 TP_Generation/Results_*/
 TP_Generation/.jelly.pid
 TP_Generation/.jelly.log
@@ -123,7 +122,6 @@ venv/
 /VRAgent/CodeCoverage/
 /VRAgent/_Experiment/
 /TP_Generation/llm_cache
-/TP_Generation/Results
 _doc/todo.md
 /_doc/ICSE27_VRAgent2.0_PVEO
 /TP_Generation/vragent2/__pycache__

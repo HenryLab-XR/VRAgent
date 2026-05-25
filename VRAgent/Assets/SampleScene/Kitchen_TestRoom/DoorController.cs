@@ -80,14 +80,6 @@ public class DoorController : MonoBehaviour
     /// <summary>Opens the door. No effect if locked.</summary>
     public void Open()
     {
-        // If a prefab asset receives the event, forward it to scene instances.
-        if (!gameObject.scene.isLoaded)
-        {
-            foreach (DoorController doorController in FindObjectsOfType<DoorController>())
-                doorController.Open();
-            return;
-        }
-
         if (CanOpen())
             isOpen = true;
     }
@@ -101,13 +93,6 @@ public class DoorController : MonoBehaviour
     /// <summary>Removes the lock so the door can be opened.</summary>
     public void Unlock()
     {
-        // If a prefab asset receives the event, forward it to scene instances.
-        if (!gameObject.scene.isLoaded)
-        {
-            foreach (DoorController doorController in FindObjectsOfType<DoorController>())
-                doorController.Unlock();
-            return;
-        }
 
         isLocked = false;
         Debug.Log($"[DoorController] {gameObject.name} unlocked.");

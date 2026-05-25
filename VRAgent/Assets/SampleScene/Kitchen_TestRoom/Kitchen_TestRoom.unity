@@ -1049,7 +1049,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: DoorNode_C_Kitchen
       objectReference: {fileID: 0}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder
@@ -3368,7 +3368,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4044343915653978978, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_Name
-      value: DoorNode
+      value: DoorNode_D_Exit
       objectReference: {fileID: 0}
     - target: {fileID: 4044343915653978979, guid: 35b2592b8cc0b5b44ad2b30d36f27d85, type: 3}
       propertyPath: m_RootOrder

@@ -1,0 +1,60 @@
+{
+  "taskUnits": [
+    {
+      "actionUnits": [
+        {
+          "type": "Trigger",
+          "source_object_name": "DoorNode_A_Lobby",
+          "source_object_fileID": "4044343915572591792",
+          "triggerring_time": 0.2,
+          "triggerring_events": [
+            {
+              "methodCallUnits": [
+                {
+                  "script_fileID": "4570469118966871284",
+                  "method_name": "Open",
+                  "parameter_fileID": []
+                }
+              ]
+            }
+          ],
+          "triggerred_events": []
+        }
+      ]
+    },
+    {
+      "actionUnits": [
+        {
+          "type": "Grab",
+          "source_object_name": "Key_Pantry",
+          "source_object_fileID": "915335388",
+          "target_object_name": "DoorNode_B_Pantry",
+          "target_object_fileID": "4044343917557724018"
+        },
+        {
+          "type": "Trigger",
+          "source_object_name": "DoorNode_B_Pantry",
+          "source_object_fileID": "4044343917557724018",
+          "triggerring_time": 0.5,
+          "triggerring_events": [
+            {
+              "methodCallUnits": [
+                {
+                  "script_fileID": "4570469118789352246",
+                  "method_name": "Unlock",
+                  "parameter_fileID": []
+                },
+                {
+                  "script_fileID": "4570469118789352246",
+                  "method_name": "Open",
+                  "parameter_fileID": []
+                }
+              ]
+            }
+          ],
+          "triggerred_events": []
+        }
+      ]
+    }
+  ]
+}
