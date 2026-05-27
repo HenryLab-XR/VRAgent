@@ -2,10 +2,11 @@
 from __future__ import annotations
 
 import argparse
-import importlib
 import sys
 from pathlib import Path
 from typing import Iterable, List, Tuple
+
+from dependency_guard import inspect_package
 
 
 ROOT = Path(__file__).resolve().parent
@@ -32,13 +33,8 @@ def check_python() -> Tuple[bool, str]:
 def check_imports(packages: Iterable[str]) -> List[Tuple[str, bool, str]]:
     rows: List[Tuple[str, bool, str]] = []
     for package in packages:
-        try:
-            importlib.import_module(package)
-            rows.append((package, True, "import ok"))
-        except ModuleNotFoundError:
-            rows.append((package, False, "not installed"))
-        except Exception as exc:  # pragma: no cover - defensive diagnostics
-            rows.append((package, False, f"import failed: {exc}"))
+        ok, detail = inspect_package(package)
+        rows.append((package, ok, detail))
     return rows
 
 
@@ -88,6 +84,8 @@ def main() -> int:
 
     print("\nEnvironment check failed.")
     print(f"Install packages with: python -m pip install -r \"{ROOT / 'requirements.txt'}\"")
+    print("If a package looks installed but still fails, force reinstall it, e.g.:")
+    print("python -m pip install --force-reinstall --no-cache-dir networkx")
     if args.dev:
         print(f"Dev extras: python -m pip install -r \"{ROOT / 'requirements-dev.txt'}\"")
     return 1

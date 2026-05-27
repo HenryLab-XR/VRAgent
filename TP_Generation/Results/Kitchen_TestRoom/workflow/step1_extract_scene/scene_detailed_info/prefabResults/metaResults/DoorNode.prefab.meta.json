@@ -1,0 +1,29 @@
+{
+  "guid": "35b2592b8cc0b5b44ad2b30d36f27d85",
+  "file_path": "E:\\HenryLab\\XRPlayer\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\Prefab\\DoorNode.prefab.meta",
+  "name": "DoorNode.prefab",
+  "type": "meta",
+  "file_size": 161,
+  "num_components": 0,
+  "COMPONENTS": [
+    {
+      "id": "PrefabImporter",
+      "PrefabImporter": [
+        {
+          "externalObjects": ""
+        },
+        {
+          "userData": ""
+        },
+        {
+          "assetBundleName": ""
+        },
+        {
+          "assetBundleVariant": ""
+        }
+      ]
+    }
+  ],
+  "ProjectName": "UnityProject",
+  "ProjectPath": null
+}

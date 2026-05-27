@@ -1,0 +1,249 @@
+{
+  "timestamp": "2026-05-27T14:12:53.528218",
+  "test_plan_path": "E:\\HenryLab\\XRPlayer\\VRAgent\\TP_Generation\\Results\\Kitchen_TestRoom\\gold-manual-kitchen-v1\\test_plan.json",
+  "total_actions": 3,
+  "executed": 3,
+  "successes": 3,
+  "failures": 0,
+  "exceptions": [],
+  "traces": [
+    {
+      "action": "Trigger:DoorNode_A_Lobby",
+      "state_before": {
+        "fileid": "4044343915572591792",
+        "name": "DoorNode_A_Lobby",
+        "active": true,
+        "position": {
+          "x": 3.911,
+          "y": -0.11,
+          "z": -1.036
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0528546162,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "DoorController",
+          "XRDirectInteractor"
+        ]
+      },
+      "state_after": {
+        "fileid": "4044343915572591792",
+        "name": "DoorNode_A_Lobby",
+        "active": true,
+        "position": {
+          "x": 3.911,
+          "y": -0.11,
+          "z": -1.036
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 319.922729,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "DoorController",
+          "XRDirectInteractor",
+          "XRTriggerable"
+        ]
+      },
+      "events": [
+        "component_added:XRTriggerable:DoorNode_A_Lobby",
+        "xrbase_initialized:DoorNode_A_Lobby",
+        "execute:MoveAction",
+        "completed:MoveAction",
+        "execute:TriggerAction",
+        "completed:TriggerAction"
+      ],
+      "success": true,
+      "duration_ms": 1073.52051
+    },
+    {
+      "action": "Grab:Key_Pantry",
+      "state_before": {
+        "fileid": "915335388",
+        "name": "Key_Pantry",
+        "active": true,
+        "position": {
+          "x": -1.99999964,
+          "y": 1.025,
+          "z": -2.0
+        },
+        "rotation": {
+          "x": 4.8871575e-06,
+          "y": -1.77924449e-06,
+          "z": -0.000403227139
+        },
+        "scale": {
+          "x": 0.1,
+          "y": 0.05,
+          "z": 0.3
+        },
+        "components": [
+          "Transform",
+          "MeshFilter",
+          "BoxCollider",
+          "MeshRenderer",
+          "Rigidbody",
+          "GrabbableKeyController",
+          "XRSimpleInteractable",
+          "XRDirectInteractor"
+        ]
+      },
+      "state_after": {
+        "fileid": "915335388",
+        "name": "Key_Pantry",
+        "active": true,
+        "position": {
+          "x": 6.35863352,
+          "y": 0.8792506,
+          "z": 0.7258574
+        },
+        "rotation": {
+          "x": 4.218364e-28,
+          "y": 36.5544243,
+          "z": -1.22707632e-27
+        },
+        "scale": {
+          "x": 0.1,
+          "y": 0.05,
+          "z": 0.3
+        },
+        "components": [
+          "Transform",
+          "MeshFilter",
+          "BoxCollider",
+          "MeshRenderer",
+          "Rigidbody",
+          "GrabbableKeyController",
+          "XRSimpleInteractable",
+          "XRDirectInteractor",
+          "XRGrabbable",
+          "Grabbable"
+        ]
+      },
+      "events": [
+        "component_added:XRGrabbable:Key_Pantry",
+        "execute:MoveAction",
+        "completed:MoveAction",
+        "execute:GrabAction",
+        "completed:GrabAction"
+      ],
+      "success": true,
+      "duration_ms": 3477.96118
+    },
+    {
+      "action": "Trigger:DoorNode_B_Pantry",
+      "state_before": {
+        "fileid": "4044343917557724018",
+        "name": "DoorNode_B_Pantry",
+        "active": true,
+        "position": {
+          "x": 7.094,
+          "y": -0.09399998,
+          "z": 0.946
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 179.498947,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "DoorController",
+          "XRDirectInteractor"
+        ]
+      },
+      "state_after": {
+        "fileid": "4044343917557724018",
+        "name": "DoorNode_B_Pantry",
+        "active": true,
+        "position": {
+          "x": 7.094,
+          "y": -0.09399998,
+          "z": 0.946
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 109.749077,
+          "z": 0.0
+        },
+        "scale": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0
+        },
+        "components": [
+          "Transform",
+          "DoorController",
+          "XRDirectInteractor",
+          "XRTriggerable"
+        ]
+      },
+      "events": [
+        "component_added:XRTriggerable:DoorNode_B_Pantry",
+        "xrbase_initialized:DoorNode_B_Pantry",
+        "execute:MoveAction",
+        "completed:MoveAction",
+        "execute:TriggerAction",
+        "completed:TriggerAction"
+      ],
+      "success": true,
+      "duration_ms": 542.2598
+    }
+  ],
+  "console_logs": [
+    "[Log] [HenryLab.XR]Entity'triggerable' Registered",
+    "[Log] [HenryLab.XR] Found parameterless method Open on DoorController",
+    "[Log] [HenryLab.XR] Successfully bound void method: DoorController.Open",
+    "[Log] Action: <color=#0080FF>MoveAction</color>",
+    "[Warning] [HenryLab.XR] Destination (3.91, -0.11, -1.04) may not be reachable, but will try",
+    "[Log] Action: <color=#0080FF>TriggerAction</color>",
+    "[Log] <b>Entity </b><color=#FFA300><b>triggerable</b></color><b> State </b><color=#00FF00><b>Triggerring</b></color>",
+    "[Warning] Could not find XRBaseController component on VRAgent2.0-PVEO (UnityEngine.GameObject) or any of its parents.",
+    "[Log] <b>Entity </b><color=#FFA300><b>triggerable</b></color><b> State </b><color=#00FF00><b>Triggerred</b></color>",
+    "[Log] [HenryLab.XR]Entity'grabbable' Registered",
+    "[Log] Can't add 'XRDirectInteractor' to Key_Pantry because a 'XRDirectInteractor' is already added to the game object!\nA GameObject can only contain one 'XRBaseInteractor' component.",
+    "[Log] Action: <color=#0080FF>MoveAction</color>",
+    "[Log] Action: <color=#0080FF>GrabAction</color>",
+    "[Log] <b>Entity </b><color=#FFA300><b>grabbable</b></color><b> State </b><color=#00FF00><b>Grabbed</b></color>",
+    "[Log] [RecipeController] Step 1 PASSED — pantry key picked up.",
+    "[Log] Action: <color=#0080FF>MoveAction</color>",
+    "[Warning] [HenryLab.XR] Destination (7.09, -0.09, 0.95) may not be reachable, but will try",
+    "[Log] [HenryLab.XR]Entity'triggerable' Registered",
+    "[Log] [HenryLab.XR] Found parameterless method Unlock on DoorController",
+    "[Log] [HenryLab.XR] Successfully bound void method: DoorController.Unlock",
+    "[Log] [HenryLab.XR] Found parameterless method Open on DoorController",
+    "[Log] [HenryLab.XR] Successfully bound void method: DoorController.Open",
+    "[Log] Action: <color=#0080FF>MoveAction</color>",
+    "[Warning] [HenryLab.XR] Destination (7.09, -0.09, 0.95) may not be reachable, but will try",
+    "[Log] Action: <color=#0080FF>TriggerAction</color>",
+    "[Log] <b>Entity </b><color=#FFA300><b>triggerable</b></color><b> State </b><color=#00FF00><b>Triggerring</b></color>",
+    "[Log] [DoorController] DoorNode_B_Pantry unlocked.",
+    "[Log] <b>Entity </b><color=#FFA300><b>triggerable</b></color><b> State </b><color=#00FF00><b>Triggerred</b></color>"
+  ],
+  "gates_solved": [
+    "Trigger:DoorNode_A_Lobby",
+    "Grab:Key_Pantry",
+    "Trigger:DoorNode_B_Pantry"
+  ],
+  "gates_failed": []
+}

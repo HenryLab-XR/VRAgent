@@ -1,0 +1,17 @@
+[
+  "CuttingBoardController.cs",
+  "DoorController.cs",
+  "EditorPlayerController.cs",
+  "FinalExitTrigger.cs",
+  "GrabbableKeyController.cs",
+  "KnifeSlotDetector.cs",
+  "LockedCabinetController.cs",
+  "MixingBowlController.cs",
+  "MixingBowlSocket.cs",
+  "PowerSwitchController.cs",
+  "RecipeController.cs",
+  "ServingCounterSocket.cs",
+  "ServingPlateSocket.cs",
+  "SinkWashStation.cs",
+  "StoveController.cs"
+]

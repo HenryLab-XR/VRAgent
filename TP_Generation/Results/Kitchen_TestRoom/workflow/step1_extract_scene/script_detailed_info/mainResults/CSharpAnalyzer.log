@@ -1,0 +1,83 @@
+2026/5/27 14:00:18 Results File: E:\HenryLab\XRPlayer\VRAgent\TP_Generation\Results\Kitchen_TestRoom\workflow\step1_extract_scene\script_detailed_info\mainResults\CodeAnalysis.json
+2026/5/27 14:00:18 Project: C# Project
+2026/5/27 14:00:18 Directory Analyzed: E:\HenryLab\XRPlayer\VRAgent\VRAgent\Assets
+2026/5/27 14:00:18 Config File: Config.json
+2026/5/27 14:00:18 Statements: False
+2026/5/27 14:00:18 Verbose: False
+2026/5/27 14:00:18 Project Path: E:\HenryLab\XRPlayer\VRAgent\VRAgent\Assets
+2026/5/27 14:00:18 Log Level: Debug
+2026/5/27 14:00:18 Config File Not Found!
+2026/5/27 14:00:18 Additional Assemblies: None
+2026/5/27 14:00:18 Analysis Started...
+2026/5/27 14:00:18 Loading Project Assemblies...
+2026/5/27 14:00:18 Nothing Found!
+2026/5/27 14:00:18 Loading Config Assemblies Directories...
+2026/5/27 14:00:18 Nothing Found!
+2026/5/27 14:00:18 Loading Project...
+2026/5/27 14:00:18 Loaded 62 .cs files!
+2026/5/27 14:00:18 Analyzing ExportEditorLogWindow
+2026/5/27 14:00:20 Analyzing TagInitializer
+2026/5/27 14:00:20 Analyzing TestPlanImporterWindow
+2026/5/27 14:00:20 Analyzing NavMeshPointChecker
+2026/5/27 14:00:20 Analyzing FileIDContainer
+2026/5/27 14:00:20 Analyzing FileIdResolver
+2026/5/27 14:00:20 Analyzing ParameterResolver
+2026/5/27 14:00:20 Analyzing SocketAction
+2026/5/27 14:00:20 Analyzing VRAgent
+2026/5/27 14:00:20 Analyzing ActionDef
+2026/5/27 14:00:20 Analyzing ActionUnitConverter
+2026/5/27 14:00:20 Analyzing TaskDef
+2026/5/27 14:00:20 Analyzing AgentBridge
+2026/5/27 14:00:21 Analyzing AgentProtocol
+2026/5/27 14:00:21 Analyzing EditorPlayerController
+2026/5/27 14:00:21 Analyzing StateCollector
+2026/5/27 14:00:21 Analyzing VRAgentOnline
+2026/5/27 14:00:21 Analyzing FaucetController
+2026/5/27 14:00:21 Analyzing FridgeDoorController
+2026/5/27 14:00:21 Analyzing StoveBurnerController
+2026/5/27 14:00:21 Analyzing TableLampController
+2026/5/27 14:00:21 Analyzing TVController
+2026/5/27 14:00:21 Analyzing AlarmClockController
+2026/5/27 14:00:21 Analyzing BookController
+2026/5/27 14:00:21 Analyzing CeilingFanController
+2026/5/27 14:00:21 Analyzing ComputerController
+2026/5/27 14:00:21 Analyzing CurtainController
+2026/5/27 14:00:21 Analyzing DeskLampController
+2026/5/27 14:00:21 Analyzing DrawerController
+2026/5/27 14:00:21 Analyzing GlobeController
+2026/5/27 14:00:21 Analyzing MainLightSwitchController
+2026/5/27 14:00:21 Analyzing MirrorDoorController
+2026/5/27 14:00:21 Analyzing MusicPlayerController
+2026/5/27 14:00:21 Analyzing TrophySocketController
+2026/5/27 14:00:21 Analyzing WindowController
+2026/5/27 14:00:21 Analyzing DrawerController
+2026/5/27 14:00:21 Analyzing KeyUnlockReceiver
+2026/5/27 14:00:21 Analyzing LightSwitchController
+2026/5/27 14:00:21 Analyzing CuttingBoardController
+2026/5/27 14:00:21 Analyzing DoorController
+2026/5/27 14:00:21 Analyzing FinalExitTrigger
+2026/5/27 14:00:21 Analyzing GrabbableKeyController
+2026/5/27 14:00:21 Analyzing KitchenBadgeUnlockReceiver
+2026/5/27 14:00:21 Analyzing KnifeSlotDetector
+2026/5/27 14:00:21 Analyzing LockedCabinetController
+2026/5/27 14:00:21 Analyzing MixingBowlController
+2026/5/27 14:00:21 Analyzing MixingBowlSocket
+2026/5/27 14:00:21 Analyzing OracleRegistry
+2026/5/27 14:00:21 Analyzing PantryKeyUnlockReceiver
+2026/5/27 14:00:21 Analyzing PowerSwitchController
+2026/5/27 14:00:21 Analyzing RecipeController
+2026/5/27 14:00:21 Analyzing ServingCounterSocket
+2026/5/27 14:00:21 Analyzing ServingPlateSocket
+2026/5/27 14:00:21 Analyzing SinkWashStation
+2026/5/27 14:00:21 Analyzing StoveController
+2026/5/27 14:00:21 Analyzing DrumPadController
+2026/5/27 14:00:21 Analyzing MetronomeController
+2026/5/27 14:00:21 Analyzing PianoKeyController
+2026/5/27 14:00:21 Analyzing SynthAudioGenerator
+2026/5/27 14:00:21 Analyzing XylophoneBarController
+2026/5/27 14:00:21 Analyzing DestroyTarget
+2026/5/27 14:00:21 Analyzing ExitRoom
+2026/5/27 14:00:21 Converting to JSON format...
+2026/5/27 14:00:21 Done!
+2026/5/27 14:00:21 Saving Results in E:\HenryLab\XRPlayer\VRAgent\TP_Generation\Results\Kitchen_TestRoom\workflow\step1_extract_scene\script_detailed_info\mainResults\CodeAnalysis.json
+2026/5/27 14:00:21 Done!

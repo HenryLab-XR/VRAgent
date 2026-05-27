@@ -1,0 +1,89 @@
+{
+  "ProjectName": "C# Project",
+  "ProjectDirectory": "E:\\HenryLab\\XRPlayer\\VRAgent\\VRAgent\\Assets",
+  "ProjectLanguage": "C#",
+  "DatasetPath": "E:\\HenryLab\\XRPlayer\\VRAgent\\TP_Generation\\Results\\Kitchen_TestRoom\\workflow\\step1_extract_scene\\script_detailed_info\\mainResults\\CodeAnalysis.json",
+  "StructureList": [
+    {
+      "Name": "AllInstantiate",
+      "Occurrency": 0,
+      "Structure": []
+    },
+    {
+      "Name": "TransformFind",
+      "Occurrency": 1,
+      "Structure": [
+        {
+          "Script": "E:\\HenryLab\\XRPlayer\\VRAgent\\VRAgent\\Assets\\Package\\VRAgent2.0-PVEO\\Online\\EditorPlayerController.cs",
+          "Name": "transform.Find",
+          "Invocation": "transform.Find",
+          "Line": 42,
+          "Arguments": [
+            {
+              "Argument": "\"TrackingSpace\"",
+              "IsInvocation": false,
+              "IsLiteral": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "GameObjectFindWithTag",
+      "Occurrency": 0,
+      "Structure": []
+    },
+    {
+      "Name": "GameObjectFind",
+      "Occurrency": 0,
+      "Structure": []
+    },
+    {
+      "Name": "TransformGetChild",
+      "Occurrency": 0,
+      "Structure": []
+    },
+    {
+      "Name": "CompareTag",
+      "Occurrency": 2,
+      "Structure": [
+        {
+          "Script": "E:\\HenryLab\\XRPlayer\\VRAgent\\VRAgent\\Assets\\SampleScene\\Kitchen_TestRoom\\FinalExitTrigger.cs",
+          "Name": "other.CompareTag",
+          "Invocation": "other.CompareTag",
+          "Line": 23,
+          "Arguments": [
+            {
+              "Argument": "PlayerTag",
+              "IsInvocation": false,
+              "IsLiteral": false
+            }
+          ]
+        },
+        {
+          "Script": "E:\\HenryLab\\XRPlayer\\VRAgent\\VRAgent\\Assets\\Scripts\\Test\\ExitRoom.cs",
+          "Name": "collision.gameObject.CompareTag",
+          "Invocation": "collision.gameObject.CompareTag",
+          "Line": 7,
+          "Arguments": [
+            {
+              "Argument": "\"Player\"",
+              "IsInvocation": false,
+              "IsLiteral": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "GameObjectFindGameObjectsWithTag",
+      "Occurrency": 0,
+      "Structure": []
+    },
+    {
+      "Name": "NameToLayer",
+      "Occurrency": 0,
+      "Structure": []
+    }
+  ]
+}
