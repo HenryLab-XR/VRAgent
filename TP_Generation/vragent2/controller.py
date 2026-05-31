@@ -545,6 +545,10 @@ class VRAgentController:
         # Inject blackboard context into planner
         if self.world_state.scene_understanding:
             planner_input["scene_context"] = self.world_state.to_prompt_summary()
+            # v2.2: also pass the structured SceneUnderstandingOutput so the
+            # planner can emit gate-chain / interaction-dependency sections
+            # directly into its first_request prompt.
+            planner_input["scene_understanding"] = self.world_state.scene_understanding.to_dict()
         # Observer strategy instruction → planner directive
         if self.world_state.strategy and self.world_state.strategy.planner_instruction:
             planner_input["observer_instruction"] = self.world_state.strategy.planner_instruction

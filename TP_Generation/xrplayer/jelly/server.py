@@ -1453,6 +1453,99 @@ class _JellyHandler(BaseHTTPRequestHandler):
             self._send_json({"options": all_options})
             return
 
+        # ── v2.2 offline plan validation (schema + dep-graph + state machine) ──
+        if path == "/api/validate_plan":
+            plan_path_param = (qs.get("path") or [None])[0]
+            if not plan_path_param:
+                self._send_json({"error": "missing path parameter"}, status=HTTPStatus.BAD_REQUEST)
+                return
+            # Resolve: try relative to results_root first, then absolute
+            plan_path: Optional[Path] = None
+            try:
+                cand = (self._root / plan_path_param).resolve()
+                if cand.is_file():
+                    plan_path = cand
+            except Exception:
+                pass
+            if plan_path is None:
+                try:
+                    cand2 = Path(plan_path_param).resolve()
+                    if cand2.is_file():
+                        plan_path = cand2
+                except Exception:
+                    pass
+            if plan_path is None:
+                self._not_found(f"test_plan.json not found: {plan_path_param}")
+                return
+            try:
+                plan_data = json.loads(plan_path.read_text(encoding="utf-8"))
+            except Exception as exc:
+                self._send_json({"error": f"failed to parse JSON: {exc}"}, status=HTTPStatus.BAD_REQUEST)
+                return
+
+            task_units: List[Dict[str, Any]] = plan_data.get("taskUnits") or []
+            is_v2 = any(
+                t.get("task_id") or t.get("intent") or
+                any((au.get("depends_on_task_index") or []) for au in (t.get("actionUnits") or []))
+                for t in task_units
+            )
+            vp_result: Dict[str, Any] = {
+                "plan_path": str(plan_path),
+                "is_v2": is_v2,
+                "task_count": len(task_units),
+                "findings": [],
+                "schema_errors": 0,
+                "dep_errors": 0,
+                "dup_errors": 0,
+                "sm_errors": [],
+                "violations": [],
+                "state_trace": [],
+            }
+
+            # --- Static offline validators ---
+            try:
+                tp_root = str(self._root)
+                if tp_root not in sys.path:
+                    sys.path.insert(0, tp_root)
+                from validateTestPlan import validate_schema, rule_duplicate_plan, rule_dependency_graph  # type: ignore
+                _findings: List[Dict[str, Any]] = []
+                _findings.extend(validate_schema(plan_data))
+                _findings.extend(rule_duplicate_plan(plan_data))
+                _findings.extend(rule_dependency_graph(plan_data))
+                vp_result["findings"] = _findings
+                vp_result["schema_errors"] = sum(1 for f in _findings if f.get("level") == "SCHEMA")
+                vp_result["dep_errors"] = sum(1 for f in _findings if f.get("type") in ("invalid_dependency", "duplicate_dependency"))
+                vp_result["dup_errors"] = sum(1 for f in _findings if f.get("level") == "DUPLICATE")
+            except Exception as exc:
+                vp_result["validate_error"] = str(exc)
+
+            # --- Symbolic state-machine simulation ---
+            try:
+                from vragent2.agents.verifier import VerifierAgent  # type: ignore
+                _va = VerifierAgent.__new__(VerifierAgent)
+                _sm_errors, _violations, _trace = _va._simulate_state_machine(task_units)
+                vp_result["sm_errors"] = [{"type": e.type, "message": e.message} for e in _sm_errors]
+                vp_result["violations"] = _violations
+                # Enrich each trace entry with intent + required/produced from plan
+                for _te in _trace:
+                    _ti = _te.get("task_index", 0)
+                    if _ti < len(task_units):
+                        _task = task_units[_ti]
+                        _te["intent"] = _task.get("intent", "")
+                        _all_req: List[str] = []
+                        _all_prod: List[str] = []
+                        for _au in (_task.get("actionUnits") or []):
+                            _all_req.extend(_au.get("required_state_changes") or [])
+                            _all_prod.extend(_au.get("produced_state_changes") or [])
+                        _te["required_state_changes"] = _all_req
+                        _te["produced_state_changes"] = _all_prod
+                vp_result["state_trace"] = _trace
+            except Exception as exc:
+                vp_result["sm_error"] = str(exc)
+
+            self._send_json(vp_result)
+            return
+
         if path == "/api/unity_coverage":
             xml_param = (qs.get("xml_path") or [None])[0]
             if xml_param:
@@ -1787,6 +1880,7 @@ class _JellyHandler(BaseHTTPRequestHandler):
                 ("app_name",        "--app_name"),
                 ("model",           "--model"),
                 ("api_base",        "--api_base"),
+                ("proxy_url",       "--proxy_url"),
                 ("scripts_dir",     "--scripts_dir"),
                 ("unity_host",      "--unity_host"),
                 ("scene_doc",       "--scene_doc"),

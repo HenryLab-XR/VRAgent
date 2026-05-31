@@ -24,8 +24,8 @@ from urllib import request as urllib_request
 # Regex to strip <think>...</think> blocks (some reasoning models emit these)
 _THINK_RE = re.compile(r"<\s*think\s*>.*?<\s*/\s*think\s*>", re.IGNORECASE | re.DOTALL)
 
-# Local proxy for API access
-_PROXY_URL = "http://127.0.0.1:15236"
+# Local proxy for API access (empty = no proxy; override with --proxy_url or HTTPS_PROXY env var)
+_PROXY_URL = ""
 
 
 class LLMClient:

@@ -82,15 +82,23 @@ class VerifierAgent(BaseAgent):
         input_data : dict
             Required keys:
                 actions – list of action-unit dicts from Planner
+            Optional keys (v2.2):
+                task_units – list of TaskUnit dicts (with depends_on_task_index /
+                             required_state_changes / produced_state_changes).
+                             When present, enables symbolic state-machine
+                             simulation across taskUnits.
 
         Returns
         -------
         dict matching VerifierOutput schema + ``evidence`` list.
         """
         actions: List[Dict] = input_data.get("actions", [])
+        task_units: Optional[List[Dict]] = input_data.get("task_units")
         errors: List[VerifierError] = []
         patched: List[Dict] = []
         evidence: List[Dict[str, Any]] = []
+        dependency_violations: List[Dict[str, Any]] = []
+        state_trace: List[Dict[str, Any]] = []
 
         # ── Build structured verifier context from RetrievalLayer ────
         ctx = self.retrieval.build_verifier_context(actions)
@@ -109,6 +117,13 @@ class VerifierAgent(BaseAgent):
         # Repeated-invalid-target detection
         repeat_errors = self._detect_repeated_invalid_targets(actions, ctx)
         errors.extend(repeat_errors)
+
+        # v2.2: symbolic state-machine simulation across taskUnits
+        if task_units:
+            sim_errors, dependency_violations, state_trace = (
+                self._simulate_state_machine(task_units)
+            )
+            errors.extend(sim_errors)
 
         total = len(actions)
         valid = len(patched)
@@ -135,6 +150,8 @@ class VerifierAgent(BaseAgent):
             errors=errors,
             passed=passed,
             patched_actions=patched,
+            dependency_violations=dependency_violations,
+            state_trace=state_trace,
         )
         result = output.to_dict()
         result["evidence"] = evidence
@@ -502,6 +519,175 @@ class VerifierAgent(BaseAgent):
         except Exception as exc:
             print(f"[VERIFIER] LLM review failed: {exc}")
             return ""
+
+    # ------------------------------------------------------------------
+    # v2.2: Symbolic state-machine simulation
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_state_change(s: str) -> Optional[tuple]:
+        """Parse a ``<ObjectName>.<field>=<value>`` string.
+
+        Returns ``(key, value)`` where ``key = "<ObjectName>.<field>"``,
+        or ``None`` for malformed input.
+        """
+        if not isinstance(s, str) or "=" not in s or "." not in s.split("=", 1)[0]:
+            return None
+        key, value = s.split("=", 1)
+        return key.strip(), value.strip()
+
+    def _simulate_state_machine(
+        self, task_units: List[Dict[str, Any]]
+    ) -> tuple:
+        """Statically simulate symbolic state across ordered taskUnits.
+
+        For each taskUnit (in order):
+          1. Verify every ``required_state_changes`` assertion matches the
+             current ``world_state`` (key present and value equal).
+          2. Verify ``depends_on_task_index`` is internally consistent: all
+             indices < current index and at least one referenced task
+             actually produced a key the current task requires (best-effort).
+          3. Merge ``produced_state_changes`` into ``world_state``.
+
+        Returns ``(errors, violations, trace)`` where ``trace`` is a list
+        of per-task snapshots.
+        """
+        errors: List[VerifierError] = []
+        violations: List[Dict[str, Any]] = []
+        trace: List[Dict[str, Any]] = []
+        world_state: Dict[str, str] = {}
+
+        # Pre-index which tasks produce which keys for cross-checking
+        produced_index: Dict[int, set] = {}
+        for ti, task in enumerate(task_units):
+            produced_keys: set = set()
+            for au in task.get("actionUnits", []) or []:
+                for s in au.get("produced_state_changes", []) or []:
+                    parsed = self._parse_state_change(s)
+                    if parsed:
+                        produced_keys.add(parsed[0])
+            produced_index[ti] = produced_keys
+
+        for ti, task in enumerate(task_units):
+            task_id = task.get("task_id") or f"taskUnits[{ti}]"
+            for ai, au in enumerate(task.get("actionUnits", []) or []):
+                loc = f"taskUnits[{ti}].actionUnits[{ai}]"
+                deps = au.get("depends_on_task_index", []) or []
+                required = au.get("required_state_changes", []) or []
+                produced = au.get("produced_state_changes", []) or []
+
+                # (1) Dependency-index sanity (defensive; rule_dependency_graph
+                # in validateTestPlan.py also checks this for offline validation)
+                for d in deps:
+                    if not isinstance(d, int) or d < 0 or d >= ti:
+                        errors.append(VerifierError(
+                            type=VerifierErrorType.INVALID_DEPENDENCY.value,
+                            location=f"{loc}.depends_on_task_index",
+                            fix_suggestion=(
+                                f"Dependency index {d!r} is invalid for {task_id} "
+                                f"(must be a non-negative int < {ti})."
+                            ),
+                        ))
+                        violations.append({
+                            "from_task": d,
+                            "to_task": ti,
+                            "reason": "invalid_index",
+                            "evidence": f"index {d!r} out of [0, {ti})",
+                        })
+
+                # (2) Required preconditions
+                for req in required:
+                    parsed = self._parse_state_change(req)
+                    if parsed is None:
+                        errors.append(VerifierError(
+                            type=VerifierErrorType.SCHEMA_ERROR.value,
+                            location=f"{loc}.required_state_changes",
+                            fix_suggestion=(
+                                f"State string '{req}' must be in form "
+                                "'<ObjectName>.<field>=<value>'."
+                            ),
+                        ))
+                        continue
+                    key, expected = parsed
+                    actual = world_state.get(key)
+                    if actual is None:
+                        errors.append(VerifierError(
+                            type=VerifierErrorType.MISSING_PRECONDITION.value,
+                            location=f"{loc}.required_state_changes",
+                            fix_suggestion=(
+                                f"{task_id} requires '{req}' but no prior task "
+                                f"produced key '{key}'. Insert a task that "
+                                f"produces it or remove this requirement."
+                            ),
+                        ))
+                        violations.append({
+                            "from_task": None,
+                            "to_task": ti,
+                            "missing_state": req,
+                            "reason": "key_never_produced",
+                        })
+                    elif actual != expected:
+                        errors.append(VerifierError(
+                            type=VerifierErrorType.MISSING_PRECONDITION.value,
+                            location=f"{loc}.required_state_changes",
+                            fix_suggestion=(
+                                f"{task_id} requires '{req}' but current state "
+                                f"is '{key}={actual}'."
+                            ),
+                        ))
+                        violations.append({
+                            "from_task": None,
+                            "to_task": ti,
+                            "missing_state": req,
+                            "actual": f"{key}={actual}",
+                            "reason": "value_mismatch",
+                        })
+                    else:
+                        # Match found: also flag missing dependency declaration
+                        producer = next(
+                            (pi for pi in range(ti) if key in produced_index.get(pi, set())),
+                            None,
+                        )
+                        if producer is not None and producer not in deps:
+                            errors.append(VerifierError(
+                                type=VerifierErrorType.MISSING_DECLARED_DEP.value,
+                                location=f"{loc}.depends_on_task_index",
+                                fix_suggestion=(
+                                    f"{task_id} consumes '{req}' produced by "
+                                    f"taskUnits[{producer}] but does not list "
+                                    f"{producer} in depends_on_task_index."
+                                ),
+                            ))
+                            violations.append({
+                                "from_task": producer,
+                                "to_task": ti,
+                                "missing_state": req,
+                                "reason": "undeclared_dependency",
+                            })
+
+                # (3) Merge produced state into world
+                for prod in produced:
+                    parsed = self._parse_state_change(prod)
+                    if parsed is None:
+                        errors.append(VerifierError(
+                            type=VerifierErrorType.SCHEMA_ERROR.value,
+                            location=f"{loc}.produced_state_changes",
+                            fix_suggestion=(
+                                f"State string '{prod}' must be in form "
+                                "'<ObjectName>.<field>=<value>'."
+                            ),
+                        ))
+                        continue
+                    key, value = parsed
+                    world_state[key] = value
+
+            trace.append({
+                "task_index": ti,
+                "task_id": task_id,
+                "world_state": dict(world_state),
+            })
+
+        return errors, violations, trace
 
     # ------------------------------------------------------------------
     # Helpers

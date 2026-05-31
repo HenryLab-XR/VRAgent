@@ -273,6 +273,8 @@ def parse_args() -> argparse.Namespace:
                    help="LLM model identifier")
     p.add_argument("--api_key", default=None,
                    help="OpenAI API key (or set OPENAI_API_KEY env var)")
+    p.add_argument("--proxy_url", default="",
+                        help="HTTP proxy URL for LLM API calls, e.g. http://127.0.0.1:15236 (empty = no proxy)")
     p.add_argument("--api_base", default=None,
                    help="OpenAI API base URL override")
     p.add_argument("--scripts_dir", default=None,
@@ -517,7 +519,7 @@ def main() -> None:
             print("[ERROR] No API base URL. Set --api_base, OPENAI_API_BASE, or OPENAI_BASE_URL.")
             sys.exit(1)
 
-        llm = LLMClient(api_key=api_key, base_url=api_base)
+        llm = LLMClient(api_key=api_key, base_url=api_base, proxy_url=getattr(args, "proxy_url", "") or "")
 
     # ── Retrieval Layer ───────────────────────────────────────────────
     hierarchy_data = load_json(args.hierarchy_json)

@@ -9,11 +9,24 @@ namespace HenryLab.VRAgent
     {
         public string type;
         [JsonProperty("source_object_fileID")] public string objectA;
+
+        // Name-based fallback when runtime FileID does not resolve
+        // (LLM-generated plans may carry static design-time FileIDs that
+        // differ from the live Unity GlobalObjectId at Play time).
+        [JsonProperty("source_object_name")] public string objectAName;
+
+        // v2.2: sequential-dependency metadata. Preserved through serialization
+        // but NOT consumed at execution time — VerifierAgent validates these
+        // statically before the test plan is run.
+        [JsonProperty("depends_on_task_index")] public List<int>? dependsOnTaskIndex;
+        [JsonProperty("required_state_changes")] public List<string>? requiredStateChanges;
+        [JsonProperty("produced_state_changes")] public List<string>? producedStateChanges;
     }
 
     public class GrabActionUnit : ActionUnit
     {
         [JsonProperty("target_object_fileID")] public string? objectB;
+        [JsonProperty("target_object_name")] public string? objectBName;
         [JsonProperty("target_position")] public Vector3? targetPosition;
     }
 
@@ -39,6 +52,7 @@ namespace HenryLab.VRAgent
     public class MoveActionUnit : ActionUnit
     {
         [JsonProperty("target_object_fileID")] public string? objectB;
+        [JsonProperty("target_object_name")] public string? objectBName;
         [JsonProperty("target_position")] public Vector3? targetPosition;
     }
 

@@ -550,7 +550,7 @@ namespace HenryLab.VRAgent.Online
                     if(!string.IsNullOrEmpty(action.objectA))
                     {
                         objTotal++;
-                        GameObject go = FileIDResolver.FindGameObject(action.objectA, cmd.useFileId);
+                        GameObject go = ResolveObject(action.objectA, action.objectAName, cmd.useFileId);
                         if(go != null)
                         {
                             objFound++;
@@ -562,7 +562,7 @@ namespace HenryLab.VRAgent.Online
                     if(action is GrabActionUnit grab && !string.IsNullOrEmpty(grab.objectB))
                     {
                         objTotal++;
-                        GameObject go = FileIDResolver.FindGameObject(grab.objectB, cmd.useFileId);
+                        GameObject go = ResolveObject(grab.objectB, grab.objectBName, cmd.useFileId);
                         if(go != null)
                         {
                             objFound++;
@@ -580,7 +580,7 @@ namespace HenryLab.VRAgent.Online
                     if(action is SocketActionUnit socket && !string.IsNullOrEmpty(socket.insertedObjectFileId))
                     {
                         objTotal++;
-                        GameObject insertedObj = FileIDResolver.FindGameObject(socket.insertedObjectFileId, cmd.useFileId);
+                        GameObject insertedObj = ResolveObject(socket.insertedObjectFileId, null, cmd.useFileId);
                         if(insertedObj != null)
                         {
                             objFound++;
@@ -602,6 +602,55 @@ namespace HenryLab.VRAgent.Online
                 componentsFound = compFound,
                 componentsTotal = compTotal,
             });
+        }
+
+        // -----------------------------------------------------------------
+        // ResolveObject: FileID first, fall back to scene-name lookup
+        //
+        // LLM-generated plans often carry static design-time FileIDs that
+        // do NOT match Unity's runtime GlobalObjectId at Play time
+        // (especially for prefab instances).  When the FileID lookup fails,
+        // we fall back to finding a GameObject by its hierarchy name —
+        // gameobject names from the planner's catalog are unique enough
+        // for our scenes (e.g. Switch_Hall_Toggle, Door_Entrance_Pivot).
+        // -----------------------------------------------------------------
+        private GameObject ResolveObject(string fileId, string fallbackName, bool useFileId)
+        {
+            GameObject go = null;
+#if UNITY_EDITOR
+            if(!string.IsNullOrEmpty(fileId))
+            {
+                go = FileIDResolver.FindGameObject(fileId, useFileId);
+                if(go != null) return go;
+            }
+#endif
+            if(!string.IsNullOrEmpty(fallbackName))
+            {
+                go = FindGameObjectByName(fallbackName);
+                if(go != null)
+                {
+                    Debug.Log($"[AgentOnline] FileID '{fileId}' not found — resolved by name '{fallbackName}'");
+                }
+                else
+                {
+                    Debug.LogWarning($"[AgentOnline] Cannot resolve object: fileID='{fileId}', name='{fallbackName}'");
+                }
+            }
+            return go;
+        }
+
+        private static GameObject FindGameObjectByName(string name)
+        {
+            if(string.IsNullOrEmpty(name)) return null;
+            // GameObject.Find only walks active roots — fall back to a full scan
+            // for inactive / nested objects.
+            GameObject direct = GameObject.Find(name);
+            if(direct != null) return direct;
+            foreach(GameObject go in GameObject.FindObjectsOfType<GameObject>(true))
+            {
+                if(go.name == name) return go;
+            }
+            return null;
         }
 
         // =================================================================

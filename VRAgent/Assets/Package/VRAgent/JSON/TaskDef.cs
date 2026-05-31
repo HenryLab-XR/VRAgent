@@ -6,7 +6,15 @@ namespace HenryLab.VRAgent
 {
     [Serializable] public class TaskList { [JsonProperty("taskUnits")] public List<TaskUnit> taskUnits; }
 
-    [Serializable] public class TaskUnit { [JsonProperty("actionUnits")] public List<ActionUnit> actionUnits; }
+    [Serializable]
+    public class TaskUnit
+    {
+        [JsonProperty("actionUnits")] public List<ActionUnit> actionUnits;
+
+        // v2.2: optional metadata for cross-task references and logging.
+        [JsonProperty("task_id")] public string? taskId;
+        [JsonProperty("intent")] public string? intent;
+    }
 
     [Serializable] public class eventUnit { [JsonProperty("methodCallUnits")] public List<methodCallUnit> methodCallUnits; }
 

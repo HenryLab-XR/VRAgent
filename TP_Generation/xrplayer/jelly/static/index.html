@@ -412,6 +412,13 @@
         <button class="btn danger"  id="btnStop"  onclick="stopRun()" disabled data-tip="终止当前正在运行的探索进程">&#x25A0; 停止</button>
         <span id="runStateLabel" class="meta"></span>
       </div>
+      <div class="field-row" style="margin-top:6px;align-items:center">
+        <label style="color:var(--muted);font-size:11px"></label>
+        <span class="meta" style="font-size:11px;margin-right:6px;flex-shrink:0">v2.2 已启用：</span>
+        <span class="tag purple" style="font-size:10px;margin-right:4px" data-tip="Planner 自动注入 SEQUENTIAL_ORDERING_INSTRUCTION&#10;包含 Kitchen 因果链示例，引导 LLM 按顺序声明依赖">Sequential Ordering</span>
+        <span class="tag purple" style="font-size:10px;margin-right:4px" data-tip="Planner 接收 SceneUnderstanding 结构化因果上下文&#10;gate_chains / interaction_dependencies / object_roles">SceneUnderstanding</span>
+        <span class="tag purple" style="font-size:10px" data-tip="Verifier 执行符号状态机模拟&#10;检查 required_state_changes / produced_state_changes 因果链合法性">State Machine Verifier</span>
+      </div>
     </div>
   </div>
 
@@ -426,8 +433,18 @@
     <div class="wf-step-body" style="margin-top:10px">
       <div class="field-row">
         <label data-tip="要重放的模型结果目录&#10;自动扫描 Results/ 下所有 &lt;scene&gt;/&lt;model&gt;/test_plan.json">模型结果</label>
-        <select id="replayModelSel" style="flex:1"><option value="auto">-- auto（使用最近运行）--</option></select>
+        <select id="replayModelSel" style="flex:1" onchange="onReplaySelChange()"><option value="auto">-- auto（使用最近运行）--</option></select>
         <button class="btn ghost sm" onclick="refreshReplayOptions()" data-tip="重新扫描 Results/ 目录">&#x27F3;</button>
+      </div>
+      <div class="field-row">
+        <label data-tip="手动输入或粘贴 test_plan.json 路径&#10;填写后优先级高于上方下拉选择&#10;支持绝对路径或相对 Results/ 的路径">自定义路径</label>
+        <input id="replayCustomPath" placeholder="（可选）例如 Kitchen_TestRoom/gold-manual-kitchen-v2/test_plan.json" style="flex:1" oninput="onReplaySelChange()" />
+        <button class="btn-browse" onclick="browseFile('replayCustomPath')" title="浏览">&#x1F4C2;</button>
+      </div>
+      <!-- v2.2 plan info badge (shown after scan/validate) -->
+      <div id="replayPlanInfo" style="display:none;margin:4px 0 6px 118px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span id="replayV2Badge" class="tag purple" style="font-size:10px;display:none" data-tip="计划含 v2.2 依赖字段&#10;task_id / intent / depends_on_task_index / state_changes">v2.2 Plan</span>
+        <span id="replayTaskCount" class="meta" style="font-size:11px"></span>
       </div>
       <div class="field-row">
         <label data-tip="使用 Unity Bridge 连接 Unity Editor&#10;Replay 通常需要开启">Unity Bridge</label>
@@ -435,11 +452,29 @@
           <input type="checkbox" id="replayUnity" checked /> 连接 Unity
         </label>
       </div>
-      <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+      <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap">
         <button class="btn primary" onclick="startReplay()" data-tip="启动 Replay 模式&#10;python -m vragent2 --replay &lt;path&gt;">&#x25B6; 重放</button>
+        <button class="btn ghost" id="btnValidatePlan" onclick="validatePlan()" data-tip="离线验证测试计划（v2.2）&#10;检查 Schema 合规 / 依赖图 / 符号状态机因果链">&#x1F50D; 验证计划</button>
+        <span id="validateStatus" class="meta" style="font-size:11px"></span>
       </div>
       <div class="meta" style="margin-top:8px;margin-left:118px">
         命令：<code style="background:var(--panel2);padding:2px 6px;border-radius:3px;font-size:11px">python -m vragent2 --replay &lt;test_plan.json&gt; [--unity]</code>
+      </div>
+      <!-- Validation result panel -->
+      <div id="validateResultPanel" style="display:none;margin-top:12px;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:12px">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+          <span style="font-size:12px;font-weight:600;color:var(--fg)">验证结果</span>
+          <span id="vBadgeSchema" class="tag" style="font-size:10px"></span>
+          <span id="vBadgeDep" class="tag" style="font-size:10px"></span>
+          <span id="vBadgeDup" class="tag" style="font-size:10px"></span>
+          <span id="vBadgeSM" class="tag" style="font-size:10px"></span>
+          <span style="flex:1"></span>
+          <button class="btn ghost sm" onclick="$('#validateResultPanel').style.display='none'">&#x2715;</button>
+        </div>
+        <!-- State trace table -->
+        <div id="vStateTrace"></div>
+        <!-- Findings list -->
+        <div id="vFindings" style="margin-top:10px"></div>
       </div>
     </div>
   </div>
@@ -683,6 +718,10 @@
       <div class="field-row">
         <label data-tip="API 密钥&#10;可保存到本地 .ui_settings.json（不推送到 git）&#10;运行时若字段为空则自动使用已保存的密钥">API Key</label>
         <input id="cfgApiKey" type="password" placeholder="sk-... （留空则使用本地保存的密钥）" style="flex:1" />
+      </div>
+      <div class="field-row">
+        <label data-tip="HTTP 代理 URL（可选）&#10;例：http://127.0.0.1:15236&#10;留空则直连 API，不走代理">代理 URL</label>
+        <input id="cfgProxyUrl" placeholder="http://127.0.0.1:15236（留空=不使用代理）" style="flex:1" />
       </div>
       <div class="field-row" style="justify-content:flex-end;gap:6px">
         <button class="btn ghost sm" id="btnSaveApiKey" onclick="saveApiKey()" data-tip="将当前输入的密钥保存到本地 .ui_settings.json&#10;（文件已加入 .gitignore，不会推送到云端）">保存 Key 到本地</button>
@@ -1647,7 +1686,7 @@ function autoFillAfterStep(n){
 
 /* ---- localStorage config persistence ---- */
 let _resultsRoot=""; // set on boot from /api/health
-const _RUN_CFG_KEYS=["cfgModel","cfgApiBase","cfgBudget","cfgLimit","cfgOutput","cfgScriptsDir",
+const _RUN_CFG_KEYS=["cfgModel","cfgApiBase","cfgProxyUrl","cfgBudget","cfgLimit","cfgOutput","cfgScriptsDir",
   "cfgHierarchyJson","cfgSceneGml","cfgUnityHost","cfgUnityPort",
   "ppProjectRoot","ppResultsDir","ppResultsDir2","ppResultsDir3","ppSceneName","ppAppName",
   "wfProjectSel","wfSceneSel"];
@@ -1860,6 +1899,7 @@ async function startRun(){
   const body={python_exe,work_dir,scene_name,
     model:$("#cfgModel").value.trim()||undefined,
     api_base:$("#cfgApiBase").value.trim()||undefined,
+    proxy_url:$("#cfgProxyUrl").value.trim()||undefined,
     api_key:$("#cfgApiKey").value.trim()||undefined,
     output:$("#cfgOutput").value.trim()||"Results",
     budget:parseInt($("#cfgBudget").value)||100,
@@ -2343,6 +2383,7 @@ async function refreshReplayOptions(){
     const opt=document.createElement("option");
     opt.value=o.path; opt.textContent=o.label; sel.appendChild(opt);
   });
+  onReplaySelChange();
 }
 // Helper: if path is relative, join with workDir; otherwise return as-is
 function _resolveDir(dir,workDir){
@@ -2353,12 +2394,123 @@ function _resolveDir(dir,workDir){
   if(/^[A-Za-z]:[\\\/]/.test(dir)||dir.startsWith("/")) return dir;
   return workDir ? workDir.replace(/[\\\/]+$/,"")+"/"+dir : dir;
 }
+// Return whichever path is active: custom input > dropdown
+function _replayEffectivePath(){
+  const custom=($("#replayCustomPath")||{}).value||"";
+  if(custom.trim()) return custom.trim();
+  return ($("#replayModelSel")||{}).value||"auto";
+}
+// Called when user changes dropdown or custom path input
+function onReplaySelChange(){
+  const p=_replayEffectivePath();
+  // Reset validation panel when path changes
+  $("#validateResultPanel").style.display="none";
+  $("#validateStatus").textContent="";
+  // Clear old v2 badge
+  const badge=$("#replayV2Badge");
+  if(badge) badge.style.display="none";
+  const cnt=$("#replayTaskCount");
+  if(cnt) cnt.textContent="";
+}
+/* ---- v2.2 plan validation ---- */
+async function validatePlan(){
+  const path=_replayEffectivePath();
+  if(!path||path==="auto"){alert("请先选择或输入一个 test_plan.json 路径");return;}
+  const btn=$("#btnValidatePlan");
+  btn.disabled=true;
+  $("#validateStatus").textContent="验证中…";
+  const d=await apiRaw("/api/validate_plan",{path});
+  btn.disabled=false;
+  if(d.error){
+    $("#validateStatus").textContent="❌ "+d.error;
+    return;
+  }
+  $("#validateStatus").textContent="";
+  _renderValidationResult(d);
+}
+function _esc(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function _renderValidationResult(d){
+  // Show v2.2 badge
+  const badge=$("#replayV2Badge");
+  const cnt=$("#replayTaskCount");
+  if(badge){ badge.style.display=d.is_v2?"inline-block":"none"; }
+  if(cnt){ cnt.textContent=d.task_count?`${d.task_count} 个任务`:""; }
+
+  const panel=$("#validateResultPanel");
+  panel.style.display="block";
+
+  // Error badges
+  const schN=d.schema_errors||0;
+  const depN=d.dep_errors||0;
+  const dupN=d.dup_errors||0;
+  const smN=(d.sm_errors||[]).length;
+  const _badge=(id,n,label)=>{
+    const el=$("#"+id); if(!el) return;
+    el.textContent=`${label}: ${n}`;
+    el.className="tag "+(n===0?"good":"bad");
+  };
+  _badge("vBadgeSchema",schN,"Schema");
+  _badge("vBadgeDep",depN,"依赖图");
+  _badge("vBadgeDup",dupN,"重复");
+  _badge("vBadgeSM",smN,"状态机");
+
+  // State trace table
+  const trace=d.state_trace||[];
+  const traceDiv=$("#vStateTrace");
+  if(trace.length){
+    let h=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600">符号状态追踪 (${trace.length} tasks)</div>`;
+    h+=`<div style="overflow-x:auto"><table><thead><tr>`;
+    h+=`<th>task_id</th><th>intent</th><th>required_state</th><th>produced_state</th><th>world_state（累积）</th>`;
+    h+=`</tr></thead><tbody>`;
+    trace.forEach(t=>{
+      const req=(t.required_state_changes||[]).map(s=>`<code style="font-size:10px;background:var(--panel2);padding:1px 4px;border-radius:2px">${_esc(s)}</code>`).join("<br>");
+      const prod=(t.produced_state_changes||[]).map(s=>`<code style="font-size:10px;color:var(--good);background:var(--panel2);padding:1px 4px;border-radius:2px">${_esc(s)}</code>`).join("<br>");
+      const ws=Object.entries(t.world_state||{}).map(([k,v])=>`<code style="font-size:10px;background:var(--panel2);padding:1px 4px;border-radius:2px">${_esc(k)}=<span style="color:var(--accent)">${_esc(String(v))}</span></code>`).join("<br>");
+      h+=`<tr>
+        <td style="color:var(--accent);white-space:nowrap;font-size:11px;font-weight:600">${_esc(t.task_id||"")}</td>
+        <td style="font-size:11px;min-width:120px">${_esc(t.intent||"")}</td>
+        <td style="min-width:180px">${req||'<span class="meta" style="font-size:11px">—</span>'}</td>
+        <td style="min-width:180px">${prod||'<span class="meta" style="font-size:11px">—</span>'}</td>
+        <td style="min-width:200px">${ws||'<span class="meta" style="font-size:11px">—</span>'}</td>
+      </tr>`;
+    });
+    h+=`</tbody></table></div>`;
+    traceDiv.innerHTML=h;
+  } else {
+    traceDiv.innerHTML=`<span class="meta" style="font-size:11px">无状态追踪数据（非 v2.2 计划或所有任务均无状态字段）</span>`;
+  }
+
+  // Findings list (static + state-machine errors)
+  const findings=d.findings||[];
+  const smErrs=(d.sm_errors||[]).map(e=>({level:"STATE_MACHINE",type:e.type||"",message:e.message||"",path:""}));
+  const all=[...findings,...smErrs];
+  const findDiv=$("#vFindings");
+  if(all.length){
+    let h=`<div style="font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600">发现的问题 (${all.length})</div>`;
+    all.forEach(f=>{
+      const lvl=f.level||"";
+      const col=["SCHEMA","CORRECTNESS","STATE_MACHINE"].includes(lvl)?"var(--bad)":lvl==="DUPLICATE"?"var(--warn)":"var(--accent)";
+      h+=`<div style="padding:5px 0;border-bottom:1px solid var(--border);font-size:11px">
+        <span class="tag" style="background:${col};color:#000;font-size:10px">${_esc(lvl)}</span>
+        <span style="margin-left:6px;font-weight:600">${_esc(f.type||"")}</span>
+        ${f.path?`<span class="meta" style="margin-left:6px;font-size:10px">${_esc(f.path)}</span>`:""}
+        <div style="color:var(--muted);margin-top:3px;padding-left:2px">${_esc(f.message||"")}</div>
+      </div>`;
+    });
+    findDiv.innerHTML=h;
+  } else {
+    findDiv.innerHTML=`<div class="meta" style="font-size:11px;color:var(--good)">&#x2705; 所有规则检查通过，可以安全重放</div>`;
+  }
+}
+
 async function startReplay(){
   saveRunCfg();
   const p=selProj();
   const python_exe=(p&&p.python_exe)||_cfg.python_exe||undefined;
   const work_dir=(p&&p.work_dir)||_cfg.work_dir||undefined;
-  const replayPath=$("#replayModelSel").value||"auto";
+  const replayPath=_replayEffectivePath();
   const body={
     python_exe,work_dir,
     replay:replayPath,
@@ -2368,6 +2520,7 @@ async function startReplay(){
     api_key:$("#cfgApiKey").value.trim()||undefined,
     model:$("#cfgModel").value.trim()||undefined,
     api_base:$("#cfgApiBase").value.trim()||undefined,
+    proxy_url:$("#cfgProxyUrl").value.trim()||undefined,
     // Replay still needs preprocessing artefacts to resolve FileIDs / scene context
     hierarchy_json:$("#cfgHierarchyJson").value.trim()||undefined,
     scene_gml:$("#cfgSceneGml").value.trim()||undefined,

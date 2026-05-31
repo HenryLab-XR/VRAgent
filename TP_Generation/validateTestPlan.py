@@ -234,6 +234,63 @@ TEST_PLAN_SCHEMA: Dict[str, Any] = {
 }
 
 # -----------------------------
+# v2.2: 顺序依赖字段注入
+# 把 depends_on_task_index / required_state_changes / produced_state_changes
+# 作为可选字段补到每个 actionUnits oneOf 分支里，保证 additionalProperties=False
+# 时不会拒绝带依赖元信息的 plan。
+# -----------------------------
+_DEP_FIELDS_SCHEMA = {
+    "depends_on_task_index": {
+        "type": "array",
+        "items": {"type": "integer", "minimum": 0},
+    },
+    "required_state_changes": {
+        "type": "array",
+        "items": {"type": "string"},
+    },
+    "produced_state_changes": {
+        "type": "array",
+        "items": {"type": "string"},
+    },
+}
+
+def _inject_dependency_fields(schema: Dict[str, Any]) -> None:
+    branches = (
+        schema.get("properties", {})
+              .get("taskUnits", {})
+              .get("items", {})
+              .get("properties", {})
+              .get("actionUnits", {})
+              .get("items", {})
+              .get("oneOf", [])
+    )
+    for branch in branches:
+        props = branch.setdefault("properties", {})
+        for k, v in _DEP_FIELDS_SCHEMA.items():
+            props.setdefault(k, v)
+
+_inject_dependency_fields(TEST_PLAN_SCHEMA)
+
+
+def _relax_fileid_types(node: Any) -> None:
+    """Recursively allow ``*_fileID`` schema nodes to accept string OR integer.
+
+    The runtime / C# side stores FileIDs as strings, but the original schema
+    declared them as integers. Without this relaxation every realistic plan
+    (including ``gold-manual-kitchen-v1``) fails ``validate_schema``.
+    """
+    if isinstance(node, dict):
+        for key, val in node.items():
+            if isinstance(val, dict) and val.get("type") == "integer" and key.endswith("_fileID"):
+                val["type"] = ["string", "integer"]
+            _relax_fileid_types(val)
+    elif isinstance(node, list):
+        for item in node:
+            _relax_fileid_types(item)
+
+_relax_fileid_types(TEST_PLAN_SCHEMA)
+
+# -----------------------------
 # GML图加载函数
 # -----------------------------
 def load_scene_index_from_gml(gml_file_path: str) -> SceneIndex:
@@ -813,11 +870,75 @@ def rule_duplicate_plan(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
     
     return findings
 
+def rule_dependency_graph(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """v2.2: 校验 taskUnits 的 depends_on_task_index 形成合法 DAG。
+
+    规则：
+      - 每个索引必须是非负整数且严格小于当前 task index（禁止前向引用与自环）
+      - 同一 task 的所有 actionUnits 共享同一 task index 命名空间
+      - 不允许出现重复索引（仅警告）
+    """
+    findings: List[Dict[str, Any]] = []
+    task_units = plan.get("taskUnits", [])
+    n = len(task_units)
+    for tu_idx, task in enumerate(task_units):
+        for au_idx, action in enumerate(task.get("actionUnits", [])):
+            deps = action.get("depends_on_task_index")
+            if deps is None:
+                continue
+            if not isinstance(deps, list):
+                findings.append({
+                    "level": "CORRECTNESS",
+                    "type": "invalid_dependency",
+                    "path": f"taskUnits[{tu_idx}]/actionUnits[{au_idx}]/depends_on_task_index",
+                    "message": "depends_on_task_index must be an array of integers",
+                })
+                continue
+            seen = set()
+            for dep in deps:
+                if not isinstance(dep, int) or dep < 0:
+                    findings.append({
+                        "level": "CORRECTNESS",
+                        "type": "invalid_dependency",
+                        "path": f"taskUnits[{tu_idx}]/actionUnits[{au_idx}]/depends_on_task_index",
+                        "message": f"Dependency index '{dep}' must be a non-negative integer",
+                    })
+                    continue
+                if dep >= n:
+                    findings.append({
+                        "level": "CORRECTNESS",
+                        "type": "invalid_dependency",
+                        "path": f"taskUnits[{tu_idx}]/actionUnits[{au_idx}]/depends_on_task_index",
+                        "message": f"Dependency index {dep} is out of range (n_tasks={n})",
+                    })
+                elif dep >= tu_idx:
+                    findings.append({
+                        "level": "CORRECTNESS",
+                        "type": "invalid_dependency",
+                        "path": f"taskUnits[{tu_idx}]/actionUnits[{au_idx}]/depends_on_task_index",
+                        "message": (
+                            f"taskUnits[{tu_idx}] cannot depend on taskUnits[{dep}] "
+                            f"(forward / self reference)"
+                        ),
+                    })
+                if dep in seen:
+                    findings.append({
+                        "level": "CONSISTENCY",
+                        "type": "duplicate_dependency",
+                        "path": f"taskUnits[{tu_idx}]/actionUnits[{au_idx}]/depends_on_task_index",
+                        "message": f"Duplicate dependency index {dep}",
+                    })
+                seen.add(dep)
+    return findings
+
+
 def evaluate_policies(plan: Dict[str, Any], scene: SceneIndex) -> List[Dict[str, Any]]:
     findings: List[Dict[str, Any]] = []
     findings.extend(validate_schema(plan))
     # 检查重复动作
     findings.extend(rule_duplicate_plan(plan))
+    # v2.2: 检查跨任务依赖图合法性
+    findings.extend(rule_dependency_graph(plan))
     action_num = 0
     # 若Schema报错，可选择直接返回；这里继续执行以收集尽可能多的问题
     for tu_idx, task in enumerate(plan.get("taskUnits", [])):
