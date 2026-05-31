@@ -192,8 +192,8 @@ namespace HenryLab.VRAgent
                 return null;
             }
 
-            // 遍历场景中所有 GameObject
-            GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+            // Traverse all GameObjects including inactive ones
+            GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>(true);
             foreach(GameObject go in allObjects)
             {
                 long goFileId = GetObjectFileID(go);

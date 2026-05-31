@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using Debug = UnityEngine.Debug;
 
@@ -260,7 +261,7 @@ namespace HenryLab.VRAgent.Online
                             _stateCollector.RecordEvent($"fallback_to_direct:{action.GetType().Name}");
                             try
                             {
-                                InvokeTriggerEventsDirectly(triggerFallback, response);
+                                InvokeTriggerEventsDirectly(triggerFallback, sourceObj, response);
                                 _stateCollector.RecordEvent($"fallback_completed:{action.GetType().Name}");
                             }
                             catch(Exception fallbackEx)
@@ -306,8 +307,9 @@ namespace HenryLab.VRAgent.Online
             return HasCalls(trigger.triggerringEvents) || HasCalls(trigger.triggerredEvents);
         }
 
-        private void InvokeTriggerEventsDirectly(TriggerActionUnit trigger, ExecutionResultResponse response)
+        private void InvokeTriggerEventsDirectly(TriggerActionUnit trigger, GameObject sourceObj, ExecutionResultResponse response)
         {
+            GameObject[] fallbackRoots = sourceObj != null ? new[] { sourceObj } : null;
             void InvokeEventList(List<eventUnit> eventUnits, string phase)
             {
                 if(eventUnits == null) return;
@@ -315,7 +317,7 @@ namespace HenryLab.VRAgent.Online
                 {
                     try
                     {
-                        UnityEngine.Events.UnityEvent evt = ParameterResolver.CreateUnityEvent(eventUnits[i]);
+                        UnityEngine.Events.UnityEvent evt = ParameterResolver.CreateUnityEvent(eventUnits[i], fallbackRoots);
                         evt?.Invoke();
                         _stateCollector.RecordEvent($"direct_trigger:{phase}[{i}]");
                     }
@@ -535,6 +537,15 @@ namespace HenryLab.VRAgent.Online
             int objTotal = 0, objFound = 0;
             int compTotal = 0, compFound = 0;
 
+            // Diagnostic: log all loaded scenes so we can verify the right scene is active
+            var sceneNames = new System.Text.StringBuilder();
+            for(int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene s = SceneManager.GetSceneAt(i);
+                sceneNames.Append($"{s.name}(loaded={s.isLoaded},roots={s.GetRootGameObjects().Length}) ");
+            }
+            Debug.Log($"[AgentOnline] LoadedScenes: {sceneNames}");
+
             TaskList taskList = cmd.taskList;
             if(taskList == null)
             {
@@ -592,11 +603,22 @@ namespace HenryLab.VRAgent.Online
 
             Debug.Log($"[AgentOnline] Import: Objects {objFound}/{objTotal}, Components {compFound}/{compTotal}");
 
+            // Fail early when NO objects could be resolved at all (wrong scene or bad plan).
+            // Partial misses (objFound < objTotal) are still allowed — individual Execute
+            // calls will surface per-object errors.
+            bool importSuccess = objTotal == 0 || objFound > 0;
+            string importError = importSuccess ? null
+                : $"ImportObjects: 0/{objTotal} objects found — check scene name matches the plan";
+
+            if(!importSuccess)
+                Debug.LogWarning($"[AgentOnline] {importError}");
+
             _bridge.SendResponse(new ImportResultResponse
             {
                 type = ResponseType.ImportResult.ToString(),
                 requestId = cmd.requestId,
-                success = true,
+                success = importSuccess,
+                errorMessage = importError,
                 objectsFound = objFound,
                 objectsTotal = objTotal,
                 componentsFound = compFound,
@@ -642,13 +664,30 @@ namespace HenryLab.VRAgent.Online
         private static GameObject FindGameObjectByName(string name)
         {
             if(string.IsNullOrEmpty(name)) return null;
-            // GameObject.Find only walks active roots — fall back to a full scan
-            // for inactive / nested objects.
+            // Try fast path first (active objects only)
             GameObject direct = GameObject.Find(name);
             if(direct != null) return direct;
-            foreach(GameObject go in GameObject.FindObjectsOfType<GameObject>(true))
+            // Full recursive scan across ALL loaded scenes (includes inactive objects)
+            for(int i = 0; i < SceneManager.sceneCount; i++)
             {
-                if(go.name == name) return go;
+                Scene scene = SceneManager.GetSceneAt(i);
+                if(!scene.IsValid() || !scene.isLoaded) continue;
+                foreach(GameObject root in scene.GetRootGameObjects())
+                {
+                    GameObject found = FindInHierarchy(root, name);
+                    if(found != null) return found;
+                }
+            }
+            return null;
+        }
+
+        private static GameObject FindInHierarchy(GameObject root, string name)
+        {
+            if(root.name == name) return root;
+            foreach(Transform child in root.transform)
+            {
+                GameObject found = FindInHierarchy(child.gameObject, name);
+                if(found != null) return found;
             }
             return null;
         }

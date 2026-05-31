@@ -162,7 +162,10 @@ class ExecutorAgent(BaseAgent):
                 duration = result.get("duration_ms", 0)
                 print(f"[EXECUTOR] {action_type} on {source_name} — {duration:.0f}ms")
             else:
-                error_msg = result.get("error_message", "Unknown error")
+                # error_message is only set on MakeError responses; real details are in exceptions
+                exceptions_list = result.get("exceptions", [])
+                error_msg = (result.get("error_message")
+                             or (exceptions_list[0] if exceptions_list else "Unknown error"))
                 self._exceptions.append(f"{action_type}:{source_name} → {error_msg}")
                 entry.events.append(f"error:{error_msg}")
                 print(f"[EXECUTOR] FAILED: {action_type} on {source_name} — {error_msg}")
