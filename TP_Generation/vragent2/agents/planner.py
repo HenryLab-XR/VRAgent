@@ -17,11 +17,52 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 from .base_agent import BaseAgent
-from ..contracts import PlannerOutput
+from ..contracts import PlannerOutput, SceneUnderstandingOutput
 from ..retrieval.retrieval_layer import RetrievalLayer
 from ..retrieval.data_types import ContextPack
 from ..utils.llm_client import LLMClient
 from ..utils.config_loader import VRAgentConfig
+
+
+# v2.2: Sequential-dependency prompt block injected into every first_request.
+# Keep this short (~30 lines) so it does not blow the token budget when
+# concatenated with per-GameObject scripts and scene meta.
+SEQUENTIAL_ORDERING_INSTRUCTION = """\
+--- Sequential Test Plan Ordering (v2.2) ---
+
+taskUnits[] is an ORDERED list. Each task is executed after the previous one
+completes, and a later task MAY depend on side effects produced by earlier
+tasks (a door opened, a key picked up, a switch flipped, etc.).
+
+Whenever an action only makes sense AFTER another action has succeeded, you
+MUST split them across distinct taskUnits and fill in these optional fields
+on each affected action:
+
+  - "depends_on_task_index": [<indices of prior taskUnits>] (each < current index)
+  - "required_state_changes": ["<ObjectName>.<field>=<value>", ...]
+  - "produced_state_changes": ["<ObjectName>.<field>=<value>", ...]
+
+State strings MUST use the three-segment form `<ObjectName>.<field>=<value>`
+so the Verifier can match them as plain strings. Examples:
+  "DoorNode_A_Lobby.isOpen=true"
+  "Key_Pantry.inHand=true"
+  "Key_Pantry.nearTarget=DoorNode_B_Pantry"
+
+WORKED EXAMPLE — "open Room A → grab key → unlock Room B":
+  taskUnits[0]  Trigger DoorNode_A.Open()
+                produced_state_changes: ["DoorNode_A.isOpen=true"]
+  taskUnits[1]  Grab Key → DoorNode_B
+                depends_on_task_index: [0]
+                required_state_changes: ["DoorNode_A.isOpen=true"]
+                produced_state_changes: ["Key.nearTarget=DoorNode_B"]
+  taskUnits[2]  Trigger DoorNode_B.Unlock() + Open()
+                depends_on_task_index: [1]
+                required_state_changes: ["Key.nearTarget=DoorNode_B"]
+                produced_state_changes: ["DoorNode_B.isOpen=true"]
+
+Do NOT cram a causal chain into a single taskUnit. If no ordering exists,
+leave the three fields empty (`[]`) — they are optional.
+"""
 
 
 class PlannerAgent(BaseAgent):
@@ -76,6 +117,18 @@ class PlannerAgent(BaseAgent):
         gate_hints = input_data.get("gate_hints")
         observer_instruction = input_data.get("observer_instruction", "")
         scene_context = input_data.get("scene_context", "")
+        # v2.2: optional SceneUnderstandingOutput (dict or dataclass) for
+        # injecting project-level gate chains into the first_request prompt.
+        su_raw = input_data.get("scene_understanding")
+        if isinstance(su_raw, SceneUnderstandingOutput):
+            self._scene_understanding = su_raw
+        elif isinstance(su_raw, dict):
+            try:
+                self._scene_understanding = SceneUnderstandingOutput.from_dict(su_raw)
+            except Exception:
+                self._scene_understanding = None
+        else:
+            self._scene_understanding = None
 
         round_directives = []
         if goal:
@@ -303,6 +356,30 @@ class PlannerAgent(BaseAgent):
             kwargs["children_ids"] = [c.get("target") for c in children]
 
         result = tpl.format(**kwargs)
+
+        # v2.2: Inject sequential-ordering instructions + scene-level gate
+        # chains so the LLM is explicitly told taskUnits are ordered and that
+        # cross-task dependencies must be declared via the new fields.
+        result += "\n\n" + SEQUENTIAL_ORDERING_INSTRUCTION
+        su = getattr(self, "_scene_understanding", None)
+        if su is not None:
+            su_parts: List[str] = []
+            if su.gate_chains:
+                su_parts.append(
+                    "Gate chain (solve in order):\n"
+                    + "\n".join(f"  {i+1}. {g}" for i, g in enumerate(su.gate_chains))
+                )
+            if su.interaction_dependencies:
+                dep_lines = [
+                    f"  - {d.source} --[{d.relation}]--> {d.target}"
+                    for d in su.interaction_dependencies
+                ]
+                su_parts.append("Interaction dependencies:\n" + "\n".join(dep_lines))
+            if su.object_roles:
+                role_lines = [f"  - {obj}: {role}" for obj, role in su.object_roles.items()]
+                su_parts.append("Object roles (key / lock / tool / target):\n" + "\n".join(role_lines))
+            if su_parts:
+                result += "\n\n--- Project Causal Context ---\n" + "\n\n".join(su_parts)
 
         # Append structured context pack if available (gate hints, nearby objects, failures)
         if hasattr(self, '_context_pack') and self._context_pack:

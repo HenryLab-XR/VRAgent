@@ -1,2 +1,0 @@
-E:\HenryLab\XRPlayer\VRAgent\TP_Generation\xrplayer\__init__.py:33: UserWarning: xrplayer: failed to import vragent2 surface: No module named 'networkx'
-  warnings.warn(f"xrplayer: failed to import vragent2 surface: {exc}")

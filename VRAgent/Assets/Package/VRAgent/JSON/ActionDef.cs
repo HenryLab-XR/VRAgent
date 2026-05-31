@@ -9,6 +9,13 @@ namespace HenryLab.VRAgent
     {
         public string type;
         [JsonProperty("source_object_fileID")] public string objectA;
+
+        // v2.2: sequential-dependency metadata. Preserved through serialization
+        // but NOT consumed at execution time — VerifierAgent validates these
+        // statically before the test plan is run.
+        [JsonProperty("depends_on_task_index")] public List<int>? dependsOnTaskIndex;
+        [JsonProperty("required_state_changes")] public List<string>? requiredStateChanges;
+        [JsonProperty("produced_state_changes")] public List<string>? producedStateChanges;
     }
 
     public class GrabActionUnit : ActionUnit

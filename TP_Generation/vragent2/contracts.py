@@ -36,6 +36,10 @@ class VerifierErrorType(str, Enum):
     DUPLICATE_ACTION = "DuplicateAction"       # Redundant action unit
     RUNTIME_REF_INVALID = "RuntimeRefInvalid"  # Dynamic object reference stale
     SCHEMA_ERROR = "SchemaError"               # JSON schema violation
+    # v2.2: sequential-dependency errors
+    MISSING_PRECONDITION = "MissingPrecondition"     # required_state_change never produced upstream
+    MISSING_DECLARED_DEP = "MissingDeclaredDep"      # depends_on_task_index missing despite state ref
+    INVALID_DEPENDENCY = "InvalidDependency"         # depends_on_task_index out of range / self / cyclic
 
 
 class ExplorationMode(str, Enum):
@@ -79,6 +83,19 @@ class EventUnit:
 # Action Units (the atomic test step)
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Sequential dependency fields (v2.2)
+#
+# Every ActionUnit carries three optional fields to express *causal* ordering
+# across taskUnits:
+#   - depends_on_task_index : indices of prior taskUnits this action requires
+#   - required_state_changes: assertions that must be true before execution,
+#                             formatted as "<ObjectName>.<field>=<value>"
+#   - produced_state_changes: assertions this action establishes when it
+#                             succeeds (consumed by downstream actions)
+# These are validated statically by VerifierAgent._simulate_state_machine.
+# ---------------------------------------------------------------------------
+
 @dataclass
 class GrabActionUnit:
     type: str = "Grab"
@@ -89,6 +106,10 @@ class GrabActionUnit:
     target_object_fileID: Optional[int] = None
     # format 2: target position
     target_position: Optional[Vec3] = None
+    # v2.2 sequential dependency metadata (optional)
+    depends_on_task_index: List[int] = field(default_factory=list)
+    required_state_changes: List[str] = field(default_factory=list)
+    produced_state_changes: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -100,6 +121,10 @@ class TriggerActionUnit:
     condition: str = ""
     triggerring_events: List[EventUnit] = field(default_factory=list)
     triggerred_events: List[EventUnit] = field(default_factory=list)
+    # v2.2 sequential dependency metadata (optional)
+    depends_on_task_index: List[int] = field(default_factory=list)
+    required_state_changes: List[str] = field(default_factory=list)
+    produced_state_changes: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -113,6 +138,22 @@ class TransformActionUnit:
     triggerring_events: List[EventUnit] = field(default_factory=list)
     triggerred_events: List[EventUnit] = field(default_factory=list)
     triggerring_time: float = 0.0
+    # v2.2 sequential dependency metadata (optional)
+    depends_on_task_index: List[int] = field(default_factory=list)
+    required_state_changes: List[str] = field(default_factory=list)
+    produced_state_changes: List[str] = field(default_factory=list)
+
+
+@dataclass
+class TaskUnit:
+    """Container for an ordered group of action units (v2.2).
+
+    ``task_id`` and ``intent`` are optional metadata fields preserved for
+    readability and cross-task references; they do not affect execution.
+    """
+    task_id: str = ""
+    intent: str = ""
+    actionUnits: List[Dict[str, Any]] = field(default_factory=list)
 
 
 # Union type for convenience
@@ -160,6 +201,9 @@ class VerifierOutput:
     errors: List[VerifierError] = field(default_factory=list)
     passed: bool = False
     patched_actions: List[Dict[str, Any]] = field(default_factory=list)
+    # v2.2: sequential-dependency analysis
+    dependency_violations: List[Dict[str, Any]] = field(default_factory=list)
+    state_trace: List[Dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -168,6 +212,8 @@ class VerifierOutput:
             "pass": self.passed,
             "passed": self.passed,
             "patched_actions": self.patched_actions,
+            "dependency_violations": self.dependency_violations,
+            "state_trace": self.state_trace,
         }
 
 
