@@ -7,7 +7,7 @@
 | maze              | https://github.com/TsingPig/unity-vr-maze_VRAgent            | https://sites.google.com/view/vrguide2023                    |
 | UnityVR           | https://github.com/TsingPig/UnityVR_VRAgent                  | https://sites.google.com/view/vrguide2023                    |
 | UnityCityView     | https://github.com/TsingPig/UnityCityView_VRAgent            | https://sites.google.com/view/vrguide2023                    |
-| escapeVr          | https://github.com/TsingPig/escapeVr_VRAgent                 | https://github.com/milocartal/escapeVr [Unaccessiable]       |
+| escapeVr          | https://github.com/TsingPig/escapeVr_VRAgent                 | https://github.com/bubu324-new/escapeVr      |
 | EE-Room           | https://github.com/TsingPig/Edutainment-Escape-Room/tree/abation_study | https://github.com/Tonheim-Halvorsen-Unity-Development/Edutainment-Escape-Room |
 | VGuns             | https://github.com/TsingPig/VGuns-Unity-VR/tree/VRAgent      | https://github.com/Stalking-Sugar/VGuns-Unity-VR             |
 | VR-Room           | https://github.com/TsingPig/VR-Room/tree/VRAgent             | https://github.com/MdAsimKhan/VR-Room                        |
