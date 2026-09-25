@@ -1,0 +1,1382 @@
+Unity Console Export (2025-10-27 15:38:35)
+📅 2025-10-27
+[15:37:58] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Some deprecated Interactable Events are being used. These deprecated events will be removed in a future version. Please convert these to use the newer events, and update script method signatures for Dynamic listeners.
+[15:37:58] [Warning] Some deprecated Interactable Events are being used. These deprecated events will be removed in a future version. Please convert these to use the newer events, and update script method signatures for Dynamic listeners.
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:37:58] [Warning] Could not find XRBaseController component on Door 2 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Could not find XRBaseController component on Door 1 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Could not find XRBaseController component on Door 2 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Could not find XRBaseController component on Door 1 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Could not find XRBaseController component on Door 2 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Could not find XRBaseController component on Door 1 (UnityEngine.GameObject) or any of its parents.
+[15:37:58] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:37:58] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:37:58] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:00] [Log] TimeCost: <b>0</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>6</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:00] [Log] [Task 1][Action 0] Type: Trigger | Source: 314576052 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:00] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:00] [Log] Added XRTriggerable component to ClockText
+[15:38:00] [Log] [HenryLab.XR] Found parameterless method onFinish on Clock
+[15:38:00] [Log] [HenryLab.XR] Successfully bound void method: Clock.onFinish
+[15:38:00] [Log] [Task 1][Action 1] Type: Trigger | Source: 314576052 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:00] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:00] [Log] Added XRTriggerable component to ClockText
+[15:38:00] [Log] [HenryLab.XR] Found parameterless method onTimeOut on Clock
+[15:38:00] [Log] [HenryLab.XR] Successfully bound void method: Clock.onTimeOut
+[15:38:00] [Log] Action: MoveAction
+[15:38:00] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:38:00] [Log] Can't add 'XRDirectInteractor' to ClockText because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:00] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.41, 0.12, -3.30) is not reachable on the NavMesh.
+[15:38:00] [Log] Action: TriggerAction
+[15:38:00] [Log] TimeCost: <b>5.480406</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>7</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:00] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:00] [Warning] Could not find XRBaseController component on VRAgent (UnityEngine.GameObject) or any of its parents.
+[15:38:00] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:00] [Log] Action: MoveAction
+[15:38:00] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.41, 0.12, -3.30) is not reachable on the NavMesh.
+[15:38:00] [Log] Action: TriggerAction
+[15:38:00] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:00] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:00] [Log] TimeCost: <b>10.60771</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>7</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:01] [Log] [Task 2][Action 0] Type: Trigger | Source: 1489944608 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Cube
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method onWin on Victory
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: Victory.onWin
+[15:38:01] [Log] [Task 2][Action 1] Type: Trigger | Source: 1489944608 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Cube
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method onWin on Victory
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: Victory.onWin
+[15:38:01] [Log] Action: MoveAction
+[15:38:01] [Warning] Could not find XRBaseController component on Cube (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Cube because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.42, 0.57, -34.90) is not reachable on the NavMesh.
+[15:38:01] [Log] Action: TriggerAction
+[15:38:01] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:01] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:01] [Log] Action: MoveAction
+[15:38:01] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.42, 0.57, -34.90) is not reachable on the NavMesh.
+[15:38:01] [Log] Action: TriggerAction
+[15:38:01] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:01] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:01] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:01] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:01] [Log] TimeCost: <b>15.79852</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>8</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:01] [Log] [Task 3][Action 0] Type: Grab | Source: 28697937 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Sphere
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 1] Type: Grab | Source: 33018423 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Sphere
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 2] Type: Grab | Source: 28697937 | Target: 948828962
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Sphere
+[15:38:01] [Log] [Task 3][Action 3] Type: Grab | Source: 33018423 | Target: 948828962
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Sphere
+[15:38:01] [Log] [Task 3][Action 4] Type: Trigger | Source: 169359321 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Door 1
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method openFinalDoor on FinalDoor
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: FinalDoor.openFinalDoor
+[15:38:01] [Log] [Task 3][Action 5] Type: Trigger | Source: 1650952629 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Door 2
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method openFinalDoor on FinalDoor
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: FinalDoor.openFinalDoor
+[15:38:01] [Log] [Task 3][Action 6] Type: Trigger | Source: 1650952629 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Door 2
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method openFinalDoor on FinalDoor
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: FinalDoor.openFinalDoor
+[15:38:01] [Log] [Task 3][Action 7] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 8] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 9] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 10] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method DecrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.DecrementKeys
+[15:38:01] [Log] [Task 3][Action 11] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 12] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 13] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 14] Type: Trigger | Source: 2046914205 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyPlacement
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method DecrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.DecrementKeys
+[15:38:01] [Log] [Task 3][Action 15] Type: Trigger | Source: 2124835094 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 16] Type: Trigger | Source: 2124835094 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method DecrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.DecrementKeys
+[15:38:01] [Log] [Task 3][Action 17] Type: Trigger | Source: 2124835094 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 18] Type: Trigger | Source: 2124835094 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method DecrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.DecrementKeys
+[15:38:01] [Log] [Task 3][Action 19] Type: Trigger | Source: 1243741902 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor (1)
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method IncrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.IncrementKeys
+[15:38:01] [Log] [Task 3][Action 20] Type: Trigger | Source: 1243741902 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to KeyInteractor (1)
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method DecrementKeys on keyMainScript
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: keyMainScript.DecrementKeys
+[15:38:01] [Log] [Task 3][Action 21] Type: Trigger | Source: 790247593 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to Exit Door
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method onFinish on ExitDoor
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: ExitDoor.onFinish
+[15:38:01] [Log] [Task 3][Action 22] Type: Grab | Source: 2098976992 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Radio
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 23] Type: Grab | Source: 486296661 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Variable hint
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 24] Type: Grab | Source: 1031835462 | Target: null
+[15:38:01] [Warning] [HenryLab.XR] Missing object for FileID: 1031835462
+[15:38:01] [Log] [Task 3][Action 25] Type: Grab | Source: 1031835462 | Target: null
+[15:38:01] [Warning] [HenryLab.XR] Missing object for FileID: 1031835462
+[15:38:01] [Log] [Task 3][Action 26] Type: Grab | Source: 2065480343 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 27] Type: Grab | Source: 2065480343 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 28] Type: Grab | Source: 1861641131 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 29] Type: Grab | Source: 1861641131 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 30] Type: Grab | Source: 2101925275 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 31] Type: Grab | Source: 2101925275 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 32] Type: Grab | Source: 2101925275 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 33] Type: Grab | Source: 2101925275 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 34] Type: Grab | Source: 395096717 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 35] Type: Grab | Source: 395096717 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 36] Type: Grab | Source: 733952606 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 37] Type: Grab | Source: 733952606 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 38] Type: Grab | Source: 756537417 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 39] Type: Grab | Source: 756537417 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 40] Type: Grab | Source: 756537417 | Target: 1308749550
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Log] [Task 3][Action 41] Type: Grab | Source: 756537417 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 42] Type: Grab | Source: 304294 | Target: 1308749550
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Log] [Task 3][Action 43] Type: Grab | Source: 304294 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to CorrectSecondPart
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 44] Type: Grab | Source: 1373921279 | Target: 1308749550
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Log] [Task 3][Action 45] Type: Grab | Source: 1373921279 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart1
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 46] Type: Grab | Source: 1942540303 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 47] Type: Grab | Source: 1942540303 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 48] Type: Grab | Source: 343767238 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Variable hint (1)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 49] Type: Grab | Source: 343767238 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Variable hint (1)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 50] Type: Trigger | Source: 1250790195 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to LoopTask (1)
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method ButtonPressed on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.ButtonPressed
+[15:38:01] [Log] [Task 3][Action 51] Type: Grab | Source: 1942540303 | Target: null
+[15:38:01] [Log] Added XRGrabbable component to WrongSecondPart2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 52] Type: Grab | Source: 343767238 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Variable hint (1)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 53] Type: Trigger | Source: 1250790195 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to LoopTask (1)
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method ButtonPressed on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.ButtonPressed
+[15:38:01] [Log] [Task 3][Action 54] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideWhile on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideWhile
+[15:38:01] [Log] [Task 3][Action 55] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideIf on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideIf
+[15:38:01] [Log] [Task 3][Action 56] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideRemoved on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideRemoved
+[15:38:01] [Log] [Task 3][Action 57] Type: Trigger | Source: 1255358095 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to InsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method insideKey on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.insideKey
+[15:38:01] [Log] [Task 3][Action 58] Type: Trigger | Source: 1255358095 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to InsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method insideLight on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.insideLight
+[15:38:01] [Log] [Task 3][Action 59] Type: Trigger | Source: 1255358095 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to InsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method insideRemoved on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.insideRemoved
+[15:38:01] [Log] [Task 3][Action 60] Type: Grab | Source: 938973847 | Target: 1255358095
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Show
+[15:38:01] [Log] [Task 3][Action 61] Type: Grab | Source: 938973847 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Show
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 62] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideWhile on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideWhile
+[15:38:01] [Log] [Task 3][Action 63] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideIf on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideIf
+[15:38:01] [Log] [Task 3][Action 64] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideRemoved on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideRemoved
+[15:38:01] [Log] [Task 3][Action 65] Type: Trigger | Source: 1255358095 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to InsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method insideLight on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.insideLight
+[15:38:01] [Log] [Task 3][Action 66] Type: Grab | Source: 938973847 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Show
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 67] Type: Grab | Source: 1647075876 | Target: 284814592
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to While
+[15:38:01] [Log] [Task 3][Action 68] Type: Grab | Source: 1647075876 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to While
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 69] Type: Trigger | Source: 1255358095 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to InsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method insideLight on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.insideLight
+[15:38:01] [Log] [Task 3][Action 70] Type: Trigger | Source: 284814592 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to OutsideInteractor
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method outsideIf on LoopManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: LoopManager.outsideIf
+[15:38:01] [Log] [Task 3][Action 71] Type: Grab | Source: 1338170481 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Nothing
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 72] Type: Grab | Source: 1338170481 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Nothing
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 73] Type: Grab | Source: 1338170481 | Target: 298341143
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Nothing
+[15:38:01] [Log] [Task 3][Action 74] Type: Grab | Source: 298341143 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 75] Type: Grab | Source: 298341143 | Target: 1338170481
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If
+[15:38:01] [Log] [Task 3][Action 76] Type: Grab | Source: 799863782 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Light
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 77] Type: Grab | Source: 799863782 | Target: 1338170481
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Light
+[15:38:01] [Log] [Task 3][Action 78] Type: Grab | Source: 298341143 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 79] Type: Grab | Source: 298341143 | Target: 799863782
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If
+[15:38:01] [Log] [Task 3][Action 80] Type: Grab | Source: 1338170481 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Nothing
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 81] Type: Grab | Source: 2044387483 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to IfFalse
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 82] Type: Grab | Source: 2044387483 | Target: 298341143
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to IfFalse
+[15:38:01] [Log] [Task 3][Action 83] Type: Grab | Source: 298341143 | Target: 2044387483
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If
+[15:38:01] [Log] [Task 3][Action 84] Type: Grab | Source: 1338170481 | Target: 2044387483
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Nothing
+[15:38:01] [Log] [Task 3][Action 85] Type: Grab | Source: 799863782 | Target: 2044387483
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Light
+[15:38:01] [Log] [Task 3][Action 86] Type: Trigger | Source: 1643180047 | TriggerringEvents: 1 | TriggerredEvents: 1
+[15:38:01] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:01] [Log] Added XRTriggerable component to If Puzzle
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method correctPiece on ifManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: ifManager.correctPiece
+[15:38:01] [Log] [HenryLab.XR] Found parameterless method removedPiece on ifManager
+[15:38:01] [Log] [HenryLab.XR] Successfully bound void method: ifManager.removedPiece
+[15:38:01] [Log] [Task 3][Action 87] Type: Grab | Source: 477913986 | Target: 684269935
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (1)
+[15:38:01] [Log] [Task 3][Action 88] Type: Grab | Source: 3248800635818260583 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 89] Type: Grab | Source: 186162469 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (3)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 90] Type: Grab | Source: 1611014898 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (4)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 91] Type: Grab | Source: 2032124412 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (2)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 92] Type: Grab | Source: 370472443 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (5)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 93] Type: Grab | Source: 1696543692 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (6)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 94] Type: Grab | Source: 1172189747 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (7)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 95] Type: Grab | Source: 1024130673 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to Code Snippet (8)
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 96] Type: Grab | Source: 797657008 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If Hint
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 97] Type: Grab | Source: 1019422769 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If Hint 2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 98] Type: Grab | Source: 797657008 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If Hint
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] [Task 3][Action 99] Type: Grab | Source: 1019422769 | Target: null
+[15:38:01] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:01] [Log] Added XRGrabbable component to If Hint 2
+[15:38:01] [Error] Lacking of Destination
+[15:38:01] [Log] Action: MoveAction
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on Door 1 (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Door 2 (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Door 2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on KeyPlacement (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyPlacement because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor (1) because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to KeyInteractor (1) because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on Exit Door (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Radio (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Variable hint (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Variable hint (1) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Variable hint (1) because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on LoopTask (1) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Variable hint (1) because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to LoopTask (1) because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to InsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to InsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to InsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on Show (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Show because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to InsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Show because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on While (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to While because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to InsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to OutsideInteractor because a 'XRSocketInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on Nothing (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Nothing because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Nothing because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on If (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on Light (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Light because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Nothing because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on IfFalse (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to IfFalse because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Nothing because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to Light because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Warning] Could not find XRBaseController component on If Puzzle (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Direct Interactor does not have required Collider set as a trigger.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (1) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (3) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (4) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (2) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (5) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (6) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (7) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on Code Snippet (8) (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on If Hint (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Warning] Could not find XRBaseController component on If Hint 2 (UnityEngine.GameObject) or any of its parents.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If Hint because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] Can't add 'XRDirectInteractor' to If Hint 2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:01] [Log] TimeCost: <b>22.49114</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>40</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:01] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.45, -0.02, -3.24) is not reachable on the NavMesh.
+[15:38:01] [Log] Action: GrabAction
+[15:38:01] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:01] [Log] Action: MoveAction
+[15:38:01] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:01] [Warning] [HenryLab.XR] SetDestination failed for (-3.43, 0.12, -13.76)
+[15:38:01] [Log] Action: MoveAction
+[15:38:01] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.49, -0.02, -3.25) is not reachable on the NavMesh.
+[15:38:01] [Log] Action: GrabAction
+[15:38:02] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:02] [Warning] [HenryLab.XR] SetDestination failed for (-6.15, 0.12, -18.61)
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.45, -0.02, -3.24) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: GrabAction
+[15:38:02] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.18, 1.04, -11.20) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.49, -0.02, -3.25) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: GrabAction
+[15:38:02] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.18, 1.04, -11.20) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.23, 0.05, -23.75) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.23, 0.05, -23.75) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] TimeCost: <b>27.68765</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>40</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.23, 0.05, -23.75) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] TimeCost: <b>32.75024</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>40</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:02] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:02] [Log] Action: MoveAction
+[15:38:02] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:02] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.00, 1.87, -18.00) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] TimeCost: <b>37.9266</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>40</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.90, 1.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.90, 1.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.90, 1.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-2.90, 1.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.50, 2.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.50, 2.57, -18.17) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.63, 0.05, -29.18) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: TriggerAction
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:03] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-14.33, 1.11, -16.40) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-6.80, 0.12, -15.08)
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Log] TimeCost: <b>42.9305</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>40</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:03] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.77, 0.87, -20.40) is not reachable on the NavMesh.
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-6.56, 0.12, -16.60)
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.70, 0.33, -23.07)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.70, 0.33, -23.07)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] Could not find XRBaseController component on CorrectSecondPart (UnityEngine.GameObject) or any of its parents.
+[15:38:03] [Log] Can't add 'XRDirectInteractor' to CorrectSecondPart because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-3.03, 0.12, -10.44)
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.72, 0.53, -22.56)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:03] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.72, 0.53, -22.56)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] Could not find XRBaseController component on WrongSecondPart1 (UnityEngine.GameObject) or any of its parents.
+[15:38:03] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart1 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-3.08, 0.12, -21.35)
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.69, 0.54, -23.08)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.69, 0.54, -23.08)
+[15:38:03] [Log] Action: GrabAction
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Warning] Could not find XRBaseController component on WrongSecondPart2 (UnityEngine.GameObject) or any of its parents.
+[15:38:03] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:03] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:03] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-1.17, 0.12, -10.73)
+[15:38:03] [Log] Action: MoveAction
+[15:38:03] [Log] TimeCost: <b>48.02792</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>43</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:03] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:03] [Warning] [HenryLab.XR] SetDestination failed for (-2.69, 0.54, -23.08)
+[15:38:03] [Log] Action: GrabAction
+[15:38:04] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-5.38, 0.12, -19.37)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.69, 0.54, -23.08)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:04] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.28, 0.12, -14.89)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.72, 0.72, -22.57)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.72, 0.72, -22.57)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on CorrectSecondPart (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to CorrectSecondPart because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-4.69, 0.12, -9.86)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.80, 0.79, -23.08)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.80, 0.79, -23.08)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on WrongSecondPart1 (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart1 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.48, 0.12, -11.40)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.74, 0.95, -22.85)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.74, 0.95, -22.85)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] TimeCost: <b>53.28818</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>45</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on WrongSecondPart2 (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-5.77, 0.12, -9.91)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.74, 0.95, -22.85)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-6.61, 1.98, -20.00) is not reachable on the NavMesh.
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.74, 0.95, -22.85)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-0.78, 0.12, -14.63)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.76, 0.21, -22.58)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.76, 0.21, -22.58)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on CorrectSecondPart (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to CorrectSecondPart because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-5.84, 0.12, -10.21)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.76, 0.24, -23.05)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.76, 0.24, -23.05)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on WrongSecondPart1 (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart1 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.77, 0.12, -10.88)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Log] TimeCost: <b>58.45728</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>48</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.73, 0.33, -22.56)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Exception] NullReferenceException: Object reference not set to an instance of an object
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-2.73, 0.33, -22.56)
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] Could not find XRBaseController component on WrongSecondPart2 (UnityEngine.GameObject) or any of its parents.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Log] Can't add 'XRDirectInteractor' to WrongSecondPart2 because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:04] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:04] [Warning] [HenryLab.XR] SetDestination failed for (-4.72, 0.12, -12.45)
+[15:38:04] [Log] Action: MoveAction
+[15:38:04] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.32, 0.87, -20.38) is not reachable on the NavMesh.
+[15:38:04] [Log] Action: GrabAction
+[15:38:04] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:04] [Log] Action: MoveAction
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-6.12, 0.12, -14.43)
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.32, 0.87, -20.38) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: GrabAction
+[15:38:05] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-6.88, 0.12, -11.49)
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-13.83, -2.12, -17.81) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-2.73, 0.33, -22.56)
+[15:38:05] [Log] Action: GrabAction
+[15:38:05] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-3.54, 0.12, -18.78)
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.32, 0.87, -20.38) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: GrabAction
+[15:38:05] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Log] TimeCost: <b>63.53827</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-2.93, 0.12, -13.11)
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-13.83, -2.12, -17.81) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-14.15, 0.90, -16.03) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: GrabAction
+[15:38:05] [Log] TimeCost: <b>68.56449</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:05] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-14.15, 0.90, -16.03) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: GrabAction
+[15:38:05] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:05] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:05] [Warning] [HenryLab.XR] SetDestination failed for (-6.89, 0.12, -17.87)
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:05] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:05] [Log] Action: MoveAction
+[15:38:05] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:05] [Log] Action: TriggerAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-14.15, 0.90, -16.03) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-3.42, 0.12, -12.36)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.59, 0.87, -16.09) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] TimeCost: <b>73.66249</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.59, 0.87, -16.09) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-3.35, 0.12, -10.36)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.23, 1.40, -11.20) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: TriggerAction
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-12.51, 1.59, -11.19) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: TriggerAction
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:06] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-6.62, 0.12, -14.63)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-5.31, 0.12, -20.07)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Log] TimeCost: <b>78.91481</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-3.04, 0.12, -19.56)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-3.59, 0.12, -20.17)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:06] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:06] [Warning] [HenryLab.XR] SetDestination failed for (-1.12, 0.12, -14.76)
+[15:38:06] [Log] Action: MoveAction
+[15:38:06] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:06] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:06] [Log] Action: GrabAction
+[15:38:07] [Log] TimeCost: <b>84.20189</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-1.60, 0.12, -15.24)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.28, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-2.70, 0.12, -14.31)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.28, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.29, 0.88, -11.50) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.28, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.53) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.28, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Log] TimeCost: <b>89.28152</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.74, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-11.28, 0.88, -11.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-3.65, 0.34, -16.24)
+[15:38:07] [Log] Action: TriggerAction
+[15:38:07] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:07] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.30, 0.88, -9.82) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.84, 1.46, -15.52) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-8.38, 1.01, -16.86) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-8.59, 0.12, -14.77)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-8.39, 0.91, -10.39) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-0.65, 0.12, -10.68)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Log] TimeCost: <b>94.39281</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-0.89, 1.03, -18.13) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-7.72, 0.12, -18.02)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-5.22, 0.91, -14.71) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:07] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:07] [Warning] [HenryLab.XR] SetDestination failed for (-4.25, 0.12, -10.16)
+[15:38:07] [Log] Action: MoveAction
+[15:38:07] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.26, 0.82, -15.86) is not reachable on the NavMesh.
+[15:38:07] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-2.53, 0.12, -12.15)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.60, 0.82, -16.04) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-3.99, 0.12, -13.93)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.60, 0.82, -15.87) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-8.14, 0.12, -17.34)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.27, 0.82, -16.03) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Log] TimeCost: <b>99.44065</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-4.89, 0.12, -12.72)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.28, 1.00, -15.60) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-5.32, 0.12, -12.14)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-5.61, 1.88, -15.60) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-1.00, 0.12, -17.36)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-3.28, 1.00, -15.60) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-7.24, 0.12, -16.91)
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-5.61, 1.88, -15.60) is not reachable on the NavMesh.
+[15:38:08] [Log] Action: GrabAction
+[15:38:08] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:08] [Log] Action: MoveAction
+[15:38:08] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:08] [Warning] [HenryLab.XR] SetDestination failed for (-7.25, 0.12, -17.43)
+[15:38:08] [Log] TimeCost: <b>104.5486</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:09] [Log] TimeCost: <b>109.6712</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:09] [Log] [Task 4][Action 0] Type: Grab | Source: 28697937 | Target: 791172510
+[15:38:09] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:09] [Log] Added XRGrabbable component to Sphere
+[15:38:09] [Log] [Task 4][Action 1] Type: Grab | Source: 33018423 | Target: 791172510
+[15:38:09] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:09] [Log] Added XRGrabbable component to Sphere
+[15:38:09] [Log] [Task 4][Action 2] Type: Grab | Source: 28697937 | Target: 732398526
+[15:38:09] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:09] [Log] Added XRGrabbable component to Sphere
+[15:38:09] [Log] [Task 4][Action 3] Type: Grab | Source: 33018423 | Target: 732398526
+[15:38:09] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:09] [Log] Added XRGrabbable component to Sphere
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:09] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:09] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:09] [Log] Can't add 'XRDirectInteractor' to Sphere because a 'XRDirectInteractor' is already added to the game object! A GameObject can only contain one 'XRBaseInteractor' component.
+[15:38:09] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:09] [Warning] [HenryLab.XR] SetDestination failed for (-6.29, 0.00, -13.31)
+[15:38:09] [Log] Action: GrabAction
+[15:38:09] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.55, 1.31, -0.51) is not reachable on the NavMesh.
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:09] [Warning] [HenryLab.XR] SetDestination failed for (-6.29, 0.00, -13.31)
+[15:38:09] [Log] Action: GrabAction
+[15:38:09] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.55, 1.31, -0.51) is not reachable on the NavMesh.
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:09] [Warning] [HenryLab.XR] SetDestination failed for (-6.29, 0.00, -13.31)
+[15:38:09] [Log] Action: GrabAction
+[15:38:09] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.50, 1.12, -33.46) is not reachable on the NavMesh.
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:09] [Warning] [HenryLab.XR] SetDestination failed for (-6.29, 0.00, -13.31)
+[15:38:09] [Log] Action: GrabAction
+[15:38:09] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:09] [Log] Action: MoveAction
+[15:38:09] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.50, 1.12, -33.46) is not reachable on the NavMesh.
+[15:38:09] [Log] TimeCost: <b>114.7674</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:09] [Log] TimeCost: <b>119.9394</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>49</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:09] [Log] [Task 5][Action 0] Type: Trigger | Source: 130277253 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:09] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:09] [Log] Added XRTriggerable component to BookBlue (8)
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeFirstHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeActivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeDeactivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeLastHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (8)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Log] [Task 5][Action 1] Type: Trigger | Source: 671280172 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:09] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:09] [Log] Added XRTriggerable component to BookBlue (9)
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeFirstHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnFirstHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeFirstSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeActivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnActivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeDeactivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnDeactivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectCanceled' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeLastHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnLastHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (9)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Log] [Task 5][Action 2] Type: Trigger | Source: 787642772 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:09] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:09] [Log] Added XRTriggerable component to BookBlue (11)
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeFirstHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnFirstHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnHoverEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeFirstSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectEntered' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeActivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnActivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeDeactivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnDeactivate' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeSelectExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnSelectCanceled' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeLastHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Error] [HenryLab.XR] No parameterless method 'InvokeOnLastHoverExited' found on UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable (BookBlue (11)). Only methods without parameters are supported for UnityEvent binding.
+[15:38:09] [Log] [Task 5][Action 3] Type: Grab | Source: 1993477995 | Target: null
+[15:38:10] [Log] [HenryLab.XR]Entity'grabbable' Registered
+[15:38:10] [Log] Added XRGrabbable component to Hourglass
+[15:38:10] [Error] Lacking of Destination
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Warning] Could not find XRBaseController component on BookBlue (8) (UnityEngine.GameObject) or any of its parents.
+[15:38:10] [Warning] Could not find XRBaseController component on BookBlue (9) (UnityEngine.GameObject) or any of its parents.
+[15:38:10] [Warning] Could not find XRBaseController component on BookBlue (11) (UnityEngine.GameObject) or any of its parents.
+[15:38:10] [Warning] Could not find XRBaseController component on Hourglass (UnityEngine.GameObject) or any of its parents.
+[15:38:10] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-10.32, 0.10, -15.27) is not reachable on the NavMesh.
+[15:38:10] [Log] Action: TriggerAction
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-1.56, 0.97, -9.85) is not reachable on the NavMesh.
+[15:38:10] [Log] Action: TriggerAction
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-0.95, 0.92, -9.63) is not reachable on the NavMesh.
+[15:38:10] [Log] Action: TriggerAction
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:10] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:10] [Warning] [HenryLab.XR] SetDestination failed for (-7.71, 0.15, -16.27)
+[15:38:10] [Log] Action: GrabAction
+[15:38:10] [Log] <b>Entity </b><b>grabbable</b><b> State </b><b>Grabbed</b>
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Error] "SetDestination" can only be called on an active agent that has been placed on a NavMesh.
+[15:38:10] [Warning] [HenryLab.XR] SetDestination failed for (-1.85, 0.12, -13.99)
+[15:38:10] [Log] TimeCost: <b>125.1336</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>53</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:10] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:10] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:10] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:10] [Warning] Failed to create agent because it is not close enough to the NavMesh
+[15:38:10] [Log] TimeCost: <b>130.43</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>53</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:10] [Log] [Task 6][Action 0] Type: Trigger | Source: 1269740005 | TriggerringEvents: 1 | TriggerredEvents: 0
+[15:38:10] [Log] [HenryLab.XR]Entity'triggerable' Registered
+[15:38:10] [Log] Added XRTriggerable component to Timer Countdown
+[15:38:10] [Log] [HenryLab.XR] Found parameterless method onWin on Timer
+[15:38:10] [Log] [HenryLab.XR] Successfully bound void method: Timer.onWin
+[15:38:10] [Log] Action: MoveAction
+[15:38:10] [Warning] Could not find XRBaseController component on Timer Countdown (UnityEngine.GameObject) or any of its parents.
+[15:38:10] [Warning] [HenryLab.XR]Heuristic Bug Logs: Destination: (-4.50, 2.51, -23.62) is not reachable on the NavMesh.
+[15:38:10] [Log] Action: TriggerAction
+[15:38:11] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerring</b>
+[15:38:11] [Log] <b>Entity </b><b>triggerable</b><b> State </b><b>Triggerred</b>
+[15:38:11] [Log] TimeCost: <b>135.5719</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>54</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:11] [Log] TimeCost: <b>139.9344</b><b>, CoveredInteractableCount: </b><b>0</b><b>, InteractableCount: </b><b>54</b><b>, Interactable Coverage: </b><b>0.00%</b>
+[15:38:11] [Log] <b>Experiment Finished</b>
+[15:38:11] [Log] Metrics saved to D:/--UnityProject/VR/VRExplorer_subjects/Edutainment-Escape-Room/Assets\../_Experiment/InteractableAndStateCoverageReport.csv
