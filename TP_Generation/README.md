@@ -194,6 +194,9 @@ The scripts generate several output files:
 4. **`test_plan_conversations_*.json`**: Generated test plans
 5. **`llm_responses/`**: Directory containing LLM interaction logs
 
+## Evaluation Files
+The output repo **execution_eval** include our results on Interaction-Scenario Evaluation and runtime test-plan execution.
+
 ## Configuration
 
 Before running the scripts, ensure:
