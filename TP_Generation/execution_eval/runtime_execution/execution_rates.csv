@@ -1,0 +1,14 @@
+project,observed_segments,executable_segments,success,partial,skipped_semantic,skipped_syntax,failed_execution,failed_reachability,dispatched_rate_percent,execution_rate_percent
+BowlingVR,6,2,0,0,4,0,2,0,33.33,0.0
+CityView,30,30,14,15,0,0,0,1,100.0,96.67
+EE-Room,111,111,2,109,0,0,0,0,100.0,100.0
+EscapeTheRoomVR,0,0,0,0,0,0,0,0,,
+escapeVr,48,48,4,44,0,0,0,0,100.0,100.0
+maze,101,101,2,99,0,0,0,0,100.0,100.0
+Parkinson,37,37,3,34,0,0,0,0,100.0,100.0
+UnityVR,10,2,0,1,8,0,1,0,20.0,50.0
+VGun,28,28,1,24,0,0,3,0,100.0,89.29
+VR-Basics,73,73,6,66,0,0,1,0,100.0,98.63
+vr-firefighter,31,31,19,12,0,0,0,0,100.0,100.0
+VR-Room,89,89,14,75,0,0,0,0,100.0,100.0
+wheelsim,12,12,2,10,0,0,0,0,100.0,100.0

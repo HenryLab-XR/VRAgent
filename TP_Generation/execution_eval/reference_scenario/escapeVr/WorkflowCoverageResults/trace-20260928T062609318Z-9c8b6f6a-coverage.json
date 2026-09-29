@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "project": "escapeVr",
+  "traceRunId": "20260928T062609318Z-9c8b6f6a",
+  "inputs": {
+    "referenceScenarios": "WorkflowCoverageResults/escapevr-reference-scenarios.json",
+    "testPlan": "artifacts/BatScene_consolidated_test_plans.json",
+    "todg": "artifacts/TODG/BatScene.unity.json_graph.gml",
+    "trace": "WorkflowCoverageResults/traces/trace-20260928T062609318Z-9c8b6f6a.jsonl"
+  },
+  "metrics": {
+    "scenarioCount": 3,
+    "dependencyCount": 18,
+    "sdc": {"covered": 2, "total": 18, "rate": 0.1111111111},
+    "pic": {"covered": 1, "total": 7, "rate": 0.1428571429},
+    "rec": {"covered": 14, "total": 30, "rate": 0.4666666667},
+    "scr": {"covered": 0, "total": 3, "rate": 0.0},
+    "diagnosticTruePostconditions": {"covered": 2, "total": 3, "rate": 0.6666666667}
+  },
+  "workflows": [
+    {
+      "id": "escape-room-door",
+      "sdc": {"covered": 1, "total": 6},
+      "pic": {"covered": 1, "total": 2},
+      "rec": {"covered": 0, "total": 6},
+      "completed": false,
+      "reason": "No runtime record for the workflow."
+    },
+    {
+      "id": "room2-shape-placement",
+      "sdc": {"covered": 1, "total": 6},
+      "pic": {"covered": 0, "total": 3},
+      "rec": {"covered": 8, "total": 14},
+      "completed": false,
+      "reason": "Controller flags and postcondition were reached by direct calls; matching trigger entries, placement actions, and snaps were absent."
+    },
+    {
+      "id": "room3-laser",
+      "sdc": {"covered": 0, "total": 6},
+      "pic": {"covered": 0, "total": 2},
+      "rec": {"covered": 6, "total": 10},
+      "completed": false,
+      "reason": "Controller state and postcondition were reached by direct calls; two distinct raycast disconnections were absent and laser1 was subsequently cleared."
+    }
+  ]
+}

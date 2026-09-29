@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "referenceVersion": "vr-room-2026-09-28",
+  "inputs": {
+    "referenceScenarios": "WorkflowCoverage/reference-scenarios.json",
+    "todg": "artifacts/My VR Room_gobj_hierarchy.json",
+    "testPlan": "artifacts/My VR Room_consolidated_test_plans.json",
+    "runtimeTrace": "WorkflowCoverage/traces/trace-20260929T033905412Z.jsonl"
+  },
+  "evaluationBoundary": {
+    "firstSequence": 1,
+    "lastSequence": 772,
+    "recordCount": 772
+  },
+  "denominators": {
+    "scenarios": 5,
+    "dependencies": 9,
+    "interactions": 6,
+    "runtimeEventObligations": 15
+  },
+  "metrics": {
+    "staticDependencyCoverage": { "covered": 5, "required": 9, "percent": 55.6 },
+    "planInteractionCoverage": { "covered": 4, "required": 6, "percent": 66.7 },
+    "runtimeEventCoverage": { "covered": 10, "required": 15, "percent": 66.7 },
+    "strictScenarioCompletionRate": { "covered": 3, "required": 5, "percent": 60.0 }
+  },
+  "workflows": [
+    {
+      "id": "start-room",
+      "staticDependencies": { "covered": 0, "required": 1 },
+      "planInteractions": { "covered": 0, "required": 1 },
+      "runtimeEvents": { "covered": 0, "required": 2 },
+      "complete": false,
+      "reason": "No OK/start-room action appears in the extracted graph, plan, or trace."
+    },
+    {
+      "id": "fire-projectile",
+      "staticDependencies": { "covered": 2, "required": 3 },
+      "planInteractions": { "covered": 1, "required": 1 },
+      "runtimeEvents": { "covered": 4, "required": 4 },
+      "complete": true,
+      "evidence": "Sequences 465-469 form one correlated action/callback/projectile/audio/postcondition chain.",
+      "planEvidence": "Trigger(Launcher_DartGun) invokes the required Fire and Play callbacks and is credited by the revised trigger-equivalence rule."
+    },
+    {
+      "id": "control-media",
+      "staticDependencies": { "covered": 2, "required": 2 },
+      "planInteractions": { "covered": 2, "required": 2 },
+      "runtimeEvents": { "covered": 4, "required": 4 },
+      "complete": true,
+      "evidence": "Sequences 502-507 form one correlated play-to-pause chain with true postconditions.",
+      "planEvidence": "Trigger actions invoke the required play and pause/stop methods and are credited by the revised trigger-equivalence rule."
+    },
+    {
+      "id": "toggle-room-effects",
+      "staticDependencies": { "covered": 1, "required": 1 },
+      "planInteractions": { "covered": 1, "required": 1 },
+      "runtimeEvents": { "covered": 2, "required": 2 },
+      "complete": true,
+      "evidence": "Sequences 485-487 form one correlated particle-control/state/postcondition chain.",
+      "planEvidence": "Trigger(Light_Switch) and targeted Toggle calls express the required effect activation under the revised rule."
+    },
+    {
+      "id": "rotate-cover",
+      "staticDependencies": { "covered": 0, "required": 2 },
+      "planInteractions": { "covered": 0, "required": 1 },
+      "runtimeEvents": { "covered": 0, "required": 3 },
+      "complete": false,
+      "reason": "The extracted serialized StartRotation target is unresolved, the plan has no cover action, and the trace has no rotate-cover records."
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+% Requires: \usepackage{booktabs,multirow,graphicx,array}
+\begin{table}[htbp]
+\centering
+\caption{Reference interaction scenarios for \texttt{escapeVr} and \texttt{VR-Room}.}
+\label{tab:reference-scenarios}
+\renewcommand{\arraystretch}{1.25}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lp{3cm} p{4.3cm} p{4cm} p{5.2cm} p{5.0cm}}
+\toprule
+\textbf{Project} &
+\textbf{Scenario} &
+\textbf{Preconditions ($P$)} &
+\textbf{Interactions ($I$)} &
+\textbf{Expected transitions ($T$)} &
+\textbf{Postconditions ($Q$)}
+\\
+\midrule
+
+\multirow{3}{*}{\texttt{\small escapeVr}}
+& $W_1$: Room 1
+& $\mathit{openTrigger} \land \mathit{tag}(k)=\texttt{Objet1}
+   \land \neg\mathit{doorOpen}$
+& $\mathit{Grab}(k);\ \mathit{Place}(k,c)$
+& $\mathit{Enter}(k,c) \Rightarrow \mathit{Snap}(k)
+   \Rightarrow \mathit{doorOpen}$
+& $\mathit{snapped}(k) \land \neg\mathit{active}(c)
+   \land \neg\mathit{openTrigger}$
+\\
+
+& $W_2$: Room 2
+& $\neg(S \lor C \lor P \lor \mathit{doorOpen})$
+& $\mathit{Place}(s,r_s);\ \mathit{Place}(c,r_c);\ \mathit{Place}(p,r_p)$
+& $S \land C \land P \Rightarrow \mathit{doorOpen}$
+& $S \land C \land P \land \mathit{snapped}(s,c,p)
+   \land \mathit{doorOpen}$
+\\
+
+& $W_3$: Room 3
+& $\mathit{connected}(L_1,L_2)
+   \land \neg(l_1 \lor l_2 \lor \mathit{doorOpen})$
+& $\mathit{Block}(L_1);\ \mathit{Block}(L_2)$
+& $\neg\mathit{conn}(L_i) \Rightarrow l_i;\quad
+   l_1 \land l_2 \Rightarrow \mathit{doorOpen}$
+& $l_1 \land l_2 \land \neg\mathit{conn}(L_1,L_2)
+   \land \mathit{doorOpen} \land \mathit{audio}$
+\\
+\midrule
+
+\multirow{5}{*}{\texttt{\small VR-Room}}
+& $W_1$: Start room
+& $\mathit{loaded}(R) \land \mathit{active}(u)
+   \land \mathit{target}(u)=R'$ 
+& $\mathit{Activate}(u)$
+& $\mathit{Activate}(u) \Rightarrow
+   \mathit{LoadSceneUsingName}(R') \Rightarrow \mathit{loaded}(R')$
+& $\mathit{activeScene}=R' \land \neg\mathit{activeScene}=R$
+\\
+
+& $W_2$: Fire projectile
+& $\mathit{selected}(g) \land \mathit{enabled}(g)
+   \land \mathit{ready}(p)$
+& $\mathit{Activate}(g)$
+& $\mathit{Activate}(g) \Rightarrow \mathit{Fire}(g)
+   \Rightarrow \mathit{Spawn}(p) \land \mathit{Play}(a)$
+& $\mathit{exists}(p') \land \mathit{movingAway}(p',g)
+   \land \mathit{playing}(a)$
+\\
+
+& $W_3$: Media controls
+& $\mathit{active}(m) \land \mathit{active}(b_p)
+   \land \mathit{active}(b_s)$
+& $\mathit{Press}(b_p);\ \mathit{Press}(b_s)$
+& $\mathit{Press}(b_p) \Rightarrow
+   \mathit{Play}(m);\quad
+   \mathit{Press}(b_s) \Rightarrow
+   \mathit{PauseOrStop}(m)$
+& $\mathit{state}(m)=\mathit{lastRequestedState}
+   \land \neg\mathit{spuriousRestart}(m)$
+\\
+
+& $W_4$: Room effects
+& $\mathit{exists}(x) \land \mathit{active}(b)
+   \land \mathit{connected}(b,x)$
+& $\mathit{Activate}(b)$
+& $\mathit{Activate}(b) \Rightarrow
+   \mathit{SetActiveOrToggle}(x) \Rightarrow
+   \mathit{stateChanged}(x)$
+& $\mathit{state}(x)=\mathit{requestedState}
+   \land \mathit{target}=x
+   \land \mathit{persistent}(x)$
+\\
+
+& $W_5$: Rotate cover
+& $\mathit{active}(v) \land \mathit{enabled}(r)
+   \land \neg\mathit{atTarget}(v)$
+& $\mathit{Activate}(b_v)$
+& $\mathit{Activate}(b_v) \Rightarrow
+   \mathit{StartRotation}(r) \Rightarrow
+   \mathit{RotateTowards}(v,\theta_t)$
+& $\mathit{angle}(v)=\theta_t
+   \land \neg\mathit{stalled}(v)
+   \land \neg\mathit{reversed}(v)$
+\\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+% VR-Room symbols:
+% R/R' = current/target scene; u = start UI control;
+% g = launcher; p/p' = projectile template/instance; a = firing audio;
+% m = media object; b_p/b_s = play/stop controls;
+% b = effect control; x = connected light, panel, or particle target;
+% v = cover; r = RotateCover component; b_v = cover control;
+% theta_t = configured target angle.

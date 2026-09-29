@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "project": "escapeVr-main",
+  "scene": "Assets/Scenes/BatScene.unity",
+  "status": "candidate-derived-reference-draft",
+  "validationProtocol": {
+    "requiredEvaluators": 2,
+    "acceptance": "Both evaluators independently confirm the initial state, action order, causal callback chain, and semantic postcondition. Resolve disagreements before using a scenario as ground truth.",
+    "completionRule": "All required actions and required trace events occur in order, no forbidden event occurs, and every semantic postcondition evaluates true. Animation invocation alone is insufficient."
+  },
+  "traceVocabulary": {
+    "Action": "A player- or MCP-initiated operation, such as grabbing, moving, or placing an object.",
+    "Callback": "A Unity or application callback caused by an action, such as OnTriggerEnter or a raycast connection change.",
+    "StateTransition": "A recorded before/after change to application state.",
+    "Postcondition": "A semantic completion oracle evaluated after the causal chain.",
+    "required": "Must occur for scenario completion.",
+    "alternative": "One of the listed equivalent observations is sufficient.",
+    "forbidden": "Its occurrence invalidates the run."
+  },
+  "scenarios": [
+    {
+      "id": "escape-room-door",
+      "title": "Place the Objet1 key object to open a door",
+      "candidateBasis": [
+        "Assets/Script/DoorOpenScript.cs::OnTriggerEnter",
+        "Assets/Script/SnapToTrigger.cs::Snap",
+        "Assets/Prefabs/collider_porte.prefab",
+        "BatScene prefab instances tagged Objet1"
+      ],
+      "initialState": [
+        "The target collider_porte instance is active.",
+        "DoorOpenScript.openTrigger is true.",
+        "The associated door is closed and its NavMesh passage is blocked.",
+        "An interactable object tagged Objet1 is outside the trigger."
+      ],
+      "actions": [
+        {"order": 1, "actor": "player", "verb": "grab", "target": "an interactable tagged Objet1"},
+        {"order": 2, "actor": "player", "verb": "move-and-release", "target": "Objet1 inside collider_porte"}
+      ],
+      "requiredTrace": [
+        {"order": 1, "kind": "Callback", "member": "OnTriggerEnter", "eventId": "door-trigger-enter", "constraint": "target tag == Objet1"},
+        {"order": 2, "kind": "Action", "category": "place-key-object", "eventId": "place-key"},
+        {"order": 3, "kind": "StateTransition", "member": "isSnapped", "after": "True"},
+        {"order": 4, "kind": "StateTransition", "member": "GameObject.activeSelf", "after": "False", "eventId": "trigger-consumed"},
+        {"order": 5, "kind": "StateTransition", "member": "openTrigger", "after": "False", "eventId": "door-opened"},
+        {"order": 6, "kind": "Postcondition", "eventId": "door-opened", "outcome": true}
+      ],
+      "dependencyEdges": [
+        "grab -> move-and-release",
+        "move-and-release -> OnTriggerEnter",
+        "OnTriggerEnter[tag=Objet1 && openTrigger] -> Snap",
+        "Snap -> trigger consumed",
+        "OnTriggerEnter -> DoorOpen animation request",
+        "DoorOpen request -> passage unblocked"
+      ],
+      "postconditions": [
+        "The placed object is snapped at the trigger and can no longer be manipulated.",
+        "The trigger object is inactive and openTrigger is false.",
+        "The door-open animation was requested and the associated NavMesh obstacle is disabled."
+      ],
+      "failureRules": [
+        "Reject if the object never enters the trigger or has a tag other than Objet1.",
+        "Reject if the trigger is consumed but the passage remains blocked.",
+        "Reject if a movement action reports that its destination is not reachable on the NavMesh."
+      ]
+    },
+    {
+      "id": "room2-shape-placement",
+      "title": "Place sphere, cube, and pyramid in their matching Room 2 receptacles",
+      "candidateBasis": [
+        "Assets/Script/room2_trigger.cs::OnTriggerEnter",
+        "Assets/Script/room2.cs::SetSphereCheck/SetCubeCheck/SetPyramidCheck/Update",
+        "Assets/Script/SnapToTrigger.cs::Snap",
+        "BatScene objects trigger_sphere, trigger_cube, trigger_pyramide",
+        "Sphere/Cube/Tapered Interactable prefabs"
+      ],
+      "initialState": [
+        "Room 2 SphereChecked, CubeChecked, PyramidChecked, and doorOpen are false.",
+        "Sphere_salle2, Cube_salle2, and Pyramid_salle2 are movable and not snapped.",
+        "The three matching receptacles are active.",
+        "The Room 2 door is closed and its NavMesh passage is blocked."
+      ],
+      "actions": [
+        {"order": 1, "actor": "player", "verb": "grab-move-release", "target": "Sphere_salle2 into trigger_sphere"},
+        {"order": 2, "actor": "player", "verb": "grab-move-release", "target": "Cube_salle2 into trigger_cube"},
+        {"order": 3, "actor": "player", "verb": "grab-move-release", "target": "Pyramid_salle2 into trigger_pyramide", "note": "The three placements may occur in any permutation."}
+      ],
+      "requiredTrace": [
+        {"order": "1..3", "kind": "Callback", "member": "OnTriggerEnter", "eventId": "shape-trigger-enter", "cardinality": 3},
+        {"order": "after matching trigger callbacks", "kind": "Action", "eventIds": ["sphere-placed", "cube-placed", "pyramid-placed"], "cardinality": 3},
+        {"order": "after placement actions", "kind": "Callback", "eventIds": ["sphere-checked", "cube-checked", "pyramid-checked"], "cardinality": 3},
+        {"order": "after each checked callback", "kind": "StateTransition", "members": ["SphereChecked", "CubeChecked", "PyramidChecked"], "after": "True", "cardinality": 3},
+        {"order": "after all checks", "kind": "StateTransition", "member": "doorOpen", "after": "True", "eventId": "room2-door-state"},
+        {"order": "last", "kind": "Postcondition", "eventId": "room2-door-open", "outcome": true}
+      ],
+      "dependencyEdges": [
+        "each grab-move-release -> matching OnTriggerEnter",
+        "matching tag and receptacle flag -> matching Set*Check",
+        "matching Set*Check -> Snap",
+        "SphereChecked && CubeChecked && PyramidChecked -> doorOpen",
+        "doorOpen -> DoorOpen animation request",
+        "DoorOpen request -> passage unblocked"
+      ],
+      "postconditions": [
+        "All three check flags and doorOpen are true.",
+        "Each shape is snapped to its matching receptacle and is no longer manipulable.",
+        "The Room 2 door-open animation was requested and its NavMesh obstacle is disabled."
+      ],
+      "failureRules": [
+        "A wrong-tag object entering a receptacle does not count as a placement.",
+        "Duplicate placement of one shape cannot substitute for a missing shape.",
+        "Reject if doorOpen occurs before all three distinct check transitions.",
+        "Reject if any required move reports an unreachable NavMesh destination."
+      ]
+    },
+    {
+      "id": "room3-laser",
+      "title": "Interrupt both Room 3 laser-to-receiver paths to open the door",
+      "candidateBasis": [
+        "Assets/Prefabs/Laser Beam/Sender.prefab (Sender and Sender (1))",
+        "Assets/Script/LaserBeamSender.cs::Update",
+        "Assets/Script/room3.cs::SetLaser/DesactivateLaser/Update",
+        "BatScene object Room 3"
+      ],
+      "initialState": [
+        "Both Sender instances are connected to Receiver-tagged targets.",
+        "Each LaserBeamSender.isConnected is true.",
+        "room3.laser1, laser2, and doorOpen are false.",
+        "The Room 3 door is closed, its passage is blocked, and the completion audio is not playing."
+      ],
+      "actions": [
+        {"order": 1, "actor": "player", "verb": "move-obstruction", "target": "into Sender laser path"},
+        {"order": 2, "actor": "player", "verb": "move-obstruction", "target": "into Sender (1) laser path"}
+      ],
+      "requiredTrace": [
+        {"order": 1, "kind": "Callback", "member": "RaycastReceiverDisconnected", "eventId": "receiver-disconnected"},
+        {"order": 2, "kind": "StateTransition", "member": "isConnected", "after": "False", "eventId": "laser-disconnected"},
+        {"order": 3, "kind": "Callback", "member": "SetLaser", "eventId": "laser-set"},
+        {"order": "repeat for second sender", "kind": "StateTransition", "members": ["laser1", "laser2"], "after": "True", "cardinality": 2},
+        {"order": "after both laser flags", "kind": "StateTransition", "member": "doorOpen", "after": "True", "eventId": "room3-door-state"},
+        {"order": "last", "kind": "Postcondition", "eventId": "room3-door-open", "outcome": true}
+      ],
+      "dependencyEdges": [
+        "obstruction in each beam -> non-Receiver raycast hit",
+        "non-Receiver hit while connected -> isConnected false",
+        "isConnected false -> SetLaser",
+        "two SetLaser transitions -> laser1 && laser2",
+        "laser1 && laser2 -> doorOpen",
+        "doorOpen -> DoorOpen animation + audio + passage unblocked"
+      ],
+      "postconditions": [
+        "laser1, laser2, and doorOpen are true.",
+        "Both senders are disconnected from their receivers at completion.",
+        "The Room 3 door-open animation and completion audio were requested, and its NavMesh obstacle is disabled."
+      ],
+      "failureRules": [
+        "Reject if the same sender toggles twice while the other remains connected.",
+        "Reject if a receiver-connected/laser-cleared event occurs before final evaluation and either laser flag becomes false.",
+        "Reject if audio or animation occurs without the doorOpen state transition and true postcondition."
+      ]
+    }
+  ]
+}

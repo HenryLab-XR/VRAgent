@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "project": "escapeVr",
+  "traceRunId": "20260928T065538684Z-bd9971ec",
+  "metrics": {
+    "scenarioCount": 3,
+    "dependencyCount": 18,
+    "sdc": {"covered": 2, "total": 18, "rate": 0.1111111111},
+    "pic": {"covered": 1, "total": 7, "rate": 0.1428571429},
+    "rec": {"covered": 14, "total": 30, "rate": 0.4666666667},
+    "scr": {"covered": 0, "total": 3, "rate": 0.0},
+    "diagnosticTruePostconditions": {"covered": 2, "total": 3, "rate": 0.6666666667}
+  },
+  "comparisonToPreviousRun": {
+    "previousRunId": "20260928T062609318Z-9c8b6f6a",
+    "previousRecordCount": 153,
+    "currentRecordCount": 167,
+    "newEvidence": "Cube_salle1 XR hover/select/activate/release actions",
+    "newReferenceEventObligationsCovered": 0
+  },
+  "workflows": [
+    {"id": "escape-room-door", "sdc": "1/6", "pic": "1/2", "rec": "0/6", "completed": false},
+    {"id": "room2-shape-placement", "sdc": "1/6", "pic": "0/3", "rec": "8/14", "completed": false},
+    {"id": "room3-laser", "sdc": "0/6", "pic": "0/2", "rec": "6/10", "completed": false}
+  ]
+}

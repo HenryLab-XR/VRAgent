@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "referenceVersion": "vr-room-2026-09-28",
+  "trace": "D:\\VR-Room-origin\\VR-Room-origin\\WorkflowCoverage\\traces\\trace-20260929T033905412Z.jsonl",
+  "recordCount": 772,
+  "metrics": {
+    "runtimeEventCoverage": {
+      "covered": 10.0,
+      "required": 15.0,
+      "percent": 66.7
+    },
+    "strictScenarioCompletionRate": {
+      "covered": 3,
+      "required": 5,
+      "percent": 60.0
+    }
+  },
+  "workflows": [
+    {
+      "id": "start-room",
+      "coveredObligations": 0,
+      "requiredObligations": 2,
+      "runtimeEventCoveragePercent": 0.0,
+      "ordered": false,
+      "correlationId": null,
+      "postconditionPassed": false,
+      "failureOracleTriggered": false,
+      "complete": false
+    },
+    {
+      "id": "fire-projectile",
+      "coveredObligations": 4,
+      "requiredObligations": 4,
+      "runtimeEventCoveragePercent": 100.0,
+      "ordered": true,
+      "correlationId": "fire-projectile-6d813a2071d44172b9e2b7d4763e13f2",
+      "postconditionPassed": true,
+      "failureOracleTriggered": false,
+      "complete": true
+    },
+    {
+      "id": "control-media",
+      "coveredObligations": 4,
+      "requiredObligations": 4,
+      "runtimeEventCoveragePercent": 100.0,
+      "ordered": true,
+      "correlationId": "control-media-23326dc340d248e19016e55d3b0f61f0",
+      "postconditionPassed": true,
+      "failureOracleTriggered": false,
+      "complete": true
+    },
+    {
+      "id": "toggle-room-effects",
+      "coveredObligations": 2,
+      "requiredObligations": 2,
+      "runtimeEventCoveragePercent": 100.0,
+      "ordered": true,
+      "correlationId": "toggle-room-effects-6d7ab705a87a4f54aa729d323ccdddc7",
+      "postconditionPassed": true,
+      "failureOracleTriggered": false,
+      "complete": true
+    },
+    {
+      "id": "rotate-cover",
+      "coveredObligations": 0,
+      "requiredObligations": 3,
+      "runtimeEventCoveragePercent": 0.0,
+      "ordered": false,
+      "correlationId": null,
+      "postconditionPassed": false,
+      "failureOracleTriggered": false,
+      "complete": false
+    }
+  ],
+  "notes": [
+    "REC counts each unique reference event obligation once.",
+    "SCR additionally requires ordered events, a successful semantic postcondition, no failure oracle, and terminal validity.",
+    "Fallback runtime.script.* records identify instrumentation candidates but do not satisfy semantic obligations by themselves."
+  ]
+}

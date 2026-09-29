@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "referenceVersion": "vr-room-2026-09-28",
+  "scene": "Assets/Scenes/My VR Room.unity",
+  "scenarioSelectionRule": "Include only interactions supported by a serialized event or project script plus an observable semantic postcondition.",
+  "scenarios": [
+    {
+      "id": "start-room",
+      "preconditions": ["My VR Room is loaded", "start UI is active"],
+      "actions": ["activate OK UI button"],
+      "dependencies": ["OK.onClick -> LoadSceneUsingName"],
+      "events": ["start-button-activated", "target-scene-loaded"],
+      "postconditions": ["configured target scene is active"],
+      "forbidden": ["scene load throws", "original scene remains active after a successful load event"]
+    },
+    {
+      "id": "fire-projectile",
+      "preconditions": ["launcher is held or selected", "projectile source is enabled"],
+      "actions": ["activate launcher"],
+      "dependencies": ["XR activate -> Fire", "Fire -> projectile spawn", "Fire -> AudioSource.Play"],
+      "events": ["launcher-activated", "fire-called", "projectile-created", "fire-audio-started"],
+      "postconditions": ["a projectile instance exists and moves away from the launcher"],
+      "forbidden": ["activation without projectile creation"]
+    },
+    {
+      "id": "control-media",
+      "preconditions": ["media object and controls are active"],
+      "actions": ["press play or play-pause control", "press pause or stop control"],
+      "dependencies": ["control event -> Play/PlayPause/TogglePlayPause", "control event -> Pause/Stop"],
+      "events": ["media-play-control", "media-playing", "media-stop-control", "media-not-playing"],
+      "postconditions": ["media playing state follows the last control action"],
+      "forbidden": ["media restarts after terminal stop without a new play action"]
+    },
+    {
+      "id": "toggle-room-effects",
+      "preconditions": ["target light, particle, or panel object exists"],
+      "actions": ["activate the connected XR control"],
+      "dependencies": ["XR control -> SetActive/Toggle/ToggleParticleSystem"],
+      "events": ["effect-control-activated", "effect-state-changed"],
+      "postconditions": ["the intended target has the requested active or particle state"],
+      "forbidden": ["a different target changes", "state immediately reverts without a second action"]
+    },
+    {
+      "id": "rotate-cover",
+      "preconditions": ["cover is active", "RotateCover is enabled"],
+      "actions": ["activate the cover control"],
+      "dependencies": ["serialized interaction -> RotateCover.StartRotation", "StartRotation -> target rotation"],
+      "events": ["cover-control-activated", "start-rotation-called", "cover-target-angle-reached"],
+      "postconditions": ["cover rotation reaches its configured target angle"],
+      "forbidden": ["rotation stalls before the target", "cover reverses before evaluation boundary"]
+    }
+  ]
+}
